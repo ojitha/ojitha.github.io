@@ -1,3 +1,4 @@
 theme: jekyll-theme-slate
 title: Ojitha's Git Pages!
 description: my blog http://ojitha.blogspot.com.au
+markdown: kramdown
