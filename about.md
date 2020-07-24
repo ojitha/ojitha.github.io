@@ -5,7 +5,7 @@ permalink: /about/
 ---
 I am [Ojitha Kumanayaka](https://www.linkedin.com/in/ojitha), the software engineer living in Australia. My [research](https://ojitha.blogspot.com/p/research.html) interests, [tutorials](https://ojitha.blogspot.com/p/tutorials.html), [articles](https://ojitha.blogspot.com/p/articles.html) are available in my official tech [blog](https://ojitha.blogspot.com.au).
 
-Recent blogs are:
+Recent blogs are: 7728818974883333052
 
 - [Mac keyboard shortcut to copy file path as markdown](https://ojitha.blogspot.com/2020/06/macos-quick-action-to-copy-markdown.html)
 
@@ -16,8 +16,6 @@ Recent blogs are:
 - [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html)
 
 - [MAC shortcuts](https://ojitha.blogspot.com/2020/04/mac-shortcuts.html)
-
-
 
 ## Projects
 Here ae some of emy projects in the [GItHub](https://github.com/ojitha).
@@ -33,3 +31,7 @@ Here ae some of emy projects in the [GItHub](https://github.com/ojitha).
 | [spring3part8](https://github.com/ojitha/spring3part8) | Source for the [Spring 3 Part 8: Spring Hibernate open session in view](https://ojitha.blogspot.com/2013/05/spring-3-part-8-spring-hibernate-open.html) |
 | [spring3part7](https://github.com/ojitha/spring3part7) | Source for the [Spring 3 Part 7: Spring with Databases](https://ojitha.blogspot.com/2013/04/spring-3-part-7-spring-with-databases.html) |
 | [spring3-part6](https://github.com/ojitha/spring3-part6) | Source for the [Spring 3 part 6: Spring AOP](https://ojitha.blogspot.com/2013/03/spring-3-part-6-spring-aop.html) |
+
+
+
+> Written with [StackEdit](https://stackedit.io/).
