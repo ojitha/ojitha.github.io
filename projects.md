@@ -3,6 +3,7 @@ layout: page
 title: Projects
 permalink: /projects/
 ---
+
 Here ae some of emy projects in the [GItHub](https://github.com/ojitha).
 
 |Project| Description |
