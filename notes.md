@@ -5,10 +5,7 @@ toc: true
 permalink: /notes/
 ---
 
-**Contents**
-* TOC
-{:toc}
-{{ post.excerpt | strip_html | replace_first: 'Contents', '' | lstrip | truncatewords: 40, "" }}<a href="{{ post.url | relative_url }}">&hellip; read more &raquo;</a>
+[TOC]
 
 This is my day to day note book where I want to share. For example, it is very general to find the following information for date and time:
 
@@ -1393,3 +1390,6 @@ following libs are installed
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 
 > Written with [StackEdit](https://stackedit.io/).
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTE5NzYwMjAxODhdfQ==
+-->
