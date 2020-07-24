@@ -1,8 +1,3 @@
----
-
-
----
-
 <p>I am <a href="https://www.linkedin.com/in/ojitha">Ojitha Kumanayaka</a>, the software engineer living in Australia. My <a href="https://ojitha.blogspot.com/p/research.html">research</a> interests, <a href="https://ojitha.blogspot.com/p/tutorials.html">tutorials</a>, <a href="https://ojitha.blogspot.com/p/articles.html">articles</a> are available in my official tech <a href="https://ojitha.blogspot.com.au">blog</a>.</p>
 <p>Recent blogs are: 7728818974883333052</p>
 <ul>
