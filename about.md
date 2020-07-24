@@ -33,4 +33,3 @@ Here ae some of emy projects in the [GItHub](https://github.com/ojitha).
 | [spring3part8](https://github.com/ojitha/spring3part8) | Source for the [Spring 3 Part 8: Spring Hibernate open session in view](https://ojitha.blogspot.com/2013/05/spring-3-part-8-spring-hibernate-open.html) |
 | [spring3part7](https://github.com/ojitha/spring3part7) | Source for the [Spring 3 Part 7: Spring with Databases](https://ojitha.blogspot.com/2013/04/spring-3-part-7-spring-with-databases.html) |
 | [spring3-part6](https://github.com/ojitha/spring3-part6) | Source for the [Spring 3 part 6: Spring AOP](https://ojitha.blogspot.com/2013/03/spring-3-part-6-spring-aop.html) |
-
