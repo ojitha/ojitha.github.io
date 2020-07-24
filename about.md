@@ -5,7 +5,7 @@ permalink: /about/
 ---
 I am [Ojitha Kumanayaka](https://www.linkedin.com/in/ojitha), the software engineer living in Australia. My [research](https://ojitha.blogspot.com/p/research.html) interests, [tutorials](https://ojitha.blogspot.com/p/tutorials.html), [articles](https://ojitha.blogspot.com/p/articles.html) are available in my official tech [blog](https://ojitha.blogspot.com.au).
 
-Recent blogs are: 7728818974883333052
+Recent blogs are: 
 
 - [Mac keyboard shortcut to copy file path as markdown](https://ojitha.blogspot.com/2020/06/macos-quick-action-to-copy-markdown.html)
 
