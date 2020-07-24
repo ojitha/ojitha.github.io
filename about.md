@@ -14,3 +14,6 @@ Recent blogs are:
 - [MAC shortcuts](https://ojitha.blogspot.com/2020/04/mac-shortcuts.html)
 
 > Written with [StackEdit](https://stackedit.io/).
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMTk4ODQwMjUyNl19
+-->
