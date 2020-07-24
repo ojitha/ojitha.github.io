@@ -5,7 +5,10 @@ toc: true
 permalink: /notes/
 ---
 
-[TOC]
+**Contents**
+* TOC
+{:toc}
+{{ post.excerpt | strip_html | replace_first: 'Contents', '' | lstrip | truncatewords: 40, "" }}<a href="{{ post.url | relative_url }}">&hellip; read more &raquo;</a>
 
 This is my day to day note book where I want to share. For example, it is very general to find the following information for date and time:
 
