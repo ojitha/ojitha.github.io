@@ -17,7 +17,7 @@ Recent blogs are:
 
 - [MAC shortcuts](https://ojitha.blogspot.com/2020/04/mac-shortcuts.html)
 
-     
+
 
 ## Projects
 Here ae some of emy projects in the [GItHub](https://github.com/ojitha).
