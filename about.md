@@ -3,6 +3,7 @@ layout: page
 title: About
 permalink: /about/
 ---
+
 I am [Ojitha Kumanayaka](https://www.linkedin.com/in/ojitha), the software engineer living in Australia. My [research](https://ojitha.blogspot.com/p/research.html) interests, [tutorials](https://ojitha.blogspot.com/p/tutorials.html), [articles](https://ojitha.blogspot.com/p/articles.html) are available in my official tech [blog](https://ojitha.blogspot.com.au).
 
 Recent blogs are: 
@@ -15,5 +16,5 @@ Recent blogs are:
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk4ODQwMjUyNl19
+eyJoaXN0b3J5IjpbLTYwODAxMjc4OCwxOTg4NDAyNTI2XX0=
 -->
