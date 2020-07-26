@@ -16,13 +16,13 @@
 title: Ojitha @ GitHub
 email: ojithak@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  I am Ojitha Kumanayaka, the certified Java software engineer 
-  and AWS certified associate developer from Australia.
-google_analytics: UA-12622200-2 
-baseurl: "" # the subpath of your site, e.g. /blog
+  I am Ojitha Kumanayaka, the certified Java software engineer and AWS certified associate developer from Australia. 
+baseurl: / # the subpath of your site, e.g. /blog
 url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+google_analytics: UA-12622200-2
 twitter_username: ojitha
-github_username:  ojitha
+github_username: ojitha
+linkedin_username: ojitha
 
 # Build settings
 markdown: kramdown
