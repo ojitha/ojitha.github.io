@@ -27,7 +27,7 @@ linkedin_username: ojitha
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-slate
+theme: jekyll-theme-architect
 plugins:
   - jekyll-feed
   - jekyll-sitemap
