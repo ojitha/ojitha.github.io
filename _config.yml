@@ -14,18 +14,23 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Ojitha @ GitHub
-email: ojithak@gmail.com
+author:
+  name: Ojitha Kumanayaka
+  email: "ojithak@gmail.com"
 description: >- # this means to ignore newlines until "baseurl:"
   I am Ojitha Kumanayaka, the certified Java software engineer and AWS certified associate developer from Australia. 
 baseurl: / # the subpath of your site, e.g. /blog
 url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 google_analytics: UA-12622200-2
 show_excerpts: true
+logo: /icons/apple-touch-icon.png
 minima:
+  skin: solarized
   social_links:
     twitter: ojitha
     github: ojitha
     linkedin: ojitha
+    stackoverflow: "546792"
 copyright: "Copywrite by Ojitha Kumanayaka"
 
 # Build settings
