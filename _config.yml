@@ -23,29 +23,25 @@ baseurl: / # the subpath of your site, e.g. /blog
 url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 google_analytics: UA-12622200-2
 show_excerpts: true
-logo: /icons/apple-touch-icon.png
+logo: /icons/mstile-150x150.png
+search_provider: algolia
 minima:
-  skin: solarized
+  skin: classic
   social_links:
     twitter: ojitha
     github: ojitha
     linkedin: ojitha
     stackoverflow: "546792"
-copyright: "Copywrite by Ojitha Kumanayaka"
+copyright: "Copyrights by Ojitha Kumanayaka"
 
 # Build settings
 markdown: kramdown
-#theme: minima
 remote_theme: jekyll/minima
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
   - jemoji
-
-disqus:
-  shortname: ojithakumanayaka
-
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
