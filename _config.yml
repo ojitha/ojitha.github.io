@@ -32,7 +32,7 @@ minima:
     github: ojitha
     linkedin: ojitha
     stackoverflow: "546792"
-copyright: "Copyrights by Ojitha Kumanayaka"
+copyright: "Copyright © 2020 Ojitha Kumanayaka"
 
 # Build settings
 markdown: kramdown
