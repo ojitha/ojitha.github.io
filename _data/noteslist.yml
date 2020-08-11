@@ -1,8 +1,8 @@
 docs_list_title: ACME Documentation
 docs:
 
-- title: Introduction
-  url: test.html
+- title: Productivity
+  url: productivity.html
 
 - title: Configuration
   url: configuration.html
