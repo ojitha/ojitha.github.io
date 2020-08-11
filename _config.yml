@@ -25,10 +25,10 @@ google_analytics: UA-12622200-2
 show_excerpts: true
 logo: /icons/mstile-150x150.png
 header_pages:
-  - blog.md
-  - projects.md
-  - notes.md   
   - about.md
+  - projects.md
+  - blog.md
+  - notes.md   
 
 minima:
   skin: classic
