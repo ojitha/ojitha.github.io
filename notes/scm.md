@@ -1,7 +1,8 @@
---- 
+---
 layout: notes 
 title: Software Configuration Management
 ---
+
 
 ## Software Configuration Management
 

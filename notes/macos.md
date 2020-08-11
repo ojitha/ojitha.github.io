@@ -1,7 +1,8 @@
---- 
+---
 layout: notes 
 title: macOS
 ---
+
 
 ## macOS tools
 

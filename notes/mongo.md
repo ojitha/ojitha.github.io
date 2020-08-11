@@ -1,7 +1,8 @@
---- 
+---
 layout: notes 
 title: Mongo DB
 ---
+
 ## MongoDB
 
 How to tunnel to mongo db using ssh:

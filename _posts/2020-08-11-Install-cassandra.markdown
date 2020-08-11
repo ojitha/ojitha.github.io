@@ -7,6 +7,7 @@ excerpt_separator: <!--more-->
 ---
 
 Apache [Cassandra](https://cassandra.apache.org) is well known big data database. Here the summarisation of how to install. Follow the [instructions](https://cassandra.apache.org/doc/latest/getting_started/installing.html) for more information.
+
 ![Apache Cassandra](https://cassandra.apache.org/img/cassandra_logo.png)
 <!--more-->
 
