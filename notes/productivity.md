@@ -19,7 +19,7 @@ graph TD;
     B-->D;
     C-->D;
 </div>
-check my update
+
 such a great diagraming.
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbMTQyNDAyMDY0XX0=

@@ -1,11 +1,29 @@
-docs_list_title: ACME Documentation
+docs_list_title: My Notes
 docs:
 
 - title: Productivity
   url: productivity.html
 
-- title: Configuration
-  url: configuration.html
+- title: DevOps
+  url: devops.html
 
-- title: Deployment
-  url: deployment.html
+- title: Email
+  url: email.html
+
+- title: Mongo DB
+  url: mongo.html
+
+- title: RDBMS
+  url: rdbms.html
+
+- title: macOS
+  url: macos.html
+
+- title: SCM
+  url: scm.html  
+
+- title: Groovy
+  url: groovy.html  
+
+- title: SFTP
+  url: sftp.html  
