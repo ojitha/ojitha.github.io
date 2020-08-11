@@ -24,7 +24,11 @@ url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.
 google_analytics: UA-12622200-2
 show_excerpts: true
 logo: /icons/mstile-150x150.png
-search_provider: algolia
+header_pages:
+  - blog.md
+  - notes.md   
+  - about.md
+
 minima:
   skin: classic
   social_links:
@@ -32,6 +36,7 @@ minima:
     github: ojitha
     linkedin: ojitha
     stackoverflow: "546792"
+   
 copyright: "Copyright © 2020 Ojitha Kumanayaka"
 
 # Build settings
