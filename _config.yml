@@ -22,6 +22,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: / # the subpath of your site, e.g. /blog
 url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 google_analytics: UA-12622200-2
+timezone: Australia/Sydney
 show_excerpts: true
 logo: /icons/mstile-150x150.png
 header_pages:

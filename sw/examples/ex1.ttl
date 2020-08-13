@@ -1,0 +1,7 @@
+@prefix card: <http://ojitha.github.io/sw/examples/ex1#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+
+card:i foaf:name "Ojitha Kumanayaka" .
+<http://bblfish.net/people/henry/card#me> foaf:name "Henry Story" .
+<http://www.cambridgesemantics.com/people/about/lee> foaf:name "Lee Feigenbaum" .
+card:amy foaf:name "Amy van der Hiel" .
