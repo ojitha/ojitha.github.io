@@ -7,5 +7,18 @@
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="msapplication-config" content="/icons/browserconfig.xml">
 <meta name="theme-color" content="#ffffff">
-
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "WebSite",
+        "name": "{{ site.title }}",
+        "url": "{{ site.url }}",
+        "description": "{{ site.description }}",
+        "dateModified": "{{ site.time | date_to_xmlschema }}",
+        "creator": {
+            "@type": "Person",
+            "name": "Ojitha Kumanayaka"
+        }
+    }
+</script>
 {% include google-search.html %}
