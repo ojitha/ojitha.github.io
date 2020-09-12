@@ -7,7 +7,8 @@ excerpt_separator: <!--more-->
 ---
 [Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues. Lean the basics here.
 
-[toc]
+* TOC
+{:toc}
 
 
 
