@@ -223,7 +223,7 @@ Use the label to view only the namespace associated with that:
 
 Labels you can find in the dashboard as well.
 
-## Deloyment
+## Deployment
 
 You can deploy images 
 
