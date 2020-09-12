@@ -9,11 +9,9 @@ excerpt_separator: <!--more-->
 
 * TOC
 {:toc}
-
-
-
 <!--more-->
 If you want to run Minikube locally, follow the instructions [here](https://kubernetes.io/docs/tasks/tools/install-minikube/).
+
 ## Install Minikube
 
 Check the version of Minikube available with you
@@ -248,6 +246,12 @@ If you deployed web server, you can expose the prot to access via external brows
 kubectl expose deployment my-deployment --port=80 --type=NodePort
 ```
 
-to get the port ![image-20200912122708834](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912122708834.png)
+to get the port 
+
+{% highlight bash %}
+kubectl get svc my-deployment -o go-template='{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}'
+{% endhighlight %}
+
+![image-20200912122708834](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912122708834.png)
 
 You can view your deployment in the dashboard as well.
