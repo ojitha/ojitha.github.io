@@ -247,10 +247,6 @@ If you deployed web server, you can expose the prot to access via external brows
 kubectl expose deployment my-deployment --port=80 --type=NodePort
 ```
 
-to get the port 
-
-```bash
-kubectl get svc my-deployment -o go-template='{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}'
-```
+to get the port ![image-20200912122708834](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912122708834.png)
 
 You can view your deployment in the dashboard as well.
