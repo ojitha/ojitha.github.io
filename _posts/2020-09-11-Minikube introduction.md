@@ -5,13 +5,17 @@ date: 2020-09-11
 categories: [blog]
 excerpt_separator: <!--more-->
 ---
-[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues. Lean the basics here.
+[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues. 
 
 <img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" alt="Minikube" style="zoom:16%;" />
 
+Lean the basics here.
+
+<!--more-->
+
 * TOC
 {:toc}
-<!--more-->
+
 If you want to run Minikube locally, follow the instructions [here](https://kubernetes.io/docs/tasks/tools/install-minikube/).
 
 ## Install Minikube
