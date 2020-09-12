@@ -7,7 +7,7 @@ excerpt_separator: <!--more-->
 ---
 [Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues. 
 
-<img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" alt="Minikube" style="zoom:16%;" />
+<img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" alt="Minikube" width="20%;" />
 
 Lean the basics here.
 
