@@ -260,3 +260,90 @@ kubectl get svc my-deployment -o go-template='{{range.spec.ports}}{{if .nodePort
 {% endraw %}
 ```
 You can view your deployment in the dashboard as well.
+
+This is example yml to deploy your web application
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ojwebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ojwebapp
+  template:
+    metadata:
+      labels:
+        app: ojwebapp
+    spec:
+      containers:
+      - name: ojwebapp
+        image:<image>:latest
+        ports:
+        - containerPort: 80
+```
+
+to deploy above deployment.yaml
+
+```bash
+kubectl create -f deployment.yaml
+```
+
+now you can verify `kubectl get deployment`
+
+![run with one instance](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912143655614.png)
+
+Get the deployment information:
+
+```bash
+kubectl describe deployment ojwebapp
+```
+
+You can control network configuration via yaml
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ojwebapp-svc
+  labels:
+    app: ojwebapp
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    nodePort: 30000
+  selector:
+    app: ojwebapp
+```
+
+To create ojwebapp-svc, deploy the service.yaml as follows:
+
+```bash
+kubectl create -f service.yaml
+```
+
+To get the all services:
+
+```bash
+kubectl get svc
+```
+
+![image-20200912144244586](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912144244586.png)
+
+To get only about `ojwebapp-svc`:
+
+```bash
+kubectl describe svc ojwebapp-svc
+```
+
+Now you can run curl command `curl <host>:30000` to get the page.
+
+You can change the number of `replicas` into 4 and apply the changes. If you run the `kubectl get deployment`, you will get:
+
+![apply chnages to run with 4 instances](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912144806068.png)
+
+Now curl will sent the request to one of the above.
+
