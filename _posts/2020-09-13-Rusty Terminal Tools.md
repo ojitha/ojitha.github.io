@@ -8,6 +8,8 @@ excerpt_separator: <!--more-->
 
 This is very intersting [blog](https://dev.to/22mahmoud/my-terminal-became-more-rusty-4g8l) explain new terminal tools written in Rusty 🚀.
 
+<!--more-->
+
 > - [alacritty](https://github.com/alacritty/alacritty) A cross-platform, GPU-accelerated terminal emulator
 > - [starship](https://github.com/starship/starship)  The minimal, blazing-fast, and infinitely customizable prompt for any shell!
 > - [exa](https://github.com/ogham/exa) A modern version of ‘ls’.
