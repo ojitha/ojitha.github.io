@@ -16,7 +16,7 @@ Lean the basics here.
 * TOC
 {:toc}
 
-If you want to run Minikube locally, follow the instructions [here](https://kubernetes.io/docs/tasks/tools/install-minikube/).
+If you want to run Minikube locally, follow the instructions for [Mac](https://ojitha.blogspot.com/2018/07/hands-dirty-with-kubernetes.html) or [here](https://kubernetes.io/docs/tasks/tools/install-minikube/).
 
 ## Install Minikube
 
