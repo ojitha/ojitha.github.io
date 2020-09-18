@@ -19,11 +19,14 @@ Using I/O redirect, redirect output to a file :
 ```bash
 ls -l t1.json > out
 ```
+The error message has to be redirect as follows:
+```bash
 
+```
 
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYyMTk2Mjk4NSwxMjc0NjUyNTBdfQ==
+eyJoaXN0b3J5IjpbLTE5MjM4ODIzODUsMTI3NDY1MjUwXX0=
 -->
