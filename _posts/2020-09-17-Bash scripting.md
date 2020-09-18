@@ -15,9 +15,10 @@ There are three I/Os to consider
  - standard output
  - standard error
 
+Using I/O redirect, redirect to a 
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDE5MjA0NDU2LDEyNzQ2NTI1MF19
+eyJoaXN0b3J5IjpbLTI2NTUwMzE0OSwxMjc0NjUyNTBdfQ==
 -->
