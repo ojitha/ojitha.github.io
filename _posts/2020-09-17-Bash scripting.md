@@ -23,10 +23,14 @@ The error message has to be redirect as follows:
 ```bash
 ls -l not.available 2> err
 ```
+To send standard output to the `sout` and standard error to the `serror`:
+```bash
+ls -l t1.json not.available > sout 2> serror
+```
 
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0OTA3Mzg4ODYsMTI3NDY1MjUwXX0=
+eyJoaXN0b3J5IjpbNzgzMjY3OTgsMTI3NDY1MjUwXX0=
 -->
