@@ -35,11 +35,15 @@ To send standard output to the `sout` and standard error to the `serror`:
 ```bash
 ls -l t1.json not.available > sout 2> serror
 ```
-t
+To redirect both to the same file
+```bash
+ls -l t1.json not.available &> sout
+```
+
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc4OTYyNDU4OCwxMTE2ODcxMzAwLDc4Mz
-I2Nzk4LDEyNzQ2NTI1MF19
+eyJoaXN0b3J5IjpbODg2ODg3MjUyLDExMTY4NzEzMDAsNzgzMj
+Y3OTgsMTI3NDY1MjUwXX0=
 -->
