@@ -21,12 +21,12 @@ ls -l t1.json > out
 ```
 The error message has to be redirect as follows:
 ```bash
-
+ls -l not.available 2> err
 ```
 
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5MjM4ODIzODUsMTI3NDY1MjUwXX0=
+eyJoaXN0b3J5IjpbLTE0OTA3Mzg4ODYsMTI3NDY1MjUwXX0=
 -->
