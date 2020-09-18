@@ -41,11 +41,11 @@ ls -l t1.json not.available &> sout
 or 
 ls -l t1.json not.available > sout 2>&1
 ```
-The second line says to re
+The second line says to redirect the error to the same as file descriptor 1.
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTkzNTMzODY1NywxMTE2ODcxMzAwLDc4Mz
-I2Nzk4LDEyNzQ2NTI1MF19
+eyJoaXN0b3J5IjpbMjEzODg1NzczLDExMTY4NzEzMDAsNzgzMj
+Y3OTgsMTI3NDY1MjUwXX0=
 -->
