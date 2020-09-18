@@ -9,11 +9,15 @@ To  find the bash version:
 ```bash
 bash --version
 ```
-There are three 
+There are three I/Os to consider
+
+ - standard input
+ - standard output
+ - standard error
 
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5NTU4NjIxMSwxMjc0NjUyNTBdfQ==
+eyJoaXN0b3J5IjpbNDE5MjA0NDU2LDEyNzQ2NTI1MF19
 -->
