@@ -5,8 +5,7 @@ date:   2020-09-17 13:01:30 +1000
 categories: [blog]
 excerpt_separator: <!--more-->
 ---
-
-Understand the bash to use in day to day developer life.
+Understand the bash scripting to use in the day-to-day life of the developer.
 
 <!--more-->
 
@@ -41,6 +40,6 @@ ls -l t1.json not.available > sout 2> serror
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMzYxODA1NzIsNzgzMjY3OTgsMTI3ND
-Y1MjUwXX0=
+eyJoaXN0b3J5IjpbMTExNjg3MTMwMCw3ODMyNjc5OCwxMjc0Nj
+UyNTBdfQ==
 -->
