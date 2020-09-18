@@ -9,10 +9,11 @@ To  find the bash version:
 ```bash
 bash --version
 ```
+There are three 
 
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ3NzIxMDk4MywxMjc0NjUyNTBdfQ==
+eyJoaXN0b3J5IjpbLTY5NTU4NjIxMSwxMjc0NjUyNTBdfQ==
 -->
