@@ -15,10 +15,15 @@ There are three I/Os to consider
  - standard output
  - standard error
 
-Using I/O redirect, redirect to a 
+Using I/O redirect, redirect output to a file :
+```bash
+ls -l t1.json > out
+```
+
+
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI2NTUwMzE0OSwxMjc0NjUyNTBdfQ==
+eyJoaXN0b3J5IjpbMTYyMTk2Mjk4NSwxMjc0NjUyNTBdfQ==
 -->
