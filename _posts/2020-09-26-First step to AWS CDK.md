@@ -55,6 +55,14 @@ The default application entry point is app.py which impor the helloaws_stack.py.
 - sns topic
 
 ## Synthesize a Cloudformation template
+To list the availble stacks
+```bash
+cdk ls
+```
+In my case I get the result `helloaws`. To synthesize:
+```bash
+cdk synth
+```
 
 
 
@@ -62,8 +70,8 @@ The default application entry point is app.py which impor the helloaws_stack.py.
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDM1MTc4NDA0LDk5MjcwMjI4LC03MzQ5ND
-A1MTgsMTc0MjIxNzE0MiwxMDUxOTczMTYwLDE1NDMwNDgxMDYs
-LTE0MTczMjM2OTQsMTAzOTUwNzQwMywtODE5MjQxMTcwLC01Nj
-k0Njk4MTBdfQ==
+eyJoaXN0b3J5IjpbLTU3NTE4NTc4Niw5OTI3MDIyOCwtNzM0OT
+QwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2MCwxNTQzMDQ4MTA2
+LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNT
+Y5NDY5ODEwXX0=
 -->
