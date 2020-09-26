@@ -5,6 +5,13 @@ date:   2020-09-26 13:01:30 +1000
 categories: [blog]
 excerpt_separator: <!--more-->
 ---
+This is my first step of using AWS CDK in macOS. However, I am using Pyenv tool for 
+
+<!--more-->
+
+* TOC
+{:toc}
+
 
 First, you have to verify that, you have installed the AWS CDK.
 1. in the macOS, install AWS CLI using Homebrew
@@ -25,6 +32,6 @@ pyenv shell p3
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNjgzMjMzMzcsLTE0MTczMjM2OTQsMT
-AzOTUwNzQwMywtODE5MjQxMTcwLC01Njk0Njk4MTBdfQ==
+eyJoaXN0b3J5IjpbODk0NzU0MTAzLC0xNDE3MzIzNjk0LDEwMz
+k1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
 -->
