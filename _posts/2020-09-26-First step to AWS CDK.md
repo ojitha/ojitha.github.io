@@ -11,10 +11,14 @@ First you have to verify that, you have installed the AWS CDK.
 2. install NodeJS
 3. install AWS CDK using NodeJS
 
-As explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html), install Python
+As explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html), install Python version 3. In case, I can use the following command to set the shell to python version 3:
+
+```bash
+pyenv shell p3
+```
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNTUyNDEyNzAsMTAzOTUwNzQwMywtOD
+eyJoaXN0b3J5IjpbLTE0MTczMjM2OTQsMTAzOTUwNzQwMywtOD
 E5MjQxMTcwLC01Njk0Njk4MTBdfQ==
 -->
