@@ -23,10 +23,10 @@ If all the above is good, now install the python enviroment to use with the AWS 
 1. install Python version 3 
 2. create virtual enviroment `p3` using pyenv tool 
 3. You can use any directory to creat your scripts, I use Visual Studio Code as my editor
-4. In case, I can use the following command to set the shell to python version 3:
+4. In case, I can use the following command to set the global version of the python  to version 3:
 
 ```bash
-pyenv shell p3
+pyenv global 3.8.0
 ```
 
 ## Frist step
@@ -47,7 +47,7 @@ As given in the output of the above command, you have to activate the Virtualenv
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTczNDk0MDUxOCwxNzQyMjE3MTQyLDEwNT
-E5NzMxNjAsMTU0MzA0ODEwNiwtMTQxNzMyMzY5NCwxMDM5NTA3
-NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgxMF19
+eyJoaXN0b3J5IjpbMTM0MTg5NjQsLTczNDk0MDUxOCwxNzQyMj
+E3MTQyLDEwNTE5NzMxNjAsMTU0MzA0ODEwNiwtMTQxNzMyMzY5
+NCwxMDM5NTA3NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgxMF19
 -->
