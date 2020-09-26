@@ -29,10 +29,16 @@ If all the above is good, now install the python enviroment to use with the AWS 
 pyenv shell p3
 ```
 
+## Frist step
+Create a directory as you want, in my case
+```bash
+mkdir helloaws
+```
+
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA1MTk3MzE2MCwxNTQzMDQ4MTA2LC0xND
-E3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5
-ODEwXX0=
+eyJoaXN0b3J5IjpbMTgwNDgxMjM0OCwxMDUxOTczMTYwLDE1ND
+MwNDgxMDYsLTE0MTczMjM2OTQsMTAzOTUwNzQwMywtODE5MjQx
+MTcwLC01Njk0Njk4MTBdfQ==
 -->
