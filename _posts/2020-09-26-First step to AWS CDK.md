@@ -5,7 +5,8 @@ date:   2020-09-26 13:01:30 +1000
 categories: [blog]
 excerpt_separator: <!--more-->
 ---
-This is my first step of using AWS CDK in macOS.  I am using Pyenv tool to create python enviroment  as explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html), 
+
+This is my first step of using AWS CDK in macOS.  I am using Pyenv tool to create python enviroment  as explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html).
  
 
 <!--more-->
@@ -32,6 +33,7 @@ pyenv shell p3
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU0MzA0ODEwNiwtMTQxNzMyMzY5NCwxMD
-M5NTA3NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgxMF19
+eyJoaXN0b3J5IjpbLTUxODY0NDExOCwxNTQzMDQ4MTA2LC0xND
+E3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5
+ODEwXX0=
 -->
