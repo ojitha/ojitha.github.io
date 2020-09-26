@@ -135,13 +135,17 @@ You have to clean up the sample-app SNS and the SQS form the helloaws_stack.py. 
 ```bash
 cdk diff
 ```
+if you are starisfied,  run the following command to update the stack:
 
+```bash
+cdk deploy
+```
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcxNDMxMzM5Niw5ODk3MjczMDksLTE2Nj
-U2MTUzNyw5OTI3MDIyOCwtNzM0OTQwNTE4LDE3NDIyMTcxNDIs
-MTA1MTk3MzE2MCwxNTQzMDQ4MTA2LC0xNDE3MzIzNjk0LDEwMz
-k1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
+eyJoaXN0b3J5IjpbMTg1ODQ4Njc2LDk4OTcyNzMwOSwtMTY2NT
+YxNTM3LDk5MjcwMjI4LC03MzQ5NDA1MTgsMTc0MjIxNzE0Miwx
+MDUxOTczMTYwLDE1NDMwNDgxMDYsLTE0MTczMjM2OTQsMTAzOT
+UwNzQwMywtODE5MjQxMTcwLC01Njk0Njk4MTBdfQ==
 -->
