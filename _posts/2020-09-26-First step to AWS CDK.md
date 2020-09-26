@@ -35,10 +35,12 @@ Create a directory as you want, in my case
 mkdir helloaws
 ```
 
+Use `cdk init` to create the project
+
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgwNDgxMjM0OCwxMDUxOTczMTYwLDE1ND
+eyJoaXN0b3J5IjpbLTQ2MDg3ODc1OCwxMDUxOTczMTYwLDE1ND
 MwNDgxMDYsLTE0MTczMjM2OTQsMTAzOTUwNzQwMywtODE5MjQx
 MTcwLC01Njk0Njk4MTBdfQ==
 -->
