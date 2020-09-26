@@ -65,7 +65,103 @@ cdk synth
 ```
 
 ```yaml
+Resources:
 
+HelloawsQueue99542750:
+
+Type: AWS::SQS::Queue
+
+Properties:
+
+VisibilityTimeout: 300
+
+Metadata:
+
+aws:cdk:path: helloaws/HelloawsQueue/Resource
+
+HelloawsQueuePolicy3ED87862:
+
+Type: AWS::SQS::QueuePolicy
+
+Properties:
+
+PolicyDocument:
+
+Statement:
+
+- Action: sqs:SendMessage
+
+Condition:
+
+ArnEquals:
+
+aws:SourceArn:
+
+Ref: HelloawsTopic418BCE5E
+
+Effect: Allow
+
+Principal:
+
+Service: sns.amazonaws.com
+
+Resource:
+
+Fn::GetAtt:
+
+- HelloawsQueue99542750
+
+- Arn
+
+Version: "2012-10-17"
+
+Queues:
+
+- Ref: HelloawsQueue99542750
+
+Metadata:
+
+aws:cdk:path: helloaws/HelloawsQueue/Policy/Resource
+
+HelloawsQueuehelloawsHelloawsTopic05A4499A13C4E1C5:
+
+Type: AWS::SNS::Subscription
+
+Properties:
+
+Protocol: sqs
+
+TopicArn:
+
+Ref: HelloawsTopic418BCE5E
+
+Endpoint:
+
+Fn::GetAtt:
+
+- HelloawsQueue99542750
+
+- Arn
+
+Metadata:
+
+aws:cdk:path: helloaws/HelloawsQueue/helloawsHelloawsTopic05A4499A/Resource
+
+HelloawsTopic418BCE5E:
+
+Type: AWS::SNS::Topic
+
+Metadata:
+
+aws:cdk:path: helloaws/HelloawsTopic/Resource
+
+CDKMetadata:
+
+Type: AWS::CDK::Metadata
+
+Properties:
+
+Modules: aws-cdk=1.64.1,@aws-cdk/assets=1.64.1,@aws-cdk/aws-applicationautoscaling=1.64.1,@aws-cdk/aws-autoscaling-common=1.64.1,@aws-cdk/aws-cloudwatch=1.64.1,@aws-cdk/aws-codeguruprofiler=1.64.1,@aws-cdk/aws-ec2=1.64.1,@aws-cdk/aws-efs=1.64.1,@aws-cdk/aws-events=1.64.1,@aws-cdk/aws-iam=1.64.1,@aws-cdk/aws-kms=1.64.1,@aws-cdk/aws-lambda=1.64.1,@aws-cdk/aws-logs=1.64.1,@aws-cdk/aws-s3=1.64.1,@aws-cdk/aws-s3-assets=1.64.1,@aws-cdk/aws-sns=1.64.1,@aws-cdk/aws-sns-subscriptions=1.64.1,@aws-cdk/aws-sqs=1.64.1,@aws-cdk/aws-ssm=1.64.1,@aws-cdk/cloud-assembly-schema=1.64.1,@aws-cdk/core=1.64.1,@aws-cdk/cx-api=1.64.1,@aws-cdk/region-info=1.64.1,jsii-runtime=Python/3.8.0
 ```
 
 
@@ -73,8 +169,8 @@ cdk synth
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NjU2MTUzNyw5OTI3MDIyOCwtNzM0OT
-QwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2MCwxNTQzMDQ4MTA2
-LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNT
-Y5NDY5ODEwXX0=
+eyJoaXN0b3J5IjpbLTE2MTk5ODM0NDEsLTE2NjU2MTUzNyw5OT
+I3MDIyOCwtNzM0OTQwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2
+MCwxNTQzMDQ4MTA2LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLT
+gxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
 -->
