@@ -36,11 +36,15 @@ mkdir helloaws
 ```
 
 Use `cdk init` to create the project
+```bash
+cdk  init sample-app --language python
+```
+
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ2MDg3ODc1OCwxMDUxOTczMTYwLDE1ND
+eyJoaXN0b3J5IjpbMTc0MjIxNzE0MiwxMDUxOTczMTYwLDE1ND
 MwNDgxMDYsLTE0MTczMjM2OTQsMTAzOTUwNzQwMywtODE5MjQx
 MTcwLC01Njk0Njk4MTBdfQ==
 -->
