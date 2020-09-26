@@ -14,7 +14,7 @@ This is my first step of using AWS CDK in macOS.  I am using Pyenv tool to creat
 * TOC
 {:toc}
 
-
+## Prepare the development env
 First, you have to verify that, you have installed the AWS CDK.
 1. in the macOS, install AWS CLI using Homebrew
 2. install NodeJS
@@ -33,7 +33,7 @@ pyenv shell p3
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUxODY0NDExOCwxNTQzMDQ4MTA2LC0xND
-E3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5
-ODEwXX0=
+eyJoaXN0b3J5IjpbLTE1NTM3OTgwNzAsMTU0MzA0ODEwNiwtMT
+QxNzMyMzY5NCwxMDM5NTA3NDAzLC04MTkyNDExNzAsLTU2OTQ2
+OTgxMF19
 -->
