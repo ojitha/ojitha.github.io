@@ -7,7 +7,13 @@ excerpt_separator: <!--more-->
 ---
 
 This is my first step of using AWS CDK in macOS.  I am using Pyenv tool to create python enviroment  as explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html).
- 
+
+Here the simple example created using AWS CDK.
+
+![helloaws](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/helloaws.png)
+
+Followed [AWS CDK Python workshop](https://cdkworkshop.com/30-python.html).
+
  <!--more-->
 
 * TOC
@@ -141,12 +147,11 @@ if you are starisfied,  run the following command to update the stack:
 cdk deploy
 ```
 
+I have followed the [AWS CDK Python workshop](https://cdkworkshop.com/30-python.html) form this point onwards.
 
-> Written with [StackEdit](https://stackedit.io/).
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk2MTY5MTUxNCwxODU4NDg2NzYsOTg5Nz
-I3MzA5LC0xNjY1NjE1MzcsOTkyNzAyMjgsLTczNDk0MDUxOCwx
-NzQyMjE3MTQyLDEwNTE5NzMxNjAsMTU0MzA0ODEwNiwtMTQxNz
-MyMzY5NCwxMDM5NTA3NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgx
-MF19
--->
+To delete the stack
+
+```bash
+cdk destroy
+```
+
