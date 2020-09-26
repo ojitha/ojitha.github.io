@@ -46,7 +46,9 @@ source  .env/bin/activate
 ```
 
 Now install the requirments:
-
+```bash
+pip  install -r requirements.txt
+```
 
 
 
@@ -54,8 +56,7 @@ Now install the requirments:
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUyNTAyNDkxNywtNzM0OTQwNTE4LDE3ND
-IyMTcxNDIsMTA1MTk3MzE2MCwxNTQzMDQ4MTA2LC0xNDE3MzIz
-Njk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5ODEwXX
-0=
+eyJoaXN0b3J5IjpbOTkyNzAyMjgsLTczNDk0MDUxOCwxNzQyMj
+E3MTQyLDEwNTE5NzMxNjAsMTU0MzA0ODEwNiwtMTQxNzMyMzY5
+NCwxMDM5NTA3NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgxMF19
 -->
