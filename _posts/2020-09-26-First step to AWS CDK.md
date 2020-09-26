@@ -40,11 +40,14 @@ Use `cdk init` to create the project
 cdk  init sample-app --language python
 ```
 
+As given in the output of the above command, you have to activate the Virtualenv
+
+
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc0MjIxNzE0MiwxMDUxOTczMTYwLDE1ND
-MwNDgxMDYsLTE0MTczMjM2OTQsMTAzOTUwNzQwMywtODE5MjQx
-MTcwLC01Njk0Njk4MTBdfQ==
+eyJoaXN0b3J5IjpbLTczNDk0MDUxOCwxNzQyMjE3MTQyLDEwNT
+E5NzMxNjAsMTU0MzA0ODEwNiwtMTQxNzMyMzY5NCwxMDM5NTA3
+NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgxMF19
 -->
