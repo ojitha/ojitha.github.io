@@ -125,7 +125,7 @@ cdk bootstrap
 ```
 Now time to deply as follows:
 ```bash
-cdk  deploy cdkworkshop
+cdk  deploy helloaws
 ```
 Now you are ready to create your own application
 
@@ -144,8 +144,9 @@ cdk deploy
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg1ODQ4Njc2LDk4OTcyNzMwOSwtMTY2NT
-YxNTM3LDk5MjcwMjI4LC03MzQ5NDA1MTgsMTc0MjIxNzE0Miwx
-MDUxOTczMTYwLDE1NDMwNDgxMDYsLTE0MTczMjM2OTQsMTAzOT
-UwNzQwMywtODE5MjQxMTcwLC01Njk0Njk4MTBdfQ==
+eyJoaXN0b3J5IjpbMTk2MTY5MTUxNCwxODU4NDg2NzYsOTg5Nz
+I3MzA5LC0xNjY1NjE1MzcsOTkyNzAyMjgsLTczNDk0MDUxOCwx
+NzQyMjE3MTQyLDEwNTE5NzMxNjAsMTU0MzA0ODEwNiwtMTQxNz
+MyMzY5NCwxMDM5NTA3NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgx
+MF19
 -->
