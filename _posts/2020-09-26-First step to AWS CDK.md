@@ -64,13 +64,16 @@ In my case I get the result `helloaws`. To synthesize:
 cdk synth
 ```
 
+```yaml
+
+```
 
 
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU3NTE4NTc4Niw5OTI3MDIyOCwtNzM0OT
+eyJoaXN0b3J5IjpbLTE2NjU2MTUzNyw5OTI3MDIyOCwtNzM0OT
 QwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2MCwxNTQzMDQ4MTA2
 LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNT
 Y5NDY5ODEwXX0=
