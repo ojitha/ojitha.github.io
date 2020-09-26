@@ -29,7 +29,7 @@ If all the above is good, now install the python enviroment to use with the AWS 
 pyenv global 3.8.0
 ```
 
-## Frist step
+## Initialse the project
 Create a directory as you want, in my case
 ```bash
 mkdir helloaws
@@ -54,6 +54,7 @@ The default application entry point is app.py which impor the helloaws_stack.py.
 - sqs queue
 - sns topic
 
+## Synthesize a Cloudformation template
 
 
 
@@ -61,8 +62,8 @@ The default application entry point is app.py which impor the helloaws_stack.py.
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjEyMzQ0NjIzOSw5OTI3MDIyOCwtNzM0OT
-QwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2MCwxNTQzMDQ4MTA2
-LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNT
-Y5NDY5ODEwXX0=
+eyJoaXN0b3J5IjpbNDM1MTc4NDA0LDk5MjcwMjI4LC03MzQ5ND
+A1MTgsMTc0MjIxNzE0MiwxMDUxOTczMTYwLDE1NDMwNDgxMDYs
+LTE0MTczMjM2OTQsMTAzOTUwNzQwMywtODE5MjQxMTcwLC01Nj
+k0Njk4MTBdfQ==
 -->
