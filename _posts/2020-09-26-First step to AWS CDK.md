@@ -11,10 +11,10 @@ First you have to verify that, you have installed the AWS CDK.
 2. install NodeJS
 3. install AWS CDK using NodeJS
 
-
+As explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html), 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5MTUzMzA5NiwtODE5MjQxMTcwLC01Nj
+eyJoaXN0b3J5IjpbMTAzOTUwNzQwMywtODE5MjQxMTcwLC01Nj
 k0Njk4MTBdfQ==
 -->
