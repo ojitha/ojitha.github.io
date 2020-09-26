@@ -123,12 +123,15 @@ First titme you have have to install the bootstrap stack which is necessary for 
 ```bash
 cdk bootstrap
 ```
-
+Now time to deply as follows:
+```bash
+cdk  deploy cdkworkshop
+```
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjA1OTM2MTk5LC0xNjY1NjE1MzcsOTkyNz
+eyJoaXN0b3J5IjpbOTg5NzI3MzA5LC0xNjY1NjE1MzcsOTkyNz
 AyMjgsLTczNDk0MDUxOCwxNzQyMjE3MTQyLDEwNTE5NzMxNjAs
 MTU0MzA0ODEwNiwtMTQxNzMyMzY5NCwxMDM5NTA3NDAzLC04MT
 kyNDExNzAsLTU2OTQ2OTgxMF19
