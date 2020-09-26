@@ -135,7 +135,7 @@ cdk  deploy helloaws
 ```
 Now you are ready to create your own application
 
-## Create real application
+## Create a real application
 You have to clean up the sample-app SNS and the SQS form the helloaws_stack.py. It is better to use the following command to see the impact when you deploy new stack compared to existing:
 
 ```bash
@@ -156,5 +156,5 @@ cdk destroy
 ```
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMxMjQzNjIyOSwxNDA3ODQ4MjIwXX0=
+eyJoaXN0b3J5IjpbMTI2NjA5OTc0OCwxNDA3ODQ4MjIwXX0=
 -->
