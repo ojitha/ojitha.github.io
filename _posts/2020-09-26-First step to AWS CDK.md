@@ -64,7 +64,7 @@ In my case I get the result `helloaws`. To synthesize:
 cdk synth
 ```
 
-here the ouput
+Here the ouput
 ```yaml
 Resources:
   HelloawsQueue99542750:
@@ -115,8 +115,6 @@ Resources:
     Type: AWS::CDK::Metadata
     Properties:
       Modules: aws-cdk=1.64.1,@aws-cdk/assets=1.64.1,@aws-cdk/aws-applicationautoscaling=1.64.1,@aws-cdk/aws-autoscaling-common=1.64.1,@aws-cdk/aws-cloudwatch=1.64.1,@aws-cdk/aws-codeguruprofiler=1.64.1,@aws-cdk/aws-ec2=1.64.1,@aws-cdk/aws-efs=1.64.1,@aws-cdk/aws-events=1.64.1,@aws-cdk/aws-iam=1.64.1,@aws-cdk/aws-kms=1.64.1,@aws-cdk/aws-lambda=1.64.1,@aws-cdk/aws-logs=1.64.1,@aws-cdk/aws-s3=1.64.1,@aws-cdk/aws-s3-assets=1.64.1,@aws-cdk/aws-sns=1.64.1,@aws-cdk/aws-sns-subscriptions=1.64.1,@aws-cdk/aws-sqs=1.64.1,@aws-cdk/aws-ssm=1.64.1,@aws-cdk/cloud-assembly-schema=1.64.1,@aws-cdk/core=1.64.1,@aws-cdk/cx-api=1.64.1,@aws-cdk/region-info=1.64.1,jsii-runtime=Python/3.8.0
-
-
 ```
 
 
@@ -124,8 +122,8 @@ Resources:
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI1NjY2OTc3NywtMTY2NTYxNTM3LDk5Mj
-cwMjI4LC03MzQ5NDA1MTgsMTc0MjIxNzE0MiwxMDUxOTczMTYw
-LDE1NDMwNDgxMDYsLTE0MTczMjM2OTQsMTAzOTUwNzQwMywtOD
-E5MjQxMTcwLC01Njk0Njk4MTBdfQ==
+eyJoaXN0b3J5IjpbLTExMjE3ODY1MTcsLTE2NjU2MTUzNyw5OT
+I3MDIyOCwtNzM0OTQwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2
+MCwxNTQzMDQ4MTA2LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLT
+gxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
 -->
