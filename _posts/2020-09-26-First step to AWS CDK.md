@@ -130,11 +130,17 @@ cdk  deploy cdkworkshop
 Now you are ready to create your own application
 
 ## Create real application
-You have to clean up the sample-app SNS and the SQS form the he
+You have to clean up the sample-app SNS and the SQS form the helloaws_stack.py. It is better to use the following command to see the impact when you deploy new stack compared to existing:
+
+```bash
+cdk diff
+```
+
+
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTYwNDY2Njk4Nyw5ODk3MjczMDksLTE2Nj
+eyJoaXN0b3J5IjpbLTcxNDMxMzM5Niw5ODk3MjczMDksLTE2Nj
 U2MTUzNyw5OTI3MDIyOCwtNzM0OTQwNTE4LDE3NDIyMTcxNDIs
 MTA1MTk3MzE2MCwxNTQzMDQ4MTA2LC0xNDE3MzIzNjk0LDEwMz
 k1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
