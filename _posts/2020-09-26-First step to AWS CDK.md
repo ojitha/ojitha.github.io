@@ -13,9 +13,9 @@ First, you have to verify that, you have installed the AWS CDK.
 
 As explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html), 
 
-1.  install Python version 3. 
-2. 
-3.
+1. install Python version 3 
+2. create virtual enviroment `p3` using pyenv tool 
+3. You can use any directory to creat your scripts, I use vis
 4. In case, I can use the following command to set the shell to python version 3:
 
 ```bash
@@ -24,6 +24,6 @@ pyenv shell p3
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTkxOTQxNzE2LC0xNDE3MzIzNjk0LDEwMz
-k1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
+eyJoaXN0b3J5IjpbLTEwNDA4MTUxMjMsLTE0MTczMjM2OTQsMT
+AzOTUwNzQwMywtODE5MjQxMTcwLC01Njk0Njk4MTBdfQ==
 -->
