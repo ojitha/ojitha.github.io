@@ -10,7 +10,7 @@ This is my first step of using AWS CDK in macOS.  I am using Pyenv tool to creat
 
 Here the simple example created using AWS CDK.
 
-![helloaws](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/helloaws.png)
+[![helloaws](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/helloaws.png)](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/helloaws.png)
 
 Followed [AWS CDK Python workshop](https://cdkworkshop.com/30-python.html).
 
