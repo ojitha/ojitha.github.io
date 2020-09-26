@@ -49,6 +49,11 @@ Now install the requirments:
 ```bash
 pip  install -r requirements.txt
 ```
+The default application entry point is app.py which impor the helloaws_stack.py. According to the helloaws_stack.py, following will be created default:
+
+- sqs queue
+- sns topic
+
 
 
 
@@ -56,7 +61,8 @@ pip  install -r requirements.txt
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTkyNzAyMjgsLTczNDk0MDUxOCwxNzQyMj
-E3MTQyLDEwNTE5NzMxNjAsMTU0MzA0ODEwNiwtMTQxNzMyMzY5
-NCwxMDM5NTA3NDAzLC04MTkyNDExNzAsLTU2OTQ2OTgxMF19
+eyJoaXN0b3J5IjpbMjEyMzQ0NjIzOSw5OTI3MDIyOCwtNzM0OT
+QwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2MCwxNTQzMDQ4MTA2
+LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLTgxOTI0MTE3MCwtNT
+Y5NDY5ODEwXX0=
 -->
