@@ -127,12 +127,15 @@ Now time to deply as follows:
 ```bash
 cdk  deploy cdkworkshop
 ```
+Now you are ready to create your own application
 
+## Create real application
+You have to clean up the sample-app SNS and the SQS form the he
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTg5NzI3MzA5LC0xNjY1NjE1MzcsOTkyNz
-AyMjgsLTczNDk0MDUxOCwxNzQyMjE3MTQyLDEwNTE5NzMxNjAs
-MTU0MzA0ODEwNiwtMTQxNzMyMzY5NCwxMDM5NTA3NDAzLC04MT
-kyNDExNzAsLTU2OTQ2OTgxMF19
+eyJoaXN0b3J5IjpbLTYwNDY2Njk4Nyw5ODk3MjczMDksLTE2Nj
+U2MTUzNyw5OTI3MDIyOCwtNzM0OTQwNTE4LDE3NDIyMTcxNDIs
+MTA1MTk3MzE2MCwxNTQzMDQ4MTA2LC0xNDE3MzIzNjk0LDEwMz
+k1MDc0MDMsLTgxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
 -->
