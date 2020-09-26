@@ -82,28 +82,28 @@ Resources:
             Condition:
               ArnEquals:
                 aws:SourceArn:
-                  Ref: HelloawsTopic418BCE5E
+                  Ref: HelloawsTopic419BCE5E
             Effect: Allow
             Principal:
               Service: sns.amazonaws.com
             Resource:
               Fn::GetAtt:
-                - HelloawsQueue99542750
+                - HelloawsQueueN95NNN50
                 - Arn
         Version: "2012-10-17"
       Queues:
-        - Ref: HelloawsQueue99542750
+        - Ref: HelloawsQueueN95NNN50
     Metadata:
       aws:cdk:path: helloaws/HelloawsQueue/Policy/Resource
-  HelloawsQueuehelloawsHelloawsTopic05A4499A13C4E1C5:
+  HelloawsQueuehelloawsHelloawsTopic05A44NNA13C4E1C5:
     Type: AWS::SNS::Subscription
     Properties:
       Protocol: sqs
       TopicArn:
-        Ref: HelloawsTopic418BCE5E
+        Ref: HelloawsTopic419BCE5E
       Endpoint:
         Fn::GetAtt:
-          - HelloawsQueue99542750
+          - HelloawsQueue9N95NNN50
           - Arn
     Metadata:
       aws:cdk:path: helloaws/HelloawsQueue/helloawsHelloawsTopic05A4499A/Resource
@@ -128,8 +128,8 @@ cdk bootstrap
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MDcyMzI4MjIsLTE2NjU2MTUzNyw5OT
-I3MDIyOCwtNzM0OTQwNTE4LDE3NDIyMTcxNDIsMTA1MTk3MzE2
-MCwxNTQzMDQ4MTA2LC0xNDE3MzIzNjk0LDEwMzk1MDc0MDMsLT
-gxOTI0MTE3MCwtNTY5NDY5ODEwXX0=
+eyJoaXN0b3J5IjpbNjA1OTM2MTk5LC0xNjY1NjE1MzcsOTkyNz
+AyMjgsLTczNDk0MDUxOCwxNzQyMjE3MTQyLDEwNTE5NzMxNjAs
+MTU0MzA0ODEwNiwtMTQxNzMyMzY5NCwxMDM5NTA3NDAzLC04MT
+kyNDExNzAsLTU2OTQ2OTgxMF19
 -->
