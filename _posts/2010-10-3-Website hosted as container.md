@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Website hosted as container"
+title: "Website hosted as a container"
 date:   2020-10-03 13:01:30 +1000
 categories: [blog]
 excerpt_separator: <!--more-->
