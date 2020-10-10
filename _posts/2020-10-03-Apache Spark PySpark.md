@@ -8,7 +8,9 @@ excerpt_separator: <!--more-->
 
 PySpark is one of the most popular way of using Spark. This blog consider the basics such as Spark SQL use with data frames.
 
+<!--more-->
 
+## First Step
 To start you new SparkSession
 
 ```python
@@ -269,5 +271,5 @@ In the above code tags are listed with number of tags per movie.
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk5NDYyNTUyOF19
+eyJoaXN0b3J5IjpbMjA1MjE0ODQ0NF19
 -->
