@@ -6,9 +6,12 @@ categories: [blog]
 excerpt_separator: <!--more-->
 ---
 
-PySpark is one of the most popular way of using Spark. This blog consider the basics such as Spark SQL use with data frames.
+PySpark is one of the most popular way of using Spark. This blog consider the basics use of Spark SQL with data frames.
 
 <!--more-->
+
+* TOC
+{:toc}
 
 ## First Step
 To start you new SparkSession
@@ -271,5 +274,5 @@ In the above code tags are listed with number of tags per movie.
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA1MjE0ODQ0NF19
+eyJoaXN0b3J5IjpbLTE3MTE3OTM3MzZdfQ==
 -->
