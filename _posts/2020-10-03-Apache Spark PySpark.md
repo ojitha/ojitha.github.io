@@ -9,7 +9,8 @@ excerpt_separator: <!--more-->
 PySpark is one of the most popular ways of using Spark. This blog considers the use of the basic of Spark SQL with data frames.
 
 <!--more-->
-
+Content
+------------------
 * TOC
 {:toc}
 
@@ -274,5 +275,5 @@ In the above code, tags listed with the number of tags per movie.
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjI2NjY2MDYwLC0xNzExNzkzNzM2XX0=
+eyJoaXN0b3J5IjpbNTc2NzIzNDc5LC0xNzExNzkzNzM2XX0=
 -->
