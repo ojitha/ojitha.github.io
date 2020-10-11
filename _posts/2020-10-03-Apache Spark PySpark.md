@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Apache Spark begin with PySpark"
+title: "Apache Spark begins with PySpark"
 date:   2020-10-03 20:01:30 +1000
 categories: [blog]
 excerpt_separator: <!--more-->
 ---
 
-PySpark is one of the most popular way of using Spark. This blog consider the basics use of Spark SQL with data frames.
+PySpark is one of the most popular ways of using Spark. This blog considers the use of the basic of Spark SQL with data frames.
 
 <!--more-->
 
@@ -28,25 +28,25 @@ df = spark.sql('SELECT "hello world" as c1')
 df.show()
 ```
 
-It is important to stop your application at the end
+It is essential to stop your application at the end.
 
 ```python
 spark.stop()
 ```
 
-Spark uses lazy evaluation and Catalyst query optimisation to plan an exeecution plan  to be triggered when action happened.
+Spark uses lazy evaluation and Catalyst query optimisation to plan an execution plan to be triggered when an action happened.
 
 There are three different operations at the level of Data Frames:
 
-1. Transformation: Spark wait until the lazy transformation encounters an action.
+1. Transformation: Spark waits until the lazy transformation encounters an action.
 2. Action: All the transformations collected will be performed
-3. Property: Depending on the context, property can be either action or transformation.
+3. Property: Depending on the context, the property can be either action or transformation.
 
 > Spark keeps a lineage graph (DAG) of all transformations requested of the data.
 
 ## Spark SQL
 
-The query API to query structured data within the Spark context. Spark SQL has native Hadoop/Hive integration.
+The query API is available to query structured data within the Spark context. Spark SQL has native Hadoop/Hive integration.
 
 The first example is to read a CSV file:
 
@@ -106,7 +106,7 @@ If you want to filter
 df.where(f.col("rating") > 4).show()
 ```
 
-If you want to do `where` in python way
+If you want to do `where` in python way.
 
 ```python
 movies = (
@@ -269,10 +269,10 @@ tags.groupBy("movieId").agg(
 ).sort(f.col("number_of_tags").desc()).show()
 ```
 
-In the above code tags are listed with number of tags per movie.
+In the above code, tags listed with the number of tags per movie.
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MTE3OTM3MzZdfQ==
+eyJoaXN0b3J5IjpbNjI2NjY2MDYwLC0xNzExNzkzNzM2XX0=
 -->
