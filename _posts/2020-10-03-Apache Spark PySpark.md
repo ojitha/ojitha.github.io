@@ -271,9 +271,3 @@ tags.groupBy("movieId").agg(
 ```
 
 In the above code, tags listed with the number of tags per movie.
-
-
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMzc3NDY3MDcsLTE3MTE3OTM3MzZdfQ==
--->
