@@ -5,9 +5,38 @@ title: Unix Tools
 
 ## awk
 
+The syntax is
+
+```bash
+awk '/search pattern/' <action file>
+```
+
+
+
 | No | Exmple|Description  |
 | -- | -- | -- |
 | 1 |  `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` | Print range of lines with  line numbers |
+| 2 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | awk -F ',' '{print $1}'` | To get the first column |
+
+## cut
+
+| No   | Example                                       | Description                                                  |
+| ---- | --------------------------------------------- | ------------------------------------------------------------ |
+| 1    | `cut -c 2 t.txt`                              | Get the first letter vertically                              |
+| 2    | `cut -c 2-6 t.txt`                            | Get the letter from position 2 up to the postion 6 vertically. |
+| 3    | `cut -c 2- t.txt`                             | Get the rest starting from the position 2.                   |
+| 4    | `echo -e 'one\ttwo\tthree' | cut -f 1`        | if tab separated you can use field                           |
+| 5    | `echo -e 'one,two,tthree'  | cut -d ',' -f 3` | to get the comma separated field.                            |
+
+
+
+## grep
+
+| No   | Example                                                      | Description          |
+| ---- | ------------------------------------------------------------ | -------------------- |
+| 1    | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass' | grep -v ^first,last$` | You will give you what doesn't match. |
+|  |  |  |
+
 
 
 ## less
@@ -22,6 +51,11 @@ title: Unix Tools
 | No | Example | Description |
 | -- | -- | -- |
 | 1 | `sed -n 14428, 14633 <fileName>` | If you want to output the lines in the number range |
+| 2 | `echo "123 abc"` | To repeast using regex |
+
+
+
+
 
 ## SFTP Data transfer
 
