@@ -2,7 +2,7 @@
 layout: notes 
 title: Unix Tools
 ---
-
+##
 ## Less
 
 | No | Exmple|Description  |
@@ -112,6 +112,6 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTA1NjE2MTc2LDc5MTgzNDAxNCwtNzU1Nj
-M4MzY4LC0xMzE0NzgwMzAzXX0=
+eyJoaXN0b3J5IjpbMTk4MzE3MTE1Miw3OTE4MzQwMTQsLTc1NT
+YzODM2OCwtMTMxNDc4MDMwM119
 -->
