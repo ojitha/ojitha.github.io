@@ -2,19 +2,26 @@
 layout: notes 
 title: Unix Tools
 ---
-##
-## Less
+
+## awk
+
+| No | Exmple|Description  |
+| -- | -- | -- |
+| 1 | Show line numbers | `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` |
+
+
+## less
 
 | No | Exmple|Description  |
 | -- | -- | -- |
 | 1 | Show line numbers | `less -N <fileName>` |
 
 
-## Sed 
+## sed 
 
 | No | Example | Description |
 | -- | -- | -- |
-| 1 | `sed -n firtLine, lastLinep <fileName>` | If you want to output the lines in the number range |
+| 1 | `sed -n 14428, 14633 <fileName>` | If you want to output the lines in the number range |
 
 ## SFTP Data transfer
 
@@ -112,6 +119,6 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk4MzE3MTE1Miw3OTE4MzQwMTQsLTc1NT
-YzODM2OCwtMTMxNDc4MDMwM119
+eyJoaXN0b3J5IjpbMTc2MzE5MjI5LDc5MTgzNDAxNCwtNzU1Nj
+M4MzY4LC0xMzE0NzgwMzAzXX0=
 -->
