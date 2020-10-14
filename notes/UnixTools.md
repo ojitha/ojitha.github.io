@@ -14,12 +14,7 @@ title: Unix Tools
 
 | No | Example | Description |
 | -- | -- | -- |
-| If you want to output the lines in the number range |  |
-
-. Using `less -N` find the required line numbers. 
-```bash
-sed -n firtLine, lastLinep <fileName>
-```
+| 1 | `sed -n firtLine, lastLinep <fileName>` | If you want to output the lines in the number range |
 
 
 ## SFTP Data transfer
@@ -118,6 +113,6 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk1Njg1MTA2Miw3OTE4MzQwMTQsLTc1NT
-YzODM2OCwtMTMxNDc4MDMwM119
+eyJoaXN0b3J5IjpbMjQ1MDM5NzQ2LDc5MTgzNDAxNCwtNzU1Nj
+M4MzY4LC0xMzE0NzgwMzAzXX0=
 -->
