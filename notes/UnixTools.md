@@ -16,7 +16,6 @@ title: Unix Tools
 | -- | -- | -- |
 | 1 | `sed -n firtLine, lastLinep <fileName>` | If you want to output the lines in the number range |
 
-
 ## SFTP Data transfer
 
 To connect to the SFTF site:
@@ -113,6 +112,6 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjQ1MDM5NzQ2LDc5MTgzNDAxNCwtNzU1Nj
+eyJoaXN0b3J5IjpbNTA1NjE2MTc2LDc5MTgzNDAxNCwtNzU1Nj
 M4MzY4LC0xMzE0NzgwMzAzXX0=
 -->
