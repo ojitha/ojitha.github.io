@@ -10,7 +10,7 @@ title: Unix Tools
 | 1 | Show line numbers | `less -N <fileName>` |
 
 
-## Sed use
+## Sed 
 If you want to output the lines in the number range. Using `less -N` find the required line numbers. 
 ```bash
 sed -n firtLine, lastLinep <fileName>
@@ -113,6 +113,6 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzkxODM0MDE0LC03NTU2MzgzNjgsLTEzMT
-Q3ODAzMDNdfQ==
+eyJoaXN0b3J5IjpbLTIwNzY3NDExNDksNzkxODM0MDE0LC03NT
+U2MzgzNjgsLTEzMTQ3ODAzMDNdfQ==
 -->
