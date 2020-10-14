@@ -17,6 +17,8 @@ awk '/search pattern/' <action file>
 | -- | -- | -- |
 | 1 |  `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` | Print range of lines with  line numbers |
 | 2 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | awk -F ',' '{print $1}'` | To get the first column |
+| 3 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | awk -F ',' -v OFS='|' '{print $2,$1}'` | To exchange the columns. Eg: `print $(NF -1)}` mean total columns reduce by one. |
+
 
 ## cut
 
@@ -35,7 +37,7 @@ awk '/search pattern/' <action file>
 | No   | Example                                                      | Description          |
 | ---- | ------------------------------------------------------------ | -------------------- |
 | 1    | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass' | grep -v ^first,last$` | You will give you what doesn't match. |
-|  |  |  |
+| 4 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | grep -Ev 'oj|Yass'` | To avoid lines based on *OR*. Eg: This command will remove ojitha and Yass both lines. |
 
 
 
@@ -54,6 +56,26 @@ awk '/search pattern/' <action file>
 | 2 | `echo "123 abc"` | To repeast using regex |
 
 
+
+## sort
+
+| No   | Example                                 | Description                                 |
+| ---- | --------------------------------------- | ------------------------------------------- |
+| 1    | `du  /Users/ojitha/GitHub/ | sort -nr`  | to find most used disk space used directory |
+| 2    | `du -h /Users/ojitha/GitHub/ | sort -h` | Human readable way                          |
+|      |                                         |                                             |
+
+Option `u`: unique
+
+
+
+## Networking
+
+To get the port numbers for UDP, TCP and listing ports
+
+```bash
+netstat -nutl
+```
 
 
 
