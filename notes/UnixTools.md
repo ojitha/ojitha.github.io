@@ -4,8 +4,8 @@ title: Unix Tools
 ---
 
 ## Less
-|#|Exmple|Description  |
-|--|--|--|
+| # | Exmple|Description  |
+| -- | -- | -- |
 | 1|Show line numbers | `less -N <fileName>` |
 
 
@@ -112,6 +112,5 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0MjI1MDc4MzQsLTEzMTQ3ODAzMDNdfQ
-==
+eyJoaXN0b3J5IjpbLTc1NTYzODM2OCwtMTMxNDc4MDMwM119
 -->
