@@ -74,6 +74,11 @@ First remove first tow lines:
 ```bash
 netstat -nutl | egrep -Ev '^Active|^Proto'
 ```
+or
+```bash
+netstat -nutl | grep ':'
+```
+
 
 
 
@@ -174,7 +179,7 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEzNzM0NjE0OSwtNTM2Mjc2NzU5LC0xMz
-Q4OTU0Mjc0LDc5MTgzNDAxNCwtNzU1NjM4MzY4LC0xMzE0Nzgw
-MzAzXX0=
+eyJoaXN0b3J5IjpbLTE4MDE1MDc0NjcsLTUzNjI3Njc1OSwtMT
+M0ODk1NDI3NCw3OTE4MzQwMTQsLTc1NTYzODM2OCwtMTMxNDc4
+MDMwM119
 -->
