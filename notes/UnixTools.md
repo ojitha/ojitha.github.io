@@ -7,14 +7,14 @@ title: Unix Tools
 
 | No | Exmple|Description  |
 | -- | -- | -- |
-| 1 | Show line numbers | `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` |
+| 1 |  `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` | Print range of lines with  line numbers |
 
 
 ## less
 
 | No | Exmple|Description  |
 | -- | -- | -- |
-| 1 | Show line numbers | `less -N <fileName>` |
+| 1 | `less -N <fileName>` | Show line numbers |
 
 
 ## sed 
@@ -119,6 +119,6 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc2MzE5MjI5LDc5MTgzNDAxNCwtNzU1Nj
-M4MzY4LC0xMzE0NzgwMzAzXX0=
+eyJoaXN0b3J5IjpbLTEzNDg5NTQyNzQsNzkxODM0MDE0LC03NT
+U2MzgzNjgsLTEzMTQ3ODAzMDNdfQ==
 -->
