@@ -11,8 +11,6 @@ The syntax is
 awk '/search pattern/' <action file>
 ```
 
-
-
 | No | Exmple|Description  |
 | -- | -- | -- |
 | 1 |  `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` | Print range of lines with  line numbers |
@@ -36,7 +34,6 @@ awk '/search pattern/' <action file>
 | ---- | ------------------------------------------------------------ | -------------------- |
 | 1    | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass' | grep -v ^first,last$` | You will give you what doesn't match. |
 |  |  |  |
-
 
 
 ## less
@@ -153,6 +150,6 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI0MzAzMzg3OSwtMTM0ODk1NDI3NCw3OT
+eyJoaXN0b3J5IjpbLTUzNjI3Njc1OSwtMTM0ODk1NDI3NCw3OT
 E4MzQwMTQsLTc1NTYzODM2OCwtMTMxNDc4MDMwM119
 -->
