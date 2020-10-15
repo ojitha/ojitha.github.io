@@ -61,7 +61,7 @@ awk '/search pattern/' <action file>
 | ---- | --------------------------------------- | ------------------------------------------- |
 | 1    | `du  /Users/ojitha/GitHub/ | sort -nr`  | to find most used disk space used directory |
 | 2    | `du -h /Users/ojitha/GitHub/ | sort -h` | Human readable way                          |
-|      |                                         |                                             |
+| 3    |` cat <file> | sort -t ':' -k 3 -n`      | sort on field 3 on field separator found by `;` |
 
 Option `u`: unique
 
@@ -204,8 +204,8 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTQxNDk0NDcwLDEzMzM4NTc3MTgsMjAwNz
-gxODI5OCwxMTkxMjQ4NjE2LC0yMTEyMjQxNTY3LC0zNDE4MTk4
-NjIsLTUzNjI3Njc1OSwtMTM0ODk1NDI3NCw3OTE4MzQwMTQsLT
-c1NTYzODM2OCwtMTMxNDc4MDMwM119
+eyJoaXN0b3J5IjpbLTE4OTczNjgzOTQsOTQxNDk0NDcwLDEzMz
+M4NTc3MTgsMjAwNzgxODI5OCwxMTkxMjQ4NjE2LC0yMTEyMjQx
+NTY3LC0zNDE4MTk4NjIsLTUzNjI3Njc1OSwtMTM0ODk1NDI3NC
+w3OTE4MzQwMTQsLTc1NTYzODM2OCwtMTMxNDc4MDMwM119
 -->
