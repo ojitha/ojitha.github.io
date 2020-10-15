@@ -86,6 +86,12 @@ to print only the ports
 ```bash
 netstat -nutl | grep ':' | awk '{print $4}' | awk -F ':' '{print $NF}'
 ```
+or 
+```bash
+netstat -nutl | grep 'tcp' | awk '{print $4}' | cut -d':' -f 2
+
+```
+
 
 
 
@@ -187,7 +193,7 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM0MTgxOTg2MiwtNTM2Mjc2NzU5LC0xMz
-Q4OTU0Mjc0LDc5MTgzNDAxNCwtNzU1NjM4MzY4LC0xMzE0Nzgw
-MzAzXX0=
+eyJoaXN0b3J5IjpbLTE5Mzc1NjU1ODksLTM0MTgxOTg2MiwtNT
+M2Mjc2NzU5LC0xMzQ4OTU0Mjc0LDc5MTgzNDAxNCwtNzU1NjM4
+MzY4LC0xMzE0NzgwMzAzXX0=
 -->
