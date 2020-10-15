@@ -36,7 +36,7 @@ awk '/search pattern/' <action file>
 | ---- | ------------------------------------------------------------ | -------------------- |
 | 1    | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass' | grep -v ^first,last$` | You will give you what doesn't match. |
 | 2 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | grep -Ev 'oj|Yass'` | To avoid lines based on *OR*. Eg: This command will remove ojitha and Yass both lines. |
-| 3 | `grep -c 'smoething' <filename>` | Count number of occurrences |
+| 3 | `grep -c 'smoething' <filename>` | Count number of lines occurred the something. |
 
 
 ## less
@@ -204,8 +204,8 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTY1MDIwNDksMTMzMzg1NzcxOCwyMDA3OD
-E4Mjk4LDExOTEyNDg2MTYsLTIxMTIyNDE1NjcsLTM0MTgxOTg2
-MiwtNTM2Mjc2NzU5LC0xMzQ4OTU0Mjc0LDc5MTgzNDAxNCwtNz
-U1NjM4MzY4LC0xMzE0NzgwMzAzXX0=
+eyJoaXN0b3J5IjpbOTQxNDk0NDcwLDEzMzM4NTc3MTgsMjAwNz
+gxODI5OCwxMTkxMjQ4NjE2LC0yMTEyMjQxNTY3LC0zNDE4MTk4
+NjIsLTUzNjI3Njc1OSwtMTM0ODk1NDI3NCw3OTE4MzQwMTQsLT
+c1NTYzODM2OCwtMTMxNDc4MDMwM119
 -->
