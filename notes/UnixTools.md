@@ -90,6 +90,11 @@ or
 ```bash
 netstat -nutl | grep 'tcp' | awk '{print $4}' | cut -d':' -f 2
 ```
+Unique ports
+```bash
+netstat -nutl | grep 'tcp' | awk '{print $4}' | awk -F ':' '{print $NF}' | sort -n | uniq
+```
+
 For the listening ports
 ```bash
 netstat -nutlp | grep 'tcp'
@@ -198,8 +203,8 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAwNzgxODI5OCwxMTkxMjQ4NjE2LC0yMT
-EyMjQxNTY3LC0zNDE4MTk4NjIsLTUzNjI3Njc1OSwtMTM0ODk1
-NDI3NCw3OTE4MzQwMTQsLTc1NTYzODM2OCwtMTMxNDc4MDMwM1
-19
+eyJoaXN0b3J5IjpbMTkxMTA1MDM0OCwyMDA3ODE4Mjk4LDExOT
+EyNDg2MTYsLTIxMTIyNDE1NjcsLTM0MTgxOTg2MiwtNTM2Mjc2
+NzU5LC0xMzQ4OTU0Mjc0LDc5MTgzNDAxNCwtNzU1NjM4MzY4LC
+0xMzE0NzgwMzAzXX0=
 -->
