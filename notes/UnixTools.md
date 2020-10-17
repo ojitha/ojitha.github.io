@@ -5,14 +5,21 @@ title: Unix Tools
 
 ## awk
 
-The syntax is
+Sed is the flip side of interactive editor such as vi. Therefore sed is limited to editor, but aws is a proramming language and provide more control over processin files. 
 
-```bash
-awk '/search pattern/' <action file>
-```
+The standard syntax is `awk 'instructions' <files>`. The `awk -f <script> <files>` is the syntax for script files.
+
+> Default `awk` field separator is either spaces or tabs. To change the file separator use the option `-F`.
+
+Options:
+
+`-F`: file separator
+
+`-f`: script separator
 
 | No | Exmple|Description  |
 | -- | -- | -- |
+| 1 | `awk -F, '/pattern/ { print $1; print $2}' <files>` |Output the matching lines only |
 | 1 |  `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` | Print range of lines with  line numbers |
 | 2 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | awk -F ',' '{print $1}'` | To get the first column |
 | 3 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | awk -F ',' -v OFS='|' '{print $2,$1}'` | To exchange the columns. Eg: `print $(NF -1)}` mean total columns reduce by one. |
@@ -44,13 +51,27 @@ awk '/search pattern/' <action file>
 | -- | -- | -- |
 | 1 | `less -N <fileName>` | Show line numbers |
 
-
 ## sed 
+
+Sed is a non-interactive stream-oriented editor.
+
+Syntax is `sed [-e] <instruction> file` and `-e` for more than one instruction to be executed. The `sed -f scriptfile file` is the way to apply commands via `scriptfile`. 
+
+Options:
+
+`-n`: default is display all the input lines as output. This opton suppress that and work with `p` (see the 3rd example in the table bellow) option to display the output
+
+`-f`: script file
+
+`-e`: instructions
+
+
 
 | No | Example | Description |
 | -- | -- | -- |
-| 1 | `sed -n 14428, 14633 <fileName>` | If you want to output the lines in the number range |
-| 2 | `echo "123 abc "` | To repeats using regex |
+| 1 | `sed -n 14428, 14633 <file>` | If you want to output the lines in the number range |
+| 2 | `sed 's/<source>/<target>/' <file>` | Substitute source with target |
+| 3 | sed -n -e '.../p' | display only the affected lines |
 
 
 
