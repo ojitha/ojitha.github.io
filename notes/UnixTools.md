@@ -17,6 +17,8 @@ Options:
 
 `-f`: script separator
 
+`-v`: This is for the parameters such as `var=value`
+
 | No | Exmple|Description  |
 | -- | -- | -- |
 | 1 | `awk -F, '/pattern/ { print $1; print $2}' <files>` |Output the matching lines only |
