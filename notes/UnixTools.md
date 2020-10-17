@@ -42,7 +42,8 @@ Options:
 | No   | Example                                                      | Description          |
 | ---- | ------------------------------------------------------------ | -------------------- |
 | 1    | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass' | grep -v ^first,last$` | You will give you what doesn't match. |
-| 4 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | grep -Ev 'oj|Yass'` | To avoid lines based on *OR*. Eg: This command will remove ojitha and Yass both lines. |
+| 2 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | grep -Ev 'oj|Yass'` | To avoid lines based on *OR*. Eg: This command will remove ojitha and Yass both lines. |
+| 3 | `grep -c 'smoething' <filename>` | Count number of lines occurred the something. |
 
 
 ## less
@@ -81,7 +82,8 @@ Options:
 | ---- | --------------------------------------- | ------------------------------------------- |
 | 1    | `du  /Users/ojitha/GitHub/ | sort -nr`  | to find most used disk space used directory |
 | 2    | `du -h /Users/ojitha/GitHub/ | sort -h` | Human readable way                          |
-|      |                                         |                                             |
+| 3    |` cat <file> | sort -t ':' -k 3 `      | sort on field 3 where field separator found by `;` |
+
 
 Option `u`: unique
 
@@ -91,9 +93,40 @@ Option `u`: unique
 
 To get the port numbers for UDP, TCP and listing ports
 
+First remove first tow lines:
 ```bash
-netstat -nutl
+netstat -nutl | egrep -Ev '^Active|^Proto'
 ```
+or
+```bash
+netstat -nutl | grep ':'
+```
+To get the host and the port:
+```bash
+netstat -nutl | grep ':' | awk '{print $4}'
+```
+to print only the ports
+```bash
+netstat -nutl | grep ':' | awk '{print $4}' | awk -F ':' '{print $NF}'
+```
+or 
+```bash
+netstat -nutl | grep 'tcp' | awk '{print $4}' | cut -d':' -f 2
+```
+Unique ports
+```bash
+netstat -nutl | grep 'tcp' | awk '{print $4}' | awk -F ':' '{print $NF}' | sort -n | uniq -c
+```
+
+For the listening ports
+```bash
+netstat -nutlp | grep 'tcp'
+```
+
+
+
+
+
 
 
 
@@ -193,6 +226,8 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUzNjI3Njc1OSwtMTM0ODk1NDI3NCw3OT
-E4MzQwMTQsLTc1NTYzODM2OCwtMTMxNDc4MDMwM119
+eyJoaXN0b3J5IjpbMTQ3MDcwMTI5NSw5NDE0OTQ0NzAsMTMzMz
+g1NzcxOCwyMDA3ODE4Mjk4LDExOTEyNDg2MTYsLTIxMTIyNDE1
+NjcsLTM0MTgxOTg2MiwtNTM2Mjc2NzU5LC0xMzQ4OTU0Mjc0LD
+c5MTgzNDAxNCwtNzU1NjM4MzY4LC0xMzE0NzgwMzAzXX0=
 -->
