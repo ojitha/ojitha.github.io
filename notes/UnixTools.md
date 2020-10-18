@@ -11,6 +11,8 @@ The standard syntax is `awk 'instructions' <files>`. The `awk -f <script> <files
 
 > Default `awk` field separator is either spaces or tabs. To change the file separator use the option `-F`.
 
+NOTE: awk is using the same metacharacters supported by egrep.
+
 Options:
 
 `-F`: file separator
@@ -68,7 +70,7 @@ Options:
 
 `-e`: instructions
 
-
+NOTE: sed is using same set of metacharacters used by the grep.
 
 | No | Example | Description |
 | -- | -- | -- |
