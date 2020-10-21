@@ -129,13 +129,6 @@ For the listening ports
 netstat -nutlp | grep 'tcp'
 ```
 
-
-
-
-
-
-
-
 ## SFTP Data transfer
 
 To connect to the SFTF site:
@@ -232,8 +225,9 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQ3MDcwMTI5NSw5NDE0OTQ0NzAsMTMzMz
-g1NzcxOCwyMDA3ODE4Mjk4LDExOTEyNDg2MTYsLTIxMTIyNDE1
-NjcsLTM0MTgxOTg2MiwtNTM2Mjc2NzU5LC0xMzQ4OTU0Mjc0LD
-c5MTgzNDAxNCwtNzU1NjM4MzY4LC0xMzE0NzgwMzAzXX0=
+eyJoaXN0b3J5IjpbMTczNjU2NjY3MSwxNDcwNzAxMjk1LDk0MT
+Q5NDQ3MCwxMzMzODU3NzE4LDIwMDc4MTgyOTgsMTE5MTI0ODYx
+NiwtMjExMjI0MTU2NywtMzQxODE5ODYyLC01MzYyNzY3NTksLT
+EzNDg5NTQyNzQsNzkxODM0MDE0LC03NTU2MzgzNjgsLTEzMTQ3
+ODAzMDNdfQ==
 -->
