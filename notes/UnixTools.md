@@ -78,6 +78,8 @@ NOTE: sed is using same set of metacharacters used by the grep.
 | 2 | `sed 's/<source>/<target>/' <file>` | Substitute source with target |
 | 3 | sed -n -e '.../p' | display only the affected lines |
 
+> Sed applies the entire script to the first input before move to second line of the input. Therefore you cannot depends on the previous line values because which are already changed by the script.
+
 
 
 ## sort
