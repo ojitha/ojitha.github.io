@@ -2,7 +2,11 @@
 layout: notes 
 title: Powershell
 ---
-
+## Syntax
+Here the syntax for the commandlet.
+```powershell
+Verb-noun [-parameter list]
+```
 
 ## Calculated parameters
 
@@ -15,5 +19,5 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzcyNTY1NDQ3XX0=
+eyJoaXN0b3J5IjpbMTAxMzU3NzIzMyw3NzI1NjU0NDddfQ==
 -->
