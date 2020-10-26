@@ -27,3 +27,6 @@ docs:
 
 - title: Unix Tools
   url: UnixTools.html 
+
+- title: Powershell
+  url: powershell.html
