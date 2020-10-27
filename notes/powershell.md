@@ -18,6 +18,10 @@ For example similar to UNIX `pwd` is:
 ```powershell
 Get-Location
 ```
+The alias for the above command is `pwd`. All the aliases can be found as follows:
+```powershell
+
+```
 
 ## Parameters
 
@@ -40,6 +44,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY3NjMzMDg4NCwxNzcxODAwODg0LDc3Mj
-U2NTQ0N119
+eyJoaXN0b3J5IjpbNTA3MTgwOTUyLDE3NzE4MDA4ODQsNzcyNT
+Y1NDQ3XX0=
 -->
