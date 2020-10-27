@@ -26,11 +26,13 @@ If you want to get all the aliases available for the commandlet, for example Get
 ```powershell
 Get-Alias | Where-Object { $_.definition -eq "get-process"}
 ```
-> You can create new alias with `Set-Alias` or `New-Alias`.
+You can create new alias with `Set-Alias` or `New-Alias`.
 ```powershell
 Set-Alias xxx Get-xxxx
 New-Alias yyy Get-yyyy
 ```
+> NOTE: `Set-Alias overwrite the existing alias. `New-Alias` will fail if the alias is already exists. You can use the `-descritpion
+
 
 
 ## Parameters
@@ -54,6 +56,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjQ4ODIwMzYsLTE1NDE0MzgyMTIsMTc3MT
-gwMDg4NCw3NzI1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbLTE4MzY0OTk3MDcsLTE1NDE0MzgyMTIsMT
+c3MTgwMDg4NCw3NzI1NjU0NDddfQ==
 -->
