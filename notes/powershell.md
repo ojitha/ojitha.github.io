@@ -33,11 +33,13 @@ you can calculate the process id 1100 as follows
 ```powershell
  Get-Process -id (1000 + 100)
 ```
+The short form for the above commandlet is `ps`.
+
 Another example to exclude services start with`v` to `w` 
 ```powershell
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU2MDk1MTE0MywxNzcxODAwODg0LDc3Mj
+eyJoaXN0b3J5IjpbLTY3NjMzMDg4NCwxNzcxODAwODg0LDc3Mj
 U2NTQ0N119
 -->
