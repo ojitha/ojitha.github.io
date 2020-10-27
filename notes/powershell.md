@@ -37,8 +37,7 @@ You can use `Set-Alias to create alias for the application as well.
 ```powershell
  Set-Alias np C:\LocalDev\npp.7.8.bin\notepad++.exe
 ```
-
-
+Now the alias `np` you can use to open any file in the CLI.
 
 
 
@@ -63,6 +62,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNjQyMzgwMDUsLTE1NDE0MzgyMTIsMT
-c3MTgwMDg4NCw3NzI1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNz
+cxODAwODg0LDc3MjU2NTQ0N119
 -->
