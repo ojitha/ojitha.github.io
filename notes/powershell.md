@@ -22,6 +22,10 @@ The alias for the above command is `pwd`. All the aliases can be found as follow
 ```powershell
 Get-Alias
 ```
+If you want to get all the aliases available for the commandlet, for example Get-Process:
+```powershell
+Get-Alias | Where-Object { $_.definition -eq "get-process"}
+```
 
 ## Parameters
 
@@ -44,6 +48,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzk5MzQ0MjA3LDE3NzE4MDA4ODQsNzcyNT
-Y1NDQ3XX0=
+eyJoaXN0b3J5IjpbLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3Nz
+I1NjU0NDddfQ==
 -->
