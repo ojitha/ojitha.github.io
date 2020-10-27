@@ -20,7 +20,7 @@ Get-Location
 ```
 The alias for the above command is `pwd`. All the aliases can be found as follows:
 ```powershell
-
+Get-Alias
 ```
 
 ## Parameters
@@ -44,6 +44,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTA3MTgwOTUyLDE3NzE4MDA4ODQsNzcyNT
+eyJoaXN0b3J5IjpbNzk5MzQ0MjA3LDE3NzE4MDA4ODQsNzcyNT
 Y1NDQ3XX0=
 -->
