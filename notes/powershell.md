@@ -26,7 +26,7 @@ If you want to get all the aliases available for the commandlet, for example Get
 ```powershell
 Get-Alias | Where-Object { $_.definition -eq "get-process"}
 ```
-
+You can create new alias with `Set-Alias` or `New-Alias`.
 ## Parameters
 
 Parameters can be positional or with the name such as `Filter`:
@@ -48,6 +48,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3Nz
-I1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbMTcxNjY4MjQ1NCwtMTU0MTQzODIxMiwxNz
+cxODAwODg0LDc3MjU2NTQ0N119
 -->
