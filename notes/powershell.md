@@ -7,7 +7,8 @@ Here the syntax for the commandlet.
 ```powershell
 Verb-noun [-parameter list]
 ```
-
+Above commandlet is not sensitivities.
+ 
 ## Calculated parameters
 
 you can calculate the process id 1100 as follows
@@ -19,5 +20,5 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAxMzU3NzIzMyw3NzI1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbMTc3MTgwMDg4NCw3NzI1NjU0NDddfQ==
 -->
