@@ -10,7 +10,8 @@ Verb-noun [-parameter list]
 Above commandlet is not sensitivities.
 
 ## Parameters
-Parameters can be positional as follows
+
+Parameters can be positional or with the name such as `Filter`:
 ```powershell
  Get-ChildItem 'C:\Local\xxxx\forms' -Filter *.pdf
 ```
@@ -27,6 +28,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTM4MzIzNzgsMTc3MTgwMDg4NCw3NzI1Nj
-U0NDddfQ==
+eyJoaXN0b3J5IjpbMjEzNzgyNzk0NCwxNzcxODAwODg0LDc3Mj
+U2NTQ0N119
 -->
