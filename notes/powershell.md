@@ -33,7 +33,8 @@ New-Alias yyy Get-yyyy
 ```
 > NOTE: `Set-Alias overwrite the existing alias. `New-Alias` will fail if the alias is already exists. You can use the `-description` to create the note.
 
-You can use `Set
+You can use `Set-Alias to create alias for the application as well.
+
 
 
 
@@ -58,6 +59,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI5MDgzNTg1OSwtMTU0MTQzODIxMiwxNz
+eyJoaXN0b3J5IjpbMTQyNjg1NjUxNywtMTU0MTQzODIxMiwxNz
 cxODAwODg0LDc3MjU2NTQ0N119
 -->
