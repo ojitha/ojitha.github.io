@@ -3,7 +3,7 @@ layout: notes
 title: Powershell
 ---
 
-Notes on Windows PowerShell
+**Notes on Windows PowerShell**
 
 * TOC
 {:toc}
@@ -34,6 +34,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0OTAyODM3MDQsMTc3MTgwMDg4NCw3Nz
-I1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbNjgwOTkyNzIsMTc3MTgwMDg4NCw3NzI1Nj
+U0NDddfQ==
 -->
