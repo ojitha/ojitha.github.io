@@ -14,6 +14,10 @@ Here the syntax for the commandlet.
 Verb-noun [-parameter list]
 ```
 Above commandlet is not sensitivities.
+For example similar to UNIX `pwd` is:
+```powershell
+Get-Location
+```
 
 ## Parameters
 
@@ -34,6 +38,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjgwOTkyNzIsMTc3MTgwMDg4NCw3NzI1Nj
-U0NDddfQ==
+eyJoaXN0b3J5IjpbLTU2MDk1MTE0MywxNzcxODAwODg0LDc3Mj
+U2NTQ0N119
 -->
