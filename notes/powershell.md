@@ -8,6 +8,13 @@ Here the syntax for the commandlet.
 Verb-noun [-parameter list]
 ```
 Above commandlet is not sensitivities.
+
+## Parameters
+Parameters can be positional as follows
+```powershell
+ Get-ChildItem 'C:\Local\xxxx\forms' -Filter *.pdf
+```
+ This will shows only the PDF files.
  
 ## Calculated parameters
 
@@ -20,5 +27,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc3MTgwMDg4NCw3NzI1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbOTM4MzIzNzgsMTc3MTgwMDg4NCw3NzI1Nj
+U0NDddfQ==
 -->
