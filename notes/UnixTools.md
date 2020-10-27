@@ -2,6 +2,10 @@
 layout: notes 
 title: Unix Tools
 ---
+**Notes on UNIX tools**
+
+* TOC
+{:toc}
 
 ## awk
 
@@ -225,9 +229,9 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTczNjU2NjY3MSwxNDcwNzAxMjk1LDk0MT
-Q5NDQ3MCwxMzMzODU3NzE4LDIwMDc4MTgyOTgsMTE5MTI0ODYx
-NiwtMjExMjI0MTU2NywtMzQxODE5ODYyLC01MzYyNzY3NTksLT
-EzNDg5NTQyNzQsNzkxODM0MDE0LC03NTU2MzgzNjgsLTEzMTQ3
-ODAzMDNdfQ==
+eyJoaXN0b3J5IjpbLTU1MzEyNzM5NiwxNzM2NTY2NjcxLDE0Nz
+A3MDEyOTUsOTQxNDk0NDcwLDEzMzM4NTc3MTgsMjAwNzgxODI5
+OCwxMTkxMjQ4NjE2LC0yMTEyMjQxNTY3LC0zNDE4MTk4NjIsLT
+UzNjI3Njc1OSwtMTM0ODk1NDI3NCw3OTE4MzQwMTQsLTc1NTYz
+ODM2OCwtMTMxNDc4MDMwM119
 -->
