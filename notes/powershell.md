@@ -34,6 +34,10 @@ New-Alias yyy Get-yyyy
 > NOTE: `Set-Alias overwrite the existing alias. `New-Alias` will fail if the alias is already exists. You can use the `-description` to create the note.
 
 You can use `Set-Alias to create alias for the application as well.
+```powershell
+ Set-Alias np C:\LocalDev\npp.7.8.bin\notepad++.exe
+```
+
 
 
 
@@ -59,6 +63,6 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQyNjg1NjUxNywtMTU0MTQzODIxMiwxNz
-cxODAwODg0LDc3MjU2NTQ0N119
+eyJoaXN0b3J5IjpbLTExNjQyMzgwMDUsLTE1NDE0MzgyMTIsMT
+c3MTgwMDg4NCw3NzI1NjU0NDddfQ==
 -->
