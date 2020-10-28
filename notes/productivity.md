@@ -2,8 +2,12 @@
 layout: notes 
 title: Productivity Tools
 ---
-
 <script src="https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js"></script>
+
+**Notes on Productivity tools**
+
+* TOC
+{:toc}
 
 ## Productivity Tools
 Productivity is a cross cutting concren each and very bit of work I do. 
@@ -23,5 +27,5 @@ graph TD;
 
 such a great diagraming.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQyNDAyMDY0XX0=
+eyJoaXN0b3J5IjpbLTEzMTY5NjU4NDgsMTQyNDAyMDY0XX0=
 -->
