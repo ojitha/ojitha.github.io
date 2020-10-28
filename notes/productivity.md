@@ -32,9 +32,14 @@ Here the way to semantically diff the XML files:
 First create your project
 ```bash
 python3 -m venv xmltest
+cd xmltest
+source bin/activate
 ```
+You project is `xmltest`. Now install the graphtage packate
+```bash
+``` 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTIwOTkzOTM2LDE0MjQwMjA2NF19
+eyJoaXN0b3J5IjpbLTIwNzM3NDkyMTEsMTQyNDAyMDY0XX0=
 -->
