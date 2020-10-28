@@ -37,9 +37,15 @@ source bin/activate
 ```
 You project is `xmltest`. Now install the graphtage packate
 ```bash
+pip install graphtage
 ``` 
-
+now you are ready to compare m1.xml and p1.xml files:
+```bash
+graphtage p1.xml m1.xml
+```
+This will give you a out put to CLI.
+to deactivate, `deactivate` in the C
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwNzM3NDkyMTEsMTQyNDAyMDY0XX0=
+eyJoaXN0b3J5IjpbMTk4Njg4NDM0OCwxNDI0MDIwNjRdfQ==
 -->
