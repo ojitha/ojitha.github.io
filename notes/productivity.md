@@ -26,8 +26,15 @@ graph TD;
 such a great diagraming.
 
 ## XML
+Tools for XML 
+### Diff
+Here the way to semantically diff the XML files:
+First create your project
+```bash
+python3 -m venv xmltest
+```
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA4MTU1MDgzNSwxNDI0MDIwNjRdfQ==
+eyJoaXN0b3J5IjpbNTIwOTkzOTM2LDE0MjQwMjA2NF19
 -->
