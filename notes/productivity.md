@@ -44,8 +44,8 @@ now you are ready to compare m1.xml and p1.xml files:
 graphtage p1.xml m1.xml
 ```
 This will give you a out put to CLI.
-to deactivate, `deactivate` in the C
+to deactivate, `deactivate` in the CLI to move out from the project environment.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk4Njg4NDM0OCwxNDI0MDIwNjRdfQ==
+eyJoaXN0b3J5IjpbMTY1OTU2MTMwMCwxNDI0MDIwNjRdfQ==
 -->
