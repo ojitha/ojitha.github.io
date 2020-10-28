@@ -9,12 +9,10 @@ title: Productivity Tools
 * TOC
 {:toc}
 
-## Productivity Tools
-Productivity is a cross cutting concren each and very bit of work I do. 
-
-### Diagraming tools
+## Diagramming
 I was very enthustic to know markdown level diagraming. 
 
+### mermaid
 One of the best so far found is [mermaid](https://mermaid-js.github.io/mermaid/#/) which I cause use with the my blog tool stackedit.io. For example:
 
 <div class="mermaid">
@@ -26,6 +24,10 @@ graph TD;
 </div>
 
 such a great diagraming.
+
+## XML
+
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMTY5NjU4NDgsMTQyNDAyMDY0XX0=
+eyJoaXN0b3J5IjpbMTA4MTU1MDgzNSwxNDI0MDIwNjRdfQ==
 -->
