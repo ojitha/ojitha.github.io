@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Binary search in Python"
-date:   2020-10-29 19:01:30 +1000
+date:   2020-10-29 19:00:00
 categories: [blog]
 excerpt_separator: <!--more-->
 ---
