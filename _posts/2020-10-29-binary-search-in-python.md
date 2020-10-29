@@ -10,6 +10,7 @@ Binary Search one of the most fundamental algorithm. Here the very simple explan
 
 <!--more-->
 
+The running time of the binary search is $ \log_{2} 3 $.
 
 ```python
 def bs(list, search_item):
