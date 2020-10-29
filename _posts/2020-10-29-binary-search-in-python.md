@@ -26,15 +26,15 @@ Binary Search one of the most fundamental algorithm. Here the very simple explan
 The running time of the binary search is $$O(\log{}n)$$.
 
 ```python
-def bs(list, search_item):
+def bs(list, s):
     l =0 # low boundry
     h = len(list) - 1 # high boundary
     while (h >= l):
         m = (l+h) // 2 #calculate middle
         guess = list[m]
-        if (guess == search_item):
+        if (guess == s):
             return m
-        if (search_item > guess):
+        if (s > guess):
             l = m + 1
         else:
             h = m -1
@@ -46,4 +46,28 @@ list = [0,1,2,3,4,5,6,7,8,9]
 result = bs(list, 0)
 print(result)
 
+```
+
+If you follow the functional programming, here the recursive founction
+
+```python
+def bsf(list,s,l,h):
+    m = (l+h) // 2
+    guess = list[m]
+    while(h >= l): #if not found this will fail
+        if (guess == s):
+            return m # found
+        # not found, find a either side of the list    
+        if (s > guess):
+            return bsf(list,s,m+1,h) # right side of the list
+        else:
+            return bsf(list,s,l,m-1) # left side of the list
+
+    return None
+
+
+# Test to run
+list = [0,1,2,3,4,5,6,7,8,9]
+result = bsf(list,2,0,len(list))
+print(result)
 ```
