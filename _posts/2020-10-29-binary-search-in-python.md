@@ -23,7 +23,7 @@ Binary Search one of the most fundamental algorithm. Here the very simple explan
 
 <!--more-->
 
-The running time of the binary search is $$\mathcal{O}(\log{}n)$$.
+The running time of the binary search is $$O(\log{}n)$$.
 
 ```python
 def bs(list, search_item):
