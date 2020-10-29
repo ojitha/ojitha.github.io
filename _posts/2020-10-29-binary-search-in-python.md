@@ -18,11 +18,11 @@ window.MathJax = {
   }
 };
 </script>
-Binary Search one of the most fundamental algorithm. Here the very simple explanation and the running time of this algorithm.
+Binary Search is one of the most fundamental algorithm.
 
 ![image-20201030093627427](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201030093627427.png) 
 
-Here see the procedural and functional way of binary search algorithms.
+I explain the procedural and functional way of binary search algorithm.
 
 <!--more-->
 
