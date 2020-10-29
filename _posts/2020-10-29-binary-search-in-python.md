@@ -5,12 +5,25 @@ date: 2020-10-29
 categories: [python, algorithm]
 excerpt_separator: <!--more-->
 ---
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script type="text/javascript">
+window.MathJax = {
+  tex: {
+    packages: ['base', 'ams']
+  },
+  loader: {
+    load: ['ui/menu', '[tex]/ams']
+  }
+};
+</script>
 
 Binary Search one of the most fundamental algorithm. Here the very simple explanation and the running time of this algorithm. 
 
 <!--more-->
 
-The running time of the binary search is $ \log_{2} 3 $.
+The running time of the binary search is $$\mathcal{O}(\log{}n)$$.
 
 ```python
 def bs(list, search_item):
