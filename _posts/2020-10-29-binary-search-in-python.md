@@ -26,7 +26,7 @@ I explain the procedural and functional way of binary search algorithm.
 
 <!--more-->
 
-The running time of the binary search is $$O(\log{}n)$$.
+Binary sarch can be run only on sorted list (line# 17). The running time of the binary search is $$O(\log{}n)$$, for more information, see [Algorithm Analysis](https://ojitha.blogspot.com/2016/05/algorithm-analysis.html).
 
 ```python
 def bs(list, s):
@@ -48,7 +48,6 @@ def bs(list, s):
 list = [0,1,2,3,4,5,6,7,8,9]
 result = bs(list, 0)
 print(result)
-
 ```
 
 If you follow the functional programming, here the recursive founction
