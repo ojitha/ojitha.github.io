@@ -13,3 +13,6 @@ My official tech [blog](https://ojitha.blogspot.com.au):
 - [MAC shortcuts](https://ojitha.blogspot.com/2020/04/mac-shortcuts.html)
 
 are the recent blogs.
+
+## Algorithms
+[Binary Search]({% link _posts/2020-10-29-binary-search-in-python.md %})
