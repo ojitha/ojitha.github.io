@@ -15,4 +15,5 @@ My official tech [blog](https://ojitha.blogspot.com.au):
 are the recent blogs.
 
 ## Algorithms
-[Binary Search]({% link _posts/2020-10-29-binary-search-in-python.md %})
+- [Binary search in Python]({% link _posts/2020-10-29-binary-search-in-python.md %})
+- [Selection sort in Python]({% link _posts/2020-10-31-selection-sort-in-python.md %})
