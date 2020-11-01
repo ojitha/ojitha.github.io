@@ -18,7 +18,7 @@ window.MathJax = {
   }
 };
 </script>
-Quick sort runining time is $$O(\log{}n)$$.
+Quick sort runining time is $$O(n\log{}n)$$.
 
 ![image-20201101122401694](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201101122401694.png)
 
