@@ -21,7 +21,7 @@ window.MathJax = {
 
 Selection sort runining time is very high as $$O(N^2)$$.
 
-![image-20201031111651922](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201031111651922.png)
+![Selection Sort](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201031111651922.png)
 
 <!--more-->
 

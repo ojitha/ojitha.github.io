@@ -20,7 +20,7 @@ window.MathJax = {
 </script>
 Binary Search is one of the most fundamental algorithm.
 
-![image-20201030093627427](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201030093627427.png) 
+![Binary Search](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201030093627427.png) 
 
 I explain the procedural and functional way of binary search algorithm.
 
