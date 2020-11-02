@@ -18,21 +18,20 @@ author:
   name: Ojitha Kumanayaka
   email: "ojithak@gmail.com"
 description: >- # this means to ignore newlines until "baseurl:"
-  I am Ojitha Kumanayaka, the certified Java software engineer and AWS certified associate developer from Australia. 
+  I am Ojitha Kumanayaka, the certified Java software engineer and AWS certified associate developer from Australia.
 baseurl: / # the subpath of your site, e.g. /blog
 url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 google_analytics: UA-12622200-2
 timezone: Australia/Sydney
 show_excerpts: true
-logo: /icons/mstile-150x150.png
 logo: https://avatars.githubusercontent.com/ojitha?s=90&v=4
 header_pages:
   - about.md
   - projects.md
   - blog.md
-  - notes.md   
+  - notes.md
 
-#theme: jekyll-theme-cayman
+# theme: minima
 remote_theme: jekyll/minima
 minima:
   skin: classic
@@ -41,7 +40,7 @@ minima:
     github: ojitha
     linkedin: ojitha
     stackoverflow: "546792"
-   
+
 copyright: "Copyright © 2020 Ojitha Kumanayaka"
 
 # Build settings
@@ -59,11 +58,11 @@ plugins:
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
