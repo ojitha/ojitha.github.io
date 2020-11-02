@@ -25,6 +25,7 @@ google_analytics: UA-12622200-2
 timezone: Australia/Sydney
 show_excerpts: true
 logo: /icons/mstile-150x150.png
+logo: https://avatars.githubusercontent.com/ojitha?s=90&v=4
 header_pages:
   - about.md
   - projects.md
