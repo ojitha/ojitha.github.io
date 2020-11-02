@@ -24,7 +24,7 @@ url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.
 google_analytics: UA-12622200-2
 timezone: Australia/Sydney
 show_excerpts: true
-logo: https://avatars.githubusercontent.com/ojitha?s=90&v=4
+
 header_pages:
   - about.md
   - projects.md
