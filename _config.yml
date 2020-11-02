@@ -31,6 +31,8 @@ header_pages:
   - blog.md
   - notes.md   
 
+#theme: jekyll-theme-cayman
+remote_theme: jekyll/minima
 minima:
   skin: classic
   social_links:
@@ -43,11 +45,14 @@ copyright: "Copyright © 2020 Ojitha Kumanayaka"
 
 # Build settings
 markdown: kramdown
-remote_theme: jekyll/minima
+
+paginate: 5
+
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-paginate
   - jemoji
 
 # Exclude from processing.
