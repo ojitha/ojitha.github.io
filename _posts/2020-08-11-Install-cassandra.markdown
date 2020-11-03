@@ -2,7 +2,7 @@
 layout: post
 title: "Install Cassandra"
 date:   2020-08-11 21:45:30 +1000
-categories: [blog]
+categories: [Cassandra]
 excerpt_separator: <!--more-->
 ---
 
@@ -32,7 +32,7 @@ bin/cassandra -R
 
 NOTE: for supper user need `-R` and for foreground run `-f`. To stop the server at the end you have to write the PID to a file, for that use `-p`.
 
-To search the log 
+To search the log
 ```bash
 grep -m 1 -C 1 "cassandra.yaml" logs/system.log
 ```
@@ -77,4 +77,3 @@ The best way to stop the server is
 user=`whoami`
 pkill -u $user -f cassandra
 ```
-

@@ -2,7 +2,7 @@
 layout: post
 title: "Binary search in Python"
 date: 2020-10-29
-categories: [python, algorithm]
+categories: [Python, Algorithm]
 excerpt_separator: <!--more-->
 ---
 <script type="text/javascript" id="MathJax-script" async
@@ -20,7 +20,7 @@ window.MathJax = {
 </script>
 Binary Search is one of the most fundamental algorithm.
 
-![Binary Search](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201030093627427.png) 
+![Binary Search](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201030093627427.png)
 
 I explain the procedural and functional way of binary search algorithm.
 

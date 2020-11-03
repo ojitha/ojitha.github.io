@@ -2,10 +2,10 @@
 layout: post
 title: "Minikube Introduction"
 date: 2020-09-11
-categories: [blog]
+categories: [Kubernetes]
 excerpt_separator: <!--more-->
 ---
-[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues. 
+[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues.
 
 <img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" alt="Minikube" width="20%;" />
 
@@ -108,7 +108,7 @@ To get indepth information about node (because this is single cluster)
 kubectl describe node minikube
 ```
 
-or for other related services such as health check of the cluster 
+or for other related services such as health check of the cluster
 
 ```shell
 kubectl get componentstatus
@@ -234,7 +234,7 @@ Labels you can find in the dashboard as well.
 
 ## Deployment
 
-You can deploy images 
+You can deploy images
 
 ```bash
 kubectl create deployment my-deployment --image=<image>
@@ -254,7 +254,7 @@ kubectl expose deployment my-deployment --port=80 --type=NodePort
 
 to get the port
 
-```bash 
+```bash
 {% raw %}
 kubectl get svc my-deployment -o go-template='{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}'
 {% endraw %}
@@ -346,4 +346,3 @@ You can change the number of `replicas` into 4 and apply the changes. If you run
 ![apply chnages to run with 4 instances](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912144806068.png)
 
 Now curl will sent the request to one of the above.
-

@@ -2,7 +2,7 @@
 layout: post
 title: "Python run on containers"
 date:   2020-10-20 20:01:30 +1000
-categories: [blog]
+categories: [Python, Docker]
 excerpt_separator: <!--more-->
 ---
 
@@ -68,11 +68,8 @@ Now run the docker container
 ocker run -d -p 5000:5000 --name=ojflaskapp localhost:5001/ojflaskimage
 ```
 
-now test with 
+now test with
 
 ```bash
 curl http://localhost:5000
 ```
-
-
-

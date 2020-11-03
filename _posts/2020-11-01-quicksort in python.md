@@ -2,7 +2,7 @@
 layout: post
 title: "Quick sort in Python"
 date:   2020-11-01 00:00:00 +1000
-categories: [blog]
+categories: [Python,Algorithm]
 ---
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
@@ -46,4 +46,3 @@ Quick sort complexcity
 ![image-20201101124728600](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201101124728600.png)
 
 The complexcity of the quick sort can be worst as $$O(n^2)$$ base on the pivotal you choose. For example, even for the sorted array if the pivotal is first element, the deapth is $$n$$.
-

@@ -2,11 +2,11 @@
 layout: post
 title:  "Mac keyboard shortcut to copy file path as markdown"
 date:   2020-07-13 19:01:30 +1000
-categories: [blog]
+Categories: [macOS]
 excerpt_separator: <!--more-->
 ---
 
-How to create macOS Automator Quick Action to copy the file/folder markdown path using shortcut keys as the same way you copy the path name of the file/folder. 
+How to create macOS Automator Quick Action to copy the file/folder markdown path using shortcut keys as the same way you copy the path name of the file/folder.
 
 <!--more-->
 

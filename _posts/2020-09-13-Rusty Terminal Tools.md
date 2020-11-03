@@ -2,7 +2,7 @@
 layout: post
 title: "Rusty terminal tools"
 date: 2020-09-13
-categories: [blog]
+categories: [Rusty]
 excerpt_separator: <!--more-->
 ---
 
@@ -20,6 +20,5 @@ This is very intersting [blog](https://dev.to/22mahmoud/my-terminal-became-more-
 > - [fd](https://github.com/sharkdp/fd) A simple, fast and user-friendly alternative to 'find'
 > - [bottom](https://github.com/clementtsang/bottom) Yet another cross-platform graphical process/system monitor.
 > - [tldr](https://github.com/tldr-pages/tldr) Collaborative cheatsheets for console commands
-> - [spotify-tui](https://github.com/rigellute/spotify-tui) Spotify for the terminal written in Rust 
+> - [spotify-tui](https://github.com/rigellute/spotify-tui) Spotify for the terminal written in Rust
 > - [gitui](https://github.com/extrawurst/gitui) Blazing 💥 fast terminal-ui for git written in rust 🦀
-

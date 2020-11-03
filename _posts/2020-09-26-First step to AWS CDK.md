@@ -2,7 +2,7 @@
 layout: post
 title: "First step to AWS CDK"
 date:   2020-09-26 13:01:30 +1000
-categories: [blog]
+categories: [AWS]
 excerpt_separator: <!--more-->
 ---
 
@@ -26,8 +26,8 @@ First, you have to verify that, you have installed the AWS CDK.
 3. install AWS CDK using NodeJS
 
 If all the above is good, now install the python enviroment to use with the AWS SDK:
-1. install Python version 3 
-2. create virtual enviroment `p3` using pyenv tool 
+1. install Python version 3
+2. create virtual enviroment `p3` using pyenv tool
 3. You can use any directory to creat your scripts, I use Visual Studio Code as my editor
 4. In case, I can use the following command to set the global version of the python  to version 3:
 
@@ -124,7 +124,7 @@ Resources:
 ```
 
 ## Bootstrapping and deployment
-First titme you have have to install the bootstrap stack which is necessary for the toolkit. 
+First titme you have have to install the bootstrap stack which is necessary for the toolkit.
 
 ```bash
 cdk bootstrap

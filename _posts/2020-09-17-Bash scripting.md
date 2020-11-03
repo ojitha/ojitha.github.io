@@ -2,7 +2,7 @@
 layout: post
 title: "Bash Introdcution"
 date:   2020-09-17 13:01:30 +1000
-categories: [blog]
+categories: [Bash]
 excerpt_separator: <!--more-->
 ---
 Understand the bash scripting to use in the day-to-day life of the developer.
@@ -38,7 +38,7 @@ ls -l t1.json not.available > sout 2> serror
 To redirect both to the same file
 ```bash
 ls -l t1.json not.available &> sout
-or 
+or
 ls -l t1.json not.available > sout 2>&1
 ```
 The second line says to redirect the error to the same as file descriptor 1.

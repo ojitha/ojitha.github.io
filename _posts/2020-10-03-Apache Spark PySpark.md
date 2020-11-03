@@ -2,7 +2,7 @@
 layout: post
 title: "Apache Spark begins with PySpark"
 date:   2020-10-03 20:01:30 +1000
-categories: [blog]
+category: Apache Spark
 excerpt_separator: <!--more-->
 ---
 
@@ -102,7 +102,7 @@ df = (
 )
 ```
 
-If you want to filter 
+If you want to filter
 
 ```python
 df.where(f.col("rating") > 4).show()
@@ -183,7 +183,7 @@ mgenre.show(20,truncate=False)
 mgenre.printSchema()
 ```
 
-the output is 
+the output is
 
 ![image-20201010120721310](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010120721310.png)
 

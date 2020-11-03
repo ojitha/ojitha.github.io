@@ -2,7 +2,7 @@
 layout: post
 title: "Selection sort in Python"
 date: 2020-10-31
-categories: [python, algorithm]
+categories: [Python, Algorithm]
 excerpt_separator: <!--more-->
 ---
 <script type="text/javascript" id="MathJax-script" async
@@ -48,4 +48,3 @@ def selection_sort(a):
 # Test
 print(selection_sort([5,3,9,4,1,6,20]))
 ```
-
