@@ -2,7 +2,7 @@
 layout: post
 title: "Killer Applications"
 date:   2020-08-09 13:01:30 +1000
-Categories: [Blog]
+categories: [Blog]
 excerpt_separator: <!--more-->
 ---
 

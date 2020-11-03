@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Mac keyboard shortcut to copy file path as markdown"
-date:   2020-07-13 19:01:30 +1000
-Categories: [macOS]
+date:   2020-07-13
+categories: [macOS]
 excerpt_separator: <!--more-->
 ---
 
