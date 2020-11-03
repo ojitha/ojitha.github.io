@@ -3,7 +3,6 @@ layout: post
 title: "Python run on containers"
 date:   2020-10-20 20:01:30 +1000
 categories: [Python, Docker]
-excerpt_separator: <!--more-->
 ---
 
 We have alrady explain [Website hosted as a container](https://ojitha.github.io/blog/2020/10/03/Website-hosted-as-container.html). In this post explained how to host flask web application.

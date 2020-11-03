@@ -3,7 +3,6 @@ layout: post
 title: "Selection sort in Python"
 date: 2020-10-31
 categories: [Python, Algorithm]
-excerpt_separator: <!--more-->
 ---
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">

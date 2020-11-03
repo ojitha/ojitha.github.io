@@ -3,7 +3,6 @@ layout: post
 title: "Website hosted as a container"
 date:   2020-10-03 13:01:30 +1000
 category: Docker
-excerpt_separator: <!--more-->
 ---
 
 This is very short tutorial to show how to quickly create a web server using Docker container. The Docker should be installed in your machine as a prerequesit.

@@ -2,8 +2,7 @@
 layout: post
 title: "Rusty terminal tools"
 date: 2020-09-13
-categories: [Rusty]
-excerpt_separator: <!--more-->
+category: Rusty
 ---
 
 This is very intersting [blog](https://dev.to/22mahmoud/my-terminal-became-more-rusty-4g8l) explain new terminal tools written in Rusty 🚀.

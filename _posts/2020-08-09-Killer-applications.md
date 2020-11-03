@@ -2,8 +2,7 @@
 layout: post
 title: "Killer Applications"
 date:   2020-08-09 13:01:30 +1000
-categories: [Blog]
-excerpt_separator: <!--more-->
+category: General
 ---
 
 I was wonder what are the applications drive to sold out computer hardware. one of the well known is [VisiCalc](https://www.bbc.com/news/business-47802280?utm_source=thenewstack&#38;utm_medium=website&#38;utm_campaign=platform) and you can fine [TED talk](https://www.ted.com/talks/dan_bricklin_meet_the_inventor_of_the_electronic_spreadsheet?utm_campaign=tedspread&utm_medium=referral&utm_source=tedcomshare), if you want more information.

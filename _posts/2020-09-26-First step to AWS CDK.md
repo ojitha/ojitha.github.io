@@ -2,8 +2,7 @@
 layout: post
 title: "First step to AWS CDK"
 date:   2020-09-26 13:01:30 +1000
-categories: [AWS]
-excerpt_separator: <!--more-->
+category: AWS
 ---
 
 This is my first step of using AWS CDK in macOS.  I am using Pyenv tool to create python enviroment  as explained in the [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html).
