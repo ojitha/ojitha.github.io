@@ -34,3 +34,15 @@
         font-size: 15px;
     }
 }
+
+.column {
+    float: left;
+    width: 50%;
+    /* Should be removed. Only for demonstration */
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
