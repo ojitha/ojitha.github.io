@@ -34,13 +34,3 @@
         font-size: 15px;
     }
 }
-
-.column {
-    float: left;
-}
-
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
