@@ -3,6 +3,9 @@ layout: notes
 title: DevOps
 ---
 
+* TOC
+{:toc}
+
 ## DevOps
 Here the important commands and information collected while programming. 
 
@@ -161,3 +164,6 @@ docker ps -a
 #start that container id
 docker start <container-id>
 ```
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMTIzNjQ1ODg1NV19
+-->
