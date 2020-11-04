@@ -2,11 +2,10 @@
 layout: notes 
 title: DevOps
 ---
-
+**Notes on UNIX tools**
 * TOC
 {:toc}
 
-## DevOps
 Here the important commands and information collected while programming. 
 
 ### AWS console
@@ -165,5 +164,5 @@ docker ps -a
 docker start <container-id>
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTIzNjQ1ODg1NV19
+eyJoaXN0b3J5IjpbLTc4OTM5NTQxN119
 -->
