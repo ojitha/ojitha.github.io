@@ -2,7 +2,7 @@
 layout: notes 
 title: DevOps
 ---
-**Notes on UNIX tools**
+**Notes on DevOps**
 
 * TOC
 {:toc}
@@ -165,5 +165,5 @@ docker ps -a
 docker start <container-id>
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc5OTU4Nzg2MV19
+eyJoaXN0b3J5IjpbLTU3NDc5MTM5N119
 -->
