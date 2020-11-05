@@ -2,5 +2,5 @@ _site
 .sass-cache
 .jekyll-metadata
 Gemfile.lock
-.DS_Store
+_algolia_api_key
 .DS_Store
