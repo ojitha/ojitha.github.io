@@ -30,6 +30,7 @@ header_pages:
   - projects.md
   - blog.md
   - notes.md
+  - search.html
 
 # theme: minima
 remote_theme: jekyll/minima
@@ -49,11 +50,16 @@ markdown: kramdown
 excerpt_separator: <!--more-->
 paginate: 5
 
+algolia:
+  application_id: 247I9HI0FJ
+  index_name: ojitha_github_io
+  search_only_api_key: c0e739fba2a9fa6f1de62c04507daf1d
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-algolia
   - jemoji
 
 # Exclude from processing.
