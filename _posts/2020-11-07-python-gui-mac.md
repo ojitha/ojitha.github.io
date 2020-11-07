@@ -5,6 +5,10 @@ date:   2020-11-07
 category: MacOS
 ---
 
+I tried wxPython, which is not even possible to install. I tried Tkinter, which worked but not the best as I expected. The only choice was PyObjC that worked as expected, but not cross platform capable.
+
+<!--more-->
+
 First install the Python 3.9.0 or above using `pyenv`:
 
 ```bash
