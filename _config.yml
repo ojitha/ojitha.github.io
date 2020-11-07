@@ -54,6 +54,11 @@ algolia:
   application_id: 247I9HI0FJ
   index_name: ojitha_github_io
   search_only_api_key: c0e739fba2a9fa6f1de62c04507daf1d
+  files_to_exclude:
+    - search.html
+    - index.html
+    - blog.html
+    
 plugins:
   - jekyll-feed
   - jekyll-sitemap
