@@ -68,9 +68,12 @@ I need to find all the lines where the particular string is exists of all the lo
 Select-String -Path .\<file name>.log.* -Pattern "-511055-141"
 ```
 Here the way to extract all the strings which are matched with the regex:
-
+```bash
+Select-String -Path .\<file-name>.log.* -Pattern "TEST0002H-.*-[0-9].?" -AllMatches |  % { $_.Matches } | % {$_.Value } | select -Unique
+```
+when executed, you will get all the strings available in the `<>`
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE5NTA5NzksNTUyNTMyMTQ3LDEwMzk3ND
-U0NTUsLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3NzI1NjU0NDdd
-fQ==
+eyJoaXN0b3J5IjpbLTY5MTkyMTkwNSw1NTI1MzIxNDcsMTAzOT
+c0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0LDc3MjU2NTQ0
+N119
 -->
