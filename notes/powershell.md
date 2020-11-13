@@ -61,7 +61,11 @@ Another example to exclude services start with`v` to `w`
 ```powershell
 Get-Service -exclude "[v-w]*"
 ```
+
+## Grep lines
+I need to find all the lines where the particular string is exists of all the log files
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNz
-cxODAwODg0LDc3MjU2NTQ0N119
+eyJoaXN0b3J5IjpbMjI1MTc2NDc4LDEwMzk3NDU0NTUsLTE1ND
+E0MzgyMTIsMTc3MTgwMDg4NCw3NzI1NjU0NDddfQ==
 -->
