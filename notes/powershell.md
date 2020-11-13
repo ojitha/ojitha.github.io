@@ -62,12 +62,15 @@ Another example to exclude services start with`v` to `w`
 Get-Service -exclude "[v-w]*"
 ```
 
-## Grep lines
+## Grep 
 I need to find all the lines where the particular string is exists of all the log files
 ```bash
 Select-String -Path .\<file name>.log.* -Pattern "-511055-141"
 ```
+Here the way to extract all the strings which are matched with the regex:
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTUyNTMyMTQ3LDEwMzk3NDU0NTUsLTE1ND
-E0MzgyMTIsMTc3MTgwMDg4NCw3NzI1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbMTE5NTA5NzksNTUyNTMyMTQ3LDEwMzk3ND
+U0NTUsLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3NzI1NjU0NDdd
+fQ==
 -->
