@@ -63,7 +63,7 @@ Get-Service -exclude "[v-w]*"
 ```
 
 ## Grep 
-I need to find all the lines where the particular string is exists of all the log files
+I need to find all the lines of all the files where the particular string is exists
 ```bash
 Select-String -Path .\<file name>.log.* -Pattern "-511055-141"
 ```
@@ -71,9 +71,9 @@ Here the way to extract all the strings which are matched with the regex:
 ```bash
 Select-String -Path .\<file-name>.log.* -Pattern "TEST0002H-.*-[0-9].?" -AllMatches |  % { $_.Matches } | % {$_.Value } | select -Unique
 ```
-when executed, you will get all the strings available in the `<>`
+when executed, you will get all the strings matching wit the regex `TEST0002H-.*-[0-9].?` in the `<file-name>.log.*` files.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5MTkyMTkwNSw1NTI1MzIxNDcsMTAzOT
-c0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0LDc3MjU2NTQ0
-N119
+eyJoaXN0b3J5IjpbNjkwMTU2MTc5LDU1MjUzMjE0NywxMDM5Nz
+Q1NDU1LC0xNTQxNDM4MjEyLDE3NzE4MDA4ODQsNzcyNTY1NDQ3
+XX0=
 -->
