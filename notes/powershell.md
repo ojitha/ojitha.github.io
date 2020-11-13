@@ -64,8 +64,10 @@ Get-Service -exclude "[v-w]*"
 
 ## Grep lines
 I need to find all the lines where the particular string is exists of all the log files
-
+```bash
+Select-String -Path .\<file name>.log.* -Pattern "-511055-141"
+```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjI1MTc2NDc4LDEwMzk3NDU0NTUsLTE1ND
+eyJoaXN0b3J5IjpbNTUyNTMyMTQ3LDEwMzk3NDU0NTUsLTE1ND
 E0MzgyMTIsMTc3MTgwMDg4NCw3NzI1NjU0NDddfQ==
 -->
