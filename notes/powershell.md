@@ -63,7 +63,7 @@ Get-Service -exclude "[v-w]*"
 ```
 
 ## Grep 
-I need to find all the lines of all the files where the particular string is exists
+I need to find all the lines of all the files where the particular string is exists using Select-String:
 ```bash
 Select-String -Path .\<file name>.log.* -Pattern "-511055-141"
 ```
@@ -73,7 +73,7 @@ Select-String -Path .\<file-name>.log.* -Pattern "TEST0002H-.*-[0-9].?" -AllMatc
 ```
 when executed, you will get all the strings matching wit the regex in the `<file-name>.log.*` files.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODEzNTUwNzEsNTUyNTMyMTQ3LDEwMzk3ND
-U0NTUsLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3NzI1NjU0NDdd
-fQ==
+eyJoaXN0b3J5IjpbLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1Mz
+IxNDcsMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0
+LDc3MjU2NTQ0N119
 -->
