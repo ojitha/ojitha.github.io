@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Spring boot properties
+title:  Spring boot property and profile management
 date:   2020-11-14
 categories: [Spring Framework]
 ---
