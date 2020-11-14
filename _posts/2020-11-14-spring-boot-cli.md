@@ -5,6 +5,10 @@ date:   2020-11-14
 categories: [Java, Spring Framework]
 ---
 
+This is a short explanation of how to use Spring boot CLI to create project and run in the macOS.
+
+<!--more-->
+
 Install spring boot using homebrew in the macOS:
 
 ```bash
