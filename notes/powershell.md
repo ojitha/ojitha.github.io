@@ -61,7 +61,19 @@ Another example to exclude services start with`v` to `w`
 ```powershell
 Get-Service -exclude "[v-w]*"
 ```
+
+## Grep 
+I need to find all the lines of all the files where the particular string is exists using Select-String:
+```bash
+Select-String -Path .\<file name>.log.* -Pattern "-511055-141"
+```
+Here the way to extract all the strings which are matched with the regex `TEST0002H-.*-[0-9].?` :
+```bash
+Select-String -Path .\<file-name>.log.* -Pattern "TEST0002H-.*-[0-9].?" -AllMatches |  % { $_.Matches } | % {$_.Value } | select -Unique
+```
+when executed, you will get all the strings matching wit the regex in the `<file-name>.log.*` files.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNz
-cxODAwODg0LDc3MjU2NTQ0N119
+eyJoaXN0b3J5IjpbLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1Mz
+IxNDcsMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0
+LDc3MjU2NTQ0N119
 -->
