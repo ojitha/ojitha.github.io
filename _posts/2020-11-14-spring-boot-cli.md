@@ -2,7 +2,7 @@
 layout: post
 title:  Spring boot CLI
 date:   2020-11-14
-categories: [Java, Spring Framework]
+categories: [Spring Framework]
 ---
 
 This is a short explanation of how to use Spring boot CLI to create project and run in the macOS.
