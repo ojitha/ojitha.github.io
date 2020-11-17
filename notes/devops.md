@@ -164,6 +164,31 @@ docker ps -a
 #start that container id
 docker start <container-id>
 ```
+## Status Codes
+
+- 1nn: informational
+- 2nn: success
+- 3nn: redirection
+- 4nn: client errors
+- 5nn: server errors
+
+## 200 common
+
+- 200 ok: everything ok
+- 201 created: Returns a location header for new resources
+- 202 Accepted: Server has accepted the request, but it is not yet complete.
+
+## 400 common
+
+- 400 Bad Request: Malformed Syntax, retry with change
+- 401 Unauthorized: Authentication is required
+- 403 Forbidded: Server has understood, but refuses request
+- 404 Not Found: Server can't find a resource for URI
+- 406 Incompatible: Incompatible Accept headers specified
+- 409 Conflict: Resource conflicts with client request
+
+
+
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbLTU3NDc5MTM5N119
 -->
