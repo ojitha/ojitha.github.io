@@ -1,26 +1,26 @@
 ---
 layout: post
-title:  Java Futures
+title:  Java Future
 date:   2020-11-21
 categories: [Java]
 ---
 
-java `Futures` are the way to support asynchronuous operations. 
+Java `Futures` are the way to support asynchronuous operations. 
 
 <!--more-->
 
 * TOC
 {:toc}
-
-
 ## Future
+
+This has been created after went through a O'Reilly Katacoda[^1]. 
 
 A `Future` is either one of two states
 
 - process 
 - complete
 
-`Future` can be cancelled before it cokplete.
+`Future` can be cancelled before it competed.
 
 The new `java.util.concurrent` API includes `Future`, `CompleteableFuture`, `Task` and `Executors`.
 
@@ -40,7 +40,7 @@ In the main thread you can continue your work until, `Callable` finished the wor
 ```java
 Future<Integer> future = executorService.submit(callable);
 
-//NOTICE: This will not block, but it is awkward
+//see Guava section to avoid this loop
 while (!future.isDone()) {
   System.out.println("wating in the thread: "+
                      Thread.currentThread().getName());
@@ -136,5 +136,5 @@ public static void main(String[] args)
 
 **RFERENCE**
 
-[Java Concurrent Programming: Basics and Thread Pools](https://learning.oreilly.com/scenarios/java-concurrent-programming/9781492093503/)
+[^1]: [Java Concurrent Programming: Basics and Thread Pools](https://learning.oreilly.com/scenarios/java-concurrent-programming/9781492093503/)
 
