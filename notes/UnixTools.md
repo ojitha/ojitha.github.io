@@ -78,7 +78,7 @@ NOTE: sed is using same set of metacharacters used by the grep.
 
 | No | Example | Description |
 | -- | -- | -- |
-| 1 | `sed -n 14428, 14633 <file>` | If you want to output the lines in the number range |
+| 1 | `sed -n '14428,14633p' <file>` | If you want to output the lines in the number range |
 | 2 | `sed 's/<source>/<target>/' <file>` | Substitute source with target |
 | 3 | sed -n -e '.../p' | display only the affected lines |
 
@@ -229,9 +229,9 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU1MzEyNzM5NiwxNzM2NTY2NjcxLDE0Nz
-A3MDEyOTUsOTQxNDk0NDcwLDEzMzM4NTc3MTgsMjAwNzgxODI5
-OCwxMTkxMjQ4NjE2LC0yMTEyMjQxNTY3LC0zNDE4MTk4NjIsLT
-UzNjI3Njc1OSwtMTM0ODk1NDI3NCw3OTE4MzQwMTQsLTc1NTYz
-ODM2OCwtMTMxNDc4MDMwM119
+eyJoaXN0b3J5IjpbLTE5Njg4NTAzNCwtNTUzMTI3Mzk2LDE3Mz
+Y1NjY2NzEsMTQ3MDcwMTI5NSw5NDE0OTQ0NzAsMTMzMzg1Nzcx
+OCwyMDA3ODE4Mjk4LDExOTEyNDg2MTYsLTIxMTIyNDE1NjcsLT
+M0MTgxOTg2MiwtNTM2Mjc2NzU5LC0xMzQ4OTU0Mjc0LDc5MTgz
+NDAxNCwtNzU1NjM4MzY4LC0xMzE0NzgwMzAzXX0=
 -->
