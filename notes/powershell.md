@@ -74,10 +74,14 @@ Select-String -Path .\<file-name>.log.* -Pattern "TEST0002H-.*-[0-9].?" -AllMatc
 when executed, you will get all the strings matching wit the regex in the `<file-name>.log.*` files.
 
 ## Tail
-Here the `tail` 
- Get-Content .\crmlog.log -Tail 4 -Wait
+Here the Unix `tail` equivalent:
+
+```bash  
+ Get-Content .\<log file name>.log -Tail 4 -Wait
+ ```
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMwNTA0OTc5MywtMjU0ODYyMzQ3LDgxMz
+eyJoaXN0b3J5IjpbMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMz
 U1MDcxLDU1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEy
 LDE3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
 -->
