@@ -72,8 +72,12 @@ Here the way to extract all the strings which are matched with the regex `TEST00
 Select-String -Path .\<file-name>.log.* -Pattern "TEST0002H-.*-[0-9].?" -AllMatches |  % { $_.Matches } | % {$_.Value } | select -Unique
 ```
 when executed, you will get all the strings matching wit the regex in the `<file-name>.log.*` files.
+
+## Tail
+Here the `tail` 
+ Get-Content .\crmlog.log -Tail 4 -Wait
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1Mz
-IxNDcsMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0
-LDc3MjU2NTQ0N119
+eyJoaXN0b3J5IjpbLTMwNTA0OTc5MywtMjU0ODYyMzQ3LDgxMz
+U1MDcxLDU1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEy
+LDE3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
 -->
