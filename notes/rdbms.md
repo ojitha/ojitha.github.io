@@ -5,10 +5,11 @@ title: RDBMS
 
 
 ## RDBS
-**Notes on Windows PowerShell**
+**Notes on Relational Databases**
 
 * TOC
 {:toc}
+
 ### H2 Database
 
 For testing use the following to run in the watch expression:
@@ -102,5 +103,5 @@ ORDER BY    TableName
             ,ColumnName;
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ5MzEyMzE0MV19
+eyJoaXN0b3J5IjpbLTgxNjA4MjEyMl19
 -->
