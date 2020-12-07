@@ -87,3 +87,14 @@ Unmount as a root:
 ```bash
 umount /dev/xvdf
 ```
+
+## MS SQL
+Find all the tables where column is exists:
+```sql
+```
+WHERE       COLUMN_NAME LIKE '%MyName%'
+```
+```
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbNTIxMTE2MTEyXX0=
+-->
