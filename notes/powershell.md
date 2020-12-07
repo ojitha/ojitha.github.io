@@ -71,6 +71,7 @@ Here the way to extract all the strings which are matched with the regex `TEST00
 ```bash
 Select-String -Path .\<file-name>.log.* -Pattern "TEST0002H-.*-[0-9].?" -AllMatches |  % { $_.Matches } | % {$_.Value } | select -Unique
 ```
+if youw
 when executed, you will get all the strings matching wit the regex in the `<file-name>.log.*` files.
 
 ## Tail
@@ -81,7 +82,7 @@ Here the Unix `tail` equivalent:
  ```
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMz
-U1MDcxLDU1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEy
-LDE3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
+eyJoaXN0b3J5IjpbNzc2ODgwMTczLDEyNDkzMDM4MTQsLTI1ND
+g2MjM0Nyw4MTM1NTA3MSw1NTI1MzIxNDcsMTAzOTc0NTQ1NSwt
+MTU0MTQzODIxMiwxNzcxODAwODg0LDc3MjU2NTQ0N119
 -->
