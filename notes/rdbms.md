@@ -91,10 +91,13 @@ umount /dev/xvdf
 ## MS SQL
 Find all the tables where column is exists:
 ```sql
-```
-WHERE       COLUMN_NAME LIKE '%MyName%'
-```
+SELECT      COLUMN_NAME AS 'ColumnName'
+            ,TABLE_NAME AS  'TableName'
+FROM        <database>.INFORMATION_SCHEMA.COLUMNS
+WHERE       COLUMN_NAME = 'Contact_Id'
+ORDER BY    TableName
+            ,ColumnName;
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTIxMTE2MTEyXX0=
+eyJoaXN0b3J5IjpbMTA0MjYzOTMxM119
 -->
