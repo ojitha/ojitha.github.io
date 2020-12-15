@@ -3,7 +3,6 @@ layout: notes
 title: RDBMS
 ---
 
-## RDBS
 **Notes on Relational Databases**
 
 * TOC
@@ -102,5 +101,5 @@ ORDER BY    TableName
             ,ColumnName;
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU3NzA4OTk3Nl19
+eyJoaXN0b3J5IjpbMTczOTYxNDk0MSwtNTc3MDg5OTc2XX0=
 -->
