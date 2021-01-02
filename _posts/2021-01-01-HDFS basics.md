@@ -2,7 +2,7 @@
 layout: post
 title:  HDFS Basics
 date:   2021-01-01
-categories: [hadoop, HDFS]
+categories: [Hadoop, HDFS]
 ---
 
 After install the sandbox from the Hortonworks, you can visit the http://localhost:50070 page to find the information about the HDFS cluster. YARN job manager can be access via http://localhost:8088. 
