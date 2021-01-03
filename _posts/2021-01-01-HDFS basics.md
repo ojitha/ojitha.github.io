@@ -40,12 +40,24 @@ run the following command to list the HDFS files in root directory of the HDFS:
 
 ```bash
 hdfs dfs -ls /
+# or
+hadoop fs -ls /
 ```
+
+create a new directory
+
+```bash
+hdfs dfs -mkdir data
+```
+
+
 
 to add the `myfiles` directory to the HDFS:
 
 ```bash
-hdfs dfs -put myfiles 
+hdfs dfs -put myfiles data
+# or
+hadoop fs -copyFromLocal myfiles data
 ```
 
 To list the current directory
@@ -61,7 +73,9 @@ The result should be like
 To delete the `myfiles` directory:
 
 ```bash
-hdfs dfs -rm -r -skipTrash  myfiles
+hdfs dfs -rm -r -skipTrash  data
+# or
+hadoop fs -rm -r -skipTrash  data
 ```
 
 You can use the following command to list the Hadoop jobs:
