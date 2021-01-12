@@ -27,8 +27,62 @@ such a great diagraming.
 
 ## XML
 Tools for XML
-### Diff
+## Python
 To setup complete python environment, see the [Python my workflow](https://ojitha.blogspot.com/2020/09/python-my-workflow.html).
+
+### Atom editor for Spark
+
+First set the following path:
+
+```bash
+export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip
+```
+
+I have used SDK MAN to install the spark home.
+
+Now create virtual environment
+
+```bash
+pyenv global 2.7.18
+virtualenv mypython
+source bin/activate
+python -m pip install --upgrade pip
+```
+
+In the virtual enviroment, install 
+
+```bash
+pip install ipykernel
+```
+
+Then run the following, if above is not working.
+
+```bash
+python -m ipykernel install --user --name=env
+```
+
+You can open in Atom editor and do the inline debugging, if you install [hydrogen](https://atom.io/packages/hydrogen) in the editor.
+
+If you want to use PySpark, first install
+
+```bash
+pip install pyspark
+```
+
+To find the installed pyspark version:
+
+```bash
+pip show pyspark
+```
+
+If you want, install the following packages to Atom editor:
+
+- Script (to execute python from IDE, CMD+i)
+- autocomplete-python
+- flake 8 (to enable `pip install flake8`)
+- python-autopep8
+
+### Diff
 
 Here the way to semantically diff the XML files:
 First create your project in Python virtual enviroment:
@@ -47,3 +101,10 @@ graphtage p1.xml m1.xml
 ```
 This will give you a out put to CLI.
 to deactivate, `deactivate` in the CLI to move out from the project environment. For more information see the post "[How to run python GUI in MacOS]({% link _posts/2020-11-07-python-gui-mac.md %})" for macOs.
+
+## Spark
+
+I have configured Spark using SDKMAN. 
+
+- [Building Spark JAR Files with SBT](https://mungingdata.com/apache-spark/building-jar-sbt/)
+
