@@ -7,7 +7,7 @@ categories: [Scala]
 
 Scala Native create machine executable code instead of runing on JVM. The result is C complied executable.
 
-<!--more -->
+<!--more-->
 
 Here the simple hello world. 
 
