@@ -13,7 +13,7 @@ Here the simple hello world.
 
 First creat `build.sbt` file:
 
-```sbt
+```
 name:="hello"
 enablePlugins(ScalaNativePlugin)
 
@@ -35,7 +35,7 @@ object main {
 
 now create a file `project/plugins.sbt`
 
-```sbt
+```
 addSbtPlugin("org.scala-native" % "sbt-scala-native"  % "0.4.0-M2")
 ```
 
