@@ -44,3 +44,4 @@ Using `scala run` , you can create executable file in the `arget/scala-2.11/hell
 ![image-20210115105143114](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20210115105143114.png)
 
 You can directly execute withou JVM as shown in the above screenshot.
+
