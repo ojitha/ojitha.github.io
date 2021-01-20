@@ -5,7 +5,7 @@ date:   2020-11-21
 categories: [Java]
 ---
 
-Java `Futures` are the way to support asynchronuous operations. 
+Java `Futures` are the way to support asynchronuous operations. Learn the basics of [Java 9 Parallelism](https://ojitha.blogspot.com/2020/11/java-9-parallelism.html) before read this post. 
 
 <!--more-->
 

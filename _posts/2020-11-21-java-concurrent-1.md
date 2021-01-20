@@ -5,13 +5,13 @@ date:   2020-11-21
 categories: [Java]
 ---
 
-The `CompletableFuture` has been introduced since JDK 8 (2014). This is a abstraction over the `java.util.concurrent.Future` which is explain in the [Java Futures]({% post_url 2020-11-21-java-futures %}).
+The `CompletableFuture` has been introduced since JDK 8 (2014). This is a abstraction over the `java.util.concurrent. Learn the basics of [Java 9 Parallelism](https://ojitha.blogspot.com/2020/11/java-9-parallelism.html) before read this post.
 
 <!--more-->
 
 * TOC
 {:toc}
-This post is based on a O'Reilly Katacoda[^1].
+This post is based on a O'Reilly Katacoda[^1]. Future` which is explain in the [Java Futures]({% post_url 2020-11-21-java-futures %}).
 
 ## CompleteableFuture
 
