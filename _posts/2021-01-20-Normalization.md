@@ -5,7 +5,7 @@ date:   2021-01-20
 categories: [RDBMS]
 ---
 
-E. F. Codd proposed three normal forms 1NF, 2NF and 3NF (1970). Revised definition (1974) was given by F. Boyce and Codd which is known as Boyce-Codd Normal Form (BCNF which is 3.5NF :laughing:) to distinguish it from the old definition of third normal form. R. Faign introduced 4NF(1977) and 5NF(1979) and DKNF(1981). All the normal forms depend on the functional dependency, but 4NF and 5NF have been proposed which are based on the concept of multivalued dependency and joining dependency, respectively.
+E. F. Codd proposed three normal forms 1NF, 2NF and 3NF (1970). Revised definition (1974) was given by F. Boyce and Codd which is known as Boyce-Codd Normal Form (BCNF which is 3.5NF) to distinguish it from the old definition of third normal form. R. Faign introduced 4NF(1977) and 5NF(1979) and DKNF(1981). All the normal forms depend on the functional dependency, but 4NF and 5NF have been proposed which are based on the concept of multivalued dependency and joining dependency, respectively.
 
 * TOC
 {:toc}
@@ -32,7 +32,7 @@ window.MathJax = {
 
 Normalization theory provides the guidelines to assess the quality of a database in designing process. 
 
-> :notebook: The normalization[^2] is the application of set of simple rules called Normal Forms (NF) to the relation schema.
+> The normalization[^2] is the application of set of simple rules called Normal Forms (NF) to the relation schema.
 
 Good schema has the following:
 
@@ -57,7 +57,7 @@ This is called **attribute prevention**.
 
 Let `X` and `Y` are subset of se of attributes of a relation $R$ , then an instance $r$ of $R$ satisfies functional dependency (FD) $$\left( FD\right) X\rightarrow Y$$, if and only if for any two tuples $$t_{1}$$ and $$t_{2}$$ in $$r$$ that have $$t_{1}[X] = t_{2}[X]$$ and $$t_{1}[Y] = t_{2}[Y]$$
 
-> :notebook: $$X\rightarrow Y$$ mean, `Y` is functionally dependent on `X` or `X` determine `Y`. Here `X` is determinant and `Y` is the dependent.
+> $$X\rightarrow Y$$ mean, `Y` is functionally dependent on `X` or `X` determine `Y`. Here `X` is determinant and `Y` is the dependent.
 
 The FD diagram is
 
@@ -66,7 +66,7 @@ graph LR;
     X-->Y;
 </div>
 
-> :notebook: The large set of FDs can reduce the efficiency of database system. Generally an $$\left( FD\right) A\rightarrow B$$ is trivial, if and only if $$B\subseteq A$$. Only **non-trivial dependencies** are considered. 				
+> The large set of FDs can reduce the efficiency of database system. Generally an $$\left( FD\right) A\rightarrow B$$ is trivial, if and only if $$B\subseteq A$$. Only **non-trivial dependencies** are considered. 				
 > 									
 
 For example, CART{order_number, order_date, item, item_qty, customer, address}.
