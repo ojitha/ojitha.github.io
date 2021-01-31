@@ -55,7 +55,7 @@ $$
 
 This is called **attribute prevention**.
 
-Let `X` and `Y` are subset of se of attributes of a relation $R$ , then an instance $r$ of $R$ satisfies functional dependency (FD) $$\left( FD\right) X\rightarrow Y$$, if and only if for any two tuples $$t_{1}$$ and $$t_{2}$$ in $$r$$ that have $$t_{1}[X] = t_{2}[X]$$ and $$t_{1}[Y] = t_{2}[Y]$$
+Let `X` and `Y` are subset of se of attributes of a relation $$R$$ , then an instance $$r$$ of $$R$$ satisfies functional dependency (FD) $$\left( FD\right) X\rightarrow Y$$, if and only if for any two tuples $$t_{1}$$ and $$t_{2}$$ in $$r$$ that have $$t_{1}[X] = t_{2}[X]$$ and $$t_{1}[Y] = t_{2}[Y]$$
 
 > $$X\rightarrow Y$$ mean, `Y` is functionally dependent on `X` or `X` determine `Y`. Here `X` is determinant and `Y` is the dependent.
 
