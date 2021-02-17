@@ -9,7 +9,7 @@ title: Productivity Tools
 * TOC
 {:toc}
 
-## Diagramming
+## Blog tools
 I was very enthustic to know markdown level diagraming.
 
 ### mermaid
@@ -22,8 +22,11 @@ graph TD;
     B-->D;
     C-->D;
 </div>
-
 such a great diagraming.
+
+### asciinema
+
+The tool [asciinema](https://asciinema.org) record your terminal and upload to cloud. You can [install](https://asciinema.org/docs/installation) this tool using `brew` in the MacOS.
 
 ## XML
 Tools for XML
@@ -107,4 +110,5 @@ to deactivate, `deactivate` in the CLI to move out from the project environment.
 I have configured Spark using SDKMAN. 
 
 - [Building Spark JAR Files with SBT](https://mungingdata.com/apache-spark/building-jar-sbt/)
+- [Setting up a Spark Development Environment with Scala](https://www.cloudera.com/tutorials/setting-up-a-spark-development-environment-with-scala/.html)
 
