@@ -1,7 +1,16 @@
 ---
 layout: notes 
-title: Groovy
+title: Programming
 ---
+
+
+**Notes on Programming**
+
+* TOC
+{:toc}
+
+Here the important commands and information collected while programming. 
+
 
 
 ## Groovy
