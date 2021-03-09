@@ -14,6 +14,9 @@ title: Unix Tools
 
 | Command  | Purpose                                          |
 | -------- | ------------------------------------------------ |
+| Ctrl+l   | Clear the screen                                 |
+| Ctrl+a   | Move to begining of the line                     |
+| Ctrl+e   | Got to the end of the line                       |
 | Ctrl+k   | cut rest of the line contents                    |
 | Ctrl+u   | cut completely before the current position       |
 | Ctrl+y   | Get the cut text back                            |
