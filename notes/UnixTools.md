@@ -6,6 +6,21 @@ title: Unix Tools
 
 * TOC
 {:toc}
+## Mac terminal
+
+### shortcut keys
+
+[My 5 Favorite Linux Shell Trickes for SPEEEEED](https://youtu.be/V8EUdia_kOE)
+
+| Command  | Purpose                                          |
+| -------- | ------------------------------------------------ |
+| Ctrl+k   | cut rest of the line contents                    |
+| Ctrl+u   | cut completely before the current position       |
+| Ctrl+y   | Get the cut text back                            |
+| Ctrl+w   | delete word by word backward                     |
+| Ctrl+x+e | Open in text editor while typing in the terminal |
+
+
 
 ## awk
 
@@ -228,10 +243,4 @@ pip install paramiko
 following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5Njg4NTAzNCwtNTUzMTI3Mzk2LDE3Mz
-Y1NjY2NzEsMTQ3MDcwMTI5NSw5NDE0OTQ0NzAsMTMzMzg1Nzcx
-OCwyMDA3ODE4Mjk4LDExOTEyNDg2MTYsLTIxMTIyNDE1NjcsLT
-M0MTgxOTg2MiwtNTM2Mjc2NzU5LC0xMzQ4OTU0Mjc0LDc5MTgz
-NDAxNCwtNzU1NjM4MzY4LC0xMzE0NzgwMzAzXX0=
--->
+

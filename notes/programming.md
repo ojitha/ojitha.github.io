@@ -3,13 +3,26 @@ layout: notes
 title: Programming
 ---
 
-
 **Notes on Programming**
 
 * TOC
 {:toc}
 
 Here the important commands and information collected while programming. 
+
+## Java
+
+### jShell
+
+To clean the jShell, in the Mac: CMD+K.
+
+To find the type of the variable
+
+```java
+public static <T> Class<?> typeOf(final T value) { 
+  return value.getClass(); 
+}
+```
 
 
 
