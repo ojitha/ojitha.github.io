@@ -7,7 +7,7 @@ categories: [Java]
 
 
 
-Classes can be defined inside other classes to encapsulate logic and constrain context of use. For example:
+Classes can be defined inside other classes to encapsulate logic and constrain the context of use. For example:
 
 
 
@@ -17,7 +17,7 @@ Classes can be defined inside other classes to encapsulate logic and constrain c
 
 <!--more-->
 
-Type of the nested class depends on the context in which it is used. Static nested class (OrderToShip) is associated with the static context of the Account outer class.
+The type of the nested class depends on the context in which it is used. Static nested class (OrderToShip) is associated with the static context of the Account outer class.
 
 ```java
 package ex6;
@@ -165,7 +165,7 @@ public void addItem(String itemName, int itemQty) {
 }
 ```
 
-In this level the class can have only final or abstract modifiers. Local inner classes direclty can access outer method (addItem()) local variables and parameters if they are final or effectively final.
+At this level, the class can have only final or abstract modifiers. Local inner classes directly can access outer method (addItem()) local variables and parameters if they are final or effectively final.
 
 Anonymous inner class is an inline implementation or extension of an interface or a class.
 
@@ -203,7 +203,7 @@ public void addItem(final String itemName, int itemQty) {
 
 ```
 
-Although most of the time inner classes are created for the interfaces, you can create anonymous inner class for the abstract class as well.
+Although most of the time inner classes are created for the interfaces, you can create an anonymous inner class for the abstract class as well.
 
 ```java
 package ...;
@@ -245,6 +245,7 @@ abstract class Book {
 }
 
 ```
+
 
 
 
