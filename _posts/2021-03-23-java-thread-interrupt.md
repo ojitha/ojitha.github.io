@@ -23,7 +23,9 @@ It is important to understand how the Java thread interrupt work.
 2. if Thread-0 is not in the sleep mode, then terminate based on the `while` condition exit from the while loop.
 3. if Thread-0 is in the sleep mode, then terminate when wake at the point of `return` statement.
 
-![thread-interrupt](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/thread-interrupt.jpeg)
+
+
+![thread-interrupt](/assets/thread-interrupt.jpeg)
 
 The `(i > 10) && other.isAlive() && current != other`, second and third conditions are very important. Second condition avoid sending one more interrupts (due to the first condition has been satisfied) and third condition completely avoid the intrrupt to be happned in the Thread-0.
 
@@ -80,3 +82,6 @@ class MyThread implements Runnable{
 
 In the above code, the instance of MyThread has been shared by the t0 (Thread-0) and t1 (Thread-1) threads.
 
+
+
+![image-20210326115613938](/assets/image-20210326115613938.png)
