@@ -82,6 +82,3 @@ class MyThread implements Runnable{
 
 In the above code, the instance of MyThread has been shared by the t0 (Thread-0) and t1 (Thread-1) threads.
 
-
-
-![image-20210326115613938](/assets/image-20210326115613938.png)
