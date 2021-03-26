@@ -11,7 +11,7 @@ It is important to understand how the Java thread interrupt work.
 
 | Source   | Target        | Action                            |
 | -------- | ------------- | --------------------------------- |
-| New      | Runnable      | `new Thread()`.                   |
+| New      | Runnable      | thread `start()`.                 |
 | Runnable | Blocked       | `synchronized` lock on.           |
 | Runnable | waiting       | when object call `Object.wait()`. |
 | Runnable | timed-waiting | when `Thread.sleep(...)`.         |
