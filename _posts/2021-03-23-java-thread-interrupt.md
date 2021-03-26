@@ -9,13 +9,13 @@ It is important to understand how the Java thread interrupt work.
 
  ![image-20210326104946921](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20210326104946921.png)
 
-| Source   | Target        | Action                                  |
-| -------- | ------------- | --------------------------------------- |
-| New      | Runnable      | When thread created with `new` keyword. |
-| Runnable | Blocked       | synchronized lock on.                   |
-| Runnable | waiting       | when object call `Object.wait()`.       |
-| Runnable | timed-waiting | when `Thread.sleep(...)`.               |
-| Runnable | Terminated    | When thread finished.                   |
+| Source   | Target        | Action                            |
+| -------- | ------------- | --------------------------------- |
+| New      | Runnable      | `new Thread()`.                   |
+| Runnable | Blocked       | `synchronized` lock on.           |
+| Runnable | waiting       | when object call `Object.wait()`. |
+| Runnable | timed-waiting | when `Thread.sleep(...)`.         |
+| Runnable | Terminated    | When thread finished.             |
 
 <!--more-->
 
