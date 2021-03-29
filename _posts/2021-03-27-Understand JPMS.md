@@ -5,15 +5,15 @@ date:   2021-03-27
 categories: [Java]
 ---
 
-Java Platform Module System (JPMS) has been introduced since Java 9. This is simple example created using IntelliJ IDEA.
+Java Platform Module System (JPMS) has been introduced since Java 9. This is a simple example created using IntelliJ IDEA.
 
 ![module-info](/assets/module-info.jpg)
 
-As shown in the above diagram, there are three modules, Application, Service and Provider 
+As shown in the above diagram, there are three modules, Application, Service and Provider. 
 
 <!--more-->
 
-> NOTE: Sorry about violation of module naming convention to simplify this example.
+> NOTE: Sorry about the violation of the module naming convention to simplify this example.
 
 
 
@@ -29,7 +29,7 @@ As shown in the above diagram, there are three modules, Application, Service and
 
 In the IntelliJ IDEA, 
 
-1. createa Empty project 
+1. create a Empty project 
 
     ![Project Structure](/assets/image-20210328122652901.png)
 
@@ -37,13 +37,13 @@ In the IntelliJ IDEA,
 
     ![IntelliJ IDEA Modules](/assets/image-20210328122340513.png)
 
-3. In the Each Java Module, you have to create, `module-info.java` files which has already shown in the first screenshot.
+3. In each Java Module, you have to create `module-info.java` files shown in the first screenshot.
 
     ![Three module-info.java files](/assets/image-20210328122554069.png)
 
     
 
-As shown in the above screenshot, there is one module-info.java file for each IntelliJ IDEA Java module. Module name should be unique although I used simple names for this example. To get the idea of naming, run the following command in the CLI to find the modules availabe with the Java runtime:
+As shown in the above screenshot, there is one module-info.java file for each IntelliJ IDEA Java module. The module name should be unique, although I used simple names for this example. To get the idea of naming, run the following command in the CLI to find the modules available with the Java runtime:
 
 ```bash
 java --list-modules
@@ -78,14 +78,14 @@ module Service {
 
 This is all about module dependencies such as 
 
-- `requires`: This module required other external module: `requires <module>` 
+- `requires`: This module required other external modules: `requires <module>` 
     - The use of `requires transitive <module-a>` implies that the `module-a` is needed by this module as well as external modules which uses this module.
-    - The use of `requires static <module-b>` implies that `module-b` is only required in the compile time for this module.
+    - The use of `requires static <module-b>` implies that `module-b` is only required in the compile-time for this module.
     - The directive `requires java.base` is implicit dependency in all the descriptors.
 - `exports`: The directive `export <package>` defines that this module packages are allowed to access by other modules
     - Access is limited only to public classes by the modules which `requires` this module.
     - Using `exports <packages> to <module-e>` restrict the access of public classes of this `packages` only by the `module-e` which `requires` this module. 
-- `open`: In the directive, `opens <pacakges>`, entire package is allowed to access runtime only via Java reflection
+- `open`: In the directive, `opens <pacakges>`, the entire package is allowed to access runtime only via Java reflection
     - Other module don't need to specify `reuqires` explcitly to access package contents.
     - This can be restricted by `opens <packages> to <module-d>` allowing only to access runtime by `module-d`.
     - Using `opens module <module-o> {}`, all the packages of the `module-o` is accessible to any other modules.  
@@ -93,16 +93,16 @@ This is all about module dependencies such as
 - `provide`: In the service consumer module, the directive `provides <service interface> with <classes>`: 
     - specifies **interface or abstract class** of the service module.
     - The service consumer **dynamically discover** (discussed in the next section) the provider implementation. 
-    - The consumer modules **don't need to specifies** `requires` for provider module.
-- `verion`: version of the module which is required for version control of modules.
+    - The consumer modules **don't need to specify ** `requires` for the provider module.
+- `version: version of the module which is required for version control of modules.
 
 > NOTE: Circular module dependencies are not allowed.
 
-## Dynammic Discovery of implementation
+## Dynamic Discovery of implementation
 
-1. The Service Java module contains only the interface which is the contract:
+1. The Service Java module contains only the interface, which is the contract:
 
-    ```java
+    ```Java
     package com.github.ojitha.service.a;
     
     public interface OjService {
@@ -129,9 +129,9 @@ This is all about module dependencies such as
     }
     ```
 
-    Here you can have number of implemetation for the same service (for example `OjService`).
+    Here you can have several implementations for the same service (for example, `OjService`).
 
-3. The client is available in the Application module which is the consumer
+3. The client is available in the Application module, which is the consumer
 
     ```java
     package com.github.ojitha.application.a;
@@ -149,7 +149,7 @@ This is all about module dependencies such as
     }
     ```
 
-    In the above code, the Provider implementation is dynamically selected which is one of the greate advantage of Module services.
+    In the above code, the Provider implementation is dynamically selected, which is one of the great advantages of Module services.
 
 4. Entry point is consumer, and you can run the `HelloWorld` main method.
 
@@ -173,7 +173,7 @@ To run:
 java -p build -m Application/com.github.ojitha.application.a.HelloWorld
 ```
 
-One of the great beneifit of modularised application is that, the distribution footprint is very small. 
+One of the great benefits of a modularised application is that the distribution footprint is very small. 
 
 Create a JIMAGE:
 
@@ -181,7 +181,7 @@ Create a JIMAGE:
 jlink --module-path build --add-modules Application,Service,Provider --bind-services --launcher Hello=Application/com.github.ojitha.application.a.HelloWorld --output Hello
 ```
 
-You don't need to install Java runtime to run this JIMAGE because Java runtime is already include in the Hello distribution.
+You don't need to install Java runtime to run this JIMAGE because Java runtime is already included in the Hello distribution.
 
 To run this in another machine:
 
@@ -189,7 +189,8 @@ To run this in another machine:
 Hello/bin/Hello 
 ```
 
-Application load is quicker even because the dependecies between modules, missing modules and other errors can be verified before start the application.
+Application load is quicker even because the dependencies between modules, missing modules and other errors can be verified before starting the application.
 
 > NOTE: Modules are load from the module-path instead of the class-path. 
+
 
