@@ -5,7 +5,7 @@ date:   2021-03-27
 categories: [Java]
 ---
 
-Java Platform Module System (JPMS) has been introduced since Java 9. This is a simple example created using IntelliJ IDEA.
+Java Platform Module System (JPMS) has been introduced since Java 9. With Java 9, JDK has been divided into 90 modules. This is a simple example created using IntelliJ IDEA.
 
 ![module-info](/assets/module-info.jpg)
 
@@ -17,15 +17,21 @@ As shown in the above diagram, there are three modules, Application, Service and
 
 > NOTE: Sorry about the violation of the module naming convention to simplify this example.
 
-
-
 ------
 
 * TOC
 {:toc}
 ------
 
+## Introduction
+The module is a set of exported and concealed packages.
 
+1. Java modules categorised into two:
+Standard modules started with `java`. These modules are part of the Java SE specification.
+
+2. The modules which are not part of the Java SE specification.
+
+The moudle `java.base` is not depends on any other modules but every module depends on `java.base` because `java.base` module reference is implicitly included in all the other pacakges.
 
 ## Create in IntelliJ IDEA
 
@@ -81,21 +87,35 @@ module Service {
 This is all about module dependencies such as 
 
 - `requires`: This module required other external modules: `requires <module>` 
-    - The use of `requires transitive <module-a>` implies that the `module-a` is needed by this module as well as external modules which uses this module.
+    - Only `exports`ed packages are readable by the requiring module.
+    - Any non`public` is not readable.
+    - The **implied readability** is `requires transitive C` implies that the module  `C` is needed by this module `B` as well as external module `A` which uses this module.
+    
+    
+    
+    ![image-20210329123854050](/assets/image-20210329123854050.png)
+    
+    
+    
     - The use of `requires static <module-b>` implies that `module-b` is only required in the compile-time for this module.
     - The directive `requires java.base` is implicit dependency in all the descriptors.
+    
 - `exports`: The directive `export <package>` defines that this module packages are allowed to access by other modules
     - Access is limited only to public classes by the modules which `requires` this module.
     - Using `exports <packages> to <module-e>` restrict the access of public classes of this `packages` only by the `module-e` which `requires` this module. 
+    
 - `open`: In the directive, `opens <pacakges>`, the entire package is allowed to access runtime only via Java reflection
     - Other module don't need to specify `reuqires` explcitly to access package contents.
     - This can be restricted by `opens <packages> to <module-d>` allowing only to access runtime by `module-d`.
     - Using `opens module <module-o> {}`, all the packages of the `module-o` is accessible to any other modules.  
+    
 - `uses`: The directive  `uses <service interface>` uses services provided by other modules
+
 - `provide`: In the service consumer module, the directive `provides <service interface> with <classes>`: 
     - specifies **interface or abstract class** of the service module.
     - The service consumer **dynamically discover** (discussed in the next section) the provider implementation. 
     - The consumer modules **don't need to specify ** `requires` for the provider module.
+    
 - `version: version of the module which is required for version control of modules.
 
 > NOTE: Circular module dependencies are not allowed.
@@ -174,6 +194,16 @@ To run:
 ```bash
 java -p build -m Application/com.github.ojitha.application.a.HelloWorld
 ```
+
+You can run the `jdeps` utility to find the module dependencies:
+
+```bash
+jdeps build
+```
+
+![image-20210329131823681](/assets/image-20210329131823681.png)
+
+This will show all the depenencies in the `build` folder.
 
 One of the great benefits of a modularised application is that the distribution footprint is very small. 
 
