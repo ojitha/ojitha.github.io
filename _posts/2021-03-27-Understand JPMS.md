@@ -116,7 +116,7 @@ This is all about module dependencies such as
     - The service consumer **dynamically discover** (discussed in the next section) the provider implementation. 
     - The consumer modules **don't need to specify ** `requires` for the provider module.
     
-- `version: version of the module which is required for version control of modules.
+- `version`: version of the module which is required for version control of modules.
 
 > NOTE: Circular module dependencies are not allowed.
 
