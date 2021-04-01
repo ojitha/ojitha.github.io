@@ -7,7 +7,7 @@ categories: [Java]
 
 Annotations are metadata that provide information at the retention level of Java source, class or runtime.
 
-<!-- more -->
+<!--more-->
 
 Annotations can be applied to the following targets:
 
