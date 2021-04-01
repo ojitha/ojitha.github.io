@@ -87,6 +87,18 @@ f.test(1.1); // false
 
 This intro will help you to go through the next sections.
 
+## Methods in interfaces
+
+Interfaces has evolved start from the Java 8 including following methods in addition to the abstract methods and public static final variables :
+
+- static (Java 8)
+- default (Java 8)
+- Private (Java 9)
+
+If the default method with same method signature defined in the super class and the interface, then super class takes the priority.
+
+If the class implmements two interfaces with the same default method signature, then class has to override that default method with its own implementation. 
+
 ## Comparator Interface
 
 Examples of default methods provided by the `java.util.Comparator` interface:
