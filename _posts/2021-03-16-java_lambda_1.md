@@ -44,6 +44,24 @@ public class LambdaTest {
 }
 ```
 
+For example to create functional factorial lambda in Java 11:
+
+```java
+UnaryOperator<Long> fact = n -> n == 0 ? 1 : n * fact.apply(n-1);
+fact.apply(10l) // 3628800
+```
+
+Another important interface is `Comparator`:
+
+```java
+List<String> list = Arrays.asList("Orange","Bannana","Apple","Kiwi")
+//create lambda expression for the Comparator interface
+Comparator<String> compare = (x, y) -> x.length - y.length
+list.sort(compare) // [Kiwi, Apple, Orange, Bannana]
+```
+
+
+
 There are predefined functional interfaces to use:
 
 | #    | Lambda Interface | Abstract Method   |
