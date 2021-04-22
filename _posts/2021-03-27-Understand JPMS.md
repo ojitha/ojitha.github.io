@@ -111,10 +111,11 @@ This is all about module dependencies such as
     
 - `uses`: The directive  `uses <service interface>` uses services provided by other modules
 
-- `provide`: In the service consumer module, the directive `provides <service interface> with <classes>`: 
-    - specifies **interface or abstract class** of the service module.
-    - The service consumer **dynamically discover** (discussed in the next section) the provider implementation. 
-    - The consumer modules **don't need to specify ** `requires` for the provider module.
+- `provide`: In the service consumer module, the directive `provides <service interface> with <implementation-classes>`: 
+    
+    - specifies service **interface or abstract class** of the service module.
+    - The service consumer **dynamically discover** (discussed in the next section) the provider implementation classes. 
+    - The consumer modules **don not need to specify** `requires` for the provider module.
     
 - `version`: version of the module which is required for version control of modules.
 
@@ -195,6 +196,8 @@ To run:
 java -p build -m Application/com.github.ojitha.application.a.HelloWorld
 ```
 
+## Find dependencies
+
 You can run the `jdeps` utility to find the module dependencies:
 
 ```bash
@@ -204,6 +207,8 @@ jdeps build
 ![image-20210329131823681](/assets/image-20210329131823681.png)
 
 This will show all the depenencies in the `build` folder.
+
+## Distribution footprint
 
 One of the great benefits of a modularised application is that the distribution footprint is very small. 
 
