@@ -17,6 +17,14 @@ Classes can be defined inside other classes to encapsulate logic and constrain t
 
 <!--more-->
 
+------
+
+* TOC
+{:toc}
+------
+
+## Member inner classes
+
 The type of the nested class depends on the context in which it is used. Static nested class (OrderToShip) is associated with the static context of the Account outer class.
 
 ```java
@@ -131,6 +139,9 @@ Static and member nested classes can be defined as:
 - private - can be referenced only inside their outer class
 
 Member inner class OrderItem is associated with the instance context of the outer class OrderToShip.
+
+## Local inner class
+
 Local inner class is associated with the context of specific method. For example, you can move OrderItem to the addItem() method as follows:
 
 ```java
@@ -166,6 +177,8 @@ public void addItem(String itemName, int itemQty) {
 ```
 
 At this level, the class can have only final or abstract modifiers. Local inner classes directly can access outer method (addItem()) local variables and parameters if they are final or effectively final.
+
+## Anonymous inner
 
 Anonymous inner class is an inline implementation or extension of an interface or a class.
 
