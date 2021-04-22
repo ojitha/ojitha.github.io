@@ -5,10 +5,9 @@ date:   2021-03-16
 categories: [Java]
 ---
 
-For example, in this blog two interfaces are compared:
+A default method added to maintain the backward compatibility which allows older classes (without modifications) to access new version of an interface. 
 
-- java.util.Comparator
-- java.util.function.Predicate
+Java 9 interfaces can have private methods and private staic methods. These methods support code reusabilit in the interface level.
 
 <!--more-->
 
@@ -18,7 +17,12 @@ For example, in this blog two interfaces are compared:
 {:toc}
 ------
 
-## Introduction to Lambda
+## Introduction
+
+For example, in this blog two interfaces are compared:
+
+- java.util.Comparator
+- java.util.function.Predicate
 
 For example functional interface can be define as follows
 
@@ -50,6 +54,8 @@ For example to create functional factorial lambda in Java 11:
 UnaryOperator<Long> fact = n -> n == 0 ? 1 : n * fact.apply(n-1);
 fact.apply(10l) // 3628800
 ```
+
+> Note: Please read the [Java Streaming API recipes](https://ojitha.blogspot.com/2021/03/java-streaming-api-recipes.html) to find how to achieve the same factorial functionality using streams.
 
 Another important interface is `Comparator`:
 
