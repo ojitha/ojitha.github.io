@@ -88,10 +88,12 @@ You can install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win
 ```bash
 start-process powershell –verb runAs
 ```
+As explained in the https://serverfault.com/questions/11879/gaining-administrator-privileges-in-powershell.
+
 AWS installation : [Developing on Amazon Linux 2 using Windows](https://aws.amazon.com/blogs/developer/developing-on-amazon-linux-2-using-windows/)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU4MjI4NjY5MCwtMTM0NTg4NzA5NiwxMj
-Q5MzAzODE0LC0yNTQ4NjIzNDcsODEzNTUwNzEsNTUyNTMyMTQ3
-LDEwMzk3NDU0NTUsLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3Nz
-I1NjU0NDddfQ==
+eyJoaXN0b3J5IjpbLTEzNDk3ODE0MTksLTEzNDU4ODcwOTYsMT
+I0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLDU1MjUzMjE0
+NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLDE3NzE4MDA4ODQsNz
+cyNTY1NDQ3XX0=
 -->
