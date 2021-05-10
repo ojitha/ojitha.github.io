@@ -138,11 +138,11 @@ code --install-extension amazonwebservices.aws-toolkit-vscode
 ```
 ### Develop Glue on Amazon Linux 2 on Windows
 Read [# Developing and Testing ETL Scripts Locally Using the AWS Glue ETL Library](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-libraries.html): here is my command summary.
-F
+1. First install the docker as explain [here](https://docs.docker.com/docker-for-windows/wsl/).
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAyNDUyMTg5OSwtMTk4OTk5NzEyNSwxNj
+eyJoaXN0b3J5IjpbLTk5MTIwOTE1MiwtMTk4OTk5NzEyNSwxNj
 c3NDg3MTI1LC00NTcxODIxMDAsLTEwOTc1NzA2NjEsMjA5ODYw
 ODA5OCwtMTY2NTkwODU3OCwxNTQxNzc3NTg5LDEzODM2MDg2OD
 UsLTEzNDk3ODE0MTksLTEzNDU4ODcwOTYsMTI0OTMwMzgxNCwt
