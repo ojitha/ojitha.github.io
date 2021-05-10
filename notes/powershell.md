@@ -100,9 +100,15 @@ Then uninstall:
 ```bash
 wslconfig /u Amazon2
 ```
+### Install
+Set the default to WSL 2
+```bash
+ wsl --set-default-vers
+```
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNzE3MTU0ODMsLTEzNDk3ODE0MTksLT
-EzNDU4ODcwOTYsMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1
-MDcxLDU1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLD
-E3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
+eyJoaXN0b3J5IjpbMjgxMDk4MTI3LC0xMzQ5NzgxNDE5LC0xMz
+Q1ODg3MDk2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3
+MSw1NTI1MzIxNDcsMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNz
+cxODAwODg0LDc3MjU2NTQ0N119
 -->
