@@ -110,13 +110,26 @@ Download [Amazon Linux 2](https://github.com/yosukes-dev/AmazonWSL/releases/down
 ```bash
 C:\WSL\Amazon2\Amazon2.exe
 ``` 
-Now run the
+Now run the following command:
+```bash
+wsl -s Amazon2
+```
+now list the available WSL distro
+```bash
+wsl -l -v
+```
+you should get
+```
+  NAME       STATE           VERSION
+* Amazon2    Stopped         2
+```
+
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NjU5MDg1NzgsMTU0MTc3NzU4OSwxMz
-gzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1ODg3MDk2LDEyNDkz
-MDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1MzIxNDcsMT
-AzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0LDc3MjU2
-NTQ0N119
+eyJoaXN0b3J5IjpbMjA5ODYwODA5OCwtMTY2NTkwODU3OCwxNT
+QxNzc3NTg5LDEzODM2MDg2ODUsLTEzNDk3ODE0MTksLTEzNDU4
+ODcwOTYsMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLD
+U1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLDE3NzE4
+MDA4ODQsNzcyNTY1NDQ3XX0=
 -->
