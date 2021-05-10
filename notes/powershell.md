@@ -84,11 +84,14 @@ Here the Unix `tail` equivalent:
  Get-Content .\<log file name>.log -Tail 4 -Wait
  ```
 ## WSL 2
-You can install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10), but first step you have to elevate powershell as follows after open with "Run as DefendPoint Adm,in":
+You can install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10), but first step you have to elevate Powershell as follows after open with "Run as DefendPoint Admin":
+```bash
+start-process powershell –verb runAs
+```
 AWS installation : [Developing on Amazon Linux 2 using Windows](https://aws.amazon.com/blogs/developer/developing-on-amazon-linux-2-using-windows/)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4OTkyMDU5MTYsLTEzNDU4ODcwOTYsMT
-I0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLDU1MjUzMjE0
-NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLDE3NzE4MDA4ODQsNz
-cyNTY1NDQ3XX0=
+eyJoaXN0b3J5IjpbMTU4MjI4NjY5MCwtMTM0NTg4NzA5NiwxMj
+Q5MzAzODE0LC0yNTQ4NjIzNDcsODEzNTUwNzEsNTUyNTMyMTQ3
+LDEwMzk3NDU0NTUsLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3Nz
+I1NjU0NDddfQ==
 -->
