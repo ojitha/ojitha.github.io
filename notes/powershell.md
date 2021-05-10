@@ -133,12 +133,12 @@ yum upgrade -y && yum update -y
 amazon-linux-extras install -y kernel-ng
 ```
 Install vscode 
-
+$\sum ^{n}_{i=0}$
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE5NjgxNDkyNiwtMTA5NzU3MDY2MSwyMD
+eyJoaXN0b3J5IjpbLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMD
 k4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4MzYw
 ODY4NSwtMTM0OTc4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5MzAzOD
 E0LC0yNTQ4NjIzNDcsODEzNTUwNzEsNTUyNTMyMTQ3LDEwMzk3
