@@ -138,14 +138,15 @@ code --install-extension amazonwebservices.aws-toolkit-vscode
 ```
 ### Develop Glue on Amazon Linux 2 on Windows
 Read [# Developing and Testing ETL Scripts Locally Using the AWS Glue ETL Library](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-libraries.html): here is my command summary.
-
+F
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtND
-U3MTgyMTAwLC0xMDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5
-MDg1NzgsMTU0MTc3NzU4OSwxMzgzNjA4Njg1LC0xMzQ5NzgxND
-E5LC0xMzQ1ODg3MDk2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4
-MTM1NTA3MSw1NTI1MzIxNDcsMTAzOTc0NTQ1NSwtMTU0MTQzOD
-IxMiwxNzcxODAwODg0LDc3MjU2NTQ0N119
+eyJoaXN0b3J5IjpbMTAyNDUyMTg5OSwtMTk4OTk5NzEyNSwxNj
+c3NDg3MTI1LC00NTcxODIxMDAsLTEwOTc1NzA2NjEsMjA5ODYw
+ODA5OCwtMTY2NTkwODU3OCwxNTQxNzc3NTg5LDEzODM2MDg2OD
+UsLTEzNDk3ODE0MTksLTEzNDU4ODcwOTYsMTI0OTMwMzgxNCwt
+MjU0ODYyMzQ3LDgxMzU1MDcxLDU1MjUzMjE0NywxMDM5NzQ1ND
+U1LC0xNTQxNDM4MjEyLDE3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
+
 -->
