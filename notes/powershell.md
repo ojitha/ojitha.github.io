@@ -103,12 +103,13 @@ wslconfig /u Amazon2
 ### Install
 Set the default to WSL 2
 ```bash
- wsl --set-default-vers
+ wsl --set-default-version 2
 ```
 
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjgxMDk4MTI3LC0xMzQ5NzgxNDE5LC0xMz
-Q1ODg3MDk2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3
-MSw1NTI1MzIxNDcsMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNz
-cxODAwODg0LDc3MjU2NTQ0N119
+eyJoaXN0b3J5IjpbMTM4MzYwODY4NSwtMTM0OTc4MTQxOSwtMT
+M0NTg4NzA5NiwxMjQ5MzAzODE0LC0yNTQ4NjIzNDcsODEzNTUw
+NzEsNTUyNTMyMTQ3LDEwMzk3NDU0NTUsLTE1NDE0MzgyMTIsMT
+c3MTgwMDg4NCw3NzI1NjU0NDddfQ==
 -->
