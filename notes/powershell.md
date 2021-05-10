@@ -107,12 +107,16 @@ First update to the [WSL2 Linux kernel update package for x64 machines](https://
  wsl --set-default-version 2
 ```
 Download [Amazon Linux 2](https://github.com/yosukes-dev/AmazonWSL/releases/download/2.0.20200722.0-update.2/Amazon2.zip) and extract to the `c:\wsl` folder.
- 
+```bash
+C:\WSL\Amazon2\Amazon2.exe
+``` 
+Now run the
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU0MTc3NzU4OSwxMzgzNjA4Njg1LC0xMz
-Q5NzgxNDE5LC0xMzQ1ODg3MDk2LDEyNDkzMDM4MTQsLTI1NDg2
-MjM0Nyw4MTM1NTA3MSw1NTI1MzIxNDcsMTAzOTc0NTQ1NSwtMT
-U0MTQzODIxMiwxNzcxODAwODg0LDc3MjU2NTQ0N119
+eyJoaXN0b3J5IjpbLTE2NjU5MDg1NzgsMTU0MTc3NzU4OSwxMz
+gzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1ODg3MDk2LDEyNDkz
+MDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1MzIxNDcsMT
+AzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0LDc3MjU2
+NTQ0N119
 -->
