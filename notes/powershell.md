@@ -91,9 +91,18 @@ start-process powershell –verb runAs
 As explained in the https://serverfault.com/questions/11879/gaining-administrator-privileges-in-powershell.
 
 AWS installation : [Developing on Amazon Linux 2 using Windows](https://aws.amazon.com/blogs/developer/developing-on-amazon-linux-2-using-windows/)
+### Uninstall
+first find the Linux version you are using:
+```bash
+wslconfig /l
+```
+Then uninstall:
+```bash
+wslconfig /u Amazon2
+```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNDk3ODE0MTksLTEzNDU4ODcwOTYsMT
-I0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLDU1MjUzMjE0
-NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLDE3NzE4MDA4ODQsNz
-cyNTY1NDQ3XX0=
+eyJoaXN0b3J5IjpbLTExNzE3MTU0ODMsLTEzNDk3ODE0MTksLT
+EzNDU4ODcwOTYsMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1
+MDcxLDU1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLD
+E3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
 -->
