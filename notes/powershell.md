@@ -123,13 +123,21 @@ you should get
   NAME       STATE           VERSION
 * Amazon2    Stopped         2
 ```
-
+to start distro
+```bash
+wsl
+```
+update Amazon Linux 2:
+```bash
+yum upgrade -y && yum update -y
+amazon-linux-extras install -y kernel-ng
+```
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA5ODYwODA5OCwtMTY2NTkwODU3OCwxNT
-QxNzc3NTg5LDEzODM2MDg2ODUsLTEzNDk3ODE0MTksLTEzNDU4
-ODcwOTYsMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLD
-U1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLDE3NzE4
-MDA4ODQsNzcyNTY1NDQ3XX0=
+eyJoaXN0b3J5IjpbLTEwOTc1NzA2NjEsMjA5ODYwODA5OCwtMT
+Y2NTkwODU3OCwxNTQxNzc3NTg5LDEzODM2MDg2ODUsLTEzNDk3
+ODE0MTksLTEzNDU4ODcwOTYsMTI0OTMwMzgxNCwtMjU0ODYyMz
+Q3LDgxMzU1MDcxLDU1MjUzMjE0NywxMDM5NzQ1NDU1LC0xNTQx
+NDM4MjEyLDE3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
 -->
