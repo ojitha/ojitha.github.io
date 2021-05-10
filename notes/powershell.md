@@ -83,9 +83,11 @@ Here the Unix `tail` equivalent:
 ```bash  
  Get-Content .\<log file name>.log -Tail 4 -Wait
  ```
-
+## WSL 2
+AWS installation : [Developing on Amazon Linux 2 using Windows]
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNDU4ODcwOTYsMTI0OTMwMzgxNCwtMj
-U0ODYyMzQ3LDgxMzU1MDcxLDU1MjUzMjE0NywxMDM5NzQ1NDU1
-LC0xNTQxNDM4MjEyLDE3NzE4MDA4ODQsNzcyNTY1NDQ3XX0=
+eyJoaXN0b3J5IjpbNjkwMjQxNDUyLC0xMzQ1ODg3MDk2LDEyND
+kzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1MzIxNDcs
+MTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0LDc3Mj
+U2NTQ0N119
 -->
