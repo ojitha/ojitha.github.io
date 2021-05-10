@@ -102,14 +102,14 @@ wslconfig /u Amazon2
 ```
 ### Install
 Set the default to WSL 2
-First update to the [WSL2 Linux kernel update package for x64 machines](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi). then set to the version 
+First update to the [WSL2 Linux kernel update package for x64 machines](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi). then set to the version 2:
 ```bash
  wsl --set-default-version 2
 ```
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk0MzEwMTIxMywxMzgzNjA4Njg1LC0xMz
+eyJoaXN0b3J5IjpbMTkyMDA4MzA5OSwxMzgzNjA4Njg1LC0xMz
 Q5NzgxNDE5LC0xMzQ1ODg3MDk2LDEyNDkzMDM4MTQsLTI1NDg2
 MjM0Nyw4MTM1NTA3MSw1NTI1MzIxNDcsMTAzOTc0NTQ1NSwtMT
 U0MTQzODIxMiwxNzcxODAwODg0LDc3MjU2NTQ0N119
