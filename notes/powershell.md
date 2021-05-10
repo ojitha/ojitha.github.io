@@ -84,10 +84,10 @@ Here the Unix `tail` equivalent:
  Get-Content .\<log file name>.log -Tail 4 -Wait
  ```
 ## WSL 2
-AWS installation : [Developing on Amazon Linux 2 using Windows]
+You can install [WSL 2]AWS installation : [Developing on Amazon Linux 2 using Windows](https://aws.amazon.com/blogs/developer/developing-on-amazon-linux-2-using-windows/)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjkwMjQxNDUyLC0xMzQ1ODg3MDk2LDEyND
-kzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1MzIxNDcs
-MTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwODg0LDc3Mj
-U2NTQ0N119
+eyJoaXN0b3J5IjpbLTIxNDY2NjQzMDQsLTEzNDU4ODcwOTYsMT
+I0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLDU1MjUzMjE0
+NywxMDM5NzQ1NDU1LC0xNTQxNDM4MjEyLDE3NzE4MDA4ODQsNz
+cyNTY1NDQ3XX0=
 -->
