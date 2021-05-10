@@ -133,15 +133,17 @@ yum upgrade -y && yum update -y
 amazon-linux-extras install -y kernel-ng
 ```
 Install vscode 
-$\sum ^{n}_{i=0}$
+```bash
+code --install-extension amazonwebservices.aws-toolkit-vscode
+```
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMD
-k4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4MzYw
-ODY4NSwtMTM0OTc4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5MzAzOD
-E0LC0yNTQ4NjIzNDcsODEzNTUwNzEsNTUyNTMyMTQ3LDEwMzk3
-NDU0NTUsLTE1NDE0MzgyMTIsMTc3MTgwMDg4NCw3NzI1NjU0ND
-ddfQ==
+eyJoaXN0b3J5IjpbMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC0xMD
+k3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0MTc3
+NzU4OSwxMzgzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1ODg3MD
+k2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1NTI1
+MzIxNDcsMTAzOTc0NTQ1NSwtMTU0MTQzODIxMiwxNzcxODAwOD
+g0LDc3MjU2NTQ0N119
 -->
