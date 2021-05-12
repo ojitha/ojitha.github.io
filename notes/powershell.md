@@ -141,18 +141,18 @@ Read [# Developing and Testing ETL Scripts Locally Using the AWS Glue ETL Librar
 1. First install the docker as explain [here](https://docs.docker.com/docker-for-windows/wsl/).
 2. run the Jupyter notebooks:
 ```bash
-docker run -itd -p 8888:8888 -p 4040:4040 -v %UserProfile%\.aws:/root/.aws:rw --name glue_jupyter amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/jupyter/jupyter_start.sh
+docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_jupyter amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/jupyter/jupyter_start.sh
 ```
 and open the notebook: http://localhost:8888
 3. open t
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwND
-A2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcx
-MjUsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMDk4NjA4MDk4LC
-0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4MzYwODY4NSwtMTM0
-OTc4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5MzAzODE0LC0yNTQ4Nj
-IzNDcsODEzNTUwNzEsNTUyNTMyMTQ3LDEwMzk3NDU0NTUsLTE1
-NDE0MzgyMTJdfQ==
+eyJoaXN0b3J5IjpbLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3OD
+AxMzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3
+MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MS
+wyMDk4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4
+MzYwODY4NSwtMTM0OTc4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5Mz
+AzODE0LC0yNTQ4NjIzNDcsODEzNTUwNzEsNTUyNTMyMTQ3LDEw
+Mzk3NDU0NTVdfQ==
 -->
