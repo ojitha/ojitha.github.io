@@ -152,6 +152,7 @@ docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw
 and open the notebook: http://localhost:8888
 
 3. This is sample testing code to run in the Jupyter notes
+
 ```python
 import os
 
@@ -170,6 +171,7 @@ s3 = boto3.Session(botocore_session=session).client('s3')
 response = s3.list_buckets()
 print(response)
 ```
+
 In the above, I am using default AWS profile and the MFA authentication:
 
 ```
@@ -190,7 +192,7 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0ODgzNDM4MjEsLTE0MTAwMTA4NDcsLT
+eyJoaXN0b3J5IjpbLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLT
 E2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2
 ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMj
 UsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMDk4NjA4MDk4LC0x
