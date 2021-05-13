@@ -156,7 +156,7 @@ aws s3 ls
 ```
 this command will prompt to enter the MFA code. As a result you should be able to see the list of available s3 buckets.
 
-3. run the Jupyter notebooks:
+3. run the Jupyter notebooks (pyspark):
 
 ```bash
 docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_jupyter amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/jupyter/jupyter_start.sh
@@ -204,11 +204,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjEwODA0MDMyMSwtMTcxMzk0NzcyNSwtMT
-QxMDAxMDg0NywtMTY1NTc3MDE4NywtOTI3MTAzOTgsMzc4MDEz
-NzEzLC0xODA0MDY4ODU1LC05OTEyMDkxNTIsLTE5ODk5OTcxMj
-UsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC0xMDk3NTcwNjYxLDIw
-OTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0MTc3NzU4OSwxMzgzNj
-A4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1ODg3MDk2LDEyNDkzMDM4
-MTQsLTI1NDg2MjM0N119
+eyJoaXN0b3J5IjpbLTE0NjEzNzA5NDYsLTE3MTM5NDc3MjUsLT
+E0MTAwMTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAx
+MzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MT
+I1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwy
+MDk4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4Mz
+YwODY4NSwtMTM0OTc4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5MzAz
+ODE0LC0yNTQ4NjIzNDddfQ==
 -->
