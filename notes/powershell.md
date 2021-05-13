@@ -141,7 +141,7 @@ code --install-extension amazonwebservices.aws-toolkit-vscode
 
 Read [# Developing and Testing ETL Scripts Locally Using the AWS Glue ETL Library](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-libraries.html): here is my command summary.
 
-NOTE: you must unch Docker -> Settings->Resources -> WSL INTEGRATION ->
+NOTE: you must unchecked the Docker -> Settings->Resources -> WSL INTEGRATION -> `Enable integation with my default WSL distro`. This caused to read only mapping of windows .aws folder in the docker instance.
 
 1. First install the docker as explain [here](https://docs.docker.com/docker-for-windows/wsl/).
 2. run the Jupyter notebooks:
@@ -189,11 +189,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI1MjYwMjcwNywtMTY1NTc3MDE4NywtOT
-I3MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05OTEyMDkx
-NTIsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC
-0xMDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0
-MTc3NzU4OSwxMzgzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1OD
-g3MDk2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1
-NTI1MzIxNDddfQ==
+eyJoaXN0b3J5IjpbLTE0MTAwMTA4NDcsLTE2NTU3NzAxODcsLT
+kyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5
+MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEwMC
+wtMTA5NzU3MDY2MSwyMDk4NjA4MDk4LC0xNjY1OTA4NTc4LDE1
+NDE3Nzc1ODksMTM4MzYwODY4NSwtMTM0OTc4MTQxOSwtMTM0NT
+g4NzA5NiwxMjQ5MzAzODE0LC0yNTQ4NjIzNDcsODEzNTUwNzEs
+NTUyNTMyMTQ3XX0=
 -->
