@@ -144,15 +144,36 @@ Read [# Developing and Testing ETL Scripts Locally Using the AWS Glue ETL Librar
 docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_jupyter amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/jupyter/jupyter_start.sh
 ```
 and open the notebook: http://localhost:8888
-3. open t
+
+3. This is sample testing code to run in the Jupyter notes
+```python
+import os
+
+import boto3
+import botocore.session
+from botocore import credentials
+
+# By default the cache path is ~/.aws/boto/cache
+cli_cache = os.path.join(os.path.expanduser('~'), '.aws/cli/cache')
+
+# Construct botocore session with cache
+session = botocore.session.get_session()
+session.get_component('credential_provider').get_provider('assume-role').cache = credentials.JSONFileCache(cli_cache)
+
+s3 = boto3.Session(botocore_session=session).client('s3')
+response = s3.list_buckets()
+print(response)
+```
+In the above 
+5. dfd
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3OD
-AxMzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3
-MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MS
-wyMDk4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4
-MzYwODY4NSwtMTM0OTc4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5Mz
-AzODE0LC0yNTQ4NjIzNDcsODEzNTUwNzEsNTUyNTMyMTQ3LDEw
-Mzk3NDU0NTVdfQ==
+eyJoaXN0b3J5IjpbMTI2NTI3NjQwNCwtMTY1NTc3MDE4NywtOT
+I3MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05OTEyMDkx
+NTIsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC
+0xMDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0
+MTc3NzU4OSwxMzgzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1OD
+g3MDk2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1
+NTI1MzIxNDddfQ==
 -->
