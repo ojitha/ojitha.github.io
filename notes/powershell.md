@@ -174,7 +174,7 @@ print(response)
 
 In the above, I am using default AWS profile and the MFA authentication:
 
-```
+```bash
 [default]
 region = ap-southeast-2
 output = json
@@ -192,7 +192,7 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLT
+eyJoaXN0b3J5IjpbLTEwOTQ5ODI0MzMsLTE0MTAwMTA4NDcsLT
 E2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2
 ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMj
 UsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMDk4NjA4MDk4LC0x
