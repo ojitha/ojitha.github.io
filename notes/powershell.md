@@ -136,8 +136,11 @@ Install vscode
 ```bash
 code --install-extension amazonwebservices.aws-toolkit-vscode
 ```
+
 ### Develop Glue on Amazon Linux 2 on Windows
+
 Read [# Developing and Testing ETL Scripts Locally Using the AWS Glue ETL Library](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-libraries.html): here is my command summary.
+
 1. First install the docker as explain [here](https://docs.docker.com/docker-for-windows/wsl/).
 2. run the Jupyter notebooks:
 ```bash
@@ -179,15 +182,15 @@ s3 =
     signature_version = s3v4
 ```
 
-5. dfd
+4. dfd
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTAxNjExNzcyLC0xNjU1NzcwMTg3LC05Mj
-cxMDM5OCwzNzgwMTM3MTMsLTE4MDQwNjg4NTUsLTk5MTIwOTE1
-MiwtMTk4OTk5NzEyNSwxNjc3NDg3MTI1LC00NTcxODIxMDAsLT
-EwOTc1NzA2NjEsMjA5ODYwODA5OCwtMTY2NTkwODU3OCwxNTQx
-Nzc3NTg5LDEzODM2MDg2ODUsLTEzNDk3ODE0MTksLTEzNDU4OD
-cwOTYsMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLDU1
-MjUzMjE0N119
+eyJoaXN0b3J5IjpbMTQ5NDI3MzM4NSwtMTY1NTc3MDE4NywtOT
+I3MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05OTEyMDkx
+NTIsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC
+0xMDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0
+MTc3NzU4OSwxMzgzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1OD
+g3MDk2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1
+NTI1MzIxNDddfQ==
 -->
