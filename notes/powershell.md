@@ -176,9 +176,6 @@ source_profile = default
 mfa_serial = arn:aws:iam::<account>:mfa/ojitha.kumanayaka@....com
 role_session_name = ojitha.kumanayaka@.....com
 s3 = 
-
- 
-
     signature_version = s3v4
 ```
 
@@ -186,7 +183,7 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTI0NzE3MjI0LC0xNjU1NzcwMTg3LC05Mj
+eyJoaXN0b3J5IjpbNTAxNjExNzcyLC0xNjU1NzcwMTg3LC05Mj
 cxMDM5OCwzNzgwMTM3MTMsLTE4MDQwNjg4NTUsLTk5MTIwOTE1
 MiwtMTk4OTk5NzEyNSwxNjc3NDg3MTI1LC00NTcxODIxMDAsLT
 EwOTc1NzA2NjEsMjA5ODYwODA5OCwtMTY2NTkwODU3OCwxNTQx
