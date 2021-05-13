@@ -170,11 +170,11 @@ In the above, I am using default AWS profile and the MFA authentication:
 region = ap-southeast-2
 output = json
 
-role_arn = arn:aws:iam::545059870239:role/Analytics-DataEngineerRole-TA
+role_arn = arn:aws:iam::<account>:role/<role-name>
 source_profile = default
 
-mfa_serial = arn:aws:iam:::mfa/ojitha.kumanayaka@capgemini.com
-role_session_name = ojitha.kumanayaka@capgemini.com
+mfa_serial = arn:aws:iam::<account>:mfa/ojitha.kumanayaka@....com
+role_session_name = ojitha.kumanayaka@.....com
 s3 = 
 
  
@@ -186,11 +186,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU0MzU1NDY4MywtMTY1NTc3MDE4NywtOT
-I3MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05OTEyMDkx
-NTIsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC
-0xMDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0
-MTc3NzU4OSwxMzgzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1OD
-g3MDk2LDEyNDkzMDM4MTQsLTI1NDg2MjM0Nyw4MTM1NTA3MSw1
-NTI1MzIxNDddfQ==
+eyJoaXN0b3J5IjpbOTI0NzE3MjI0LC0xNjU1NzcwMTg3LC05Mj
+cxMDM5OCwzNzgwMTM3MTMsLTE4MDQwNjg4NTUsLTk5MTIwOTE1
+MiwtMTk4OTk5NzEyNSwxNjc3NDg3MTI1LC00NTcxODIxMDAsLT
+EwOTc1NzA2NjEsMjA5ODYwODA5OCwtMTY2NTkwODU3OCwxNTQx
+Nzc3NTg5LDEzODM2MDg2ODUsLTEzNDk3ODE0MTksLTEzNDU4OD
+cwOTYsMTI0OTMwMzgxNCwtMjU0ODYyMzQ3LDgxMzU1MDcxLDU1
+MjUzMjE0N119
 -->
