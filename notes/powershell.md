@@ -144,7 +144,8 @@ Read [# Developing and Testing ETL Scripts Locally Using the AWS Glue ETL Librar
 NOTE: you must unchecked the Docker -> Settings->Resources -> WSL INTEGRATION -> `Enable integation with my default WSL distro`. This caused to read only mapping of windows .aws folder in the docker instance.
 
 1. First install the docker as explain [here](https://docs.docker.com/docker-for-windows/wsl/).
-2. run the Jupyter notebooks:
+2. 
+3. run the Jupyter notebooks:
 
 ```bash
 docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_jupyter amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/jupyter/jupyter_start.sh
@@ -192,11 +193,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLT
-E2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2
-ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMj
-UsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMDk4NjA4MDk4LC0x
-NjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4MzYwODY4NSwtMTM0OT
-c4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5MzAzODE0LC0yNTQ4NjIz
-NDcsODEzNTUwNzFdfQ==
+eyJoaXN0b3J5IjpbMTk5NDMyNzkxMiwtMTcxMzk0NzcyNSwtMT
+QxMDAxMDg0NywtMTY1NTc3MDE4NywtOTI3MTAzOTgsMzc4MDEz
+NzEzLC0xODA0MDY4ODU1LC05OTEyMDkxNTIsLTE5ODk5OTcxMj
+UsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC0xMDk3NTcwNjYxLDIw
+OTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0MTc3NzU4OSwxMzgzNj
+A4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1ODg3MDk2LDEyNDkzMDM4
+MTQsLTI1NDg2MjM0N119
 -->
