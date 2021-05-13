@@ -164,12 +164,29 @@ s3 = boto3.Session(botocore_session=session).client('s3')
 response = s3.list_buckets()
 print(response)
 ```
-In the above 
+In the above, I am using default AWS profile and the MFA authentication:
+```
+[default]
+region = ap-southeast-2
+output = json
+
+role_arn = arn:aws:iam::545059870239:role/Analytics-DataEngineerRole-TA
+source_profile = default
+
+mfa_serial = arn:aws:iam:::mfa/ojitha.kumanayaka@capgemini.com
+role_session_name = ojitha.kumanayaka@capgemini.com
+s3 = 
+
+ 
+
+    signature_version = s3v4
+```
+
 5. dfd
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI2NTI3NjQwNCwtMTY1NTc3MDE4NywtOT
+eyJoaXN0b3J5IjpbLTU0MzU1NDY4MywtMTY1NTc3MDE4NywtOT
 I3MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05OTEyMDkx
 NTIsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC
 0xMDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0
