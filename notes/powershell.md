@@ -163,7 +163,7 @@ docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw
 ```
 and open the notebook: http://localhost:8888
 
-3. This is sample testing code to run in the Jupyter notes
+3. This is sample testing code to run in the Jupyter notes[^session]
 
 ```python
 import os
@@ -202,13 +202,15 @@ s3 =
 
 4. dfd
 
+[^session]: https://github.com/boto/boto3/issues/1179
+
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0NjEzNzA5NDYsLTE3MTM5NDc3MjUsLT
-E0MTAwMTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAx
-MzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MT
-I1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwy
-MDk4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4Mz
-YwODY4NSwtMTM0OTc4MTQxOSwtMTM0NTg4NzA5NiwxMjQ5MzAz
-ODE0LC0yNTQ4NjIzNDddfQ==
+eyJoaXN0b3J5IjpbMTIxMjY3MzIzOCwtMTQ2MTM3MDk0NiwtMT
+cxMzk0NzcyNSwtMTQxMDAxMDg0NywtMTY1NTc3MDE4NywtOTI3
+MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05OTEyMDkxNT
+IsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MTgyMTAwLC0x
+MDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1NzgsMTU0MT
+c3NzU4OSwxMzgzNjA4Njg1LC0xMzQ5NzgxNDE5LC0xMzQ1ODg3
+MDk2LDEyNDkzMDM4MTRdfQ==
 -->
