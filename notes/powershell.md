@@ -83,6 +83,13 @@ Here the Unix `tail` equivalent:
 ```bash  
  Get-Content .\<log file name>.log -Tail 4 -Wait
  ```
+ ## Kill Process
+
+```bash
+  netstat -ano | findstr :9007
+  taskkill /PID 4448 /F
+ ```
+
 ## WSL 2
 You can install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10), but first step you have to elevate Powershell as follows after open with "Run as DefendPoint Admin":
 ```bash
@@ -200,18 +207,18 @@ s3 =
     signature_version = s3v4
 ```
 
-How to install zeppeling:
+
 
 
 [^session]: [boto3 not caching STS MFA sessions](https://github.com/boto/boto3/issues/1179)
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNTY0MDY3ODksODMzODgwMDQ1LC0xND
-YxMzcwOTQ2LC0xNzEzOTQ3NzI1LC0xNDEwMDEwODQ3LC0xNjU1
-NzcwMTg3LC05MjcxMDM5OCwzNzgwMTM3MTMsLTE4MDQwNjg4NT
-UsLTk5MTIwOTE1MiwtMTk4OTk5NzEyNSwxNjc3NDg3MTI1LC00
-NTcxODIxMDAsLTEwOTc1NzA2NjEsMjA5ODYwODA5OCwtMTY2NT
-kwODU3OCwxNTQxNzc3NTg5LDEzODM2MDg2ODUsLTEzNDk3ODE0
-MTksLTEzNDU4ODcwOTZdfQ==
+eyJoaXN0b3J5IjpbLTc0MjM3ODcyOCwtMTI1NjQwNjc4OSw4Mz
+M4ODAwNDUsLTE0NjEzNzA5NDYsLTE3MTM5NDc3MjUsLTE0MTAw
+MTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAxMzcxMy
+wtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2
+Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMDk4Nj
+A4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4MzYwODY4
+NSwtMTM0OTc4MTQxOV19
 -->
