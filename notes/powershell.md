@@ -90,6 +90,7 @@ Here the Unix `tail` equivalent:
   taskkill /PID 4448 /F
  ```
 
+
 ## WSL 2
 You can install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10), but first step you have to elevate Powershell as follows after open with "Run as DefendPoint Admin":
 ```bash
@@ -214,11 +215,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc0MjM3ODcyOCwtMTI1NjQwNjc4OSw4Mz
-M4ODAwNDUsLTE0NjEzNzA5NDYsLTE3MTM5NDc3MjUsLTE0MTAw
-MTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAxMzcxMy
-wtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2
-Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5NzU3MDY2MSwyMDk4Nj
-A4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1ODksMTM4MzYwODY4
-NSwtMTM0OTc4MTQxOV19
+eyJoaXN0b3J5IjpbLTE3ODU3NTU4OTgsLTEyNTY0MDY3ODksOD
+MzODgwMDQ1LC0xNDYxMzcwOTQ2LC0xNzEzOTQ3NzI1LC0xNDEw
+MDEwODQ3LC0xNjU1NzcwMTg3LC05MjcxMDM5OCwzNzgwMTM3MT
+MsLTE4MDQwNjg4NTUsLTk5MTIwOTE1MiwtMTk4OTk5NzEyNSwx
+Njc3NDg3MTI1LC00NTcxODIxMDAsLTEwOTc1NzA2NjEsMjA5OD
+YwODA5OCwtMTY2NTkwODU3OCwxNTQxNzc3NTg5LDEzODM2MDg2
+ODUsLTEzNDk3ODE0MTldfQ==
 -->
