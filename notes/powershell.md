@@ -169,7 +169,7 @@ this command will prompt to enter the MFA code. As a result you should be able t
 ```bash
 docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_jupyter amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/jupyter/jupyter_start.sh
 ```
-To run aeppelin:
+To run Zeppelin:
 
 ```bash
  docker run -itd -p 8080:8080 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_zeppelin amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/zeppelin/bin/zeppelin.sh
@@ -221,11 +221,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3NTAxMDIxNDYsMTg1MzM0ODIyMiwtMT
-c4NTc1NTg5OCwtMTI1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEz
-NzA5NDYsLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3Nz
-AxODcsLTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwt
-OTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1Nz
-E4MjEwMCwtMTA5NzU3MDY2MSwyMDk4NjA4MDk4LC0xNjY1OTA4
-NTc4LDE1NDE3Nzc1ODldfQ==
+eyJoaXN0b3J5IjpbLTQ0ODg1NzI4OSwxODUzMzQ4MjIyLC0xNz
+g1NzU1ODk4LC0xMjU2NDA2Nzg5LDgzMzg4MDA0NSwtMTQ2MTM3
+MDk0NiwtMTcxMzk0NzcyNSwtMTQxMDAxMDg0NywtMTY1NTc3MD
+E4NywtOTI3MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05
+OTEyMDkxNTIsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MT
+gyMTAwLC0xMDk3NTcwNjYxLDIwOTg2MDgwOTgsLTE2NjU5MDg1
+NzgsMTU0MTc3NzU4OV19
 -->
