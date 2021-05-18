@@ -169,6 +169,12 @@ this command will prompt to enter the MFA code. As a result you should be able t
 ```bash
 docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_jupyter amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/jupyter/jupyter_start.sh
 ```
+To run aeppelin:
+
+```bash
+ docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_zeppelin amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/zeppelin/bin/zeppelin.sh
+```
+
 and open the notebook: http://localhost:8888
 
 3. This is sample testing code to run in the Jupyter notes[^session]
@@ -215,11 +221,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3ODU3NTU4OTgsLTEyNTY0MDY3ODksOD
-MzODgwMDQ1LC0xNDYxMzcwOTQ2LC0xNzEzOTQ3NzI1LC0xNDEw
-MDEwODQ3LC0xNjU1NzcwMTg3LC05MjcxMDM5OCwzNzgwMTM3MT
-MsLTE4MDQwNjg4NTUsLTk5MTIwOTE1MiwtMTk4OTk5NzEyNSwx
-Njc3NDg3MTI1LC00NTcxODIxMDAsLTEwOTc1NzA2NjEsMjA5OD
-YwODA5OCwtMTY2NTkwODU3OCwxNTQxNzc3NTg5LDEzODM2MDg2
-ODUsLTEzNDk3ODE0MTldfQ==
+eyJoaXN0b3J5IjpbMTg1MzM0ODIyMiwtMTc4NTc1NTg5OCwtMT
+I1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEzNzA5NDYsLTE3MTM5
+NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMz
+k4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0x
+OTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5Nz
+U3MDY2MSwyMDk4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1
+ODksMTM4MzYwODY4NV19
 -->
