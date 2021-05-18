@@ -172,7 +172,7 @@ docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw
 To run aeppelin:
 
 ```bash
- docker run -itd -p 8888:8888 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_zeppelin amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/zeppelin/bin/zeppelin.sh
+ docker run -itd -p 8080:8080 -p 4040:4040 -v $env:userprofile\.aws:/root/.aws:rw --name glue_zeppelin amazon/aws-glue-libs:glue_libs_1.0.0_image_01 /home/zeppelin/bin/zeppelin.sh
 ```
 
 and open the notebook: http://localhost:8888
@@ -221,11 +221,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg1MzM0ODIyMiwtMTc4NTc1NTg5OCwtMT
-I1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEzNzA5NDYsLTE3MTM5
-NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMz
-k4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0x
-OTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEwMCwtMTA5Nz
-U3MDY2MSwyMDk4NjA4MDk4LC0xNjY1OTA4NTc4LDE1NDE3Nzc1
-ODksMTM4MzYwODY4NV19
+eyJoaXN0b3J5IjpbLTE3NTAxMDIxNDYsMTg1MzM0ODIyMiwtMT
+c4NTc1NTg5OCwtMTI1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEz
+NzA5NDYsLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3Nz
+AxODcsLTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwt
+OTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1Nz
+E4MjEwMCwtMTA5NzU3MDY2MSwyMDk4NjA4MDk4LC0xNjY1OTA4
+NTc4LDE1NDE3Nzc1ODldfQ==
 -->
