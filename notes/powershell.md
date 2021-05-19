@@ -147,14 +147,13 @@ Getting to the AWS Linux docker container:
 docker exec -it al bash
 ```
 
-Update
+Install AWS CLI 2
 
 ```bash
-yum upgrade -y && yum update -y
-amazon-linux-extras install -y kernel-ng
-```
 
-Install 
+yum install unzip
+```
+ 
 Install vscode 
 ```bash
 code --install-extension amazonwebservices.aws-toolkit-vscode
@@ -236,7 +235,7 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMxMDQ4MjA3MywtNzYxMDg0NTIzLC0yMD
+eyJoaXN0b3J5IjpbLTY2Njc3MzkwNSwtNzYxMDg0NTIzLC0yMD
 U1ODUzNzcwLC00NDg4NTcyODksMTg1MzM0ODIyMiwtMTc4NTc1
 NTg5OCwtMTI1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEzNzA5ND
 YsLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3NzAxODcs
