@@ -189,6 +189,13 @@ docker start <container-id>
 
 ## Dynamodb
 Basic operations
+List all the tables
+
+```bash
+aws dynamodb list-tables
+```
+
+describe a table found in the above command:
 
 ```bash
 aws dynamodb describe-table --table-name <table name> 
@@ -197,5 +204,5 @@ aws dynamodb describe-table --table-name <table name>
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTIyNjE3ODAwLC01NzQ3OTEzOTddfQ==
+eyJoaXN0b3J5IjpbLTMyMjgwMzI5MiwtNTc0NzkxMzk3XX0=
 -->
