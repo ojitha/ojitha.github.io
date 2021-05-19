@@ -141,10 +141,20 @@ Install AWS Linux docker container
 docker run -itd -v $env:userprofile\.aws:/root/.aws:rw --name al amazonlinux bash
 ```
 
+Getting to the AWS Linux docker container:
+
+```bash
+docker exec -it al bash
+```
+
+Update
+
 ```bash
 yum upgrade -y && yum update -y
 amazon-linux-extras install -y kernel-ng
 ```
+
+Install 
 Install vscode 
 ```bash
 code --install-extension amazonwebservices.aws-toolkit-vscode
@@ -226,11 +236,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc2MTA4NDUyMywtMjA1NTg1Mzc3MCwtND
-Q4ODU3Mjg5LDE4NTMzNDgyMjIsLTE3ODU3NTU4OTgsLTEyNTY0
-MDY3ODksODMzODgwMDQ1LC0xNDYxMzcwOTQ2LC0xNzEzOTQ3Nz
-I1LC0xNDEwMDEwODQ3LC0xNjU1NzcwMTg3LC05MjcxMDM5OCwz
-NzgwMTM3MTMsLTE4MDQwNjg4NTUsLTk5MTIwOTE1MiwtMTk4OT
-k5NzEyNSwxNjc3NDg3MTI1LC00NTcxODIxMDAsLTEwOTc1NzA2
-NjEsMjA5ODYwODA5OF19
+eyJoaXN0b3J5IjpbMTMxMDQ4MjA3MywtNzYxMDg0NTIzLC0yMD
+U1ODUzNzcwLC00NDg4NTcyODksMTg1MzM0ODIyMiwtMTc4NTc1
+NTg5OCwtMTI1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEzNzA5ND
+YsLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3NzAxODcs
+LTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwtOTkxMj
+A5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEw
+MCwtMTA5NzU3MDY2MV19
 -->
