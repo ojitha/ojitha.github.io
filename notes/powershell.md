@@ -166,10 +166,6 @@ aws/install
 
 NOTE: This is the best container to execute Dynamodb queries
  
-Install vscode 
-```bash
-code --install-extension amazonwebservices.aws-toolkit-vscode
-```
 
 ### Develop Glue on Amazon Linux 2 on Windows
 
@@ -247,11 +243,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMzIxNzUxOTgsLTc2MTA4NDUyMywtMj
-A1NTg1Mzc3MCwtNDQ4ODU3Mjg5LDE4NTMzNDgyMjIsLTE3ODU3
-NTU4OTgsLTEyNTY0MDY3ODksODMzODgwMDQ1LC0xNDYxMzcwOT
-Q2LC0xNzEzOTQ3NzI1LC0xNDEwMDEwODQ3LC0xNjU1NzcwMTg3
-LC05MjcxMDM5OCwzNzgwMTM3MTMsLTE4MDQwNjg4NTUsLTk5MT
-IwOTE1MiwtMTk4OTk5NzEyNSwxNjc3NDg3MTI1LC00NTcxODIx
-MDAsLTEwOTc1NzA2NjFdfQ==
+eyJoaXN0b3J5IjpbMTg3NzYxMzc0MiwtNzYxMDg0NTIzLC0yMD
+U1ODUzNzcwLC00NDg4NTcyODksMTg1MzM0ODIyMiwtMTc4NTc1
+NTg5OCwtMTI1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEzNzA5ND
+YsLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3NzAxODcs
+LTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwtOTkxMj
+A5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEw
+MCwtMTA5NzU3MDY2MV19
 -->
