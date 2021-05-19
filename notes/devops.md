@@ -188,7 +188,7 @@ docker start <container-id>
 - 409 Conflict: Resource conflicts with client request
 
 ## Dynamodb
-Basic operations
+
 List all the tables
 
 ```bash
@@ -204,5 +204,5 @@ aws dynamodb describe-table --table-name <table name>
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMyMjgwMzI5MiwtNTc0NzkxMzk3XX0=
+eyJoaXN0b3J5IjpbLTEzODU4MjM3NzAsLTU3NDc5MTM5N119
 -->
