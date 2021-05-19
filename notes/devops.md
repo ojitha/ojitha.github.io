@@ -187,8 +187,15 @@ docker start <container-id>
 - 406 Incompatible: Incompatible Accept headers specified
 - 409 Conflict: Resource conflicts with client request
 
+## Dynamodb
+Basic operations
+
+```bash
+aws dynamodb describe-table --table-name <table name> 
+```
+
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU3NDc5MTM5N119
+eyJoaXN0b3J5IjpbMTIyNjE3ODAwLC01NzQ3OTEzOTddfQ==
 -->
