@@ -135,7 +135,12 @@ to start distro
 ```bash
 wsl
 ```
-Install AWS
+Install AWS Linux docker container
+
+```bash
+docker run -itd -v $env:userprofile\.aws:/root/.aws:rw --name al amazonlinux bash
+```
+
 ```bash
 yum upgrade -y && yum update -y
 amazon-linux-extras install -y kernel-ng
@@ -221,11 +226,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwNTU4NTM3NzAsLTQ0ODg1NzI4OSwxOD
-UzMzQ4MjIyLC0xNzg1NzU1ODk4LC0xMjU2NDA2Nzg5LDgzMzg4
-MDA0NSwtMTQ2MTM3MDk0NiwtMTcxMzk0NzcyNSwtMTQxMDAxMD
-g0NywtMTY1NTc3MDE4NywtOTI3MTAzOTgsMzc4MDEzNzEzLC0x
-ODA0MDY4ODU1LC05OTEyMDkxNTIsLTE5ODk5OTcxMjUsMTY3Nz
-Q4NzEyNSwtNDU3MTgyMTAwLC0xMDk3NTcwNjYxLDIwOTg2MDgw
-OTgsLTE2NjU5MDg1NzhdfQ==
+eyJoaXN0b3J5IjpbLTc2MTA4NDUyMywtMjA1NTg1Mzc3MCwtND
+Q4ODU3Mjg5LDE4NTMzNDgyMjIsLTE3ODU3NTU4OTgsLTEyNTY0
+MDY3ODksODMzODgwMDQ1LC0xNDYxMzcwOTQ2LC0xNzEzOTQ3Nz
+I1LC0xNDEwMDEwODQ3LC0xNjU1NzcwMTg3LC05MjcxMDM5OCwz
+NzgwMTM3MTMsLTE4MDQwNjg4NTUsLTk5MTIwOTE1MiwtMTk4OT
+k5NzEyNSwxNjc3NDg3MTI1LC00NTcxODIxMDAsLTEwOTc1NzA2
+NjEsMjA5ODYwODA5OF19
 -->
