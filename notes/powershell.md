@@ -150,8 +150,18 @@ docker exec -it al bash
 Install AWS CLI 2
 
 ```bash
+# download
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 
+# install unzip
 yum install unzip
+
+# unzip to out folder
+unzip awscliv2.zip -d out
+
+# install
+
+
 ```
  
 Install vscode 
@@ -235,11 +245,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY2Njc3MzkwNSwtNzYxMDg0NTIzLC0yMD
-U1ODUzNzcwLC00NDg4NTcyODksMTg1MzM0ODIyMiwtMTc4NTc1
-NTg5OCwtMTI1NjQwNjc4OSw4MzM4ODAwNDUsLTE0NjEzNzA5ND
-YsLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcsLTE2NTU3NzAxODcs
-LTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwNDA2ODg1NSwtOTkxMj
-A5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcxMjUsLTQ1NzE4MjEw
-MCwtMTA5NzU3MDY2MV19
+eyJoaXN0b3J5IjpbNTYxOTcwMzc2LC03NjEwODQ1MjMsLTIwNT
+U4NTM3NzAsLTQ0ODg1NzI4OSwxODUzMzQ4MjIyLC0xNzg1NzU1
+ODk4LC0xMjU2NDA2Nzg5LDgzMzg4MDA0NSwtMTQ2MTM3MDk0Ni
+wtMTcxMzk0NzcyNSwtMTQxMDAxMDg0NywtMTY1NTc3MDE4Nywt
+OTI3MTAzOTgsMzc4MDEzNzEzLC0xODA0MDY4ODU1LC05OTEyMD
+kxNTIsLTE5ODk5OTcxMjUsMTY3NzQ4NzEyNSwtNDU3MTgyMTAw
+LC0xMDk3NTcwNjYxXX0=
 -->
