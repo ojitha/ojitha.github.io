@@ -135,9 +135,10 @@ to start distro
 ```bash
 wsl
 ```
-Install AWS CLI 2
+Install AWS
 ```bash
-
+yum upgrade -y && yum update -y
+amazon-linux-extras install -y kernel-ng
 ```
 Install vscode 
 ```bash
@@ -220,7 +221,7 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMDE5NTYzMDYsLTQ0ODg1NzI4OSwxOD
+eyJoaXN0b3J5IjpbLTIwNTU4NTM3NzAsLTQ0ODg1NzI4OSwxOD
 UzMzQ4MjIyLC0xNzg1NzU1ODk4LC0xMjU2NDA2Nzg5LDgzMzg4
 MDA0NSwtMTQ2MTM3MDk0NiwtMTcxMzk0NzcyNSwtMTQxMDAxMD
 g0NywtMTY1NTc3MDE4NywtOTI3MTAzOTgsMzc4MDEzNzEzLC0x
