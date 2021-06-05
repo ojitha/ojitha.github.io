@@ -12,8 +12,8 @@ title: Productivity Tools
 ## Blog tools
 I was very enthustic to know markdown level diagraming.
 
-### mermaid
-One of the best so far found is [mermaid](https://mermaid-js.github.io/mermaid/#/) which I cause use with the my blog tool stackedit.io. For example:
+### Mermaid
+One of the best so far found is [mermaid](https://mermaid-js.github.io/mermaid/#/) which I have used with the my blog tool stackedit.io. For example:
 
 <div class="mermaid">
 graph TD;

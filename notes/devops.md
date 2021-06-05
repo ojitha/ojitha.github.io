@@ -9,6 +9,8 @@ title: DevOps
 
 Here the important commands and information collected while programming. 
 
+## AWS
+
 ### AWS console
 
 configure the AWS console (For the region  http://docs.aws.amazon.com/general/latest/gr/rande.html)
@@ -102,6 +104,72 @@ AWS Kinesis shows only example shows only one sequence. This is the record I fou
     }]
 }
 ```
+
+### AWS Cloudformation
+
+Stack creation with IAM role
+
+Here the role CF:
+
+```yaml
+AWSTemplateFormatVersion: "2010-09-09"
+Description: create IAM role
+
+Resources:
+  IamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAssumeRole
+            Effect: Allow
+            Principal:
+              Service: "cloudformation.amazonaws.com"
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AdministratorAccess"
+Outputs:
+  IamRole:
+    Value: !GetAtt IamRole.Arn     
+```
+
+Then create a stack from the file:
+
+```bash
+aws cloudformation create-stack --stack-name cfniamrole --capabilities CAPABILITY_IAM --template-body file://MyIamRole.yaml
+```
+
+Get the IAM Role ARN to the following variable `IAM_ROLE_ARN`
+
+```bash
+IAM_ROLE_ARN=$(aws cloudformation describe-stacks --stack-name cfniamrole --query "Stacks[0].Outputs[?OutputKey=='IamRole'].OutputValue" --output text)
+```
+
+Example, here the stack for a S3 bucket:
+
+```yaml
+AWSTemplateFormatVersion: "2010-09-09"
+Description: This is my first bucket
+
+Resources:
+  ojithadeletebucket:
+    Type: AWS::S3::Bucket
+```
+
+Create a bucket using `IAM_ROLE_ARN` role and the CF file.
+
+```bash
+aws cloudformation create-stack --stack-name mybucket --template-body file://mybucket.yaml --role-arn $IAM_ROLE_ARN
+```
+
+Delete the stack as this way:
+
+```bash
+for i in mybucket cfniamrole; do aws cloudformation delete-stack --stack-name  $i;done
+```
+
+
 
 ### AWS Chalice
 
