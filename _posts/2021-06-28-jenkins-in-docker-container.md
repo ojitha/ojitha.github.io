@@ -144,7 +144,7 @@ To create container, run the following command in the parent directory level:
 docker-compose -f jenkins/docker-compose.yml up -d
 ```
 
-you can access Jenkins via http://localhsot:8080 using user/pass ojitha/ojitha.
+you can access Jenkins via http://localhost:8080 using user/pass ojitha/ojitha.
 
 If you want to remove the container:
 
