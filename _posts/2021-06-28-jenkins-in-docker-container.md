@@ -152,7 +152,7 @@ If you want to remove the container:
 docker-compose -f jenkins/docker-compose.yml down
 ```
 
-This source was written following a course[^1] and modified to work with latest version of Jenkins.
+This source was written following a course[^1] (author's blog is https://blog.sixeyed.com) and modified to work with latest version of Jenkins.
 
 [^1]: [Using Declarative Jenkins Pipelines](https://pluralsight.pxf.io/DPOAj) 
 
