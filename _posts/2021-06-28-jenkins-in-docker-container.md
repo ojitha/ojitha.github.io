@@ -17,7 +17,7 @@ This is the source code to create a Jenkins Docker container.
 
 ## Folder Structure
 
-In your root folder create a sub folder name say `jenkins`. All the docker specific files, can be kept in this folder. Your git repositories you can create under the root directory where Jenkinsfile is exists.
+In your parent folder create a sub folder name say `jenkins`. All the docker specific files, can be kept in this folder. Your git repositories you can create under the parent directory where Jenkinsfile is exists.
 
 ![image-20210629194310446](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20210629194310446.png)
 
