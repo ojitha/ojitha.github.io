@@ -5,7 +5,7 @@ date:   2021-06-28
 categories: [CI/CD]
 ---
 
-This is the source code to create a Jenkins Docker container
+This is the source code to create a Jenkins Docker container.
 
 <!--more-->
 
@@ -152,9 +152,9 @@ If you want to remove the container:
 docker-compose -f jenkins/docker-compose.yml down
 ```
 
+This source was written following a course[^1] and modified to work with latest version of Jenkins.
 
-
-
+[^1]: [Using Declarative Jenkins Pipelines](https://pluralsight.pxf.io/DPOAj) 
 
 
 
