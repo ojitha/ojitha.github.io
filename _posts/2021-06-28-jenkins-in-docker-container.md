@@ -9,9 +9,19 @@ This is the source code to create a Jenkins Docker container.
 
 <!--more-->
 
+------
+
+* TOC
+{:toc}
+------
+
+## Folder Structure
+
 In your root folder create a sub folder name say `jenkins`. All the docker specific files, can be kept in this folder. Your git repositories you can create under the root directory where Jenkinsfile is exists.
 
 ![image-20210629194310446](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20210629194310446.png)
+
+## Docker compose 
 
 As shown in the above screenshot, you have to have docker-compose.yml file:
 
@@ -30,6 +40,8 @@ services:
 ```
 
 you can find Jenkins specific configuration in the `29.06.2021` which was created based in the date.
+
+## Dockerfile
 
 The Dockerfile is as follows:
 
@@ -84,6 +96,8 @@ COPY ./jenkins.install.UpgradeWizard.state ${JENKINS_HOME}/
 COPY ./scripts/ ${JENKINS_HOME}/init.groovy.d/
 ```
 
+## Jenkins Configuration
+
 The `jenkins.install.UpgradeWizard.state` file contains:
 
 ```
@@ -137,6 +151,8 @@ pm.doCheckUpdatesServer()
 ```
 
 
+
+## Container operation
 
 To create container, run the following command in the parent directory level:
 
