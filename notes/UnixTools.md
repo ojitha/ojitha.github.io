@@ -247,3 +247,63 @@ following libs are installed
 
 asn1crypto-0.22.0 cffi-1.10.0 cryptography-1.8.1 enum34-1.1.6 idna-2.5 ipaddress-1.0.18 paramiko-2.1.2 pyasn1-0.2.3 pycparser-2.17
 
+## volumes
+
+To show the mount points
+
+```bash
+slblk
+# to get the idea:  sudo file -s /dev/xvdf
+```
+
+If the file system is `data`, that means there is no file system yet. To create `xfs` file system:
+
+```bash
+sudo mkfs -t xfs  /dev/xvdf
+# meta-data=/dev/xvdf              isize=512    agcount=4, agsize=655360 blks
+#          =                       sectsz=512   attr=2, projid32bit=1
+#          =                       crc=1        finobt=1, sparse=0
+# data     =                       bsize=4096   blocks=2621440, imaxpct=25
+#          =                       sunit=0      swidth=0 blks
+# naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+# log      =internal log           bsize=4096   blocks=2560, version=2
+#          =                       sectsz=512   sunit=0 blks, lazy-count=1
+# realtime =none                   extsz=4096   blocks=0, rtextents=0
+```
+
+To mount
+
+```bash
+# create a folder
+sudo mkdir /ebstest
+# mount the above folder
+sudo mount /dev/xvdf /ebstest
+```
+
+You have to configure this mount to make it available after reboot.
+
+First get the UUID of the EBS storage
+
+```bash
+sudo blkid
+# /dev/xvda1: LABEL="/" UUID="8562e9fb-f45b-4a09-9778-bde97be4afb3" TYPE="xfs" PARTLABEL="Linux" PARTUUID="5e8ed354-3406-4942-9b72-a557417e17d6" /dev/xvdf: UUID="c4ee15ae-7d99-4e65-9f09-71e42a1f463d" TYPE="xfs"
+```
+
+Edit the `/etc/fstab` with the following:
+
+```bash
+UUID=c4ee15ae-7d99-4e65-9f09-71e42a1f463d /ebstest xfs defaults,nofail
+```
+
+Then mount all the file systems:
+
+```bash
+sudo mount -a
+```
+
+Now test with 
+
+```bash
+df -k
+```
+
