@@ -136,7 +136,9 @@ to start distro
 wsl
 ```
 
-
+### Install Ubuntu
+1. Follow the [Install WSL on Windows 10 | Microsoft Docs](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+2. 
 
 ## AWS Linux 2 Docker
 If you want install docker container
@@ -245,11 +247,11 @@ s3 =
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0MDMxMjg0NjcsLTEyMDE3NjU5MzUsMT
-g3NzYxMzc0MiwtNzYxMDg0NTIzLC0yMDU1ODUzNzcwLC00NDg4
-NTcyODksMTg1MzM0ODIyMiwtMTc4NTc1NTg5OCwtMTI1NjQwNj
-c4OSw4MzM4ODAwNDUsLTE0NjEzNzA5NDYsLTE3MTM5NDc3MjUs
-LTE0MTAwMTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3OD
-AxMzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3
-MTI1LDE2Nzc0ODcxMjVdfQ==
+eyJoaXN0b3J5IjpbMjQ2NjQ0ODAyLC0xMjAxNzY1OTM1LDE4Nz
+c2MTM3NDIsLTc2MTA4NDUyMywtMjA1NTg1Mzc3MCwtNDQ4ODU3
+Mjg5LDE4NTMzNDgyMjIsLTE3ODU3NTU4OTgsLTEyNTY0MDY3OD
+ksODMzODgwMDQ1LC0xNDYxMzcwOTQ2LC0xNzEzOTQ3NzI1LC0x
+NDEwMDEwODQ3LC0xNjU1NzcwMTg3LC05MjcxMDM5OCwzNzgwMT
+M3MTMsLTE4MDQwNjg4NTUsLTk5MTIwOTE1MiwtMTk4OTk5NzEy
+NSwxNjc3NDg3MTI1XX0=
 -->
