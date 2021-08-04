@@ -108,7 +108,7 @@ Then uninstall:
 ```bash
 wslconfig /u Amazon2
 ```
-### Install
+### Install Amazon Linux 2
 Set the default to WSL 2
 First update to the [WSL2 Linux kernel update package for x64 machines](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi). then set to the version 2:
 ```bash
@@ -135,6 +135,8 @@ to start distro
 ```bash
 wsl
 ```
+
+
 
 ## AWS Linux 2 Docker
 If you want install docker container
@@ -239,18 +241,15 @@ s3 =
     signature_version = s3v4
 ```
 
-
-
-
 [^session]: [boto3 not caching STS MFA sessions](https://github.com/boto/boto3/issues/1179)
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMDE3NjU5MzUsMTg3NzYxMzc0MiwtNz
-YxMDg0NTIzLC0yMDU1ODUzNzcwLC00NDg4NTcyODksMTg1MzM0
-ODIyMiwtMTc4NTc1NTg5OCwtMTI1NjQwNjc4OSw4MzM4ODAwND
-UsLTE0NjEzNzA5NDYsLTE3MTM5NDc3MjUsLTE0MTAwMTA4NDcs
-LTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3ODAxMzcxMywtMTgwND
-A2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3MTI1LDE2Nzc0ODcx
-MjUsLTQ1NzE4MjEwMF19
+eyJoaXN0b3J5IjpbLTE0MDMxMjg0NjcsLTEyMDE3NjU5MzUsMT
+g3NzYxMzc0MiwtNzYxMDg0NTIzLC0yMDU1ODUzNzcwLC00NDg4
+NTcyODksMTg1MzM0ODIyMiwtMTc4NTc1NTg5OCwtMTI1NjQwNj
+c4OSw4MzM4ODAwNDUsLTE0NjEzNzA5NDYsLTE3MTM5NDc3MjUs
+LTE0MTAwMTA4NDcsLTE2NTU3NzAxODcsLTkyNzEwMzk4LDM3OD
+AxMzcxMywtMTgwNDA2ODg1NSwtOTkxMjA5MTUyLC0xOTg5OTk3
+MTI1LDE2Nzc0ODcxMjVdfQ==
 -->
