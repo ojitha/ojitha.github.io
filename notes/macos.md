@@ -214,3 +214,21 @@ Here
 >  - du command -h option : display sizes in human readable format.
 >  - du command -s option : show only a total for each argument (summary).
 >  - du command -x option : skip directories on different file systems.
+
+Enable Clipboard [reddit](https://www.reddit.com/r/MacOS/comments/k149hz/universal_clipboard_and_safari_links_not_working/)
+
+1.Run Terminal
+
+2.Type the following to _check_ to see if ClipboardSharingEnabled is equal to zero. (if so, proceed to #3)
+
+**defaults read ~/Library/Preferences com.apple.coreservices.useractivityd.plist**
+
+3.Type the following to _delete_ the ClipboardSharingEnabled = 0 setting.
+
+**defaults delete ~/Library/Preferences/com.apple.coreservices.useractivityd.plist ClipboardSharingEnabled**
+
+4.Reboot your mac. Copy paste across devices should now work.
+
+Alternatively, type the following to enable ClipboardSharingEnabled as the default:
+
+**defaults write ~/Library/Preferences/com.apple.coreservices.useractivityd.plist ClipboardSharingEnabled 1**
