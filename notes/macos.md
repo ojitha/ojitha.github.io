@@ -221,14 +221,23 @@ Enable Clipboard [reddit](https://www.reddit.com/r/MacOS/comments/k149hz/univers
 
 2.Type the following to _check_ to see if ClipboardSharingEnabled is equal to zero. (if so, proceed to #3)
 
-**defaults read ~/Library/Preferences com.apple.coreservices.useractivityd.plist**
+```bash
+defaults read ~/Library/Preferences com.apple.coreservices.useractivityd.plist
+```
+
+
 
 3.Type the following to _delete_ the ClipboardSharingEnabled = 0 setting.
 
-**defaults delete ~/Library/Preferences/com.apple.coreservices.useractivityd.plist ClipboardSharingEnabled**
+```bash
+defaults delete ~/Library/Preferences/com.apple.coreservices.useractivityd.plist ClipboardSharingEnabled
+```
 
 4.Reboot your mac. Copy paste across devices should now work.
 
 Alternatively, type the following to enable ClipboardSharingEnabled as the default:
 
-**defaults write ~/Library/Preferences/com.apple.coreservices.useractivityd.plist ClipboardSharingEnabled 1**
+```bash
+defaults write ~/Library/Preferences/com.apple.coreservices.useractivityd.plist ClipboardSharingEnabled 1
+```
+
