@@ -271,6 +271,16 @@ aws dynamodb describe-table --table-name <table name>
 
 
 
+## Access AWS account from bash
+
+```bash
+echo $(aws sts get-caller-identity --query='Account' --output=text)
+```
+
+
+
+
+
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbLTEzODU4MjM3NzAsLTU3NDc5MTM5N119
 -->
