@@ -112,3 +112,49 @@ I have configured Spark using SDKMAN.
 - [Building Spark JAR Files with SBT](https://mungingdata.com/apache-spark/building-jar-sbt/)
 - [Setting up a Spark Development Environment with Scala](https://www.cloudera.com/tutorials/setting-up-a-spark-development-environment-with-scala/.html)
 
+```bash
+docker run --name pyspark -e JUPYTER_ENABLE_LAB=yes -e JUPYTER_TOKEN="pyspark"  -v "$(pwd)":/home/jovyan/work -p 8888:8888 jupyter/pyspark-notebook:d4cbf2f80a2a 
+```
+
+Use the http://localhost:8888/?token=pyspark to open the jupyter notebook.
+
+To run the Zeppelin:
+
+```bash
+docker run -u $(id -u) -p 8080:8080 -p 4040:4040 --rm -v $PWD/logs:/logs -v $PWD/:/notebook -e ZEPPELIN_LOG_DIR='/logs' -e ZEPPELIN_NOTEBOOK_DIR='/notebook' --name zeppelin apache/zeppelin:0.10.0
+```
+
+Command to create Apache Airflow
+
+```bash
+docker run -ti -p 8080:8080 -v ${PWD}/<dag>.py:/opt/airflow/dags/download_rocket_launches.py --name airflow --entrypoint=/bin/bash apache/airflow:2.0.0-python3.8 -c '( airflow db init && airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email ojithak@gmail.com); airflow webserver & airflow scheduler'
+```
+
+## Postgres
+
+Create docker image: (In the current directory, create a `data` folder)
+
+```bash
+docker run -t -i \
+    --name Mastering-postgres \
+    --rm \
+    -p 5432:5432 \
+    -e POSTGRES_PASSWORD=ojitha \
+    -v "$(pwd)/data":/var/lib/postgresql/data \
+    postgres:13.4
+```
+
+Docker to access psql:
+
+```bash
+docker exec -it Mastering-postgres bash
+```
+
+Inside the bash run the following command to get into the `psql`:
+
+```bash
+psql -h localhost -p 5432 -U postgres
+```
+
+
+
