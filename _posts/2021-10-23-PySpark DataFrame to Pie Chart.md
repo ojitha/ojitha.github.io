@@ -7,7 +7,7 @@ categories: [Apache Spark]
 
 I am sharing a Jupyter notebook. 
 
-<!-- more -->
+<!--more-->
 
 This shows:
 
@@ -90,11 +90,8 @@ plt.title('DVD rental revenue on ratings')
 plt.show()             
 ```
 
-
-![Pie Chart](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/2021-10-23%2520PySpark%2520DataFrame%2520to%2520Pie%2520Chart_5_0.png)
-    
-
 ![Pie Chart for Movie Rental revenue](/assets/2021-10-23 PySpark DataFrame to Pie Chart_5_0.png)
+
 
 ```python
 spark.stop()
