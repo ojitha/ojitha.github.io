@@ -1,3 +1,17 @@
+---
+layout: post
+title:  PySpark Data Frame to Pie Chart
+date:   2021-10-23
+categories: [Apache Spark]
+---
+
+I am sharing a Jupyter notebook. This shows:
+1. Access to PostgreSQL database connection
+2. How to draw Pie Chart 
+3. SQL shows common table expression
+
+
+
 ```python
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("Postgres Connection") \
