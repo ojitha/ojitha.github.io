@@ -32,6 +32,13 @@ The tool [asciinema](https://asciinema.org) record your terminal and upload to c
 Tools for XML
 ## Python
 To setup complete python environment, see the [Python my workflow](https://ojitha.blogspot.com/2020/09/python-my-workflow.html).
+To fond the python directories in the `PYTHONPATH`:
+
+```python
+import sys
+import pprint from pprint
+pprint(sys.path)
+```
 
 ### Atom editor for Spark
 
@@ -52,7 +59,7 @@ source bin/activate
 python -m pip install --upgrade pip
 ```
 
-In the virtual enviroment, install 
+In the virtual enviroment, install
 
 ```bash
 pip install ipykernel
@@ -107,13 +114,13 @@ to deactivate, `deactivate` in the CLI to move out from the project environment.
 
 ## Spark
 
-I have configured Spark using SDKMAN. 
+I have configured Spark using SDKMAN.
 
 - [Building Spark JAR Files with SBT](https://mungingdata.com/apache-spark/building-jar-sbt/)
 - [Setting up a Spark Development Environment with Scala](https://www.cloudera.com/tutorials/setting-up-a-spark-development-environment-with-scala/.html)
 
 ```bash
-docker run --name pyspark -e JUPYTER_ENABLE_LAB=yes -e JUPYTER_TOKEN="pyspark"  -v "$(pwd)":/home/jovyan/work -p 8888:8888 jupyter/pyspark-notebook:d4cbf2f80a2a 
+docker run --name pyspark -e JUPYTER_ENABLE_LAB=yes -e JUPYTER_TOKEN="pyspark"  -v "$(pwd)":/home/jovyan/work -p 8888:8888 jupyter/pyspark-notebook:d4cbf2f80a2a
 ```
 
 Use the http://localhost:8888/?token=pyspark to open the jupyter notebook.
@@ -156,5 +163,11 @@ Inside the bash run the following command to get into the `psql`:
 psql -h localhost -p 5432 -U postgres
 ```
 
+## Jekylle
 
+To start Jekylle
+
+```bash
+bundle exec jekyll serve
+```
 
