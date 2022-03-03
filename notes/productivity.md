@@ -217,7 +217,7 @@ bundle exec jekyll serve
     
     <!--more-->
     
-    {% include pyspark_date_example.html %}
+    -- include pyspark_date_example.html using liquid --
     ```
 
     As shown in the line# 12 embed the html file to post. 
