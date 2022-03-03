@@ -171,3 +171,55 @@ To start Jekylle
 bundle exec jekyll serve
 ```
 
+## Quarto
+
+[Quarto](https://quarto.org) is based on the [pandoc](https://pandoc.org/MANUAL.html#option--reference-doc). Here the workflow to include Jupyter notebook in [Jekyll](https://jekyllrb.com/docs/posts/) site.
+
+1. Frirst create Jupyter notebook in the vscode and include the yaml in the raw form.
+
+    ```yaml
+    ---
+    title: PySpark Date Example
+    format:
+        html:
+            code-fold: true
+    jupyter: python3        
+    ---
+    ```
+
+    
+
+2. now copy the `ipynb` to temp directory
+
+3. now run the following command 
+
+    ```bash
+    quarto render pyspark_date_example.ipynb --to html
+    ```
+
+    
+
+4. copy both of the generated folder and the html file to `<jekyll root>/_include` foler.
+
+5. remove the `<!DOCTYPE html>` first statement from the HTML page
+
+6. And add the post such as
+
+    ```
+    ---
+    layout: post
+    title:  PySpark Date Exmple
+    date:   2022-03-02
+    categories: [Apache Spark]
+    ---
+    
+    PySpark date in string to date type conversion example. How you can use python sql functions like `datediff` to calculate the differences in days.
+    
+    <!--more-->
+    
+    {% include pyspark_date_example.html %}
+    ```
+
+    As shown in the line# 12 embed the html file to post. 
+
+7. Now run the Jekyll if not started
