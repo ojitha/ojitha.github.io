@@ -78,3 +78,6 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+    - exec
+    - jekyll
+    - build
