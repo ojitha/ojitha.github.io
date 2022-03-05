@@ -25,7 +25,7 @@ It is important to understand how the Java thread interrupt work.
 
 
 
-![thread-interrupt](/assets/thread-interrupt.jpeg)
+![thread-interrupt](/assets/images/thread-interrupt.jpeg)
 
 The `(i > 10) && other.isAlive() && current != other`, second and third conditions are very important. Second condition avoid sending one more interrupts (due to the first condition has been satisfied) and third condition completely avoid the intrrupt to be happned in the Thread-0.
 

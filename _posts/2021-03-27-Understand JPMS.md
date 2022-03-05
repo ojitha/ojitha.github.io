@@ -7,7 +7,7 @@ categories: [Java]
 
 Java Platform Module System (JPMS) has been introduced since Java 9. With Java 9, JDK has been divided into 90 modules. This is a simple example created using IntelliJ IDEA.
 
-![module-info](/assets/module-info.jpg)
+![module-info](/assets/images/module-info.jpg)
 
 As shown in the above diagram, there are three modules, Application, Service and Provider. 
 
@@ -39,15 +39,15 @@ In the IntelliJ IDEA,
 
 1. create a Empty project 
 
-    ![Project Structure](/assets/image-20210328122652901.png)
+    ![Project Structure](/assets/images/image-20210328122652901.png)
 
 2. Add the three IntelliJ IDEA Java modules: Application, Service and Provider.
 
-    ![IntelliJ IDEA Modules](/assets/image-20210328122340513.png)
+    ![IntelliJ IDEA Modules](/assets/images/image-20210328122340513.png)
 
 3. In each Java Module, you have to create `module-info.java` files shown in the first screenshot.
 
-    ![Three module-info.java files](/assets/image-20210328122554069.png)
+    ![Three module-info.java files](/assets/images/image-20210328122554069.png)
 
     
 
@@ -93,7 +93,7 @@ This is all about module dependencies such as
     
     
     
-    ![image-20210329123854050](/assets/image-20210329123854050.png)
+    ![image-20210329123854050](/assets/images/image-20210329123854050.png)
     
     
     
@@ -112,7 +112,7 @@ This is all about module dependencies such as
 - `uses`: The directive  `uses <service interface>` uses services provided by other modules
 
 - `provide`: In the service consumer module, the directive `provides <service interface> with <implementation-classes>`: 
-    
+  
     - specifies service **interface or abstract class** of the service module.
     - The service consumer **dynamically discover** (discussed in the next section) the provider implementation classes. 
     - The consumer modules **don not need to specify** `requires` for the provider module.
@@ -188,7 +188,7 @@ javac  -d ./build  --module-source-path "./*/src" $(find . -name "*.java")
 
 Here the complete source and target after the compilation:
 
-![image-20210328192452235](/assets/image-20210328192452235.png)
+![image-20210328192452235](/assets/images/image-20210328192452235.png)
 
 To run:
 
@@ -204,7 +204,7 @@ You can run the `jdeps` utility to find the module dependencies:
 jdeps build
 ```
 
-![image-20210329131823681](/assets/image-20210329131823681.png)
+![image-20210329131823681](/assets/images/image-20210329131823681.png)
 
 This will show all the depenencies in the `build` folder.
 
@@ -229,5 +229,4 @@ Hello/bin/Hello
 Application load is quicker even because the dependencies between modules, missing modules and other errors can be verified before starting the application.
 
 > NOTE: Modules are load from the module-path instead of the class-path. 
-
 

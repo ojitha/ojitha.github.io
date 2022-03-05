@@ -90,7 +90,7 @@ plt.title('DVD rental revenue on ratings')
 plt.show()             
 ```
 
-![Pie Chart for Movie Rental revenue](/assets/2021-10-23 PySpark DataFrame to Pie Chart_5_0.png)
+![Pie Chart for Movie Rental revenue](/assets/images/2021-10-23 PySpark DataFrame to Pie Chart_5_0.png)
 
 
 ```python
