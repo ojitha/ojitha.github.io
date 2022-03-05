@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  RegEx on bash shell
+title:  RegEx on MacOS
 date:   2022-03-04
 categories: [RegEx]
 ---
