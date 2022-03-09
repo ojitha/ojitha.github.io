@@ -1,8 +1,9 @@
 ---
 layout: notes
 title: Productivity Tools
+mermaid: true
 ---
-<script src="https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js"></script>
+
 
 **Notes on Productivity tools**
 
