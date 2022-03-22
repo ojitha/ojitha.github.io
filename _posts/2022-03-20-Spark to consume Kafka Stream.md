@@ -2,10 +2,10 @@
 layout: post
 title:  Spark to consume Kafka Stream
 date:   2022-03-20
-categories: [Kafka]
+categories: [Kafka, Apache Spark]
 ---
 
-Kafka
+A simple PySpark example to show how to consume Kafka stream (given [Kafka tutorial][tut]{:target="_blank"}).
 
 <!--more-->
 
@@ -17,7 +17,7 @@ Kafka
 
 ## Run Kafka
 
-The Kafka application creates the stream created using Confluent Developer[^1]. I have slightly changed the docker-compose.yaml to work using an external host instead of localhost.
+The Kafka application creates the stream created using [Confluent Developer tutorial][tut]{:target="_blank"}. I have slightly changed the docker-compose.yaml to work using an external host instead of localhost.
 
 ```yaml
 ---
@@ -212,5 +212,5 @@ As shown in the above code, the output mode is `append`, and the trigger time is
 
 Reference:
 
-[^1]: [How to build your first Apache Kafka Streams application](https://developer.confluent.io/tutorials/creating-first-apache-kafka-streams-application/kstreams.html)
+[tut]: https://developer.confluent.io/tutorials/creating-first-apache-kafka-streams-application/kstreams.html "How to build your first Apache Kafka Streams application"
 
