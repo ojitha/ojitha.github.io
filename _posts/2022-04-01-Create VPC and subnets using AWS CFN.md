@@ -5,13 +5,15 @@ date:   2022-04-01
 categories: [AWS]
 ---
 
-This is very basic example of creating AWS VPC and the subnets using AWS Cloudformation(CFN).
+This is very basic example of creating AWS VPC and the subnets using AWS Cloudformation(CFN). In the next post, I've discussed the [AWS CFN - Create IGW and NAT]({% post_url 2022-04-08-Create-IGWndNAT-using-AWS %}).
 
-![image-20220409123443526](/assets/images/2022-04-01-Create VPC and subnets using AWS CFN/image-20220409123443526.png)
+[![Fig.1 VPC architecture](/assets/images/2022-04-01-Create VPC and subnets using AWS CFN/image-20220409123443526.png)](/assets/images/2022-04-01-Create VPC and subnets using AWS CFN/image-20220409123443526.png){:target="_blank"}
 
 <!--more-->
 
-Here the CFN yaml to create the above architecture. If you want more information, please visit the reference[^1] I used to create this post. 
+The prerequisite for this post is [AWS Cloudformation to create AWS VPC](https://ojitha.blogspot.com/2021/06/aws-cloudformation-to-create-aws-vpc.html){:target="_blank"}.
+
+Here the CFN yaml to create the above architecture. If you want more information, please visit the reference[^1] I used to create this post. As shown in the above diagram `x.y` prefix (at line# 4), you have to pass the parameter as `--parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0` when you are creating the stack.
 
 ```yaml
 AWSTemplateFormatVersion: "2010-09-09"
@@ -229,7 +231,9 @@ Validate the template:
 aws cloudformation validate-template --template-body file://vpc-example-1.yaml
 ```
 
-If there is no errors create the stack
+If there is no errors create the stack. 
+
+>  Remeber to pass the parameters for the `x.y` shown in the above diagram.
 
 ```bash
 aws cloudformation create-stack --template-body file://vpc-example-1.yaml --parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0  --stack-name oj-test-stack
@@ -300,6 +304,8 @@ More information such as AZ and number of availble IPs, you can get as follows:
 ```bash
 aws ec2 describe-subnets --filters "Name=vpc-id,Values=${VPC_ID}" --query 'Subnets[].[Tags[?Key==`Name`]|[0].Value,SubnetId,CidrBlock,Tags[?Key==`Scope`]|[0].Value,AvailableIpAddressCount,AvailabilityZone]' --output table
 ```
+
+---
 
 [^1]: [Automation in AWS with CloudFormation, CLI, and SDKs](https://learning.oreilly.com/videos/automation-in-aws/9780134818313/),[Richard A. Jones](https://learning.oreilly.com/search/?query=author%3A%22Richard%20A.%20Jones%22&sort=relevance&highlight=true)
 
