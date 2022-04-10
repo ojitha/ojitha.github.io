@@ -61,7 +61,9 @@ Resources:
 
 Here `AWS::StackName` is the current stack name, for example `oj-test-igwandnat-stack`. The IGW has to create in the current stack and attached to the VPC, which is provided via `NetworkStack` from the parameter as shown in line# 17. The `VpcId` is derived property.
 
-## Route Tables
+## RT
+
+First create route table which is pointing to the IGW where internet traffic is enable in its nature, therefore, which is public.
 
 ```yaml
   # public Route Table
@@ -105,7 +107,7 @@ There are 3 steps:
 
 3. Associate the routeing table to the subnet. 
 
-For Apps, you need to create a private route table as follows:
+For Apps, you need to create a private route table pointing to NAT which is only out going traffic allows as follows:
 
 ```yaml
 privateRT:
@@ -168,6 +170,104 @@ For dedicated route, NAT Gateway need elastic IP.
 
 [![image-20220410142015289](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410142015289.png)](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410142015289.png){:target="_blank"}
 
+
+
+## ACL
+
+There is always a default NACL which pointing to all the subnets. for Network Access Control List will be the central place to pass traffic via subnet, which will override the Security Group access as well.
+
+Here the inbound of the default ACL:
+
+![Default Inbounds](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410231217976.png)
+
+![default Outbounds](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410231322111.png)
+
+As [AWS][aws_doc]{:target="_blank"} stated:
+
+> The default network ACL is configured to allow all traffic to flow in and out of the subnets with which it is associated. Each network ACL also includes a rule whose rule number is an asterisk. This rule ensures that if a packet doesn't match any of the other numbered rules, it's denied. You can't modify or remove this rule.
+
+Here the custom ACL to create: 
+
+```yaml
+  # ACL to control traffic at subnet level
+  DmzAcl:
+    Type: AWS::EC2::NetworkAcl
+    Properties:
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${NetworkStack}-VpcId
+      Tags:
+      - Key: Name
+        Value: ACL security
+      - Key: Scope
+        Value: public
+
+  # NACL must be associated with Dmz subnets
+  DmzAclAssociationA:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Properties:
+      NetworkAclId: !Ref DmzAcl
+      SubnetId:
+        Fn::ImportValue: !Sub ${NetworkStack}-DmzSubnetAId
+  DmzAclAssociationB:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Properties:
+      NetworkAclId: !Ref DmzAcl
+      SubnetId:
+        Fn::ImportValue: !Sub ${NetworkStack}-DmzSubnetBId
+  DmzAclAssociationC:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Properties:
+      NetworkAclId: !Ref DmzAcl
+      SubnetId:
+        Fn::ImportValue: !Sub ${NetworkStack}-DmzSubnetCId
+
+  # NACL in bounds
+  DmzAclIngress4UDP:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId: !Ref DmzAcl
+      RuleAction: allow
+      RuleNumber: 100
+      Protocol: 17 # for UDP 
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 123
+        To: 123      
+
+  # NACL out bounds
+  DmzAclEgress4UDP:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId: !Ref DmzAcl
+      RuleAction: allow
+      Egress: true
+      RuleNumber: 100
+      Protocol: 17 # for UDP 
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: 123
+        To: 123         
+```
+
+There are 3 steps:
+
+1. Create ACL for the VPC
+
+2. Associate with the subnets of the VPC
+
+3. Define inbounds
+
+4. Define outbounds
+
+    As in the [AWS][aws_doc]{:target="_blank"} documentation:
+
+    > Rules are evaluated starting with the lowest numbered rule. As soon as a rule matches traffic, it's applied regardless of any higher-numbered rule that might contradict it.
+
+    ![custom inbound](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410231449706.png)
+
+    ![custom outbound](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410231534807.png)
+
 ## Deploy
 
 Command to validate
@@ -214,3 +314,4 @@ Please refer to the reference[^1] used to create this post for more information.
 
 [^1]: [Automation in AWS with CloudFormation, CLI, and SDKs](https://learning.oreilly.com/videos/automation-in-aws/9780134818313/), Richard A. Jones
 
+[aws_doc]: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html#nacl-rule
