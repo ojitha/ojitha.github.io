@@ -166,6 +166,8 @@ As shown in the line# 3 `DependsOn`, NAT instance creation shouldn't start until
 
 For dedicated route, NAT Gateway need elastic IP.
 
+[![image-20220410142015289](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410142015289.png)](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410142015289.png){:target="_blank"}
+
 ## Deploy
 
 Command to validate
