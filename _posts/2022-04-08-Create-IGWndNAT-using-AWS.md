@@ -174,7 +174,7 @@ For dedicated route, NAT Gateway need elastic IP.
 
 ## ACL
 
-There is always a default NACL which pointing to all the subnets. for Network Access Control List will be the central place to pass traffic via subnet, which will override the Security Group access as well.
+There is always a default NACL which pointing to all the subnets. for Network Access Control List will be the central place to pass traffic via subnet. ACLs are stateless, therefore you have to define the inbound and outbound rules.
 
 Here the inbound of the default ACL:
 
