@@ -5,7 +5,7 @@ date:   2022-04-01
 categories: [AWS]
 ---
 
-This is very basic example of creating AWS VPC and the subnets using AWS Cloudformation(CFN). In the next post, I've discussed the [AWS CFN - Create IGW and NAT]({% post_url 2022-04-08-Create-IGWndNAT-using-AWS %}).
+This is a fundamental example of creating AWS VPC and the subnets using AWS Cloudformation(CFN). In the next post, I've discussed the [AWS CFN - Create IGW and NAT]({% post_url 2022-04-08-Create-IGWndNAT-using-AWS %}).
 
 [![Fig.1 VPC architecture](/assets/images/2022-04-01-Create VPC and subnets using AWS CFN/image-20220409123443526.png)](/assets/images/2022-04-01-Create VPC and subnets using AWS CFN/image-20220409123443526.png){:target="_blank"}
 
@@ -13,7 +13,7 @@ This is very basic example of creating AWS VPC and the subnets using AWS Cloudfo
 
 The prerequisite for this post is [AWS Cloudformation to create AWS VPC](https://ojitha.blogspot.com/2021/06/aws-cloudformation-to-create-aws-vpc.html){:target="_blank"}.
 
-Here the CFN yaml to create the above architecture. If you want more information, please visit the reference[^1] I used to create this post. As shown in the above diagram `x.y` prefix (at line# 4), you have to pass the parameter as `--parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0` when you are creating the stack.
+Here is the CFN YAML to create the above architecture. Please visit the reference[^1] I used to create this post if you want more information. As shown in the above diagram `x.y` prefix (at line# 4), you must pass the parameter as `--parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0` when you are creating the stack.
 
 ```yaml
 AWSTemplateFormatVersion: "2010-09-09"
@@ -231,15 +231,15 @@ Validate the template:
 aws cloudformation validate-template --template-body file://vpc-example-1.yaml
 ```
 
-If there is no errors create the stack. 
+If there are no errors, create the stack. 
 
->  Remeber to pass the parameters for the `x.y` shown in the above diagram.
+>  Remember to pass the parameters for the `x.y` shown above.
 
 ```bash
 aws cloudformation create-stack --template-body file://vpc-example-1.yaml --parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0  --stack-name oj-test-stack
 ```
 
-To list all the exports
+To list all the exports.
 
 ```bash
 aws cloudformation list-exports --query 'Exports[].[Name,Value]' --output table
@@ -272,7 +272,7 @@ to get only the VpcId:
 aws ec2 describe-vpcs --filters "Name=tag:Name,Values=oj-test-stack" --query 'Vpcs[0].VpcId' --output text
 ```
 
-if you wants to use the above VpcId , then assign that to a variable
+if you want to use the above VpcId , then assign that to a variable
 
 ```bash
 VPC_ID=$(aws ec2...above command)
@@ -308,4 +308,5 @@ aws ec2 describe-subnets --filters "Name=vpc-id,Values=${VPC_ID}" --query 'Subne
 ---
 
 [^1]: [Automation in AWS with CloudFormation, CLI, and SDKs](https://learning.oreilly.com/videos/automation-in-aws/9780134818313/),[Richard A. Jones](https://learning.oreilly.com/search/?query=author%3A%22Richard%20A.%20Jones%22&sort=relevance&highlight=true)
+
 

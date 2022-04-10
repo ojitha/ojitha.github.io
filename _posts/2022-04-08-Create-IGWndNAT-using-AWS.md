@@ -11,7 +11,7 @@ In this post, let's see how to create Internet Gateway (IGW) and NAT Gateway usi
 
 [![Fig.1: Architect Diagram](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410104530855.png)](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220410104530855.png){:target="_blank"}
 
-This post is continuation of the [AWS CFN - Create VPC and subnets]({% post_url 2022-04-01-Create VPC and subnets using AWS CFN %}).
+This post is a continuation of the [AWS CFN - Create VPC and subnets]({% post_url 2022-04-01-Create VPC and subnets using AWS CFN %}).
 
 <!--more-->
 
@@ -23,7 +23,7 @@ This post is continuation of the [AWS CFN - Create VPC and subnets]({% post_url 
 
 The prerequisite for this post is [AWS Cloudformation to create AWS VPC](https://ojitha.blogspot.com/2021/06/aws-cloudformation-to-create-aws-vpc.html){:target="_blank"}.
 
-There is one parameter to pass that is the VPC created earlier, for example `ParameterKey=NetworkStack,ParameterValue=oj-test-stack` :
+There is one parameter to pass that is the VPC created earlier, for example, `ParameterKey=NetworkStack,ParameterValue=oj-test-stack` :
 
 ```yaml
 AWSTemplateFormatVersion: "2010-09-09"
@@ -59,7 +59,7 @@ Resources:
           !Sub ${NetworkStack}-VpcId 
 ```
 
-Here `AWS::StackName` is the current stack name, for example `oj-test-igwandnat-stack`. The IGW has to create in the current stack and attach to the VPC which is provided via `NetworkStack` from the parameter as shown in the line# 17. The `VpcId` is derived property.
+Here `AWS::StackName` is the current stack name, for example `oj-test-igwandnat-stack`. The IGW has to create in the current stack and attached to the VPC, which is provided via `NetworkStack` from the parameter as shown in line# 17. The `VpcId` is derived property.
 
 ## Route Tables
 
@@ -97,15 +97,15 @@ Here `AWS::StackName` is the current stack name, for example `oj-test-igwandnat-
 
 There are 3 steps:
 
-1. create the `publicRT` and attach to the vpc. 
+1. create the `publicRT` and attach it to the VPC. 
 
-2. Then add the routes to the route table. All the traffic has to flow through the IGW except local route as follows:
+2. Then add the routes to the routeing table. All the traffic has to flow through the IGW except local route as follows:
 
     ![publicRT](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/publicRT.jpg)
 
-3. Associate the route table to the subnet. 
+3. Associate the routeing table to the subnet. 
 
-For Apps, you need to create private route table as follows:
+For Apps, you need to create a private route table as follows:
 
 ```yaml
 privateRT:
@@ -206,8 +206,9 @@ Output:
 +--------+---------------------------+----------------------+
 ```
 
-For more information please refere to the reference[^1] used to creat this post.
+Please refer to the reference[^1] used to create this post for more information.
 
 ---
 
 [^1]: [Automation in AWS with CloudFormation, CLI, and SDKs](https://learning.oreilly.com/videos/automation-in-aws/9780134818313/), Richard A. Jones
+
