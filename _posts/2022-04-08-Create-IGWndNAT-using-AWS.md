@@ -318,6 +318,44 @@ Output:
 +--------+---------------------------+----------------------+
 ```
 
+## Change management
+
+If you update the template, you can use the change set approach:
+
+```bash
+CHANGE_SET=$(aws cloudformation create-change-set --change-set-name allow-http-traffic --stack-name oj-test-security-stack --template-body file://vpc-example-1-2.yaml --parameters ParameterKey=NetworkStack,UsePreviousValue=true --query 'Id' --output text)
+```
+
+To describe the change set
+
+```bash
+aws cloudformation describe-change-set --change-set-name $CHANGE_SET --query '[StackName,Changes[].ResourceChange]' --output text
+```
+
+Output: 
+
+```
+oj-test-security-stack
+Add     DmzAclEgressWeb AWS::EC2::NetworkAclEntry
+Add     DmzAclEntryEgressHttps  AWS::EC2::NetworkAclEntry
+Add     DmzAclEntryEgressHttp   AWS::EC2::NetworkAclEntry
+Add     DmzAclEntryIngressHttps AWS::EC2::NetworkAclEntry
+Add     DmzAclEntryIngressHttp  AWS::EC2::NetworkAclEntry
+Add     DmzAclIngressWeb        AWS::EC2::NetworkAclEntry
+```
+
+To deploy the change set after review:
+
+```bash
+aws cloudformation execute-change-set --change-set-name ${CHANGE_SET} && aws cloudformation wait stack-update-complete --stack-name oj-test-security-stack
+```
+
+To delete the change set
+
+```bash
+aws cloudformation delete-change-set --stack-name oj-test-security-stack --change-set-name allow-http-traffic
+```
+
 Please refer to the reference[^1] used to create this post for more information.
 
 ---
