@@ -37,7 +37,7 @@ Parameters:
 
 ## IGW
 
-![IGW](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411160658423.png)
+![IGW](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411160658423.png)
 
 The first resource is IGW:
 
@@ -67,7 +67,7 @@ Here `AWS::StackName` is the current stack name, for example `oj-test-igwandnat-
 
 First create route table which is pointing to the IGW where internet traffic is enable in its nature, therefore, which is public.
 
-![Route Table](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161108416.png)
+![Route Table](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161108416.png)
 
 ```yaml
   # public Route Table
@@ -153,7 +153,7 @@ In the second row, notice the nat-... which is created in the following section.
 
 As shown in the line# 3 `DependsOn`, NAT instance creation shouldn't start until IGW attachment has been completed.
 
-![NAT](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161639824.png)
+![NAT](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161639824.png)
 
 ```yaml
   # NAT
@@ -194,7 +194,7 @@ As [AWS][aws_doc]{:target="_blank"} stated:
 
 Here the custom ACL to create: 
 
-![ACL](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161945885.png)
+![ACL](/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161945885.png)
 
 In the above diagram, `DmzAclAssociationB` and `DmzAclAssociationC` are not shown for simplicity.
 
