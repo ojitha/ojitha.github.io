@@ -37,6 +37,8 @@ Parameters:
 
 ## IGW
 
+![IGW](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411160658423.png)
+
 The first resource is IGW:
 
 ```yaml
@@ -64,6 +66,8 @@ Here `AWS::StackName` is the current stack name, for example `oj-test-igwandnat-
 ## RT
 
 First create route table which is pointing to the IGW where internet traffic is enable in its nature, therefore, which is public.
+
+![Route Table](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161108416.png)
 
 ```yaml
   # public Route Table
@@ -149,6 +153,8 @@ In the second row, notice the nat-... which is created in the following section.
 
 As shown in the line# 3 `DependsOn`, NAT instance creation shouldn't start until IGW attachment has been completed.
 
+![NAT](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161639824.png)
+
 ```yaml
   # NAT
   NatGateway:
@@ -187,6 +193,10 @@ As [AWS][aws_doc]{:target="_blank"} stated:
 > The default network ACL is configured to allow all traffic to flow in and out of the subnets with which it is associated. Each network ACL also includes a rule whose rule number is an asterisk. This rule ensures that if a packet doesn't match any of the other numbered rules, it's denied. You can't modify or remove this rule.
 
 Here the custom ACL to create: 
+
+![ACL](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2022-04-08-Create-IGWndNAT-using-AWS/image-20220411161945885.png)
+
+In the above diagram, `DmzAclAssociationB` and `DmzAclAssociationC` are not shown for simplicity.
 
 ```yaml
   # ACL to control traffic at subnet level
