@@ -11,7 +11,19 @@ Here the important commands and information collected while programming.
 
 ## AWS
 
-### EC2 Role for the vscode
+### EC2
+
+#### EC2 use of jq
+Install jq
+```bash
+sudo yum install jq
+```
+Execute AWS stepfunction:
+```bash
+jq -c . <input file>.json | xargs -0 aws stepfunctions start-execution --state-machine-arn <stepfunction arn>--input
+```
+
+#### EC2 Role for the vscode
 If your EC2 instance has been created in the private subnet, you have to create a role with the following policies:
 NOTE: Trust relationship should be the EC2 and the developer should be with the `PowerUserAccess`.
 
