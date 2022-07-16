@@ -11,30 +11,187 @@ Here the important commands and information collected while programming.
 
 ## AWS
 
-### AWS console
+### EC2 Role for the vscode
+If your EC2 instance has been created in the private subnet, you have to create a role with the following policies:
+NOTE: Trust relationship should be the EC2 and the developer should be with the `PowerUserAccess`.
 
-configure the AWS console (For the region  http://docs.aws.amazon.com/general/latest/gr/rande.html)
-
-```bash
-aws configure
+```yaml
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "cloudformation:*",
+                "lambda:*",
+                "sns:*",
+                "events:*",
+                "logs:*",
+                "ec2:*",
+                "s3:*",
+                "dynamodb:*",
+                "kms:*",
+                "iam:*",
+                "states:*",
+                "sts:*",
+                "sqs:*",
+                "elasticfilesystem:*",
+                "config:*",
+                "cloudwatch:*",
+                "apigateway:*",
+                "backup:*",
+                "firehose:*",
+                "backup-storage:*",
+                "ssm:*"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
 ```
 
-Find all the running EC2 instances:
+and 
 
-```bash
-aws ec2 describe-instances
-```
-
-To find Instance Id
-
-```bash
-ec2 describe-instances | grep InstanceId
-```
-
-Terminate the instance 
-
-```bash
-aws ec2 terminate-instances --instance-id i-07fbd393a04fdd22c
+```yaml
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "CloudFormationTemplate",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:CreateChangeSet"
+            ],
+            "Resource": [
+                "arn:aws:cloudformation:*:aws:transform/Serverless-2016-10-31"
+            ]
+        },
+        {
+            "Sid": "CloudFormationStack",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:CreateChangeSet",
+                "cloudformation:CreateStack",
+                "cloudformation:DeleteStack",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:DescribeStacks",
+                "cloudformation:ExecuteChangeSet",
+                "cloudformation:GetTemplateSummary",
+                "cloudformation:ListStackResources",
+                "cloudformation:UpdateStack"
+            ],
+            "Resource": [
+                "arn:aws:cloudformation:*:<account id>:stack/*"
+            ]
+        },
+        {
+            "Sid": "S3",
+            "Effect": "Allow",
+            "Action": [
+                "s3:CreateBucket",
+                "s3:GetObject",
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*/*"
+            ]
+        },
+        {
+            "Sid": "ECRRepository",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:BatchGetImage",
+                "ecr:CompleteLayerUpload",
+                "ecr:CreateRepository",
+                "ecr:DeleteRepository",
+                "ecr:DescribeImages",
+                "ecr:DescribeRepositories",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetRepositoryPolicy",
+                "ecr:InitiateLayerUpload",
+                "ecr:ListImages",
+                "ecr:PutImage",
+                "ecr:SetRepositoryPolicy",
+                "ecr:UploadLayerPart"
+            ],
+            "Resource": [
+                "arn:aws:ecr:*:<account id>:repository/*"
+            ]
+        },
+        {
+            "Sid": "ECRAuthToken",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "Lambda",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:AddPermission",
+                "lambda:CreateFunction",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:GetFunctionConfiguration",
+                "lambda:ListTags",
+                "lambda:RemovePermission",
+                "lambda:TagResource",
+                "lambda:UntagResource",
+                "lambda:UpdateFunctionCode",
+                "lambda:UpdateFunctionConfiguration"
+            ],
+            "Resource": [
+                "arn:aws:lambda:*:<account id>:function:*"
+            ]
+        },
+        {
+            "Sid": "IAM",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "iam:DeleteRole",
+                "iam:DetachRolePolicy",
+                "iam:GetRole",
+                "iam:TagRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::<account id>:role/*"
+            ]
+        },
+        {
+            "Sid": "IAMPassRole",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": "lambda.amazonaws.com"
+                }
+            }
+        },
+        {
+            "Sid": "APIGateway",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:DELETE",
+                "apigateway:GET",
+                "apigateway:PATCH",
+                "apigateway:POST",
+                "apigateway:PUT"
+            ],
+            "Resource": [
+                "arn:aws:apigateway:*::*"
+            ]
+        }
+    ]
+}
 ```
 
 ### AWS KMS
