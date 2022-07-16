@@ -219,60 +219,24 @@ aws kms encrypt --key-id cfc7acf7-4f20-49c3-aa11-8be4cdc3291d --plaintext fileb:
 aws kms decrypt  --ciphertext-blob fileb://out.txt --output text --query Plaintext | base64 --decode
 ```
 
-### AWS Kinesis
+### AWS Athena JDBC
 
-AWS Kinesis shows only example shows only one sequence. This is the record I found from the log with multiple sequences:
+Here the the code to connect to the athena using JDBC:
 
-```json
-{
-    u 'Records': [{
-        u 'eventVersion': u '1.0',
-        u 'eventID': u 'shardId-000000000000:49559921416499955208897145459995453707469374714070171650',
-        u 'kinesis': {
-            u 'approximateArrivalTimestamp': 1502065218.908,
-            u 'partitionKey': u 'TI2I7c',
-            u 'data': u '<data1>',
-            u 'kinesisSchemaVersion': u '1.0',
-            u 'sequenceNumber': u '49559921416499955208897145459995453707469374714070171650'
-        },
-        u 'invokeIdentityArn': u 'arn:aws:iam::389920326251:role/Lambda-execution-role-Uat',
-        u 'eventName': u 'aws:kinesis:record',
-        u 'eventSourceARN': u 'arn:aws:kinesis:ap-southeast-2:389920326251:stream/ticketing-uat',
-        u 'eventSource': u 'aws:kinesis',
-        u 'awsRegion': u 'ap-southeast-2'
-    }, {
-        u 'eventVersion': u '1.0',
-        u 'eventID': u 'shardId-000000000000:49559921416499955208897145459996662633288989343244877826',
-        u 'kinesis': {
-            u 'approximateArrivalTimestamp': 1502065218.908,
-            u 'partitionKey': u 'ihwN32',
-            u 'data': u '<data2>',
-            u 'kinesisSchemaVersion': u '1.0',
-            u 'sequenceNumber': u '49559921416499955208897145459996662633288989343244877826'
-        },
-        u 'invokeIdentityArn': u 'arn:aws:iam::389920326251:role/Lambda-execution-role-Uat',
-        u 'eventName': u 'aws:kinesis:record',
-        u 'eventSourceARN': u 'arn:aws:kinesis:ap-southeast-2:389920326251:stream/ticketing-uat',
-        u 'eventSource': u 'aws:kinesis',
-        u 'awsRegion': u 'ap-southeast-2'
-    }, {
-        u 'eventVersion': u '1.0',
-        u 'eventID': u 'shardId-000000000000:49559921416499955208897145460000289410747833230768996354',
-        u 'kinesis': {
-            u 'approximateArrivalTimestamp': 1502065218.913,
-            u 'partitionKey': u 'PoGyUG',
-            u 'data': u 'H4sIAAAAAAAAAzMAACHf2/QBAAAA',
-            u 'kinesisSchemaVersion': u '1.0',
-            u 'sequenceNumber': u '<data3>'
-        },
-        u 'invokeIdentityArn': u 'arn:aws:iam::389920326251:role/Lambda-execution-role-Uat',
-        u 'eventName': u 'aws:kinesis:record',
-        u 'eventSourceARN': u 'arn:aws:kinesis:ap-southeast-2:389920326251:stream/ticketing-uat',
-        u 'eventSource': u 'aws:kinesis',
-        u 'awsRegion': u 'ap-southeast-2'
-    }]
-}
+```python
+from awsglue.context import GlueContext
+# ...
+
+# create Athena JDBC connection
+con = (
+    glueContext.read.format("jdbc")
+    .option("driver", "com.simba.athena.jdbc.Driver")
+    .option("AwsCredentialsProviderClass","com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider")
+    .option("url", "jdbc:awsathena://athena.ap-southeast-2.amazonaws.com:443")
+    .option("S3OutputLocation","s3://{}/temp/{}".format(args['<destination bucket>'], datetime.now().strftime("%m%d%y%H%M%S")))
+ )
 ```
+Above code has been used in the Glue script.
 
 ### AWS Cloudformation
 
