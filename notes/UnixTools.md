@@ -23,6 +23,39 @@ title: Unix Tools
 | Ctrl+w   | delete word by word backward                     |
 | Ctrl+x+e | Open in text editor while typing in the terminal |
 
+## File redirection
+
+Here the command to redirect the console:
+
+```bash
+grep the << EOF
+> This is the example
+> I wanted to show you
+> EOF
+This is the example
+```
+
+The `EOF` define the start and the end.
+
+Or use the following command
+
+```
+grep second <<< '
+> first line
+> second line
+> third line
+> second last line
+> last line
+> '
+```
+
+These two commands are doing the same thing.
+
+```bash
+grep Document <<< "$(ls -ltr | awk '{print $NF}')"
+ls -ltr | awk '{print $NF}' | grep Documents
+```
+
 
 
 ## awk
@@ -49,6 +82,13 @@ Options:
 | 1 |  `awk 'NR == 14428, NR == 14633 { print NR, $0}' <fileName>` | Print range of lines with  line numbers |
 | 2 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | awk -F ',' '{print $1}'` | To get the first column |
 | 3 | `echo -e 'first,last\nojitha,kumanayaka\nMark,Athony\nMichael,Yass'  | awk -F ',' -v OFS='|' '{print $2,$1}'` | To exchange the columns. Eg: `print $(NF -1)}` mean total columns reduce by one. |
+
+To display the last column of the `ls` command:
+
+```bash
+ls -ltr | awk '{print $NF}'
+```
+
 
 
 ## cut
@@ -114,6 +154,20 @@ NOTE: sed is using same set of metacharacters used by the grep.
 
 
 Option `u`: unique
+
+## jq
+
+Identity filter:
+
+```bash
+jq . <<< '{"foo":"bar"}'
+```
+
+Using `curl` command:
+
+```bash
+jq "." <<< "$(curl -s https://data.nsw.gov.au/data/api/3/action/package_show?id=e31077b8-9afb-4f52-a324-490700bc8d93)"
+```
 
 
 
