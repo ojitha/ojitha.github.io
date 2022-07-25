@@ -361,3 +361,23 @@ Now test with
 df -k
 ```
 
+## Shell Scripting
+
+To create array:
+
+```bash
+a=(3 5 6 7)
+```
+
+To list complete array
+
+```bash
+echo "${a[@]}"
+```
+
+To get element on index:
+
+```bash
+echo "${a[0]}"
+```
+
