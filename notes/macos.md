@@ -4,7 +4,13 @@ title: macOS
 ---
 
 
-## macOS tools
+## 
+
+**macOS tips**
+
+* TOC
+{:toc}
+## Shell
 
 change the shell to zsh
 
@@ -17,6 +23,8 @@ Edit a file in a TextEdit
 ```bash
 open -a TextEdit ~/.zshrc
 ```
+
+### Find files
 
 Find the file names only with the text recusively
 
@@ -74,6 +82,10 @@ Here the way to validate xml file for schema and generate the report
 
 noout will stop xml written to the error.txt. 
 
+## Tools
+
+Here some important tools to use in the shell.
+
 ### awk
 
 Commandline
@@ -109,15 +121,156 @@ END{
 
 ```
 
-### Brew
+### Logging
 
-List installed packages
+For the log stream
 
 ```bash
-brew list -1
+log stream
 ```
 
-### Terminal Commands
+To filter
+
+```bash
+log stream --predicate 'eventMessage contains "<searh word>"'
+```
+
+Filter by the specific process:
+
+```bash
+log stream  --process 153
+# or
+log stream --predicate '(process == <PID>)'
+```
+
+### Convert between file formats
+
+To convert files:
+
+```bash
+textutil -convert doc textfile.rtf -output msword.doc
+```
+
+### Scriptable Image Processing System (sips)
+
+To make the jpeg to 200 pixels wide
+
+```bash
+sips --resampleWidth 200 image_file.jpeg
+```
+
+### IP
+
+To get current public IPv4 address:
+
+```bash
+curl -4 https://icanhazip.com/; echo
+```
+
+### Flush DNS Cache
+
+To reset the DNS cache
+
+```bash
+sudo killall -HUP mDNSResponder
+```
+
+You have to provide root password.
+
+### Empty Trash forcefully
+
+Sometime it is not possible to empty the trash. Run the following command:
+
+```bash
+sudo rm -ri ~/.Trash/*
+```
+
+### Disk utitlity
+
+```bash
+diskutil list
+```
+
+
+
+### nslookup
+
+In addition to showing you a host’s domain name or IP address, `nslookup` gives you the IP address of the DNS server i if you’re trying to diagnose a DNS problem:
+
+```bash
+nslookup ojitha.blogspot.com
+nslookup ojitha.github.io
+```
+
+### Domain information
+
+Find out what person or organization owns a domain name
+
+```bash
+whois ojitha.blogspot.com
+```
+
+### lsof
+
+Which apps have open TCP network connections:
+
+```bash
+lsof -i
+```
+
+### 
+
+## Terminal Commands
+
+Find the hidden files 
+
+```bash
+defaults write com.apple.finder AppleShowAllFiles true; killall Finder
+```
+
+Change the screenshot format (`bmp`,`gif`,`pdf`,`png`,`tiff` or `jpeg`)
+
+```bash
+defaults write com.apple.screencapture type -string "jpeg"; killall SystemUIServer
+```
+
+Software updates CLI:
+
+```bash
+sudo softwareupdate -i -a
+```
+
+Here, `-i` and `-a` flags to go ahead and install every available update.
+
+To list the last reboots:
+
+```bash
+last reboot
+```
+
+Find the uptime:
+
+```bash
+uptime
+```
+
+History of user Loggins:
+
+```bash
+last
+```
+
+To add the new user
+
+```bash
+sysadminctl -addUser <username> -fullName "<Full Name>" -password <password>
+```
+
+To change the password of the user:
+
+```bash
+sysadminctl -resetPasswordFor <username> -newPassword <new password> -passwordHint "<password hint>"
+```
 
 Find the type of the command
 
@@ -188,7 +341,17 @@ Here the equlents, lines is a file
 < lines awk 'NR<=3'
 ```
 
-### Disk Management
+
+
+### Shortcuts
+
+If you want to select all and only the output from the most recent command press ⌘-Shift-A.
+
+![image-20220806200426196](/assets/images/macos/image-20220806200426196.png)
+
+
+
+## Disk Management
 
 To display size of the folder
 
