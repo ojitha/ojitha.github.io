@@ -5,7 +5,7 @@ date:   2022-08-13
 categories: [AWS]
 ---
 
-This blog explains how to create an AWS Glue container to develop PySpark scripts locally. I've already explained how to run the Glue locally using [Glue Development using Jupyter]({% post_url 2022-07-11-Glue development using Jupyter %}).
+This blog explains how to create an AWS Glue container[^1] to develop PySpark scripts locally. I've already explained how to run the Glue locally using [Glue Development using Jupyter]({% post_url 2022-07-11-Glue development using Jupyter %}).
 
 <!--more-->
 
@@ -69,10 +69,14 @@ and specify the remote server URL (http://localhost:8888/?token=pyspark):
 
 ![Jupyter remote server URL](/assets/images/2022-08-13-AWS-Glue-run-locally/image-20220814152542162.png)
 
-In the command pallet, select `Create: New Jupyter Notebook"`. 
+In the command pallet, select `Create: New Jupyter Notebook`. 
 
 ![Connect to remote docker glue server](/assets/images/2022-08-13-AWS-Glue-run-locally/image-20220814153055371.png)
 
 In the notebook select the `Glue Spark - Local (PySpark) (Remote) Jupyter Kernal`. In the above Dockerfile, because you install the PyAthena, it should be possible to `import pyathena` as a test.
 
 You can use the http://localhost:4040 to access the SparkUI.
+
+
+
+[^1]:[Develop and test AWS Glue version 3.0 jobs locally using a Docker container](https://aws.amazon.com/blogs/big-data/develop-and-test-aws-glue-version-3-0-jobs-locally-using-a-docker-container/){:target="_blank"}
