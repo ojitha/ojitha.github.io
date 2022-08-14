@@ -6,7 +6,7 @@ categories: [AWS, Glue, Jupyter]
 ---
 
 Developing and testing the Glue job in the viscose IDE is one of the best development opportunities because Jupyter doesn't support IDE features. 
-In this blog, I set up a Glue docker instance in the EC2 and use the vscode Jupyter notebook feature to develop Glue jobs. If you want to create more customized your own Docker image, please see [AWS Glue run locally]({% post_url /Users/ojitha/GitHub/ojitha.github.io/_posts/2022-08-13-AWS-Glue-run-locally %}).
+In this blog, I set up a Glue docker instance in the EC2 and use the vscode Jupyter notebook feature to develop Glue jobs. If you want to create more customized your own Docker image, please see [AWS Glue run locally]({% post_url 2022-08-13-AWS-Glue-run-locally %}).
 
 <!--more-->
 

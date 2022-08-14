@@ -5,7 +5,7 @@ date:   2022-08-13
 categories: [AWS]
 ---
 
-This blog explains how to create an AWS Glue container to develop PySpark scripts locally. I've already explained how to run the Glue locally using [Glue Development using Jupyter]({% post_url /Users/ojitha/GitHub/ojitha.github.io/_posts/2022-07-11-Glue development using Jupyter %}).
+This blog explains how to create an AWS Glue container to develop PySpark scripts locally. I've already explained how to run the Glue locally using [Glue Development using Jupyter]({% post_url 2022-07-11-Glue development using Jupyter %}).
 
 <!--more-->
 
