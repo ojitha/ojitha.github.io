@@ -169,6 +169,12 @@ Using `curl` command:
 jq "." <<< "$(curl -s https://data.nsw.gov.au/data/api/3/action/package_show?id=e31077b8-9afb-4f52-a324-490700bc8d93)"
 ```
 
+You can use jq to send the number of key/value pairs to AWS SSM parameter store:
+
+```bash
+jq -c 'with_entries(.value |= tostring )' ojitha.json | xargs -0 aws secretsmanager put-secret-value --secret-id /test/ojitha --secret-string
+```
+
 
 
 ## Networking
