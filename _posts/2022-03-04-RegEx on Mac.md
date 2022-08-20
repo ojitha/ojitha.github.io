@@ -364,7 +364,13 @@ wonder why' | ggrep -P --color '\b(\w+)\s\1'
 
 ![repeat the same word twice](/assets/images/image-20220305231626340.png)
 
+You can use vscode to capture the CSV column and modify. For example,
 
+| Before                                                       | After                                                        |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![before run replace](/assets/images/2022-03-04-RegEx on Mac/image-20220820204018978.png) | ![after run replace](/assets/images/2022-03-04-RegEx on Mac/image-20220820204056997.png) |
+
+ 
 
 ## Stream editor
 
