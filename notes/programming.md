@@ -74,3 +74,133 @@ assert (con.exists('cn=ojitha,OU=oj Users,DC=aus')):" Not exists!"
 
 run as: `groovy -cp  ~/applications/groovyldap/dist/groovy-ldap.jar hello.groovy`
 The thridparty lib available at https://directory.apache.org/api/groovy-api/1-groovy-ldap-download.html.
+
+## Typescript
+
+I use vscode for Typescript development. Install vscode:
+
+```bash
+brew install --cask visual-studio-code
+```
+
+Any time you can uninstall vscode as follows:
+
+```bash
+brew uninstall --cask visual-studio-code
+rm -rf $HOME/Library/Application Support/Code
+rm -rf $HOME/.vscode/
+```
+
+First install nodejs
+
+```bash
+brew install node
+```
+
+Check node is installed:
+
+```bash
+node --version
+```
+
+Follow the [TypeScript tutorial in Visual Studio Code](https://code.visualstudio.com/docs/typescript/typescript-tutorial) for more information.
+
+To install typescript
+
+```bash
+npm install -g typescript
+```
+
+check
+
+```bash
+tsc --version
+```
+
+To install `express`:
+
+```bash
+npm i express
+```
+
+To intsall the express
+
+```bash
+npm i -D @types/express
+```
+
+My `tsconfig.json` is:
+
+```bash
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "CommonJS",
+        "outDir": "out",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
+    }
+}
+```
+
+To run the express server:
+
+```bash
+px ts-node app.ts
+```
+
+The app.ts is:
+
+```typescript
+import express from "express";
+const app = express();
+
+app.get('/', (req,res) => {
+    res.status(200);
+    res.send("Hello")
+})
+
+app.listen(3000)
+```
+
+To check type `localhost:3000` in the browser.
+
+### Using Yarn
+
+Install yarn:
+
+```bash
+npm install --global yarn
+```
+
+check with
+
+```bash
+yarn --version
+```
+
+Install typescript:
+
+```bash
+yarn add typescript --dev
+```
+
+to check
+
+```bash
+yarn tsc --version
+```
+
+Install express
+
+```bash
+yarn add express
+```
+
+
+
+
+
+
+
