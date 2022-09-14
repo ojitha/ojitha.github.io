@@ -106,7 +106,7 @@ from pyathena.pandas.util import as_pandas
 df = as_pandas(cursor)
 df
 ```
-
+## Create Development env
 You can create EC2 based development environment using the following CFN:
 
 ```yaml
@@ -119,7 +119,7 @@ Parameters:
     Description: Please provide first name to create the environment
     Default: ojitha
 
-VpcId:
+  VpcId:
     Type: String
     Description: Vpc id where to launch an EC2
 
@@ -191,19 +191,30 @@ Resources:
             DeleteOnTermination: true
       UserData: 
         Fn::Base64: |
-          #!/bin/bash
+          #!/bin/bash -xe
           yum update -y
           yum -y install tmux
           yum -y install @development zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel libffi-devel findutils
+          amazon-linux-extras install -y docker
+          usermod -a -G docker ec2-user
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip -u awscliv2.zip
           ./aws/install
           wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
           unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
           ./sam-installation/install
-          amazon-linux-extras install -y docker
-          usermod -a -G docker ec2-user
-          chmod 666 /var/run/docker.sock
+          yum -y install jq
+          sudo -u ec2-user -i <<'EOF'
+          git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
+          echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+          echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+          echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+          source ~/.bashrc
+          git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+          pip install git-remote-codecommit
+          pyenv install 3.9.14
+          pyenv virtualenv 3.9.14 p39
+          EOF
 
       Tags:
         - Key: Name
