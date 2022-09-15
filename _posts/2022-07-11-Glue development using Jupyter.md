@@ -175,7 +175,8 @@ Resources:
   EC2ForDev:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-07620139298af599e
+      # ImageId: ami-07620139298af599e
+      ImageId: ami-0b55fc9b052b03618
       InstanceType: t2.large
       SubnetId: !Ref SubnetId
       KeyName: !Ref UserPublicKey
@@ -185,7 +186,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/xvda
           Ebs:
-            VolumeSize: 30
+            VolumeSize: 50
             Encrypted: true
             VolumeType: gp2
             DeleteOnTermination: true
@@ -195,27 +196,55 @@ Resources:
           yum update -y
           yum -y install tmux
           yum -y install @development zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel libffi-devel findutils
+          yum -y install jq
           amazon-linux-extras install -y docker
           usermod -a -G docker ec2-user
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          
+          curl -LS --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 \
+            "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip -u awscliv2.zip
           ./aws/install
-          wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
+
+          curl -LS --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 \
+            "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "aws-sam-cli-linux-x86_64.zip" 
           unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
           ./sam-installation/install
-          yum -y install jq
+
           sudo -u ec2-user -i <<'EOF'
-          git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
+          echo '--- Install pyenv for ec2-user ---'
+          source ~/.bashrc 
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
           echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
           echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
           echo 'eval "$(pyenv init -)"' >> ~/.bashrc
           source ~/.bashrc
-          git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
-          pip install git-remote-codecommit
-          pyenv install 3.9.14
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
+          echo '--- Install git-remote for ec2-user ---'
+          pip3 install git-remote-codecommit
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do pyenv install 3.9.14 ; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
           pyenv virtualenv 3.9.14 p39
+          echo '--- Install docker-compose for ec2-user ---' 
+          echo 'export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}' >>  ~/.bashrc
+          echo 'export PATH="$DOCKER_CONFIG/cli-plugins:$PATH"' >> ~/.bashrc
+          source ~/.bashrc
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          curl -LS --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 \
+            https://github.com/docker/compose/releases/download/v2.11.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+          echo '--- end ---'          
           EOF
-
       Tags:
         - Key: Name
           Value:
