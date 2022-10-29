@@ -106,257 +106,431 @@ from pyathena.pandas.util import as_pandas
 df = as_pandas(cursor)
 df
 ```
+## Create Development env
+You can create EC2 based development environment using the following CFN:
 
-NOTE:
-You have to have proper IAM policies configured with your EC2 IAM Role. With the **PowerUserAccess**, you may need:
+```yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create Dev environment
 
-Trust relationship:
+Parameters:
+  UserName:
+    Type: String
+    Description: Please provide first name to create the environment
+    Default: ojitha
 
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "ec2.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-        }
-    ]
-}
+  VpcId:
+    Type: String
+    Description: Vpc id where to launch an EC2
+
+  SubnetId:
+    Type: String
+    Description: Private Subnet where to launch an EC2
+
+  MyPublicKey:
+    Type: String
+    Description: Please provide your public key
+
+
+Resources:
+  SGForDevEC2:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open SSH port 22 for the EC2 development environment
+      GroupName: dev-security-group
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: <cider ip range>
+          FromPort: 22
+          ToPort: 22
+        - IpProtocol: tcp
+          CidrIp: <cider ip range>
+          FromPort: 22
+          ToPort: 22
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          FromPort: -1
+          ToPort: -1
+      Tags:
+        - Key: Name
+          Value: 
+            !Join 
+              - "-"
+              - - !Sub ${UserName}
+                - 'dev'
+                - 'sg'  
+  UserPublicKey:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: 
+        !Join 
+          - "-"
+          - - !Sub ${UserName}
+            - 'dev'
+            - 'key'
+      PublicKeyMaterial: !Ref MyPublicKey
+  
+  EC2ForDev:
+    Type: AWS::EC2::Instance
+    Properties:
+      # ImageId: ami-07620139298af599e
+      ImageId: ami-0b55fc9b052b03618
+      InstanceType: t2.large
+      SubnetId: !Ref SubnetId
+      KeyName: !Ref UserPublicKey
+      SecurityGroupIds:
+        - !GetAtt  SGForDevEC2.GroupId
+      IamInstanceProfile: !Ref RootInstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 50
+            Encrypted: true
+            VolumeType: gp2
+            DeleteOnTermination: true
+      UserData: 
+        Fn::Base64: |
+          #!/bin/bash -xe
+          yum update -y
+          yum -y install tmux
+          yum -y install @development zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel libffi-devel findutils
+          yum -y install jq
+          amazon-linux-extras install -y docker
+          usermod -a -G docker ec2-user
+          
+          curl -LS --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 \
+            "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -u awscliv2.zip
+          ./aws/install
+
+          curl -LS --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 \
+            "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "aws-sam-cli-linux-x86_64.zip" 
+          unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
+          ./sam-installation/install
+
+          sudo -u ec2-user -i <<'EOF'
+          echo '--- Install pyenv for ec2-user ---'
+          source ~/.bashrc 
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
+          echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+          echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+          echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+          source ~/.bashrc
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
+          echo '--- Install git-remote for ec2-user ---'
+          pip3 install git-remote-codecommit
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do pyenv install 3.9.14 ; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
+          pyenv virtualenv 3.9.14 p39
+          echo '--- Install docker-compose for ec2-user ---' 
+          echo 'export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}' >>  ~/.bashrc
+          echo 'export PATH="$DOCKER_CONFIG/cli-plugins:$PATH"' >> ~/.bashrc
+          source ~/.bashrc
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          curl -LS --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 \
+            https://github.com/docker/compose/releases/download/v2.11.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+          echo '--- end ---'          
+          EOF
+      Tags:
+        - Key: Name
+          Value:
+            !Join 
+              - "-"
+              - - !Sub ${UserName}
+                - 'dev'
+                - 'ec2' 
+  CPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: CPU alarm to stop Dev instance
+      AlarmName: 
+        !Join 
+          - "-"
+          - - !Sub ${UserName}
+            - 'dev'
+            - 'alarm'
+            - 'stop'      
+      ActionsEnabled: true
+      AlarmActions: [ !Sub "arn:aws:automate:${AWS::Region}:ec2:stop" ]
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: '900'
+      EvaluationPeriods: '3'
+      Threshold: '0.3'
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Dimensions:
+      - Name: InstanceId
+        Value:
+          Ref: EC2ForDev
+
+  RootRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      RoleName: 
+        !Join 
+          - "-"
+          - - !Sub ${UserName}
+            - 'dev'
+            - 'ROOT'
+            - 'role'
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+  
+  CFNPolicies: 
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "CFNPolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+        - Action:
+            - cloudformation:*
+            - lambda:*
+            - sns:*
+            - events:*
+            - logs:*
+            - ec2:*
+            - s3:*
+            - dynamodb:*
+            - kms:*
+            - iam:*
+            - states:*
+            - sts:*
+            - sqs:*
+            - elasticfilesystem:*
+            - config:*
+            - cloudwatch:*
+            - apigateway:*
+            - backup:*
+            - firehose:*
+            - backup-storage:*
+            - ssm:*
+          Resource: '*'
+          Effect: Allow
+      Roles: 
+        - Ref: "RootRole" 
+  VSCodePolicies: 
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "VSCode"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+        - Sid: CloudFormationTemplate
+          Effect: Allow
+          Action:
+            - cloudformation:CreateChangeSet
+          Resource:
+            - arn:aws:cloudformation:*:aws:transform/Serverless-2016-10-31
+        - Sid: CloudFormationStack
+          Effect: Allow
+          Action:
+            - cloudformation:CreateChangeSet
+            - cloudformation:CreateStack
+            - cloudformation:DeleteStack
+            - cloudformation:DescribeChangeSet
+            - cloudformation:DescribeStackEvents
+            - cloudformation:DescribeStacks
+            - cloudformation:ExecuteChangeSet
+            - cloudformation:GetTemplateSummary
+            - cloudformation:ListStackResources
+            - cloudformation:UpdateStack
+          Resource:
+            - arn:aws:cloudformation:*:111111111111:stack/*
+        - Sid: S3
+          Effect: Allow
+          Action:
+            - s3:CreateBucket
+            - s3:GetObject
+            - s3:PutObject
+          Resource:
+            - arn:aws:s3:::*/*
+        - Sid: ECRRepository
+          Effect: Allow
+          Action:
+            - ecr:BatchCheckLayerAvailability
+            - ecr:BatchGetImage
+            - ecr:CompleteLayerUpload
+            - ecr:CreateRepository
+            - ecr:DeleteRepository
+            - ecr:DescribeImages
+            - ecr:DescribeRepositories
+            - ecr:GetDownloadUrlForLayer
+            - ecr:GetRepositoryPolicy
+            - ecr:InitiateLayerUpload
+            - ecr:ListImages
+            - ecr:PutImage
+            - ecr:SetRepositoryPolicy
+            - ecr:UploadLayerPart
+          Resource:
+            - arn:aws:ecr:*:111111111111:repository/*
+        - Sid: ECRAuthToken
+          Effect: Allow
+          Action:
+            - ecr:GetAuthorizationToken
+          Resource:
+            - '*'
+        - Sid: Lambda
+          Effect: Allow
+          Action:
+            - lambda:AddPermission
+            - lambda:CreateFunction
+            - lambda:DeleteFunction
+            - lambda:GetFunction
+            - lambda:GetFunctionConfiguration
+            - lambda:ListTags
+            - lambda:RemovePermission
+            - lambda:TagResource
+            - lambda:UntagResource
+            - lambda:UpdateFunctionCode
+            - lambda:UpdateFunctionConfiguration
+          Resource:
+            - arn:aws:lambda:*:111111111111:function:*
+        - Sid: IAM
+          Effect: Allow
+          Action:
+            - iam:CreateRole
+            - iam:AttachRolePolicy
+            - iam:DeleteRole
+            - iam:DetachRolePolicy
+            - iam:GetRole
+            - iam:TagRole
+          Resource:
+            - arn:aws:iam::111111111111:role/*
+        - Sid: IAMPassRole
+          Effect: Allow
+          Action: iam:PassRole
+          Resource: '*'
+          Condition:
+            StringEquals:
+              iam:PassedToService: lambda.amazonaws.com
+        - Sid: APIGateway
+          Effect: Allow
+          Action:
+            - apigateway:DELETE
+            - apigateway:GET
+            - apigateway:PATCH
+            - apigateway:POST
+            - apigateway:PUT
+          Resource:
+            - arn:aws:apigateway:*::*
+      Roles: 
+        - Ref: "RootRole"
+
+  AthenaPolicies: 
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "Athena"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+        - Action:
+            - athena:ListEngineVersions
+            - athena:ListWorkGroups
+            - athena:ListDataCatalogs
+            - athena:ListDatabases
+            - athena:GetDatabase
+            - athena:ListTableMetadata
+            - athena:GetTableMetadata
+          Resource: '*'
+          Effect: Allow
+          Sid: athenaglobal
+        - Action:
+            - athena:GetQueryResultsStream
+            - athena:GetWorkGroup
+            - athena:GetQueryExecution
+            - athena:CreatePreparedStatement
+            - athena:GetPreparedStatement
+            - athena:ListPreparedStatements
+            - athena:UpdatePreparedStatement
+            - athena:DeletePreparedStatement
+            - athena:StartQueryExecution
+            - athena:StopQueryExecution
+            - athena:GetQueryResults
+          Resource:
+            - arn:aws:athena:ap-southeast-2:111111111111:workgroup/primary
+          Effect: Allow
+          Sid: athenaWorkgroup
+      Roles: 
+        - Ref: "RootRole"
+
+  S3Policies: 
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "S3Policies"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+        - Action:
+            - s3:GetObject
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::111111111111-<...athena...>-prod*
+            - arn:aws:s3:::111111111111-<...athena...>-prod*/*
+          Effect: Allow
+          Sid: S3Polices
+        - Action:
+            - s3:*
+          Resource:
+            - arn:aws:s3:::111111111111-oj-temp
+            - arn:aws:s3:::111111111111-oj-temp/*
+          Effect: Allow
+        - Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:ListBucket
+            - s3:DeleteObject
+          Resource:
+            - arn:aws:s3:::111111111111-oj-glue
+            - arn:aws:s3:::111111111111-oj-glue/*
+          Effect: Allow
+      Roles: 
+        - Ref: "RootRole"
+
+  # # use this template if you need to add access 
+  # RolePolicies: 
+  #   Type: "AWS::IAM::Policy"
+  #   Properties: 
+  #     PolicyName: "root"
+  #     PolicyDocument: 
+  #       Version: "2012-10-17"
+  #       Statement: 
+  #         - Effect: "Allow"
+  #           Action: "*"
+  #           Resource: "*"
+  #     Roles: 
+  #       - Ref: "RootRole"
+
+  RootInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - Ref: "RootRole"
 ```
-
-Policy for the vscode development:
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "CloudFormationTemplate",
-            "Effect": "Allow",
-            "Action": [
-                "cloudformation:CreateChangeSet"
-            ],
-            "Resource": [
-                "arn:aws:cloudformation:*:aws:transform/Serverless-2016-10-31"
-            ]
-        },
-        {
-            "Sid": "CloudFormationStack",
-            "Effect": "Allow",
-            "Action": [
-                "cloudformation:CreateChangeSet",
-                "cloudformation:CreateStack",
-                "cloudformation:DeleteStack",
-                "cloudformation:DescribeChangeSet",
-                "cloudformation:DescribeStackEvents",
-                "cloudformation:DescribeStacks",
-                "cloudformation:ExecuteChangeSet",
-                "cloudformation:GetTemplateSummary",
-                "cloudformation:ListStackResources",
-                "cloudformation:UpdateStack"
-            ],
-            "Resource": [
-                "arn:aws:cloudformation:*:<account-id>:stack/*"
-            ]
-        },
-        {
-            "Sid": "S3",
-            "Effect": "Allow",
-            "Action": [
-                "s3:CreateBucket",
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::*/*"
-            ]
-        },
-        {
-            "Sid": "ECRRepository",
-            "Effect": "Allow",
-            "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:BatchGetImage",
-                "ecr:CompleteLayerUpload",
-                "ecr:CreateRepository",
-                "ecr:DeleteRepository",
-                "ecr:DescribeImages",
-                "ecr:DescribeRepositories",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetRepositoryPolicy",
-                "ecr:InitiateLayerUpload",
-                "ecr:ListImages",
-                "ecr:PutImage",
-                "ecr:SetRepositoryPolicy",
-                "ecr:UploadLayerPart"
-            ],
-            "Resource": [
-                "arn:aws:ecr:*:<account-id>:repository/*"
-            ]
-        },
-        {
-            "Sid": "ECRAuthToken",
-            "Effect": "Allow",
-            "Action": [
-                "ecr:GetAuthorizationToken"
-            ],
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Sid": "Lambda",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:AddPermission",
-                "lambda:CreateFunction",
-                "lambda:DeleteFunction",
-                "lambda:GetFunction",
-                "lambda:GetFunctionConfiguration",
-                "lambda:ListTags",
-                "lambda:RemovePermission",
-                "lambda:TagResource",
-                "lambda:UntagResource",
-                "lambda:UpdateFunctionCode",
-                "lambda:UpdateFunctionConfiguration"
-            ],
-            "Resource": [
-                "arn:aws:lambda:*:<account-id>:function:*"
-            ]
-        },
-        {
-            "Sid": "IAM",
-            "Effect": "Allow",
-            "Action": [
-                "iam:CreateRole",
-                "iam:AttachRolePolicy",
-                "iam:DeleteRole",
-                "iam:DetachRolePolicy",
-                "iam:GetRole",
-                "iam:TagRole"
-            ],
-            "Resource": [
-                "arn:aws:iam::<account-id>:role/*"
-            ]
-        },
-        {
-            "Sid": "IAMPassRole",
-            "Effect": "Allow",
-            "Action": "iam:PassRole",
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:PassedToService": "lambda.amazonaws.com"
-                }
-            }
-        },
-        {
-            "Sid": "APIGateway",
-            "Effect": "Allow",
-            "Action": [
-                "apigateway:DELETE",
-                "apigateway:GET",
-                "apigateway:PATCH",
-                "apigateway:POST",
-                "apigateway:PUT"
-            ],
-            "Resource": [
-                "arn:aws:apigateway:*::*"
-            ]
-        }
-    ]
-}
-```
-
-Policy for the Athena
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "athena:ListEngineVersions",
-                "athena:ListWorkGroups",
-                "athena:ListDataCatalogs",
-                "athena:ListDatabases",
-                "athena:GetDatabase",
-                "athena:ListTableMetadata",
-                "athena:GetTableMetadata"
-            ],
-            "Resource": "*",
-            "Effect": "Allow",
-            "Sid": "athenaglobal"
-        },
-        {
-            "Action": [
-                "athena:GetQueryResultsStream",
-                "athena:GetWorkGroup",
-                "athena:GetQueryExecution",
-                "athena:CreatePreparedStatement",
-                "athena:GetPreparedStatement",
-                "athena:ListPreparedStatements",
-                "athena:UpdatePreparedStatement",
-                "athena:DeletePreparedStatement",
-                "athena:StartQueryExecution",
-                "athena:StopQueryExecution",
-                "athena:GetQueryResults"
-            ],
-            "Resource": [
-                "arn:aws:athena:ap-southeast-2:<account-id>:workgroup/primary"
-            ],
-            "Effect": "Allow",
-            "Sid": "athenaWorkgroup"
-        }
-    ]
-}
-```
-
-S3 policy
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "s3:GetObject",
-                "s3:ListBucket"
-            ],
-            "Resource": [
-                "arn:aws:s3:::<account-id>-<s3-athena-data>*",
-                "arn:aws:s3:::<account-id>-<s3-athena-data>*/*"
-            ],
-            "Effect": "Allow",
-            "Sid": "S3Polices"
-        },
-        {
-            "Action": [
-                "s3:*"
-            ],
-            "Resource": [
-                "arn:aws:s3:::<account-id>-<s3-bucket>",
-                "arn:aws:s3:::<account-id>-<s3-bucket>/*"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject",
-                "s3:ListBucket",
-                "s3:DeleteObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::<account-id>-other",
-                "arn:aws:s3:::<account-id>-other/*"
-            ],
-            "Effect": "Allow"
-        }
-    ]
-}
-```
-
