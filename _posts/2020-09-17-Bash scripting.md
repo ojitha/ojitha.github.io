@@ -117,6 +117,24 @@ am
 Ojitha Hewa
 ```
 
+To add and print `x` and `y` ends:
+
+```bash
+x=1; y=2; printf "sum of $x + $y is %d\n" "$(( x + y ))"
+```
+
+<img src="/Users/ojitha/GitHub/ojitha.github.io/assets/images/2020-09-17-Bash scripting/image-20221030112329586.png" alt="image-20221030112329586" style="zoom:50%;" />
+
+Call the function
+
+```bash
+func() { printf "%d\n" "$(( $1 + $2 ))"; } ; printf 'call func %s\n' "$(func 2 3)"
+```
+
+<img src="/Users/ojitha/GitHub/ojitha.github.io/assets/images/2020-09-17-Bash scripting/image-20221030113645932.png" alt="image-20221030113645932" style="zoom:50%;" />
+
+
+
 ## Seq
 
 Here the simple example for seq
@@ -151,7 +169,6 @@ output is
 # 9
 # 10
 ```
-
 
 
 
