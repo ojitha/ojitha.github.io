@@ -123,7 +123,7 @@ To add and print `x` and `y` ends:
 x=1; y=2; printf "sum of $x + $y is %d\n" "$(( x + y ))"
 ```
 
-<img src="/Users/ojitha/GitHub/ojitha.github.io/assets/images/2020-09-17-Bash scripting/image-20221030112329586.png" alt="image-20221030112329586" style="zoom:50%;" />
+<img src="/assets/images/2020-09-17-Bash scripting/image-20221030112329586.png" alt="image-20221030112329586" style="zoom:50%;" />
 
 Call the function
 
@@ -131,9 +131,41 @@ Call the function
 func() { printf "%d\n" "$(( $1 + $2 ))"; } ; printf 'call func %s\n' "$(func 2 3)"
 ```
 
-<img src="/Users/ojitha/GitHub/ojitha.github.io/assets/images/2020-09-17-Bash scripting/image-20221030113645932.png" alt="image-20221030113645932" style="zoom:50%;" />
+<img src="/assets/images/2020-09-17-Bash scripting/image-20221030113645932.png" alt="image-20221030113645932" style="zoom:50%;" />
 
+## Arrys
 
+Define the array in the bash shell:
+
+```bash
+typeset -a arr=( 1 2 3 )
+```
+
+Iterate over the array
+
+```bash
+for e in ${arr[@]}; do printf '%d\n' "$e" ; done
+```
+
+define associative array
+
+```bash
+typeset -A assoc=( a 5 b 6 c 7 d 8 )
+```
+
+You can access elements directly by the key
+
+```bash
+echo ${assoc[a]} # 5
+```
+
+To iterate over the associated array:
+
+```bash
+for k in ${!assoc[@]}; do printf "$k is %d\n" ${assoc[$k]} ; done
+```
+
+<img src="/assets/images/2020-09-17-Bash scripting/image-20221030122029641.png" alt="image-20221030122029641" style="zoom:50%;" />
 
 ## Seq
 
