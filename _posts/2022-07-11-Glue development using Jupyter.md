@@ -43,6 +43,29 @@ and run the notebook
 ```bash
 jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/glue_user/workspace/jupyter_workspace/ --ServerApp.token='pyspark' --ServerApp.password=''
 ```
+## Using Dockerfile
+Instead of the above, if you want more control, create 
+
+```Dockerfile
+FROM public.ecr.aws/glue/aws-glue-libs:glue_libs_3.0.0_image_01
+WORKDIR /home/glue_user/workspace/jupyter_workspace
+ENV DISABLE_SSL=true
+RUN python3 -m pip3 install --upgrade pip3
+RUN pip3 install pyathena
+RUN pip3 install awswrangler
+RUN pip3 install pydeequ
+
+CMD [ "./start.sh" ]
+```
+
+You should have the start.sh file in the same directory
+
+```bash
+livy-server start
+jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/glue_user/workspace/jupyter_workspace/ --ServerApp.token='pyspark' --ServerApp.password=''
+```
+
+Use the docker compose to setup this environment.
 
 ## Notebook for JDBC access
 You have to specify the JDBC driver file in the Jupyter before access:
