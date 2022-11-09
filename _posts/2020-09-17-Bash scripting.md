@@ -162,7 +162,7 @@ echo ${assoc[a]} # 5
 To iterate over the associated array:
 
 ```bash
-for k in ${!assoc[@]}; do printf "$k is %d\n" ${assoc[$k]} ; done
+for k  in ${!assoc[@]}; do printf '[%s]=%d\n' $k ${assoc[$k]} ; done
 ```
 
 <img src="/assets/images/2020-09-17-Bash scripting/image-20221030122029641.png" alt="image-20221030122029641" style="zoom:50%;" />
