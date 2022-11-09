@@ -43,7 +43,7 @@ and run the notebook
 ```bash
 jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/glue_user/workspace/jupyter_workspace/ --ServerApp.token='pyspark' --ServerApp.password=''
 ```
-## Using Dockerfile
+## Using Docker compose
 Instead of the above, if you want more control, create 
 
 ```Dockerfile
@@ -63,6 +63,20 @@ You should have the start.sh file in the same directory
 ```bash
 livy-server start
 jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/glue_user/workspace/jupyter_workspace/ --ServerApp.token='pyspark' --ServerApp.password=''
+```
+In addition to that your docker-compos.yaml is
+
+```docker
+version: '3.9'
+services:
+  aws_glue:
+    build: .
+    volumes:
+      - .:/home/glue_user/workspace/jupyter_workspace
+    privileged: true
+    ports:
+      - 8888:8888
+      - 4040:4040
 ```
 
 Use the docker compose to setup this environment.
