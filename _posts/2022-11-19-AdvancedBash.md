@@ -21,7 +21,8 @@ There are **Positional parameters** such as `$1`, `$2` and so on. if you use abo
 
 
 
-```bashset -- first second
+```bash
+set -- first second
 echo $*
 echo $2 and $1
 ```
@@ -180,7 +181,8 @@ for i in $(seq 1 3) ; do echo $i; done
 or
 
 
-```bashseq 1 3 | while read line; do  printf '%d\n' $((line)); done
+```bash
+seq 1 3 | while read line; do  printf '%d\n' $((line)); done
 ```
 
     1
@@ -206,7 +208,8 @@ done
 or
 
 
-```bashfor i in {0..8..2}
+```bash
+for i in {0..8..2}
 do
     echo $i
 done    
@@ -586,7 +589,8 @@ ${!who}
 indirect expansion
 
 
-```bashsurname=lastname; lastname=HEWA
+```bash
+surname=lastname; lastname=HEWA
 echo ${!surname}
 ```
 
@@ -803,7 +807,8 @@ echo walk{,e{d,s},ing,ful{l,ly}}
 
 
 
-```bashecho {1..5}{0,5}%
+```bash
+echo {1..5}{0,5}%
 ```
 
     10% 15% 20% 25% 30% 35% 40% 45% 50% 55%
