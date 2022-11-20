@@ -5,8 +5,7 @@ date:   2022-11-19
 categories: [Bash]
 ---
 
-While I am going throug the following the [youtub talk](https://www.youtube.com/watch?v=BJ0uHhBkzOQ) and its assoicated [presentation](http://talk.jpnc.info/bash_lfnw_2017.pdf), my hand ons recorded here.
-You can refere to the [Bash Ref Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents) as well.
+While I am going through the following, the [youtube talk](https://www.youtube.com/watch?v=BJ0uHhBkzOQ) and it's associated [presentation](http://talk.jpnc.info/bash_lfnw_2017.pdf), my hand-ons recorded here. You can also refer to the [Bash Ref Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents) for more information.
 
 <!--more-->
 
@@ -17,7 +16,7 @@ You can refere to the [Bash Ref Manual](https://www.gnu.org/software/bash/manual
 ------
 
 ## Parameters
-There are **Positional parameters** such as `$1`, `$2` and so on. if you use above 9, you have to use braces such as `${11}`. You can find about **special parameters** from the [documentation](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html).
+There are **Positional parameters** such as `$1`, `$2` and so on. if you use above 9, you must use braces such as `${11}`. You can find about **special parameters** from the [documentation](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html).
 
 
 
@@ -31,7 +30,7 @@ echo $2 and $1
     second and first
 
 
-If command return 0 when success otherwise number 1 -255. Use the `$?` to capture the return value. Many programs signal different types of failure with different return values.
+If the command returns 0 when successful, otherwise number 1 -255. Use the `$?` to capture the return value. Many programs signal different types of failure with different return values.
 
 
 ```bash
@@ -43,7 +42,7 @@ echo $?
     0
 
 
-Use of some of the special variable such as `$*`, `$@` and so on has been explain in the following code snippests:
+Use special variables such as `$*`, `$@` and so on has been explained in the following code snippet:
 
 
 ```bash
@@ -95,9 +94,9 @@ login "one" "two"
     Bad Syntax. Usage: -user [username] -pass [password] required
 
 
-There are compund commands
+There are compound commands
 - iterations: such as `while`, `until`, `for`, and `select`.
-- conditons: `if` and `case`
+- conditions: `if` and `case`
 - command groups: `(list)` and {list;}`
 
 
@@ -118,7 +117,7 @@ done
 
 Another example
 
-The `until` is opposite of the `while`.
+The `until` is the opposite of the `while`.
 
 
 ```bash
@@ -151,7 +150,7 @@ done
     i: 3
 
 
-This is C lang style for loop
+Following is C lang style For loop
 
 
 ```bash
@@ -222,7 +221,7 @@ done
     8
 
 
-The `select` statement example is hard to show in the notbook because it is interactive
+The `select` statement example is hard to show in the notebook because it is interactive.
 
 ```bash 
 select choice in one two "no choice"
@@ -244,7 +243,7 @@ You can select 1, 2 or 3 from the stdin.
 
 ## Expressions
 
-The `[]` matches any one of the enclosed characters. The new way is `[[...]]` which return a status of 0 or 1 depending on the evaluation of the conditional expression expression.
+The `[]` matches any one of the enclosed characters. The new way is `[[...]]`, which returns a status of 0 or 1 depending on the evaluation of the conditional expression.
 
 
 ```bash
@@ -253,7 +252,7 @@ s2=""
 [[ -n $s1 ]]
 echo "s1: $?"
 
-# test string is non empty
+# test string is non-empty
 [[ -n $s2 ]]
 echo "s2: $?"
 ```
@@ -294,7 +293,7 @@ echo $?
     1
 
 
-To match the regular expression
+To match the regular expression.
 
 
 ```bash
@@ -356,7 +355,7 @@ if [[ $a == +(oj|aj)itha ]]; then echo yes; else echo no; fi
 
 ## Pattern Matching
 
-The `case` is the great way to match patterns. The pipe character between two patterns entails a match on condition `OR`.
+The `case` is a great way to match patterns. The pipe character between two patterns entails a match on condition `OR`.
 
 
 ```bash
@@ -377,8 +376,8 @@ esac
 
 
 ## Command Groups
-Evaluate list of commands in a subshell use `(...)`.
->NOTE: To evaluate list of commands in the current shell use `{ list; }`. Here the spaces next to the curly braces and trailing semicolon are compulsory.
+Evaluate the list of commands in a subshell using `(...)`.
+>NOTE: To evaluate a list of commands in the current shell, use `{ list; }`. Here the spaces next to the curly braces and trailing semicolon are compulsory.
 
 
 ```bash
@@ -397,7 +396,7 @@ echo "Outside the subshell $a"
     Outside the subshell Ojitha
 
 
-if you use group command 
+If you use the group command 
 
 
 ```bash
@@ -429,7 +428,7 @@ echo ------ in the subshell ---
     b
 
 
-another use of parenthesis:
+Another use of parenthesis:
 
 
 ```bash
@@ -443,11 +442,11 @@ echo I am `(whoami)` #same as above
 
 ## Redirection
 
-If not specified, `fd 1` (`STDOUT`) is assumed when redirecting output. Alternative file discriptors may be specified by prepending the `fd number`. To direct error to file: `2>file`. To redirect to a file descriptor append `&` and the `fd number`: `2>&1` to redirect `STDERR` to the current target for `STDOUT`.
+If not specified, `fd 1` (`STDOUT`) is assumed when redirecting output. Alternative file descriptors may be specified by prepending the `fd number`. To direct error to file: `2>file`. To redirect to a file descriptor, append `&` and the `fd number`: `2>&1` to redirect `STDERR` to the current target for `STDOUT`.
 
-In the above `$(whoami)` is a **command substitution**. The **Process substitution** feeds the output of a process (or processes) into the `stdin` of another process. For example I want to compare two directories:
+In the above, `$(whoami)` is a **command substitution**. The **Process substitution** feeds the output of a process (or processes) into the `stdin` of another process. For example, I want to compare two directories:
 
-First create directories and files inside the directories
+First, create directories and files inside the directories.
 
 ```bash
 mkdir first && touch first/f1.txt first/f2.txt first/common.txt
@@ -471,12 +470,12 @@ output
 > s2.txt
 ```
 
-NOTE: The file common.txt is not visible because that is exists in the both of the directories.
+NOTE: The file common.txt is not visible because that exists in both of the directories.
 
 ## Parameter Expansion
 Find the [documentation](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html).
 
-Follwoing code, if the `param` is empty, its return the default (in this case `$(whoami)`) value, but not set to the variable.
+Following code, if the `param` is empty, it returns the default (in this case `$(whoami)`) value but is not set to the variable.
 
 
 ```bash
@@ -492,8 +491,8 @@ echo who without default: $who
     who without default:
 
 
-if you want to set default to the `who` variable (use `:=`).
-> Positional parameters and special parameters may not be assigned to in this way.
+if you want to set the default to the `who` variable (use `:=`).
+> Positional parameters and special parameters may not be assigned in this way.
 
 
 ```bash
@@ -507,8 +506,7 @@ echo who without default: $who
     who with default: ojitha
     who without default: ojitha
 
-
-alternate
+### Alternate
 
 
 ```bash
@@ -534,7 +532,7 @@ echo $who
     ojitha
 
 
-If parameter is null or unset, the expansion of word (or a message to that effect if word is not present) is written to the standard error and the shell, if it is not interactive, exits. Otherwise, the value of parameter is substituted.
+If a parameter is null or unset, the expansion of the word (or a message to that effect if the word is not present) is written to the standard error and the shell, if it is not interactive, exits. Otherwise, the value of the parameter is substituted.
 
 ```bash
 who=
@@ -571,8 +569,7 @@ echo ${who:(-1)}
 
     a
 
-
-Expand to length
+### Expand to length
 
 
 ```bash
@@ -585,8 +582,7 @@ ${!who}
 
     length 6
 
-
-indirect expansion
+### Indirect expansion
 
 
 ```bash
@@ -596,8 +592,7 @@ echo ${!surname}
 
     HEWA
 
-
-List name matching prefix
+### List name-matching prefix
 
 
 ```bash
@@ -618,7 +613,7 @@ List the keys in an array `${!arr[*]}` or `${!arr[@]}`
 
 
 ```bash
-# Declare associative array
+# Declare an associative array
 declare -A arr
 
 arr[fruit]=Mango
@@ -665,7 +660,7 @@ echo ${who/#aa/12}
     12bb
 
 
-substitute at right edge
+substitute at the right edge
 
 
 ```bash
@@ -699,17 +694,17 @@ echo Array indexes ${!a[@]}
     Array indexes 0 1 2 3 4 5
 
 
-substitute `_` for all the sparces
+substitute `_` for all the spaces
 
 
 ```bash
 # declare the array
-a=( "This is an example of sustituting underscore for spsace" "Hello World" )
+a=( "This is an example of substituting underscore for spaces" "Hello World" )
 a=( "${a[@]// /_}" )
 declare -p a
 ```
 
-    declare -a a=([0]="This_is_an_example_of_sustituting_underscore_for_spsace" [1]="Hello_World")
+    declare -a a=([0]="This_is_an_example_of_substituting_underscore_for_spaces" [1]="Hello_World")
 
 
 Sub arraying
@@ -768,7 +763,7 @@ count=1
 echo "count=1, count++ after evaluation is $((count++))"
 # before evaluate
 count=1
-echo "count=1, ++count before evaulation is $((++count))"
+echo "count=1, ++count before evaluation is $((++count))"
 ```
 
     1==1 0
@@ -788,15 +783,15 @@ count=5
 echo "count=5, count++ after evaluation is $((count--))"
 # before evaluate
 count=5
-echo "count=5, ++count before evaulation is $((--count))"
+echo "count=5, ++count before evaluation is $((--count))"
 ```
 
     count=5, count++ after evaluation is 5
-    count=5, ++count before evaulation is 4
+    count=5, ++count before evaluation is 4
 
 
 ## Brace Expansion
-Genreate arbitrary words
+Generate arbitrary words
 
 
 ```bash
@@ -815,7 +810,7 @@ echo {1..5}{0,5}%
 
 
 ## Session Portability
-Import element from current session directly into a new local or remote session.
+Import elements from the current session directly into a new local or remote session.
 - `p` for parameters
 - `f` for functions
 
@@ -828,14 +823,14 @@ who=ojitha
 function hello(){
     echo Hello $1
 }
-# pass variable and the function to new shell
+# pass a variable and the function to a new shell
 bash -c "$(declare -p who; declare -f hello); hello $who "
 ```
 
     Hello ojitha
 
 
-you can pass the session to remote
+You can pass the session to remote
 
 ```bash
 ssh remote_host "$(declare -p parameter; declare -f func); your code "
