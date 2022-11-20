@@ -5,7 +5,7 @@ date:   2022-11-19
 categories: [Bash]
 ---
 
-While I am going through the following, the [youtube talk](https://www.youtube.com/watch?v=BJ0uHhBkzOQ) and it's associated [presentation](http://talk.jpnc.info/bash_lfnw_2017.pdf), my hand-ons recorded here. You can also refer to the [Bash Ref Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents) for more information.
+While I am going through the following, the [youtube talk](https://www.youtube.com/watch?v=BJ0uHhBkzOQ){:target="_blank"} and it's associated [presentation](http://talk.jpnc.info/bash_lfnw_2017.pdf){:target="_blank"}, my hand-ons were recorded here. It is recommended to go through the [basics]({% link _posts/2020-09-17-Bash scripting.md %}) first. You can also refer to the [Bash Ref Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents){:target="_blank"} for more information.
 
 <!--more-->
 
@@ -612,27 +612,6 @@ echo ${!v*}
 List the keys in an array `${!arr[*]}` or `${!arr[@]}`
 
 
-```bash
-# Declare an associative array
-declare -A arr
-
-arr[fruit]=Mango
-arr[bird]=Cockatail
-arr[flower]=Rose
-arr[animal]=Tiger
-
-for i in ${!arr[*]}
-do
-    echo $i
-done
-```
-
-    flower
-    fruit
-    animal
-    bird
-
-
 ### Pattern Substituion
 
 
@@ -673,7 +652,7 @@ echo ${who/%bb/12}
 
 ## Arrays
 
-make arrays
+There are arrays and new associative arrays. First see the arrays:
 
 
 ```bash
@@ -706,8 +685,7 @@ declare -p a
 
     declare -a a=([0]="This_is_an_example_of_substituting_underscore_for_spaces" [1]="Hello_World")
 
-
-Sub arraying
+### Sub arraying
 
 
 ```bash
@@ -719,8 +697,7 @@ declare -p a
 
     declare -a a=([0]="3" [1]="ojitha" [2]="Hello" [3]="World")
 
-
-Passing to function
+### Passing an array argument
 
 
 ```bash
@@ -742,6 +719,27 @@ display ${a[@]}
     3
     4
 
+### Associative arrays
+
+```bash
+# Declare an associative array
+declare -A arr
+
+arr[fruit]=Mango
+arr[bird]=Cockatail
+arr[flower]=Rose
+arr[animal]=Tiger
+
+for i in ${!arr[*]}
+do
+    echo $i
+done
+```
+
+    flower
+    fruit
+    animal
+    bird
 
 ## Arithmatics
 
