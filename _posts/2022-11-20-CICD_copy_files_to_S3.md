@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Notes on Introduction to Advanced Bash Usage
+title:  AWS CI/CD pipeline to Copy files to S3 bucket
 date:   2022-11-19
 categories: [AWS]
 ---
