@@ -2,10 +2,10 @@
 layout: post
 title:  Scala - S3 bucket operations
 date:   2022-12-03
-categories: [AWS,Scala]
+categories: [AWS, Scala]
 ---
 
-How to list S3 bucket contents using Scala.
+How to list and upload S3 bucket contents using Scala.
 
 <!--more-->
 
