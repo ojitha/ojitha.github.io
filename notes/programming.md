@@ -198,6 +198,30 @@ Install express
 yarn add express
 ```
 
+## Scala Notebooks
+
+You can create Scala notebook using docker:
+
+```bash
+docker run --rm -it \
+    -p 127.0.0.1:8192:8192 \
+    -p 127.0.0.1:4040-4050:4040-4050 \
+    -v `pwd`/config.yml:/opt/config/config.yml \
+    -v `pwd`/notebooks:/opt/notebooks/ \
+    -v $HOME/.aws:/home/polly/.aws polynote/polynote:latest \
+    --config /opt/config/config.yml
+```
+
+You have to have the following `config.yml` file in your directory
+
+```yaml
+storage:
+  dir: /opt/notebooks
+  mounts:
+    examples:
+      dir: examples
+```
+
 
 
 
