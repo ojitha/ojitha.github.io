@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Scala: S3 bucket operations
+title:  Scala - S3 bucket operations
 date:   2022-12-03
 categories: [AWS,Scala]
 ---
