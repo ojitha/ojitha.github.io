@@ -59,9 +59,7 @@ df = spark.read.csv(path="ratings.csv"
                    )
 ```
 
-The `inferSchema` inference the data type. If you execute `df.printSchema(), you will get:
-
-![image-20201004173447563](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201004173447563.png)
+The `inferSchema` inference the data type. If you execute `df.printSchema()`.
 
 Or you can specify the type:
 
@@ -121,10 +119,6 @@ movies = (
 )
 ```
 
-Here the output
-
-![image-20201010112745165](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010112745165.png)
-
 then python way
 
 ```python
@@ -148,8 +142,6 @@ mgenre.printSchema()
 
 
 
-![image-20201010114718863](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010114718863.png)
-
 You can explode based on the genres as follows:
 
 ```python
@@ -162,7 +154,7 @@ mgenre.show(5,truncate=False)
 mgenre.printSchema()
 ```
 
-![image-20201010120227183](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010120227183.png)
+
 
 You can simplify your output droping the genres if you want
 
@@ -184,15 +176,13 @@ mgenre.printSchema()
 
 the output is
 
-![image-20201010120721310](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010120721310.png)
-
 Now you can query to see all the avaialble genres:
 
 ```python
 mgenre.select("egenre").distinct().show()
 ```
 
-![image-20201010122035508](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010122035508.png)
+
 
 If you want to list which moves doesn't have genres
 
@@ -218,7 +208,7 @@ For inner join the above and the movie data frame give you the result of how man
 movies.join(mgenre.groupBy("movieId").count(),['movieId'], how = "inner").show(truncate=False)
 ```
 
-![image-20201010140404297](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010140404297.png)
+
 
 There are following joining options:
 
@@ -249,7 +239,7 @@ tags.where(f.col("movieId") == 1959).show()
 
 the result is as follows:
 
-![image-20201010172339770](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010172339770.png)
+
 
 if you run the following command:
 
@@ -259,7 +249,7 @@ tags.groupBy("movieId").agg(
 ).show()
 ```
 
-![image-20201010172447987](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201010172447987.png)
+
 
 As shown in the above figure, collect_set(tag) has created an array. You can change the second column name to `tags` using `alias` command.
 
