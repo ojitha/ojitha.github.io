@@ -6,7 +6,7 @@ categories: [RegEx]
 ---
 
 
-How to use RegEx in MacOs. One good use of RegEx is text processing which may specially help you to find text files where regular expression has been met. 
+As I understood, RegExs are very useful for general work. Most of the following regular expressions (RegEx)s can be run on the MacOs terminal, where you can get the great value of command line tools that have no value without RegExs (`grep`, `sed` and so on). In addition, I've used some popular tools to explain complex operations later in the document, which has been referenced under the footnotes.
 
 <!--more-->
 
@@ -18,7 +18,7 @@ How to use RegEx in MacOs. One good use of RegEx is text processing which may sp
 
 ## macOS grep or ggrep
 
-For the MacOs, the default `grep` (FreeBSD version) is very limited. You cannot run all the bash command express in theis blog post using MacOs standard `grep` command. There for install the grep from the home-brew:
+For the MacOs, the default `grep` (FreeBSD version) is very limited. You cannot run all the bash commands expressed in this blog post using the MacOs standard `grep` command. There for install the grep from the home-brew:
 
 ```bash
 brew install grep
@@ -32,11 +32,9 @@ ggrep --help
 
 
 
-For testing purpose downloand the texts of Shakespeare[^1] as a zip file. After you extract the zip file.
+For testing purposes, download the texts of Shakespeare[^1] as a zip file after you extract the zip file.
 
-
-
-## Find in the file
+## Find a text in a file
 
 To find the word in the TXT file:
 
@@ -48,11 +46,11 @@ This will show you something similar to the following output.
 
 ![image-20220304192546992](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20220304192546992.png)
 
-You can see the `the` is hilighted.
+You can see the `the` is highlighted.
 
 ## Find in the folder
 
-Locate the file in the file system where every file show the lines of the that contains text `henry`.
+Locate the file in the file system where every file shows the lines that contain text `henry`.
 
 ```bash
 find . -exec egrep -H 'Henry IV' {} \; 2>/dev/null
@@ -60,7 +58,7 @@ find . -exec egrep -H 'Henry IV' {} \; 2>/dev/null
 
 ![List the file which has the seach](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20220304195622052.png)
 
-For example, case sensitive match:
+For example, case-sensitive match:
 
 ```bash
 egrep --color 'the|is' hamlet_TXT_FolgerShakespeare.txt
@@ -68,9 +66,7 @@ egrep --color 'the|is' hamlet_TXT_FolgerShakespeare.txt
 
 ![multiple words in the search](/assets/images/multiple words in the search.png)
 
-
-
-for case insensitive match, use the `-i` option
+For case insensitive match, use the `-i` option
 
 ```bash
 egrep --color -i 'england' hamlet_TXT_FolgerShakespeare.txt
@@ -78,9 +74,9 @@ egrep --color -i 'england' hamlet_TXT_FolgerShakespeare.txt
 
 ![case-intensive-search](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/case-intensive-search.jpg)
 
-To implements tha Enhanced Regular Expressions (ERE) dialect use `grep -E`(`grep -P` say PCRE, for MacOS use the `perl` in the terminal) and `egrep` is the shorten form of that.
+To implement the Enhanced Regular Expressions (ERE) dialect, use `grep -E`(`grep -P` say PCRE, for MacOS use the `perl` in the terminal), and `egrep` is the shortened form of that.
 
-If you want collection of text to match, you can use either alternation `|` or external text file with the words. 
+If you want a collection of text to match, you can use either alternation `|` or an external text file with the words. 
 
 ```
 echo 'england' >>  search_keywords.txt
@@ -94,7 +90,7 @@ Search command is
 egrep --color -f search_keywords.txt hamlet_TXT_FolgerShakespeare.txt
 ```
 
-To show the lines do not mach (negative of the above), use `v` option:
+To show the lines do not match (negative of the above), use `v` option:
 
 ```bash
 egrep --color -v -i -f search_keywords.txt hamlet_TXT_FolgerShakespeare.txt
@@ -102,7 +98,7 @@ egrep --color -v -i -f search_keywords.txt hamlet_TXT_FolgerShakespeare.txt
 
 ## Character Class
 
-You can create complex search key expression using class of characters. To create character class, use the `[]` in the search. For example
+You can create complex search key expressions using a class of characters. To create a character class, use the `[]` in the search. For example
 
 ```bash
 egrep --color -i '[abc]' hamlet_TXT_FolgerShakespeare.txt
@@ -110,11 +106,11 @@ egrep --color -i '[abc]' hamlet_TXT_FolgerShakespeare.txt
 
 ![Character class example](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20220304230229838.png)
 
-For the complement of the above is `[^abc]`.
+The complement of the above is `[^abc]`.
 
 ![complement of the character class](/assets/images/complement of the character class.png)
 
-for example.
+For example:
 
 ### Generic Character classes
 
@@ -127,7 +123,7 @@ for example.
 | `\s`    | `[\t\n\r\f]`   |
 | `\S`    | `[^\t\n\r\f]`  |
 
-For exmple
+For example
 
 ```bash
 echo 'Hello Ojitha 1234' | grep --color -i '\D'
@@ -143,9 +139,9 @@ Only the words are selected.
 
 This has been created to simplify the character classes. The syntax is `[[:CLASS:]]`. Use the `^` as the complement `[[:^CLASS:]]`.
 
-> Only perl regex support the following classes.
+> Only Perl regex supports the following classes.
 >
-> Use `perl` in the MacOS terminal
+> Use `Perl` in the macOS terminal
 
 | Posix   | Characte Class | Description        |
 | ------- | -------------- | ------------------ |
@@ -179,7 +175,7 @@ ggrep --color -P  '[[:upper:]]' hamlet_TXT_FolgerShakespeare.txt
 
 ## Quantifiers
 
-In the regex expression we want to quantify how many characters we want to mach for exsample.
+In the regex expression, we want to quantify how many characters we want to match, for example.
 
 | Quantifier | Description       |
 | ---------- | ----------------- |
@@ -196,7 +192,12 @@ For example
 echo 'my 20 birtday party @ bay' |egrep --color '\d{2}\s\w{3}'
 ```
 
-will give you the 
+can be visualized[^2] as:
+
+![quantifier example](/assets/images/2022-03-04-RegEx on Mac/quantifier_example.png)
+
+
+The output of the above regex is
 
 ![Use_of_quantifier](/assets/images/Use_of_quantifier.png)
 
@@ -219,7 +220,7 @@ output is
 | `(?s)`   | Single line mode                                             |
 | `(?m)`   | Multi line mode, here `\A` start if the string and `\Z` end of the string. |
 
-For example, although I specify the Posix class `lower` for lower letters, when you specify modifier `(?xi)` it shows all the word ignoring the Upper case letters.
+For example, although I specify the Posix class `lower` for lower letters, when you specify modifier `(?xi)`, it shows all the words ignoring the Upper case letters.
 
 ```bash
 echo 'my 20 Birtday party @ BAY' |ggrep --color -P '(?xi) [[:lower:]]'
@@ -239,7 +240,7 @@ How are you' | ggrep --color -Pz '(?xm) ^Hello .* '
 
 In the above bash command, `-z` option allows the input data to be a sequence of lines.
 
-See the modification to above for single line modifier:
+See the modification above for single line modifier:
 
 ```bash
 echo 'Hello
@@ -253,7 +254,7 @@ All the lines are selected because `\n` new line has been tread as another chara
 
 ### Bounding
 
-Bonding regex don't match characters, but they specify where in the string the regex to be matched.
+Bonding regex does not match characters, but they specify where in the string the regex is to be matched.
 
 | Bounding | Meaning                                 |
 | -------- | --------------------------------------- |
@@ -262,7 +263,7 @@ Bonding regex don't match characters, but they specify where in the string the r
 | `\A`     | begining of string                      |
 | `\Z`     | end of string                           |
 | `\b`     | begining or end of a word               |
-| `\B`     | Complement of begining or end of a word |
+| `\B`     | complement of begining or end of a word |
 
 ```bash
 echo "the pen is my brother's" | ggrep -P --color '\bthe'
@@ -272,7 +273,7 @@ echo "the pen is my brother's" | ggrep -P --color '\bthe'
 
 
 
-As shown in the above, bro`the`r's is not selected because, the word `the` is not the begining of that word according to the bounding `\b`.
+As shown above, bro`the`r's is not selected because the word `the` is not the beginning of that word according to the bounding `\b`.
 
 But, if you use bounding `\B`:
 
@@ -282,9 +283,9 @@ echo "the pen is my brother's" | ggrep -P --color '\Bthe'
 
 <img src="/assets/images/image-20220305170512740.png" alt="image-20220305170512740" style="zoom:25%;" />
 
-### Alternation
+### alternation
 
-Either match this or that: This has been alredy introduced in the begining.
+Either match this or that: This has already been introduced in the beginning.
 
 ```bash
 echo 'one and two are numbers' > test.txt
@@ -295,7 +296,7 @@ perl -pe 's/one|two/digit/' test.txt
 digit and two are numbers
 ```
 
-you can use alternation with bounds as follows:
+You can use alternation with bounds as follows:
 
 ```bash
 echo 'I have borther
@@ -317,7 +318,37 @@ and any other ...' | ggrep -P --color '^(I|and)'
 
 ## Capture
 
-You can replace text as we did above or extract matching. You can turn off capturing by following the open paren with a `?:`.
+You can create capture groups using `()` as follows:
+
+```
+(.+)\.(png|gif)
+```
+
+The graphical representation[^5] is 
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/CapturGroupDiagram.png" alt="Capture Group Diagram" style="zoom:50%;" />
+
+The target string match as follows:
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/CaptureGroupOutput.png" alt="Capture group output" style="zoom:50%;" />
+
+For non-capture groups, use the `?:` as follows:
+
+```
+(.+)\.(?:png|gif)
+```
+
+The above regex matched the string but hasn't captured the second group
+
+
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/noncapture.png" alt="non capture" style="zoom:50%;" />
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/image-20221220190642877.png" alt="non capture group" style="zoom:50%;" />
+
+you can reference the captured group later in the expression by the positional value
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/reference capture by position.png" alt="reference capture by its position" style="zoom:50%;" />
 
 ```bash
 echo 'Hello
@@ -328,7 +359,7 @@ mirrrror' | ggrep -P --color '(.)\1'
 
 ![Captureing](/assets/images/image-20220305224430826.png)
 
-and
+and visualisation[^3]![back reference](/assets/images/2022-03-04-RegEx on Mac/back_reference.svg)
 
 ```bash
 echo 'Hello
@@ -341,7 +372,7 @@ mama mia' | ggrep -P --color '(.)(.)\1\2'
 
 ![image-20220305225344362](/assets/images/image-20220305225344362.png)
 
-this is same as above
+This is same as above
 
 ```bash
 echo 'Hello
@@ -364,17 +395,65 @@ wonder why' | ggrep -P --color '\b(\w+)\s\1'
 
 ![repeat the same word twice](/assets/images/image-20220305231626340.png)
 
-You can use vscode to capture the CSV column and modify. For example,
+Good practical example is HTML tag matching such as `<(\w+)>.*?<\/\1>` as shown in the visualisation:
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/htm_tag_matching.png" alt="image-20221221155344369" style="zoom:50%;" />
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/html tag validation.png" alt="html tag validation" style="zoom:50%;" />
+
+You can name the capture group as follows. In the editor[^4], you can substitute the HTML `em` tag in markdown bold text. More similar to boundary tokens. 
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/named capture group.png" alt="image-20221221115615187" style="zoom:50%;" />
+
+Using Sed
+
+```bash
+sed -E 's/([a-z]*) (\d*)/text: \1, digits: \2/'
+```
+
+```
+text: hello, digits: 123
+```
+
+
+
+## Lookarounds
+
+Lookarounds are regex expression conditions that are not captured as a part of the match.
+
+|                | Postive                                                      | Negative                |
+| -------------- | ------------------------------------------------------------ | ----------------------- |
+| **Lookahead**  | *T* `(?=c)`: Capture *T* which statisfy the condition `c` **after** it. | Negation of *T* `(?!c)` |
+| **Lookbehind** | `(?<=c)` *T*: Capture T which satisfy the condtion `c` **before** it. | Negation of`(?<!c)` *T* |
+
+Examples:
+
+|                     |                                                              |                                                              |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Postive Lookahead   | <img src="/assets/images/2022-03-04-RegEx on Mac/positivelookahead.png" alt="image-20221221163509915" style="zoom:100%;" /> | <img src="/assets/images/2022-03-04-RegEx on Mac/positivelookaheadexample.png" alt="image-20221221163752540" style="zoom:50%;" /> |
+| Negative Lookahead  | ![image-20221221164838168](/assets/images/2022-03-04-RegEx on Mac/NegativeLookahead.png) | <img src="/assets/images/2022-03-04-RegEx on Mac/NegativeLookaheadExample.png" alt="image-20221221164510708" style="zoom:50%;" /> |
+| Positive lookbehind | <img src="/assets/images/2022-03-04-RegEx on Mac/image-20221221191545911.png" alt="image-20221221191545911" style="zoom:50%;" /> |                                                              |
+| Negative Lookbehind | <img src="/assets/images/2022-03-04-RegEx on Mac/image-20221221191659565.png" alt="image-20221221191659565" style="zoom:50%;" /> |                                                              |
+
+> NOTE: Python support only fixed-width lookarounds. Indermine quantifiers such as `*,?,+` are not allowed.
+
+
+
+## VSCode
+
+You can use VSCode to capture the CSV column and modify it. For example,
 
 | Before                                                       | After                                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ![before run replace](/assets/images/2022-03-04-RegEx on Mac/image-20220820204018978.png) | ![after run replace](/assets/images/2022-03-04-RegEx on Mac/image-20220820204056997.png) |
 
- 
+VSCode support the lookarounds as well.
+
+<img src="/assets/images/2022-03-04-RegEx on Mac/vscode_lookarounds.png" alt="VSCode lookarounds" style="zoom:50%;" />
 
 ## Stream editor
 
-The `sed` commmand is capable to modify a file inline using `-i` option.
+By default, sed uses the BRE dialect. The `-E` option uses ERE. The `sed` command can modify a file inline using the `-i` option.
 
 ```bash
 touch test.txt
@@ -384,10 +463,20 @@ sed -i '.bak' 's/ojitha/OJ/' test.txt
 
 ![image-20220304201448235](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20220304201448235.png)
 
+Text mactches using `&`:
 
+```bash
+echo 'Hello ojitha' | sed 's/oj.*/(&)/g'
+```
 
-
+```
+Hello (ojitha)
+```
 
 
 
 [^1]: Download The Folger Shakespeare – [Complete Set](https://shakespeare.folger.edu/download-the-folger-shakespeare-complete-set/)
+[^2]: [Debuggex visualizer](https://www.debuggex.com){:target="_blank"}
+[^3]: [regexper visualizer](https://regexper.com/){:target="_blank"}
+[^4]: [regex101 editor](https://regex101.com/){:target="_blank"}
+[^5]: [jex visualizer](https://jex.im/regulex){:target="_blank"}
