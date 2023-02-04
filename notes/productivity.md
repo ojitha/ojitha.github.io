@@ -138,7 +138,9 @@ Command to create Apache Airflow
 docker run -ti -p 8080:8080 -v ${PWD}/<dag>.py:/opt/airflow/dags/download_rocket_launches.py --name airflow --entrypoint=/bin/bash apache/airflow:2.0.0-python3.8 -c '( airflow db init && airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email ojithak@gmail.com); airflow webserver & airflow scheduler'
 ```
 
-## Postgres
+## Docker Databases containers
+
+### Postgres
 
 Create docker image: (In the current directory, create a `data` folder)
 
@@ -162,6 +164,34 @@ Inside the bash run the following command to get into the `psql`:
 
 ```bash
 psql -h localhost -p 5432 -U postgres
+```
+
+### MSSQL
+
+Pull the image
+
+```powershell
+docker pull mcr.microsoft.com/mssql/server:2019-latest
+```
+
+to run
+
+```powershell
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Pwd@2023" `
+   -p 1433:1433 --name sql1 --hostname sql1 `
+   -v C:\Users\ojitha\dev\mssql\data:/var/opt/mssql/data `
+   -v C:\Users\ojitha\dev\mssql\log:/var/opt/mssql/log `
+   -d `
+   mcr.microsoft.com/mssql/server:2019-latest
+```
+
+Download the sample database from the [backup](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms)
+
+Run the following fix before restore
+
+```powershell
+docker container exec sql1 touch /var/opt/mssql/data/AdventureWorks2019.mdf
+docker container exec sql1 touch /var/opt/mssql/log/AdventureWorks2019_log.ldf
 ```
 
 ## Jekylle
@@ -224,3 +254,5 @@ bundle exec jekyll serve
     As shown in the line# 12 embed the html file to post. 
 
 7. Now run the Jekyll if not started
+
+## 
