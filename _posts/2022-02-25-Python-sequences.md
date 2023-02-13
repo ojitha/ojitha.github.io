@@ -780,4 +780,30 @@ r[:5:-2]
 
 
     [9, 7]
+    
+## dict comprehensions
+First create listcomps 
+
+``` python
+import string
+myList = [chr(chNum) for chNum in list(range(ord('a'),ord('z')+1))]
+codes =  [(i,x) for i, x in enumerate(myList) if i > 10]
+```
+From the above listcomp, create dictcomps:
+
+```python
+d = {letter: i+1 for i, letter in codes if i > 20}
+```
+
+use this in a function
+
+```python
+def dump(**kwargs):
+    return kwargs
+dump(a=1,**d)   
+# {'a': 1, 'v': 22, 'w': 23, 'x': 24, 'y': 25, 'z': 26}
+```
+
+above is simlar to the `{'a':1, **{'v': 22, 'w': 23, 'x': 24, 'y': 25, 'z': 26}}`, but notice the first 
+element.
 
