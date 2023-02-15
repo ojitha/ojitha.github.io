@@ -807,3 +807,18 @@ dump(a=1,**d)
 above is simlar to the `{'a':1, **{'v': 22, 'w': 23, 'x': 24, 'y': 25, 'z': 26}}`, but notice the first 
 element.
 
+## Hack for JSON
+
+To [hack](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch03.html#idm46582491014480) to copy and paste jon to python:
+
+```python
+true, false, null = True, False, None # hack
+fruit = {
+     "type": "banana",
+     "avg_weight": 123.2,
+     "edible_peel": false,
+     "species": ["acuminata", "balbisiana", "paradisiaca"],
+     "issues": null,
+ }
+```
+
