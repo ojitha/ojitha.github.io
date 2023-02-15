@@ -43,6 +43,4 @@ print (qs([5,9,4,7,6,8,2,1,3]))
 
 Quick sort complexcity
 
-![image-20201101124728600](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20201101124728600.png)
-
 The complexcity of the quick sort can be worst as $$O(n^2)$$ base on the pivotal you choose. For example, even for the sorted array if the pivotal is first element, the deapth is $$n$$.
