@@ -51,9 +51,7 @@ Verify Minikube is running
 minikube status
 ```
 
-It should verify:
 
-![Verify Minikube is running](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912110034208.png)
 
 To get the IP of the Minikube
 
@@ -112,8 +110,6 @@ or for other related services such as health check of the cluster
 ```shell
 kubectl get componentstatus
 ```
-
-![image-20200912111013726](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912111013726.png)
 
 
 
@@ -177,7 +173,7 @@ Some services exposed via ports to access externally,
 minikube service list
 ```
 
-![image-20200912114706279](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912114706279.png)
+
 
 The URLs for these services can be listed:
 
@@ -226,8 +222,6 @@ kubectl describe namespace myspace
 ```
 
 Use the label to view only the namespace associated with that:
-
-![image-20200912120431348](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912120431348.png)
 
 Labels you can find in the dashboard as well.
 
@@ -292,8 +286,6 @@ kubectl create -f deployment.yaml
 
 now you can verify `kubectl get deployment`
 
-![run with one instance](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912143655614.png)
-
 Get the deployment information:
 
 ```bash
@@ -330,7 +322,7 @@ To get the all services:
 kubectl get svc
 ```
 
-![image-20200912144244586](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912144244586.png)
+
 
 To get only about `ojwebapp-svc`:
 
@@ -340,8 +332,4 @@ kubectl describe svc ojwebapp-svc
 
 Now you can run curl command `curl <host>:30000` to get the page.
 
-You can change the number of `replicas` into 4 and apply the changes. If you run the `kubectl get deployment`, you will get:
-
-![apply chnages to run with 4 instances](https://cdn.jsdelivr.net/gh/ojitha/blog@master/uPic/image-20200912144806068.png)
-
-Now curl will sent the request to one of the above.
+You can change the number of `replicas` into 4 and apply the changes. If you run the `kubectl get deployment`.
