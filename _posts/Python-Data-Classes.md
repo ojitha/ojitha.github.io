@@ -15,7 +15,16 @@ Python  Data classes.
 {:toc}
 ------
 
-## Data class
+
+## Data class builders
+The data class builders provide the following methods automatically:
+- `__init__`
+- `__repr__`
+- `__eq__`
+
+Both `collections.namedtuple` and `typing.NamedTuple` build classes that are `tuple` subclasses. The `@dataclass` is a class decorator that does not affect the class hierarchy.
+
+### collections.namedtuple
 The `collections.namedtuple` is the earliest data class. Example data class:
 
 ```python
@@ -107,4 +116,35 @@ Cloth(color='Yellow', size='M')
 Cloth(color='Yellow', size='S')
 ```
 
+Convert to the json
+
+```python
+import json
+json.dumps(shirts[0]._asdict())
+```
+output is
+
+```
+'{"color": "Black", "size": "S"}'
+```
+### typing.NamedTuple
+Since Python 3.6, it made easy to add new methods and override methods by creating data classe extended from `tuple`.
+
+```python
+from typing import NamedTuple
+from dataclasses import field
+
+class NTShirts(NamedTuple):
+    sizes: list[str] = field(default_factory=list)
+    colors: list[str] = field(default_factory=list)
+    
+nt = NTShirts('S M L'.split(),'Black White Blue Green Yellow'.split())
+nt    
+```
+
+output is
+
+```
+NTShirts(sizes=['S', 'M', 'L'], colors=['Black', 'White', 'Blue', 'Green', 'Yellow'])
+```
 
