@@ -148,3 +148,24 @@ output is
 NTShirts(sizes=['S', 'M', 'L'], colors=['Black', 'White', 'Blue', 'Green', 'Yellow'])
 ```
 
+### Data Class
+
+Since Python 3.9, you can find the decorator which can be used to create data class:
+
+```python
+from dataclasses import dataclass, field
+from typing import ClassVar
+
+@dataclass
+class DCShirts:
+    sizes: list[str] = field(default_factory=list)
+    colors: list[str] = field(default_factory=list)
+    inventory: ClassVar[int] = 99
+
+dc = DCShirts('S M L'.split(),'Black White Blue Green Yellow'.split())
+dc
+```
+This will generate the same output, but important point is `ClassVar` which hold the class variable, while `sizes` and `colors` are instance variables.
+
+> Both `NamedTuple` and docorator support [PEP 526 – Syntax for Variable Annotations](https://peps.python.org/pep-0526/)
+
