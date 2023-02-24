@@ -50,7 +50,7 @@ Instead of the above, if you want more control, create
 FROM public.ecr.aws/glue/aws-glue-libs:glue_libs_3.0.0_image_01
 WORKDIR /home/glue_user/workspace/jupyter_workspace
 ENV DISABLE_SSL=true
-RUN python3 -m pip3 install --upgrade pip3
+RUN python3 -m pip install --upgrade pip
 RUN pip3 install pyathena
 RUN pip3 install awswrangler
 RUN pip3 install pydeequ
@@ -58,12 +58,19 @@ RUN pip3 install pydeequ
 CMD [ "./start.sh" ]
 ```
 
-You should have the start.sh file in the same directory
+Give more visibility to the folder where Dockerfile is located.
+
+```bash
+sudo chmod -R a+rwx,o-w <folder>
+```
+
+You should have the start.sh file in the same directory with the following two lines
 
 ```bash
 livy-server start
 jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/glue_user/workspace/jupyter_workspace/ --ServerApp.token='pyspark' --ServerApp.password=''
 ```
+
 In addition to that your docker-compos.yaml is
 
 ```docker
