@@ -169,3 +169,21 @@ This will generate the same output, but important point is `ClassVar` which hold
 
 > Both `NamedTuple` and docorator support [PEP 526 – Syntax for Variable Annotations](https://peps.python.org/pep-0526/)
 
+## First Class Objects
+Python can treates function (including anonymous function `lambda`) as an object. A function that takes a function as an argument or returns a function as the result is a [higher-order function](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch07.html#idm46582448567408).
+
+NOTE: In the `lambda`, the body cannot contain Python statements (eg:`while`, `try`). Assignment with `=` is also a statement, therefore it cannot be occured in a lambda. However, the new assignment expression syntax using `:=` can be used.
+
+There are 9 flavors of callable objects:
+1. User-defined functions
+2. Built-in functions (`len`)
+3. Built-in methods (of `dict`, `tuple` and so on)
+4. Methods of a class
+5. Classes
+6. Class instances (`__call__` method must be defined) 
+7. Generator functions (`yield` returns the generator object)
+8. Native coroutine functions (`async def`)
+9. Asynchronous generator functions ( function or method defined with `async def` and return by the `yield`.
+
+
+
