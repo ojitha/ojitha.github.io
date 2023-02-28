@@ -185,5 +185,126 @@ There are 9 flavors of callable objects:
 8. Native coroutine functions (`async def`)
 9. Asynchronous generator functions ( function or method defined with `async def` and return by the `yield`.
 
+### Parameter passing in a function
+In addition to positional parameters, there are few other parameter types:
+
+```python
+def p2f(name, *content, namedpara=None, **attrs):
+    print(f'name:{name}')
+    print(f'content:{content}')
+    print(f'namedpara:{namedpara}')
+    print(f'attrs:{attrs}')
+```
+above positional parameter is the first one, named parameter is `namedpara`.
+
+```python
+p2f('ojitha')
+```
+output
+```
+name:ojitha
+content:()
+namedpara:None
+attrs:{}
+```
+if your pass extra, it is for `content` tuple as follows
+```python
+p2f('ojitha','hewa', 'kum')
+```
+output
+```
+name:ojitha
+content:('hewa', 'kum')
+namedpara:None
+attrs:{}
+```
+and
+
+```python
+p2f('ojitha',id=1)
+```
+output
+
+```
+name:ojitha
+content:()
+named parameters:None
+attrs:{'id': 1}
+```
+if you pass parameters as follows
+```python
+params = {'name':'ojitha', 'last_name':'kuma'}
+p2f(**params)
+```
+the output is
+```
+name:oj
+content:()
+namedpara:None
+attrs:{'last_name': 'kuma'}
+```
+
+#### Keyword-only arguments
+This will never capture unnamed positional arguments, for example
+
+```python
+def f(p1,*,p2):
+    print(p1,p2)
+```
+and if you call the function
+
+```python
+f(1,2)
+```
+The ouput is an error
+
+```
+TypeError                                 Traceback (most recent call last)
+Cell In[11], line 1
+----> 1 f(1,2)
+
+TypeError: f() takes 1 positional argument but 2 were given
+```
+
+Therefore you have to call the above function as follows
+
+```python
+f(1, p2 =2)
+```
+
+#### Positional only
+For example
+
+```
+# since python 3.8
+# position only parameters
+
+def f(p1, p2, /, p3):
+    print(p1, p2, p3)
+```
+if you call the function
+
+```python
+f(1, p2=2, p3=3)
+```
+the output is 
+
+```
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+Cell In[25], line 1
+----> 1 f(1, p2=2, p3=3)
+
+TypeError: f() got some positional-only arguments passed as keyword arguments: 'p2'
+```
+but, if you call as follows:
+
+```python
+f(1,2, p3=3)
+# output is 1 2 3
+```
+
+
+
 
 
