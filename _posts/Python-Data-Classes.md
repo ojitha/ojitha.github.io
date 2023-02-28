@@ -115,6 +115,54 @@ Cloth(color='Yellow', size='L')
 Cloth(color='Yellow', size='M')
 Cloth(color='Yellow', size='S')
 ```
+Another example found from https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch07.html#attrgetter_demo
+
+```python
+from collections import namedtuple
+
+LatLon = namedtuple('LatLon', 'lat lon')  
+Metropolis = namedtuple('Metropolis', 'name cc pop coord')  
+metro_areas = [Metropolis(name, cc, pop, LatLon(lat, lon))  
+    for name, cc, pop, (lat, lon) in metro_data]
+metro_areas
+```
+
+the output is 
+
+```
+[Metropolis(name='Tokyo', cc='JP', pop=36.933, coord=LatLon(lat=35.689722, lon=139.691667)),
+ Metropolis(name='Delhi NCR', cc='IN', pop=21.935, coord=LatLon(lat=28.613889, lon=77.208889)),
+ Metropolis(name='Mexico City', cc='MX', pop=20.142, coord=LatLon(lat=19.433333, lon=-99.133333)),
+ Metropolis(name='New York-Newark', cc='US', pop=20.104, coord=LatLon(lat=40.808611, lon=-74.020386)),
+ Metropolis(name='São Paulo', cc='BR', pop=19.649, coord=LatLon(lat=-23.547778, lon=-46.635833))]
+```
+
+to access
+
+```python
+metro_areas[0].coord.lat
+# output: 35.689722
+```
+
+more efficient to access using `attrgetter` in the `operator` package
+
+```python
+from operator import attrgetter
+name_lat = attrgetter('name', 'coord.lat')  
+
+for city in metro_areas:  
+    print(name_lat(city))
+```
+
+the ouput is 
+
+```
+('Tokyo', 35.689722)
+('Delhi NCR', 28.613889)
+('Mexico City', 19.433333)
+('New York-Newark', 40.808611)
+('São Paulo', -23.547778)
+```
 
 Convert to the json
 
