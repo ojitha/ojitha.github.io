@@ -116,6 +116,12 @@ to deactivate, `deactivate` in the CLI to move out from the project environment.
 ### VSCode extensions for Python
 Some of the extensions tested for Python:
 - Use tools like flake8 and [blue](https://fpy.li/8-10). [flake8](https://fpy.li/8-9) reports on code styling, among many other issues, and blue rewrites source code according to (most) rules embedded in the [black](https://fpy.li/8-11) code formatting tool.
+- isort: organise imports
+- JSON Path Status Bar: Show JSON path of the element
+- Output Colorizer: VSCode output in color
+- Open Folder Context Menu for VS Code: This will open a new instance of VSCode for the selected folder in the Explorer.
+- Pylint: Lint from Microsoft
+- 
 
 ## Spark
 
@@ -123,12 +129,7 @@ I have configured Spark using SDKMAN.
 
 - [Building Spark JAR Files with SBT](https://mungingdata.com/apache-spark/building-jar-sbt/)
 - [Setting up a Spark Development Environment with Scala](https://www.cloudera.com/tutorials/setting-up-a-spark-development-environment-with-scala/.html)
-- isort: organise imports
-- JSON Path Status Bar: Show JSON path of the element
-- Output Colorizer: VSCode output in color
-- Open Folder Context Menu for VS Code: This will open a new instance of VSCode for the selected folder in the Explorer.
-- Pylint: Lint from Microsoft
-- 
+
 
 ```bash
 docker run --name pyspark -e JUPYTER_ENABLE_LAB=yes -e JUPYTER_TOKEN="pyspark"  -v "$(pwd)":/home/jovyan/work -p 8888:8888 jupyter/pyspark-notebook:d4cbf2f80a2a
