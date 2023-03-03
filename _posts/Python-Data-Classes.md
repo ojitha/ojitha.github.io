@@ -477,8 +477,6 @@ from collections.abc import Mapping
 from typing import List
 from typing import TypeAlias
 
-letterMap:dict[int,str] = {1:'a',2:'b'}
-
 # define the type alias
 ta:TypeAlias = Mapping[int,str]
 
@@ -490,3 +488,57 @@ printLetters(letterMap)
 
 This will simplify the method signature.
 
+## Parameterized Generics
+Generic type, written as `list[T]`, where `T` is a **type variable** that will be bound to a specific type in each occation.
+
+### Risticted TypeVar
+```python
+from typing import TypeVar
+from collections.abc import Sequence, Iterable
+
+T = TypeVar('T',int,float, str)
+
+def doubElem(l:Sequence[T]) -> Iterable[T]:
+    for i in l:
+        yield i*2
+
+for i in doubElem((1,2)):
+    print(i)  
+
+for i in doubElem(['a','b','c']):
+    print(i)
+  
+```
+output is
+```
+2
+4
+aa
+bb
+cc
+```
+
+### Bounded TypeVar
+
+```python
+from typing import TypeVar
+from collections.abc import Sequence, Iterable
+
+T = TypeVar('T',bound=int)
+
+def doubIntElem(l:Sequence[T]) -> Iterable[T]:
+    return [i for i in l]
+
+for i in doubIntElem((1,2)):
+    print(i)  
+
+# for i in doubIntElem(['a','b','c']):
+#     print(i)  
+```
+output is
+```
+1
+2
+```
+NOTE:
+One of the predefined bounded type variable is `AnyStr`.
