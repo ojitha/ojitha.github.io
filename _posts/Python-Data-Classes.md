@@ -291,7 +291,22 @@ content:()
 namedpara:None
 attrs:{'last_name': 'kuma'}
 ```
+With type hints
 
+```python
+from typing import Optional
+
+
+def p2f(name: str
+    , *content: str
+    , namedpara: Optional[str] = None
+    , **attrs: str):
+    
+    print(f'name:{name}')
+    print(f'content:{content}')
+    print(f'namedpara:{namedpara}')
+    print(f'attrs:{attrs}')
+```
 #### Keyword-only arguments
 This will never capture unnamed positional arguments, for example
 
