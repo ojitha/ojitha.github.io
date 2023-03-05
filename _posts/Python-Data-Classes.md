@@ -307,6 +307,20 @@ def p2f(name: str
     print(f'namedpara:{namedpara}')
     print(f'attrs:{attrs}')
 ```
+if you have different value to pass in the variadic parameters:
+
+```python
+from typing import Optional, Union
+
+def p2f(name: str
+    , *content: Union[str,int]
+    , namedpara: Optional[str] = None
+    , **attrs: Union[str,int]) :
+    
+    ...
+```
+
+
 #### Keyword-only arguments
 This will never capture unnamed positional arguments, for example
 
