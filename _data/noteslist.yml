@@ -13,6 +13,9 @@ docs:
 - title: Programming
   url: programming.html 
 
+- title: Python
+  url: python.html  
+
 - title: Mongo DB
   url: mongo.html
 
