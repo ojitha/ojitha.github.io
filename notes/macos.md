@@ -2,11 +2,7 @@
 layout: notes 
 title: macOS
 ---
-
-
-## 
-
-**macOS tips**
+**Notes on macOS**
 
 * TOC
 {:toc}
