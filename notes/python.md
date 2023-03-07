@@ -272,5 +272,28 @@ In the above code, `n` parameter is a local variable but `p` parameter is not.
 
 
 
+```python
+from functools import singledispatch
+from collections import abc
+
+@singledispatch
+def myprint(obj:object) -> str:
+    return f'object: {obj}'
+
+@myprint.register
+def _(text: str) -> str:
+    return f'str: {text}'
+
+@myprint.register
+def _(n: int) -> str:
+    return f'int: {n}'
+
+@myprint.register(abc.Sequence)
+def _(seq) -> str:
+    return (f'sequence: {seq}')   
+```
+
+When you call `myprint(1)` the output: `'int: 1'` and call `myprint('oj')` the output is `'str: oj'`. In the case of input sequence such as `myprint([1,2,3])` the output is `'sequence: [1, 2, 3]'`.
+
 
 
