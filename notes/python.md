@@ -270,14 +270,16 @@ hoFunc(2)(1) #-> 4
 ```
 In the above code, `n` parameter is a local variable but `p` parameter is not.
 
+## Decorators
 
+The `singledispatch` is one of the [standard library decorator](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch09.html#idm46582438196432), which is use to create overloaded functions similar to Java overload methods instead dispatch function. For example,
 
 ```python
 from functools import singledispatch
 from collections import abc
 
 @singledispatch
-def myprint(obj:object) -> str:
+def myprint(obj:object) -> str: # generic function
     return f'object: {obj}'
 
 @myprint.register
@@ -288,12 +290,16 @@ def _(text: str) -> str:
 def _(n: int) -> str:
     return f'int: {n}'
 
-@myprint.register(abc.Sequence)
+@myprint.register(abc.Sequence) # pass the type if you want
 def _(seq) -> str:
     return (f'sequence: {seq}')   
 ```
 
 When you call `myprint(1)` the output: `'int: 1'` and call `myprint('oj')` the output is `'str: oj'`. In the case of input sequence such as `myprint([1,2,3])` the output is `'sequence: [1, 2, 3]'`.
 
+> NOTE:  Java-style method overloading is missing in Python. When possible, register the specialized functions to handle abstract classes such as `numbers.Integral` and `abc.MutableSequence`, instead of concrete implementations like `int` and `list`.
+from [Fluent](1)
+
+[1]: http://ojitha.blogspot.com.au, Fluent Python
 
 
