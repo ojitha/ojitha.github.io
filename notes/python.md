@@ -230,3 +230,47 @@ output is
 
 NOTE:
 One of the predefined bounded type variable is `AnyStr`.
+
+## Closures
+
+A function variable becomes local when assigned a value; otherwise, it searches for global scope variable assignment of the same variable (the name of the variables are the same). Therefore, before printing the local variable, you have to assign a variable locally, or you have to explicitly inform using the `global` keyword to avoid  the misconception:
+
+```python
+a=1
+b=2
+def bla(p)
+    global a
+    ...
+    print(a) # this is valid because `a` is a global variable
+    print(b) # this is not valid, there are errors because 
+             # `b` is a local variable due to the following assignment 
+    b=3
+    ...
+    a=5
+```
+A closure is simply a function with free variables, where the bindings for all such variables are known in advance. 
+
+The *free variable* is a technical term meaning a variable that is not bound in the local scope. In Python language, all functions are closed. Therefore in the Python closures, free variables defined in the high-order function has to access by its nested returning function. You have to use `nonlocal` keywoard instead of the `global` keyword to access the free variables from the nested function.
+
+```python
+g=10
+def hoFunc(p):
+    my_free_var=0
+    def nested(n):
+        nonlocal my_free_var,p
+        global g # only define as global
+        p += 1
+        n += g # n is local
+        g=1
+        my_free_var += (n+p)
+        return my_free_var
+    return nested     
+
+hoFunc(2)(1) #-> 4        
+```
+In the above code, `n` parameter is a local variable but `p` parameter is not.
+
+
+
+
+
