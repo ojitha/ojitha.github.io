@@ -4,6 +4,7 @@ title:  Normalization
 date:   2021-01-20
 categories: [RDBMS]
 mermaid: true
+maths: true
 ---
 
 E. F. Codd proposed three normal forms 1NF, 2NF and 3NF (1970). Revised definition (1974) was given by F. Boyce and Codd which is known as Boyce-Codd Normal Form (BCNF which is 3.5NF) to distinguish it from the old definition of third normal form. R. Faign introduced 4NF(1977) and 5NF(1979) and DKNF(1981). All the normal forms depend on the functional dependency, but 4NF and 5NF have been proposed which are based on the concept of multivalued dependency and joining dependency, respectively.
