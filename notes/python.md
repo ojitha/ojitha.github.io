@@ -233,7 +233,7 @@ One of the predefined bounded type variable is `AnyStr`.
 
 ## Closures
 
-A function variable becomes local when assigned a value; otherwise, it searches for global scope variable assignment of the same variable (the name of the variables are the same). Therefore, before printing the local variable, you have to assign a variable locally, or you have to explicitly inform using the `global` keyword to avoid  the misconception:
+A function variable becomes local when assigned a value; otherwise, it searches for global scope variable assignment of the same variable (the name of the variables are the same). Therefore, before use the local variable, you have to assign a variable locally, or you have to explicitly inform using the `global` keyword to avoid  the misconception:
 
 ```python
 a=1
@@ -250,7 +250,7 @@ def bla(p)
 ```
 A closure is simply a function with free variables, where the bindings for all such variables are known in advance. 
 
-The *free variable* is a technical term meaning a variable that is not bound in the local scope. In Python language, all functions are closed. Therefore in the Python closures, free variables defined in the high-order function has to access by its nested returning function. You have to use `nonlocal` keywoard instead of the `global` keyword to access the free variables from the nested function.
+The *free variable* is a technical term meaning a variable that is not bound in the local scope but in the lexical scope. In Python language, all functions are closed. Therefore in the Python closures, free variables defined in the enclosing functions to access by its nested returning function. You have to use `nonlocal` keywoard instead of the `global` keyword to access the free variables from the nested function.
 
 ```python
 g=10
