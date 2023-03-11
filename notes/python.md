@@ -298,8 +298,132 @@ def _(seq) -> str:
 When you call `myprint(1)` the output: `'int: 1'` and call `myprint('oj')` the output is `'str: oj'`. In the case of input sequence such as `myprint([1,2,3])` the output is `'sequence: [1, 2, 3]'`.
 
 > NOTE:  Java-style method overloading is missing in Python. When possible, register the specialized functions to handle abstract classes such as `numbers.Integral` and `abc.MutableSequence`, instead of concrete implementations like `int` and `list`.
-from [Fluent](1)
+> from [Fluent Python][fluent]
 
-[1]: http://ojitha.blogspot.com.au, Fluent Python
+Here the simple decorator
 
+```python
+def deco(func):
+    def inner(*args):
+        result = func(*args)
+        name = func.__name__
+        arg_str = ', '.join(repr(arg) for arg in args)
+        print(f' {name}({arg_str}) -> {result!r} in the decorator')
+        return result
+    return inner    
+```
+
+You can docorate `myfunc` as follows:
+
+```python
+@deco
+def myfunc(p):
+    print(f'parameter: {p}')
+
+myfunc(1)   
+```
+
+output is 
+
+```
+parameter: 1
+ myfunc(1) -> None in the decorator
+```
+
+But there is a problem, if you run `myfunc(p=1) `, you get the following error, because above decorator not support keyword arguments
+
+```
+TypeError                                 Traceback (most recent call last)
+Cell In[11], line 5
+      1 @deco
+      2 def myfunc(p):
+      3     print(f'parameter: {p}')
+----> 5 myfunc(p=1)    
+
+TypeError: deco..inner() got an unexpected keyword argument 'p'
+```
+
+The resoultion:
+
+```python
+import functools
+
+def deco(func):
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        result = func(*args, **kwargs)
+        name = func.__name__
+        arg_str = ', '.join(repr(arg) for arg in args)
+        print(f' {name}({arg_str}) -> {result!r} in the decorator')
+        return result
+    return inner   
+```
+
+As shown in the above code in the  
+
+- line #1, you have to import `functools`
+- line #4, do the wraping
+- line #5, pass the `**kwargs` to the inner function
+- line #6, pass the `**kwargs` to the function
+
+
+
+### Decorator with arguments
+
+To send parameter in the decorator:
+
+```python
+import functools
+def docowithargs(show=True): #1
+    def deco(func):
+        @functools.wraps(func)
+        def inner(*args, **kwargs):
+            result = func(*args, **kwargs)
+            if show: #2
+                name = func.__name__
+                arg_str = ', '.join(repr(arg) for arg in args)
+                print(f' {name}({arg_str}) -> {result!r} in the decorator')
+            return result
+        return inner   
+    return deco  #3  
+```
+
+Modify the `deco` function to pass the parameter as follows
+
+1. New decorator which wrap the `deco` function
+2. Use the argument pass in the decorator
+3. return the deco function
+
+If you run the following code:
+
+```python
+@docowithargs(show=True)
+def myfuncT(p):
+    print(f'parameter: {p}')
+
+@docowithargs(show=False)
+def myfuncF(p):
+    print(f'parameter: {p}')
+
+myfuncT(1)    
+myfuncF(2)   
+```
+
+the output is
+
+```
+parameter: 1
+ myfuncT(1) -> None in the decorator
+parameter: 2
+```
+
+
+
+
+
+
+
+
+
+[fluent]: https://www.oreilly.com/library/view/fluent-python-2nd/9781492056348 "Fluent Python 2nd Edition"
 
