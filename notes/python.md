@@ -9,7 +9,7 @@ title: Python
 {:toc}
 ## First Class Objects
 
-Python can treates function (including anonymous function `lambda`) as an object. A function that takes a function as an argument or returns a function as the result is a [higher-order function](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch07.html#idm46582448567408).
+Python can treates function (including anonymous function `lambda`) as an object. A function that takes a function as an argument or returns a function as the result is a higher-order function[^1].
 
 NOTE: In the `lambda`, the body cannot contain Python statements (eg:`while`, `try`). Assignment with `=` is also a statement, therefore it cannot be occured in a lambda. However, the new assignment expression syntax using `:=` can be used.
 
@@ -250,7 +250,11 @@ def bla(p)
 ```
 A closure is simply a function with free variables, where the bindings for all such variables are known in advance. 
 
-The *free variable* is a technical term meaning a variable that is not bound in the local scope but in the lexical scope. In Python language, all functions are closed. Therefore in the Python closures, free variables defined in the enclosing functions to access by its nested returning function. You have to use `nonlocal` keywoard instead of the `global` keyword to access the free variables from the nested function.
+The *free variable* is a technical term meaning a variable that is not bound in the local scope but in the lexical scope. In Python language, all functions are closed. Therefore in the Python closures, free variables defined in the enclosing functions to access by its nested returning function. 
+
+> lexical scope is the norm: free variables are evaluated considering the environment where the function is defined. Python does not have a program global scope, only module global scopes.
+
+You have to use `nonlocal` keywoard instead of the `global` keyword to access the free variables from the nested function.
 
 ```python
 g=10
@@ -370,7 +374,7 @@ As shown in the above code in the
 
 ### Decorator with arguments
 
-To send parameter in the decorator:
+To send parameter in the decorator[^2]:
 
 ```python
 import functools
@@ -417,6 +421,50 @@ parameter: 1
 parameter: 2
 ```
 
+### Class based decorator
+
+This is simple as follows:
+
+```python
+class classdeco:
+    def __init__(self, show=True):
+        self.show = show
+
+    def __call__(self, func):
+        def inner(*args, **kwargs):
+            result = func(*args, **kwargs)
+            if self.show: #1
+                name = func.__name__
+                arg_str = ', '.join(repr(arg) for arg in args)
+                print(f' {name}({arg_str}) -> {result!r} in the decorator')
+            return result
+        return inner 
+```
+
+It is a same `inner` function with the modification to #1 in the above code. Decorate the function as follows and call the function:
+
+```python
+@classdeco(show=False)
+def myfuncT(p):
+    print(f'parameter: {p}')
+    
+# call the function
+@classdeco(show=True)
+def myfuncT(p):
+    print(f'parameter: {p}')
+```
+
+The output is 
+
+```
+parameter: 3
+ myfuncT() -> None in the decorator
+```
+
+
+
+## Objects
+
 
 
 
@@ -427,3 +475,6 @@ parameter: 2
 
 [fluent]: https://www.oreilly.com/library/view/fluent-python-2nd/9781492056348 "Fluent Python 2nd Edition"
 
+[^1]: [higher-order function](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch07.html#idm46582448567408)
+
+[^2]: [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/#decorators-with-arguments)
