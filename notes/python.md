@@ -461,11 +461,28 @@ parameter: 3
  myfuncT() -> None in the decorator
 ```
 
+## static vs class method
+Class method expect class as a first parameter, but static method not:
 
+```python
+class MethodDeco:
+    @classmethod #1
+    def myClassMethod(*args) -> None:
+        print(args)
+    
+    @staticmethod #2
+    def myStaticMethod(*args) -> None:
+        print(args)
+```
+if upi call class method `MethodDeco.myClassMethod(1)` the output is:
+```
+(<class '__main__.MethodDeco'>, 1)
+```
+but if you call static method `MethodDeco.myStaticMethod(1)` the output is:
 
-## Objects
-
-
+```
+(1,)
+```
 
 
 
