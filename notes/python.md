@@ -474,7 +474,7 @@ class MethodDeco:
     def myStaticMethod(*args) -> None:
         print(args)
 ```
-if upi call class method `MethodDeco.myClassMethod(1)` the output is:
+if you call class method `MethodDeco.myClassMethod(1)` the output is:
 ```
 (<class '__main__.MethodDeco'>, 1)
 ```
