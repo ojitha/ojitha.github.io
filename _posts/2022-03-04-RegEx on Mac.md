@@ -437,6 +437,12 @@ Examples:
 
 > NOTE: Python support only fixed-width lookarounds. Indermine quantifiers such as `*,?,+` are not allowed.
 
+Example of Postive Lookahead where I want to remote `date_parse` and `date_format` function from the following line:
+
+```sql
+GROUP BY "date_trunc"('day', "date_parse"("date_format"(convert_timezone('Australia/Sydney', table-a.field-x), '%d/%m/%Y %H:%i:%s'), '%d/%m/%Y %H:%i:%s'))
+```
+The regular expression to find is `"date_parse"\(.*(convert_timezone.*?\)).*(?=\))` and the replacement in VSCode, is `$1`. The Postive Lookahead has been used to avoid the selection of last `)`.
 
 
 ## VSCode
@@ -446,6 +452,8 @@ You can use VSCode to capture the CSV column and modify it. For example,
 | Before                                                       | After                                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ![before run replace](/assets/images/2022-03-04-RegEx on Mac/image-20220820204018978.png) | ![after run replace](/assets/images/2022-03-04-RegEx on Mac/image-20220820204056997.png) |
+
+Look
 
 VSCode support the lookarounds as well.
 
