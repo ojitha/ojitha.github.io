@@ -10,16 +10,21 @@ In this blog, I set up a Glue docker instance in the EC2 and use the vscode Jupy
 
 <!--more-->
 
+------
+
+* TOC
+{:toc}
+------
 
 ## Docker-based environment
-First, you have to Docker on Amazon Linux as explained in the [install](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html). 
+First, you have to Docker on Amazon Linux as explained in the [install](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html){:target="_blank"}. 
 
 to start the docker service
 ```bash
 sudo service docker start
 ```
 
-Create a docker instance based on the Glue 3:
+Create a docker instance based on the Glue 3. AWS has released Glue ver 4[^1] as well:
 
 ```bash
 docker run -it -v ~/.aws:/home/glue_user/.aws -v "$(pwd)":/home/glue_user/workspace/jupyter_workspace/ -e AWS_PROFILE=$PROFILE_NAME -e DISABLE_SSL=true --rm -p 4040:4040 -p 8888:8888 --name glue_pyspark amazon/aws-glue-libs:glue_libs_3.0.0_image_01
@@ -578,3 +583,7 @@ Resources:
       Roles: 
         - Ref: "RootRole"
 ```
+
+**References**
+
+[^1]: [PySpark environment for the Postgres database](https://ojitha.blogspot.com/2022/02/pyspark-environment-for-postgres.html){:target="_blank"}
