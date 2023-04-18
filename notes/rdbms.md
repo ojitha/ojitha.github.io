@@ -29,9 +29,26 @@ ORDER BY    TableName
             ,ColumnName;
 ```
 
+## Athena
+
+### Dates
+
+Use the function `date_parse` to convert formated string to time stamp:
+
+```sql
+select * from cte 
+where date_parse("issue-date",'%Y%m%d') >  from_iso8601_date('2023-04-17') and date_parse("issue-date",'%Y%m%d') <  from_iso8601_date('2023-04-19')
+and  "account-no" in (...) order by "account-no";
+```
+
+NOTE: The column `issue-date` is a string type.
+In the above code use the function `from_iso8601_date` to create timestamp from the string.
+
 ## Redshift
 
-Date functions:
+### Date 
+
+functions:
 
 ```sql
 -- Simple example
@@ -49,4 +66,11 @@ select date_part('year',dateadd('month', 1, current_timestamp AT TIME ZONE 'UTC'
 
 -- create formatted string from the date
 select to_char(current_timestamp AT TIME ZONE 'UTC', 'yyyymmdd')
+```
+
+In the following example, the field `issue-date` is varchar type. To convert varchar to date, use the `convert` function.
+  
+```sql
+select * from "schema"."ViewOrTable"
+where convert(TIMESTAMP ,"issue-date") >  date '2023-04-17' and convert(TIMESTAMP ,"issue-date") <  date '2023-04-19' 
 ```
