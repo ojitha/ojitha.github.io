@@ -311,7 +311,7 @@ aws emr create-cluster \
  --log-uri "s3n://<provide s3bucket prefix>-oj-temp/emr/logs/" \
  --release-label "emr-6.3.1" \
  --service-role "EMR_DefaultRole" \
- --ec2-attributes '{"InstanceProfile":"EMR_EC2_DefaultRole","EmrManagedMasterSecurityGroup":"sg-<provide group-id>","EmrManagedSlaveSecurityGroup":"sg-<provide group-id>","KeyName":"oj-public-key","AdditionalMasterSecurityGroups":[],"AdditionalSlaveSecurityGroups":[],"ServiceAccessSecurityGroup":"sg-<provide group-id>","SubnetId":"subnet-<provide subnet-id>"}' \
+ --ec2-attributes '{"InstanceProfile":"EMR_EC2_DefaultRole","EmrManagedMasterSecurityGroup":"sg-<provide Master group id for Elastic MapReduce>","EmrManagedSlaveSecurityGroup":"sg-<provide Slave group id for Elastic MapReduce>","KeyName":"oj-public-key","AdditionalMasterSecurityGroups":[],"AdditionalSlaveSecurityGroups":[],"ServiceAccessSecurityGroup":"sg-<provide Service access group id for Elastic MapReduce>","SubnetId":"subnet-<provide subnet-id>"}' \
  --applications Name=Hadoop Name=JupyterEnterpriseGateway Name=Spark Name=Ganglia Name=Zeppelin Name=Livy \
  --configurations '[{"Classification":"spark-hive-site","Properties":{"hive.metastore.client.factory.class":"com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"}}]' \
  --instance-groups '[{"InstanceCount":1,"InstanceGroupType":"MASTER","Name":"Master - 1","InstanceType":"m5.xlarge","EbsConfiguration":{"EbsBlockDeviceConfigs":[{"VolumeSpecification":{"VolumeType":"gp2","SizeInGB":32},"VolumesPerInstance":2}]}},{"InstanceCount":1,"InstanceGroupType":"CORE","Name":"Core - 2","InstanceType":"m5.xlarge","EbsConfiguration":{"EbsBlockDeviceConfigs":[{"VolumeSpecification":{"VolumeType":"gp2","SizeInGB":32},"VolumesPerInstance":2}]}}]' \
