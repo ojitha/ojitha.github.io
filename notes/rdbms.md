@@ -7,7 +7,7 @@ title: RDBMS
 * TOC
 {:toc}
 
-### H2 Database
+## H2 Database
 
 For testing use the following to run in the watch expression:
 
@@ -17,77 +17,6 @@ org.h2.tools.Server.startWebServer(this.jdbcTemplate.getDataSource().getConnecti
 
 if you need to run in the browser(start browser: **java -cp h2-1.4.193.jar org.h2.tools.Console -web -browser**) use the **jdbc:h2:mem:dataSourc**e as connection url for Spring testing.
 
-##Tomcat
-
-Configure the tomcat for CAS
-
-```xml
-    <Connector port="8443" 
-	   protocol="org.apache.coyote.http11.Http11NioProtocol" 
-	   SSLEnabled="true"
-           maxThreads="150" scheme="https" secure="true"
-           clientAuth="false" sslProtocol="TLS"
-	   allowTrace="true" 
-    	   keystoreFile="conf/abc-keys/keystore.jks" 
-    	   keystorePass="<key-password>" 
-    	   truststoreFile="conf/abc-keys/truststore.jks"
-    	   URIEncoding="UTF-8" useBodyEncodingForURI="true"/>
-```
-
-Add the above code to the server.xml file before the `<Connector port="8009" protocol...` statement.
-
-Install apahce web server
-
-```bash
-sudo yum install httpd -y
-```
-
-Start the service
-
-```bash
-sudo service httpd start
-```
-
-Configure to start every time:
-
-```bash
-sudo chkconfig httpd on
-```
-
-Show the disk volumes
-
-```bash
-lsblk
-```
-
-check the data in the volume:
-
-```bash
-sudo file -s /dev/xvdf
-```
-
-format the before mount the volume:
-
-```bash
-sudo mkfs -t ext4 /dev/xvdf
-```
-
-Now mount the volume:
-
-```bash
-#first create myfileserver
-cd /
-sudo mkdir myfileserver
-
-#then mount
-sudo mount /dev/xvdf /myfileserver
-```
-
-Unmount as a root:
-
-```bash
-umount /dev/xvdf
-```
 
 ## MS SQL
 Find all the tables where column is exists:
@@ -99,6 +28,25 @@ WHERE       COLUMN_NAME = 'Contact_Id'
 ORDER BY    TableName
             ,ColumnName;
 ```
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMjM4MzM1ODksLTU3NzA4OTk3Nl19
--->
+
+## Redshift
+
+Date functions:
+
+```sql
+-- Simple example
+select convert_timezone('Australia/Sydney', TIMESTAMP '2023-04-18 06:05:00.170 UTC')
+
+-- How to convert UTC current time to AU
+select convert_timezone('Australia/Sydney', current_timestamp AT TIME ZONE 'UTC')
+
+-- get month of the date
+select date_part('month', convert_timezone('Australia/Sydney', current_timestamp AT TIME ZONE 'UTC'))
+select dateadd('month',1,  current_timestamp AT TIME ZONE 'UTC')
+
+-- get year only
+select date_part('year',dateadd('month', 1, current_timestamp AT TIME ZONE 'UTC'))
+
+-- create formatted string from the date
+select to_char(current_timestamp AT TIME ZONE 'UTC', 'yyyymmdd')
+```
