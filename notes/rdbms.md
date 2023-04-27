@@ -44,6 +44,16 @@ and  "account-no" in (...) order by "account-no";
 NOTE: The column `issue-date` is a string type.
 In the above code use the function `from_iso8601_date` to create timestamp from the string.
 
+### Athena to date example
+
+```sql
+select * from table1 
+where  "Account ID" in ('1000','1100') 
+and year(date_parse("my date/time", '%d/%m/%Y %H:%i:%s')) > 2021 
+and month(date_parse("my date/time", '%d/%m/%Y %H:%i:%s')) = 7
+order by "Account ID", ...
+```
+
 ## Redshift
 
 ### Date 
@@ -73,4 +83,14 @@ In the following example, the field `issue-date` is varchar type. To convert var
 ```sql
 select * from "schema"."ViewOrTable"
 where convert(TIMESTAMP ,"issue-date") >  date '2023-04-17' and convert(TIMESTAMP ,"issue-date") <  date '2023-04-19' 
+```
+
+### Redshift to date example
+
+```sql
+SELECT *  FROM table 
+where  "Account ID" in (1000,1100) 
+and DATE_PART_YEAR(TO_DATE("my date/time", 'dd/mm/yyyy HH24:MI:SS')) > 2021 
+and DATE_PART(month, TO_DATE("my date/time", 'dd/mm/yyyy HH24:MI:SS')) = 7
+order by "Account ID", ...
 ```
