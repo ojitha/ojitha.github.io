@@ -237,6 +237,26 @@ This can be replace using `foldr` as follows:
 myproduct n = foldr (*) 1 n
 ```
 
+Another example:
 
+To insert value to sorted list:
+
+```haskell
+insertNum x [] = [x] 
+insertNum x (y:ys) = if x <= y then x:y:ys else y: insertNum x ys
+```
+
+For inserstion sort
+
+```haskell
+isort [] = []
+isort (x:xs) = insertNum x (isort xs)
+```
+
+Above insertion sort can be rewritten as:
+
+```haskell
+isort xs = foldr insertNum [] xs
+```
 
 
