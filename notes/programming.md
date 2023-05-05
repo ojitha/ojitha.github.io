@@ -222,8 +222,20 @@ storage:
       dir: examples
 ```
 
+## Haskell
 
+You can write the basic recursive product of list elements as follows:
 
+```haskell
+myproduct [] = 1
+myproduct (n:ns) = n * myproduct ns
+```
+
+This can be replace using `foldr` as follows:
+
+```haskell
+myproduct n = foldr (*) 1 n
+```
 
 
 
