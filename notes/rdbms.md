@@ -94,3 +94,10 @@ and DATE_PART_YEAR(TO_DATE("my date/time", 'dd/mm/yyyy HH24:MI:SS')) > 2021
 and DATE_PART(month, TO_DATE("my date/time", 'dd/mm/yyyy HH24:MI:SS')) = 7
 order by "Account ID", ...
 ```
+
+To truncate:
+
+```
+SELECT * FROM table 
+where date_trunc('day', "x date") = DATE '2023-02-01';
+```
