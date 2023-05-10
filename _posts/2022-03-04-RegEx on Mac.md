@@ -481,6 +481,63 @@ echo 'Hello ojitha' | sed 's/oj.*/(&)/g'
 Hello (ojitha)
 ```
 
+## Merge multiple lines to group of lines
+For example you want to couple two lines to one line int he following text:
+
+```
+11111,
+22222,
+33333,
+44444,
+55555,
+66666,
+77777,
+88888,
+99999,
+```
+
+You have to follow 3 steps in the visual studio code
+
+1. search regex: `(^(\d+,\n){2})` and replace regex: `--$1--`
+
+```--11111,
+22222,
+----33333,
+44444,
+----55555,
+66666,
+----77777,
+88888,
+--99999,
+
+```
+
+In the above code, 2 lines are selected to compose as one a line.
+
+2. search regx: `\n` and replace regex: empty
+
+```
+--11111,22222,----33333,44444,----55555,66666,----77777,88888,--99999,
+```
+
+3. search regex: `----` and replace regex: `\n`
+
+```
+--11111,22222,
+33333,44444,
+55555,66666,
+77777,88888,--99999,
+```
+
+4. search : `--` and replace: empty
+
+```
+11111,22222,
+33333,44444,
+55555,66666,
+77777,88888,99999,
+```
+
 
 
 [^1]: Download The Folger Shakespeare – [Complete Set](https://shakespeare.folger.edu/download-the-folger-shakespeare-complete-set/)
