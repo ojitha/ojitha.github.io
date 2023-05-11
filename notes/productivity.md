@@ -266,4 +266,20 @@ bundle exec jekyll serve
 
 7. Now run the Jekyll if not started
 
-## 
+## CSVKit
+
+Create a docker bases Postgres Docker container first. The default port is 5432.
+To import CSV file to postgres test database:
+
+```bash
+csvsql --db postgresql://postgres:ojitha@localhost/test --insert data.csv
+```
+NOTE: Table will be created as test.public.data.
+
+You can query the table:
+
+```sql
+SELECT * FROM test.public.data
+where "invoice_no" in (....)
+order by "invoice_no";
+```
