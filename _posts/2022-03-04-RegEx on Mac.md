@@ -18,7 +18,7 @@ As I understood, RegExs are very useful for general work. Most of the following 
 
 ## macOS grep or ggrep
 
-For the MacOs, the default `grep` (FreeBSD version) is very limited. You cannot run all the bash commands expressed in this blog post using the MacOs standard `grep` command. There for install the grep from the home-brew:
+For the MacOs, the default `grep` (FreeBSD version) is very limited. You cannot run all the bash commands expressed in this blog post using the MacOs standard `grep` command. Therefore install the grep from the home-brew:
 
 ```bash
 brew install grep
@@ -30,7 +30,7 @@ and use the command `ggrep` instead of `grep`. For the help
 ggrep --help
 ```
 
-
+NOTE: The improved grep is `ggrep`.
 
 For testing purposes, download the texts of Shakespeare[^1] as a zip file after you extract the zip file.
 
@@ -96,6 +96,8 @@ To show the lines do not match (negative of the above), use `v` option:
 egrep --color -v -i -f search_keywords.txt hamlet_TXT_FolgerShakespeare.txt
 ```
 
+
+
 ## Character Class
 
 You can create complex search key expressions using a class of characters. To create a character class, use the `[]` in the search. For example
@@ -132,6 +134,8 @@ echo 'Hello Ojitha 1234' | grep --color -i '\D'
 ![Generic character class example](/assets/images/Generic character class example.png)
 
 Only the words are selected.
+
+![Select only the part of the searching word](/assets/images/2022-03-04-RegEx on Mac/Select only the part of the searching word.jpg)
 
 ### Posix Character Classes
 
@@ -171,11 +175,15 @@ Or
 ggrep --color -P  '[[:upper:]]' hamlet_TXT_FolgerShakespeare.txt
 ```
 
+another example to search 12 and non other digits:
 
+![not numbers except 1 and 2](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-13 at 21.29.33@2x.jpg)
 
 ## Quantifiers
 
 In the regex expression, we want to quantify how many characters we want to match, for example.
+
+
 
 | Quantifier | Description       |
 | ---------- | ----------------- |
@@ -210,6 +218,14 @@ echo 'my 20 Birtday party @ Bay' |grep --color -E '[[:upper:]]{1}'
 output is 
 
 ![Use Quntifiers with Posix classes](/assets/images/Use Quntifiers with Posix classes.png)
+
+See the following example:
+
+![Quantifiers are greedy](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-13 at 21.59.50@2x.jpg)
+
+Quantifiers are greedy, the consume as much as they can.
+
+
 
 ### Inline Modifiers
 
@@ -251,6 +267,22 @@ How are you' | ggrep --color -Pz '(?xs) ^Hello .* '
 ![image-20220305162321037](/assets/images/image-20220305162321037.png)
 
 All the lines are selected because `\n` new line has been tread as another character in the single line(`s`) mode.
+
+example of embedding white space
+
+![Embedding whitespace](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-13 at 22.14.36@2x.jpg)
+
+In the above regex the whitespace to search is given as `\x20`.
+
+![Multi-line as single line](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-13 at 22.34.18@2x.jpg)
+
+In the above regex, the new line is treated as `\n` because `s` treated the two lines as an one line.
+
+if you use `m` instad of `s`:
+
+![Search in the multi-lines](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-13 at 22.35.38@2x.jpg)
+
+
 
 ### Bounding
 
@@ -315,6 +347,43 @@ and any other ...' | ggrep -P --color '^(I|and)'
 ```
 
 ![alternation with group](/assets/images/image-20220305233313620.png)
+
+### Lazy Quantifiers
+
+Not going to consume greedy but minimally.
+
+| Quntifier | Description                            |
+| --------- | -------------------------------------- |
+| `*?`      | zero or more minimal                   |
+| `+?`      | one or more minimal                    |
+| `??`      | zero or one minimal                    |
+| `{n}?`    | n times minimal (n is numeric)         |
+| `{n,}?`   | n times or more minimal (n is numeric) |
+| `{n,m}?`  | n through m minimal (n is numeric)     |
+
+As shown in the following screenshot, the first regex greedly consume and match the first letter a to last letter t. In the second regex, it matches the first and up to the closest letter t. 
+
+![Lazy select closest](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-14 at 13.20.12@2x.jpg)
+
+In the first grep command there is only one mactch. In the second, there are two maches: 'azy is import' and 'ant'.
+
+For example see the difference in the outputs when you apply lazy quantifier:
+
+![Lazy Quantifier example -1 ](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-14 at 13.01.35@2x.jpg)
+
+another example:
+
+![Lazy Quantifier example -2](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-14 at 13.07.11@2x-4033706.jpg)
+
+### Possessive Quantifier
+
+| Quantifier | Description             |
+| ---------- | ----------------------- |
+| `*+`       | zero or more possessive |
+| `++`       | one or more possessive  |
+| ?+         | zero or one possessive  |
+
+
 
 ## Capture
 
@@ -415,7 +484,9 @@ sed -E 's/([a-z]*) (\d*)/text: \1, digits: \2/'
 text: hello, digits: 123
 ```
 
+For example, non capture using perl:
 
+![first group is non capture](/assets/images/2022-03-04-RegEx on Mac/CleanShot 2023-05-14 at 12.38.53@2x.jpg)
 
 ## Lookarounds
 
