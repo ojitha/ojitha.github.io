@@ -101,3 +101,29 @@ To truncate:
 SELECT * FROM table 
 where date_trunc('day', "x date") = DATE '2023-02-01';
 ```
+
+### User handling
+
+To see the user sessions:
+
+```sql
+select * from svv_transactions order by txn_start desc;
+-- kill the pid
+select pg_terminate_backend(1073955175);
+```
+
+you can find the users grant roles
+
+```sql
+-- user grants
+select * from svv_user_grants;
+-- if you set the current session to a role 
+set SESSION AUTHORIZATION ...
+```
+
+To find the [masking policies](https://www.youtube.com/watch?v=jXYoxRxEpOU)
+
+```sql
+-- all the masking policies
+select * from svv_attached_masking_policy;
+```
