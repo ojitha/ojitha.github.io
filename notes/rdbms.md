@@ -127,3 +127,32 @@ To find the [masking policies](https://www.youtube.com/watch?v=jXYoxRxEpOU)
 -- all the masking policies
 select * from svv_attached_masking_policy;
 ```
+
+### Query optimisation
+Find the latest query by user
+
+```sql
+SELECT * from stl_query q where q.userid=102 order by q.starttime desc;
+```
+or from the query column you can find the query id: 
+
+```sql
+select *
+from svl_qlog
+where userid = 102
+order by query
+desc limit 20;
+```
+
+After find the query id from the above, find the query summary details
+
+```sql
+select * from SVL_QUERY_SUMMARY s 
+where s.query = 42379953 order by s.maxtime desc;
+```
+
+or 
+
+```sql
+Select segment, step, event, solution from stl_alert_event_log where query in (	43052982,43055809,43055811) order by segment, step
+```
