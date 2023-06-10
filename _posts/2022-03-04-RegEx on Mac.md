@@ -6,7 +6,7 @@ categories: [RegEx]
 ---
 
 
-As I understood, RegExs are very useful for general work. Most of the following regular expressions (RegEx)s can be run on the MacOs terminal, where you can get the great value of command line tools that have no value without RegExs (`grep`, `sed` and so on). In addition, I've used some popular tools to explain complex operations later in the document, which has been referenced under the footnotes.
+As I understood, RegExs are very useful for general work. Most of the following regular expressions (RegEx)s can be run on the macOS terminal, where you can get the great value of command line tools that have no value without RegExs (`grep`, `sed` and so on). In addition, I've used some popular tools to explain complex operations later in the document, which have been referenced under the footnotes.
 
 <!--more-->
 
@@ -14,11 +14,13 @@ As I understood, RegExs are very useful for general work. Most of the following 
 
 * TOC
 {:toc}
+
+
 ------
 
 ## macOS grep or ggrep
 
-For the MacOs, the default `grep` (FreeBSD version) is very limited. You cannot run all the bash commands expressed in this blog post using the MacOs standard `grep` command. Therefore install the grep from the home-brew:
+For the macOS, the default `grep` (FreeBSD version) is minimal. Using the macOS standard grep command, you cannot run all the bash commands expressed in this blog post. Therefore install the grep from the homebrew:
 
 ```bash
 brew install grep
@@ -66,7 +68,7 @@ egrep --color 'the|is' hamlet_TXT_FolgerShakespeare.txt
 
 ![multiple words in the search](/assets/images/multiple words in the search.png)
 
-For case insensitive match, use the `-i` option
+For case insensitive matches, use the `-i` option.
 
 ```bash
 egrep --color -i 'england' hamlet_TXT_FolgerShakespeare.txt
@@ -377,6 +379,8 @@ another example:
 
 ### Possessive Quantifier
 
+Possessive quantifiers are like normally greedy quantifiers, the important difference is that the possessive quantifiers do not backtrack (go back) unlike greedy quantifiers.
+
 | Quantifier | Description             |
 | ---------- | ----------------------- |
 | `*+`       | zero or more possessive |
@@ -606,3 +610,4 @@ In the above code, 2 lines are selected to compose as an one line.
 [^3]: [regexper visualizer](https://regexper.com/){:target="_blank"}
 [^4]: [regex101 editor](https://regex101.com/){:target="_blank"}
 [^5]: [jex visualizer](https://jex.im/regulex){:target="_blank"}
+[^6]: [Guide To Regular Expressions](https://blog.robertelder.org/regular-expressions/){:target="_blank"}

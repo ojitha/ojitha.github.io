@@ -6,7 +6,7 @@ categories: [Haskell]
 maths: true
 ---
 
-This is a short description of lambda calculus. Lambda calculus is the smallest programming language that is capable of variable substitution and a single function definition scheme. Haskell is the functional programming language based on lambda calculus which I am going to explore. I already explained how to use [VSCode for Haskell Development](https://ojitha.blogspot.com/2023/04/vscode-for-haskell-development.html){:target="_blank"} to support the code listed here.
+This is a short description of lambda calculus. Lambda calculus is the smallest programming language that is capable of variable substitution and a single function definition scheme. Haskell is the functional programming language based on lambda calculus, which I will explore. I already explained how to use [VSCode for Haskell Development](https://ojitha.blogspot.com/2023/04/vscode-for-haskell-development.html){:target="_blank"} to support the code listed here.
 
 <!--more-->
 
@@ -18,9 +18,9 @@ This is a short description of lambda calculus. Lambda calculus is the smallest 
 
 ## Introduction
 
-The $$\lambda$$ calculus was introduced in 1930 by Alonzo Church, who was the instructor to Alan Tuning, who invented the Turing machine. However, $$\lambda$$ calculus is more related to software[^1] than machine than Turing machine because it doesn't care about the implementation facts.
+The $$\lambda$$ calculus was introduced in 1930 by Alonzo Church, the instructor of Alan Tuning, who invented the Turing machine. However, $$\lambda$$ calculus is more related to software[^1] than machine than Turing machine because it doesn't care about the implementation facts.
 
-In the $$\lambda$$ calculus, all variables are local to the definition. In the function $$\lambda x.x$$ x is **bound variable** because it is in the body of the definition. A variable not preceded by a $$\lambda$$ is called a **free variable** in the expression, such as $$\lambda x.xy$$.
+In the $$\lambda$$ calculus, all variables are local to the definition. In the function $$\lambda x.x$$ x is a **bound variable** because it is in the body of the definition. A variable not preceded by a $$\lambda$$ is called a **free variable** in the expression, such as $$\lambda x.xy$$.
 
  
 

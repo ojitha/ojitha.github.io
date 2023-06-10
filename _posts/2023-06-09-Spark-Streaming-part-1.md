@@ -2,14 +2,14 @@
 layout: post
 title:  Spark Streaming Basics 
 date:   2023-06-09
-categories: [Spark]
+categories: [Apache Spark]
 ---
 
 
 
 This is a very basic example created to explain Spark streaming. Spark run on the AWS Glue container locally.
 
-<!-- more -->
+<!--more-->
 
 There is plenty of information on Spark streaming. My objective is to provide a running example with a very simple approach.
 
@@ -97,6 +97,6 @@ outDF.awaitTermination()
 
 When you type the text into the Netcat, the text will be saved in the file in the folder given in line #11.
 
-![Save the stream to text file](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-06-09-Spark-Streaming-part-1/save_stream2file.jpg)
+![Save the stream to text file](/assets/images/2023-06-09-Spark-Streaming-part-1/save_stream2file.jpg)
 
 You have to interrupt the notebook to stop forcefully.
