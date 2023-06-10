@@ -40,6 +40,24 @@ networks:
 
 To generate text, I use the Netcat application, which is well-known in Unix. As shown in line #9, if you uncomment the line, you should have Netcat in your local machine and comment the lines 17 to 20.
 
+The Dockerfile:
+
+```dockerfile
+FROM public.ecr.aws/glue/aws-glue-libs:glue_libs_3.0.0_image_01
+WORKDIR /home/glue_user/workspace/jupyter_workspace
+ENV DISABLE_SSL=true
+RUN python3 -m pip install --upgrade pip
+RUN pip3 install pyathena
+RUN pip3 install awswrangler
+RUN pip3 install pydeequ
+RUN pip3 install ipython-sql
+RUN pip3 install pg8000
+
+CMD [ "./start.sh" ]
+```
+
+
+
 To install Netcat in the Docker container:
 
 
