@@ -2,16 +2,16 @@
 layout: post
 title:  Spark to create table in AWS Redshift
 date:   2023-06-09
-categories: [AWS,Redshift, Apache Spark]
+categories: [AWS, Redshift, Apache Spark]
 ---
 
-In this post, Spark read the data from a CSV file to a DateFrame and save that DataFrame as a Redshift table.
+In this post, Spark reads the data from a CSV file to a DateFrame and saves that DataFrame as a Redshift table.
 
 <!--more-->
 
-This example has been ran in the Jupyter notebook. 
+This example has run in the Jupyter Notebook. 
 
-Configure the Redhsift JDBC driver and Spark Redshift dirver.
+Configure the Redshift JDBC driver and Spark Redshift JDBC driver.
 
 ```python
 %%configure -f
@@ -22,7 +22,7 @@ Configure the Redhsift JDBC driver and Spark Redshift dirver.
 }
 ```
 
-As ususal create Spark session
+As usual, create Spark session
 
 ```python
 from pyspark.sql import SparkSession
@@ -41,7 +41,7 @@ url = "jdbc:redshift://<redshift-database...>.<tt...>.ap-southeast-2.redshift.am
 
 Please specify the database name at the end of the URL.
 
-Create the Schema for the table
+Create the Schema for the table.
 
 ```python
 from pyspark.sql.types import StructType, StructField, DateType, DecimalType, StringType
@@ -55,7 +55,7 @@ tbl_retail_sales = StructType([
 )
 ```
 
-Above schem is create for the us_retail_sales.csv[^1] file to read.
+The above schema is created for the us_retail_sales.csv[^1] file to read.
 
 ```python
 df = spark.read.option("header", True).schema(tbl_retail_sales).csv("test1.csv")
@@ -63,7 +63,7 @@ df = spark.read.option("header", True).schema(tbl_retail_sales).csv("test1.csv")
 df.printSchema()
 ```
 
-The most important step wanted to hilighted in this post is create a table in the <database> specified above.
+The most crucial step this post highlights is creating a table in the `<database>` specified above.
 
 ```python
 df.write \
@@ -79,7 +79,7 @@ df.write \
 
 Above table will be created as <database>.public.retail_sales.
 
-To read the Redhsift table
+To read the Redshift table
 
 ```python
 # Read data from a table
@@ -103,4 +103,4 @@ df_tbl.show(5)
 
 References:
 
-[^1]: [](https://github.com/cathytanimura/sql_book/tree/master/Chapter%203:%20Time%20Series%20Analysis)
+[^1]: [SQL for Data Analysis](https://github.com/cathytanimura/sql_book/tree/master/Chapter%203:%20Time%20Series%20Analysis)
