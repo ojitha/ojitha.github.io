@@ -7,6 +7,8 @@ categories: [AWS, Redshift, Apache Spark]
 
 In this post, Spark reads the data from a CSV file to a DateFrame and saves that DataFrame as a Redshift table.
 
+![CleanShot 2023-06-13 at 19.54.14@2x](/assets/images/2023-06-10-Spark2Redshift/Spark2Redshift.jpg)
+
 <!--more-->
 
 This example has run in the Jupyter Notebook. 
