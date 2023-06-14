@@ -9,6 +9,8 @@ In this post, Spark reads the data from a CSV file to a DateFrame and saves that
 
 ![Spark to Redshift](/assets/images/2023-06-10-Spark2Redshift/Spark2Redshift.jpg)
 
+In addition to that, I've explained how to create a table in Postgres, use Jupyter magics and plot a diagram.
+
 <!--more-->
 
 ------
@@ -32,7 +34,7 @@ Configure the Redshift JDBC driver and Spark Redshift JDBC driver.
 }
 ```
 
-As usual, create a Spark session
+As usual, create a Spark session.
 
 ```python
 from pyspark.sql import SparkSession
@@ -142,9 +144,9 @@ and Dockerfile:
 FROM postgres:13.4
 ```
 
-In my *Spark Streaming Basics*[^3] post, I've already explained how to create Docker AWS Glue container to host Juputer notebooks and how to create shared network `ojnw-1`.
+In my *Spark Streaming Basics*[^3] post, I've already explained how to create a Docker AWS Glue container to host Juputer notebooks and how to create a shared network `ojnw-1`.
 
-Here is the code to insert data to Postgres:
+Here is the code to insert data into Postgres:
 
 ```python
 from pyspark.sql import SparkSession
@@ -178,20 +180,20 @@ df.write.format("jdbc") \
 spark.stop()
 ```
 
-You have to download Postgress JDBC driver[^2] and configure as shown in the line #6.
+You have to download the Postgres JDBC driver[^2] and configure it, as shown in line #6.
 
-## Quering
+## Querying
 
-Uisng Jupyter notebooks you can query the database:
+Using Jupyter Notebooks, you can query the database:
 
 ```python
 %%sql postgresql+pg8000://postgres:ojitha@postgres_db:5432/sales
 select * from retail_sales limit 10;
 ```
 
-Here `postgres_db` is Docker service name.
+Here `postgres_db` is the Docker service name.
 
-In the next cell, run the sql query and get the `sql.run.ResultSet` result:
+In the next cell, run the SQL query and get the `sql.run.ResultSet` result:
 
 ```python
 %%sql result <<
@@ -229,7 +231,7 @@ df.info()
 
 ## Graph
 
-You can plot the graph from the Dataframe:
+You can plot the graph from the data frame:
 
 ```python
 %matplotlib inline
@@ -237,7 +239,7 @@ import matplotlib.pyplot as plt
 df.plot(kind='line', y=['womens_sales','mens_sales'], subplots=False)
 ```
 
-You can use Jupyter matplotlib macgic to plot following diagram.
+You can use Jupyter matplotlib magic to plot the following diagram.
 
 ![plot using dataffame](/assets/images/2023-06-10-Spark2Redshift/plot using dataffame.png)
 
