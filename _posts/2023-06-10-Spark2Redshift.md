@@ -142,7 +142,7 @@ and Dockerfile:
 FROM postgres:13.4
 ```
 
-In my [previous]({%post_url 2023-06-09-Spark-Streaming-part-2%}) post I've already explained how to create Docker AWS Glue container to host Juputer notebooks and how to create shared network `ojnw-1`.
+In my *Spark Streaming Basics*[^3] post, I've already explained how to create Docker AWS Glue container to host Juputer notebooks and how to create shared network `ojnw-1`.
 
 Here is the code to insert data to Postgres:
 
@@ -210,7 +210,7 @@ order by 1
 ;
 ```
 
-Convert above result to Pandas Dataframe:
+Convert above query[^4] result to Pandas Dataframe:
 
 ```pyth
 df = result.DataFrame()
@@ -245,3 +245,5 @@ References:
 
 [^1]: [SQL for Data Analysis](https://github.com/cathytanimura/sql_book/tree/master/Chapter%203:%20Time%20Series%20Analysis)
 [^2]:[Postgress JDBC Driver](https://jdbc.postgresql.org/download/)
+[^3]: [Spark Streaming Basics]({%post_url 2023-06-10-Spark2Redshift%})
+[^4]: SQL for Data Analysis, Cathy Tanimura
