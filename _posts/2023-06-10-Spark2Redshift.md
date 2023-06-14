@@ -239,7 +239,7 @@ df.plot(kind='line', y=['womens_sales','mens_sales'], subplots=False)
 
 You can use Jupyter matplotlib macgic to plot following diagram.
 
-![plot using dataffame](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-06-10-Spark2Redshift/plot using dataffame.png)
+![plot using dataffame](/assets/images/2023-06-10-Spark2Redshift/plot using dataffame.png)
 
 References:
 
