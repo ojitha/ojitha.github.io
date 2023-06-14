@@ -112,9 +112,39 @@ df_tbl.show(5)
 
 ## Postgres
 
+Create the Postgress Docker container first. Here the docker-compose.yml
+
+```yaml
+version: '3.3'
+services:
+  postgres_db:
+    container_name: postgres
+    build: .
+    volumes:
+      - /home/ojitha/workspace/postgres/data:/var/lib/postgresql/data
+    privileged: true
+    # network_mode: host
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: "ojitha"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "dvdrental"
+networks: 
+  default: 
+    external: 
+      name: ojnw-1
+```
+
+and Dockerfile:
+
+```dockerfile
+FROM postgres:13.4
+```
+
+In my [previous]({%post_url 2023-06-09-Spark-Streaming-part-2%}) post I've already explained how to create Docker AWS Glue container to host Juputer notebooks and how to create shared network `ojnw-1`.
+
 Here is the code to insert data to Postgres:
-
-
 
 ```python
 from pyspark.sql import SparkSession
@@ -148,8 +178,68 @@ df.write.format("jdbc") \
 spark.stop()
 ```
 
+You have to download Postgress JDBC driver[^2] and configure as shown in the line #6.
 
+## Quering
+
+Uisng Jupyter notebooks you can query the database:
+
+```python
+%%sql postgresql+pg8000://postgres:ojitha@postgres_db:5432/sales
+select * from retail_sales limit 10;
+```
+
+Here `postgres_db` is Docker service name.
+
+In the next cell, run the sql query and get the `sql.run.ResultSet` result:
+
+```python
+%%sql result <<
+SELECT date_part('year',sales_month) as sales_year
+,sum(case when kind_of_business = 'Women''s clothing stores' 
+          then sales 
+          end) as womens_sales
+,sum(case when kind_of_business = 'Men''s clothing stores' 
+          then sales 
+          end) as mens_sales
+FROM retail_sales
+WHERE kind_of_business in ('Men''s clothing stores'
+ ,'Women''s clothing stores')
+GROUP BY 1
+order by 1
+;
+```
+
+Convert above result to Pandas Dataframe:
+
+```pyth
+df = result.DataFrame()
+```
+
+Convert object types to integer or numeric types:
+
+```python
+df["sales_year"] = df["sales_year"].astype('int')
+df["womens_sales"] = df["womens_sales"].astype('int')
+df["mens_sales"] = df["mens_sales"].astype('int')
+df.set_index('sales_year', inplace=True)
+
+df.info()
+```
+
+You can plot the graph from the Dataframe:
+
+```python
+%matplotlib inline
+import matplotlib.pyplot as plt
+df.plot(kind='line', y=['womens_sales','mens_sales'], subplots=False)
+```
+
+You can use Jupyter matplotlib macgic to plot following diagram.
+
+![plot using dataffame](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-06-10-Spark2Redshift/plot using dataffame.png)
 
 References:
 
 [^1]: [SQL for Data Analysis](https://github.com/cathytanimura/sql_book/tree/master/Chapter%203:%20Time%20Series%20Analysis)
+[^2]:[Postgress JDBC Driver](https://jdbc.postgresql.org/download/)
