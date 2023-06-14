@@ -52,7 +52,7 @@ networks:
       name: ojnw-1
 ```
 
-In the above file, line# 24, instead of `localhost, must be replaced by the broker. In addition to that, it is important to notice that both the Glue container (Spark) and Kafka container share the same network, `ojnw-1`. You need to create this network in your host:
+In the above file, line# 24, instead of `localhost`, must be replaced by the broker. In addition to that, it is important to notice that both the Glue container (Spark) and Kafka container share the same network, `ojnw-1`. You need to create this network in your host:
 
 ```bash
 # to create

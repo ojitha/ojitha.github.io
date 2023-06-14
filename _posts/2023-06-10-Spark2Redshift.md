@@ -227,6 +227,8 @@ df.set_index('sales_year', inplace=True)
 df.info()
 ```
 
+## Graph
+
 You can plot the graph from the Dataframe:
 
 ```python
