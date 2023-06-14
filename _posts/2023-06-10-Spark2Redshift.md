@@ -1,17 +1,25 @@
 ---
 layout: post
-title:  Spark to create table in AWS Redshift
-date:   2023-06-09
+title:  Spark to create a table in AWS Redshift
+date:   2023-06-13
 categories: [AWS, Redshift, Apache Spark]
 ---
 
 In this post, Spark reads the data from a CSV file to a DateFrame and saves that DataFrame as a Redshift table.
 
-![CleanShot 2023-06-13 at 19.54.14@2x](/assets/images/2023-06-10-Spark2Redshift/Spark2Redshift.jpg)
+![Spark to Redshift](/assets/images/2023-06-10-Spark2Redshift/Spark2Redshift.jpg)
 
 <!--more-->
 
+------
+
+* TOC
+{:toc}
+------
+
 This example has run in the Jupyter Notebook. 
+
+## Redshift
 
 Configure the Redshift JDBC driver and Spark Redshift JDBC driver.
 
@@ -24,7 +32,7 @@ Configure the Redshift JDBC driver and Spark Redshift JDBC driver.
 }
 ```
 
-As usual, create Spark session
+As usual, create a Spark session
 
 ```python
 from pyspark.sql import SparkSession
@@ -101,6 +109,45 @@ You can verify with
 ```python
 df_tbl.show(5)
 ```
+
+## Postgres
+
+Here is the code to insert data to Postgres:
+
+
+
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+        .appName("connectToPostgres") \
+        .enableHiveSupport() \
+        .config("spark.jars", "/home/glue_user/workspace/jupyter_workspace/libs/postgresql-42.6.0.jar") \
+        .getOrCreate()
+
+from pyspark.sql.types import StructType, StructField, DateType, DecimalType, StringType
+tbl_retail_sales = StructType([
+    StructField("sales_month",DateType(),False),
+    StructField("naics_code", StringType(), False),
+    StructField("kind_of_business", StringType(), False),
+    StructField("reason_for_null", StringType(), False),
+    StructField("sales", DecimalType(8,2), False)
+    ]
+)
+
+df = spark.read.option("header", True).schema(tbl_retail_sales).csv("retail_sales.csv")
+
+df.write.format("jdbc") \
+    .option("url", "jdbc:postgresql://postgres_db:5432/sales") \
+    .option("dbtable", "public.retail_sales") \
+    .option("user", "postgres") \
+    .option("password", "ojitha") \
+    .option("driver", "org.postgresql.Driver") \
+    .mode('append').save()
+
+spark.stop()
+```
+
 
 
 References:
