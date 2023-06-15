@@ -156,3 +156,33 @@ or
 ```sql
 Select segment, step, event, solution from stl_alert_event_log where query in (	43052982,43055809,43055811) order by segment, step
 ```
+
+### Redshift Windowing functions
+If you run the example with default winodw:
+
+```sql
+select sales
+    , COUNT(sales) OVER ()
+   , SUM(sales) OVER ()
+FROM "retail_sales";
+```
+Following query generates the same result gnereated by the above result:
+
+```sql
+select sales
+    , COUNT(sales) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING )
+   , SUM(sales) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+FROM "retail_sales";
+```
+
+Based on the above result, I realised the default is `(ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)` for redshift. For the Postgres, the default is (RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW). However, `RANGE` is not supported by Redshift version I am using.
+
+As I found from the following quer, upper bound default is `CURRENT ROW` (same as in Postgres):
+
+```sql
+select sales
+    , COUNT(sales) OVER (ROWS CURRENT ROW )
+   , SUM(sales) OVER (ROWS BETWEEN CURRENT ROW AND CURRENT ROW)
+FROM "retail_sales";
+```
+because `ROWS CURRENT ROW` generate the same result for the `ROWS BETWEEN CURRENT ROW AND CURRENT ROW`.
