@@ -12,12 +12,90 @@ Here the important commands and information collected while programming.
 ## AWS
 
 ### EC2
+#### Dev environment Tools to install
+Here the tool to install when you need EC2 instance as Dev
 
-#### EC2 use of jq
-Install jq
-```bash
-sudo yum install jq
+```yaml
+      UserData: 
+        Fn::Base64: |
+          #!/bin/bash -xe
+          echo "Update..."
+          yum update -y
+          echo "Installing tmux..."
+          yum -y install tmux
+          echo "Installing development libs..."
+          yum -y install @development zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel libffi-devel findutils
+          echo "Installing git..."
+          yum -y install git
+          echo "Installing jq..."
+          yum -y install jq
+          echo "Installing docker..."
+          amazon-linux-extras install -y docker
+          echo "Add ec2-user to docker..."
+          usermod -a -G docker ec2-user
+          
+          # # curl -LS --connect-timeout 15 \
+          # #   --retry 5 \
+          # #   --retry-delay 5 \
+          # #   --retry-max-time 60 \
+          # #   "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          # # unzip -u awscliv2.zip
+          # # ./aws/install
+          # # rm awscliv2.zip
+
+          wait
+          echo "Installing AWS SAM..."
+          curl -LS --connect-timeout 15 \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-max-time 60 \
+            "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "aws-sam-cli-linux-x86_64.zip" 
+          unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
+          ./sam-installation/install
+          rm aws-sam-cli-linux-x86_64.zip
+          
+          wait
+          sudo -u ec2-user -i <<'EOF'
+
+          echo '--- Install docker-compose for ec2-user ---' 
+          echo 'export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}' >>  ~/.bashrc
+          echo 'export PATH="$DOCKER_CONFIG/cli-plugins:$PATH"' >> ~/.bashrc
+          source ~/.bashrc
+          
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          curl -LS --connect-timeout 15 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 \
+            https://github.com/docker/compose/releases/download/v2.11.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+          
+
+          echo '--- Install pyenv for ec2-user ---'
+          source ~/.bashrc
+
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
+          echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+          echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+          echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+          source ~/.bashrc
+
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
+          echo '--- Install git-remote for ec2-user ---'
+          pip3 install git-remote-codecommit
+
+          echo "Insalling python environment for AWS Lambda development..."
+          echo 'export TMPDIR="$HOME/tmp"' >>  ~/.bashrc
+          source ~/.bashrc
+          RETRIES=3; DELAY=10; COUNT=1; while [ $COUNT -lt $RETRIES ]; do pyenv install 3.9.14 ; if [ $? -eq 0 ]; then RETRIES=0;  break; fi; let COUNT=$COUNT+1; sleep $DELAY; done
+          pyenv virtualenv 3.9.14 p39
+
+          echo '--- end ---'          
+          EOF
+
 ```
+
+
 Execute AWS stepfunction:
 ```bash
 jq -c . <input file>.json | xargs -0 aws stepfunctions start-execution --state-machine-arn <stepfunction arn>--input
