@@ -9,7 +9,7 @@ This is to explain Terraform for each looping technique. In this example, 3 buck
 
 
 
-![CleanShot 2023-07-09 at 14.34.13@2x](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-07-08-terraform-for-loop/create 3 S3 buckets.jpg)
+![create 3 S3 buckets](/assets/images/2023-07-08-terraform-for-loop/create 3 S3 buckets.jpg)
 
 
 
@@ -97,7 +97,7 @@ output "aws_caller_identity_account_id" {
 
 The bucket name is composed in line #19 under the local variables.
 
-![three-s3-buckets](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-07-08-terraform-for-loop/three-s3-buckets.png)
+![three-s3-buckets](/assets/images/2023-07-08-terraform-for-loop/three-s3-buckets.png)
 
 ## Count
 
@@ -175,7 +175,7 @@ output "aws_caller_identity_account_id" {
 
 The above provision script is simplified as follows:
 
-![three-s3-buckets_count](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-07-08-terraform-for-loop/three-s3-buckets_count.png)
+![three-s3-buckets_count](/assets/images/2023-07-08-terraform-for-loop/three-s3-buckets_count.png)
 
 
 
