@@ -267,7 +267,7 @@ output "aws_caller_identity_account_id" {
 
 In the above code, the `count` has been replaced by the `foreach` lines 23-34 as follows:
 
-![three-s3-buckets_foreach](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-07-08-terraform-for-loop/three-s3-buckets_foreach.png)
+![three-s3-buckets_foreach](/assets/images/2023-07-08-terraform-for-loop/three-s3-buckets_foreach.png)
 
 
 
