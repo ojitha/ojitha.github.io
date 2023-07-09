@@ -269,6 +269,19 @@ In the above code, the `count` has been replaced by the `foreach` lines 23-34 as
 
 ![three-s3-buckets_foreach](/assets/images/2023-07-08-terraform-for-loop/three-s3-buckets_foreach.png)
 
+You can change the above code's map to list as follows:
 
+```terraform
+locals {
+  buckets = ["0","1","2"]
+}
+
+resource "aws_s3_bucket" "bucket" {
+  for_each = toset(local.buckets)
+  bucket =  "${local.bucket_prefix}${each.key}"
+}
+```
+
+As shown in lines #1-3, only the list elements are created as buckets. Please note how line #6 has been changed to return set. In line #7 instead of `each.value` now we are using `each.key`.
 
 [^1]: [Developing Infrastructure as Code with Terraform LiveLessons](https://learning.oreilly.com/videos/developing-infrastructure-as/9780136608776/9780136608776-dict_01_03_08_00/)
