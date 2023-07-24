@@ -7,7 +7,7 @@ categories: [Kafka, Apache Spark]
 
 The diagram shows that the Kafka producer reads from Wikimedia and writes to the Kafka topic. Then Kafka Spark consumer pulls the data from the Kafka topic and writes the steam batches to disk.
 
-![arcitecture of the streaming application](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-07-18-Conducktor-configuration/arcitecture of the streaming application.png)
+![arcitecture of the streaming application](/assets/images/2023-07-18-Conducktor-configuration/arcitecture of the streaming application.png)
 
 <!--more-->
 
@@ -184,7 +184,7 @@ Submit the job as follows:
 container>spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0 <file-name>.py
 ```
 
-![Result of saved stream batches](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-07-18-Conducktor-configuration/CleanShot 2023-07-24 at 12.29.11@2x.jpg)
+![Result of saved stream batches](/assets/images/2023-07-18-Conducktor-configuration/CleanShot 2023-07-24 at 12.29.11@2x.jpg)
 
  You can check the output as above.
 
