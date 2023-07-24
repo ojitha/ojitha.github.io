@@ -17,8 +17,6 @@ The diagram shows that the Kafka producer reads from Wikimedia and writes to the
 {:toc}
 ------
 
-
-
 I previously explained Spark Streaming Basics[^2] and Spark Kafka Docker Configuration[^3].  
 
 ## Install
@@ -181,15 +179,92 @@ wget https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3
 Submit the job as follows:
 
 ```bash
-container>spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0 <file-name>.py
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0 <file-name>.py
 ```
 
 ![Result of saved stream batches](/assets/images/2023-07-18-Conducktor-configuration/CleanShot 2023-07-24 at 12.29.11@2x.jpg)
 
  You can check the output as above.
 
+## VSCode Development Environment
+
+The above spark submission does not help to debug the code. Therefore, you can set up the VSCode environment. I use the Pyenv package for Python environments, allowing me to install any Python version and create a virtual environment from any of those versions. You can find more information on setting up the Pyenv from my blog post, **Python workflow**[^4].
+
+First, create your virtual environment after installing Python version 3.9.2.
+
+```bash
+pyenv virtualenv 3.9.2 spark
+```
+
+Activate the virtual environment:
+
+```bash
+pyenv activate spark
+```
+
+I am using Apache Spark 3.0.0. Therefore, install the same PySpark version in the virtual environment as well:
+
+```bash
+pip3 install pyspark==3.0.0
+```
+
+> If the PySpark version is incompatible with the Spark version, you will get a Py4J error.
+
+You need environment variables `SPARK_HOME` and `PYTHONPATH` to run or debug the Python from the VSCode. Therefore, create a launch configuration. Here is my launch.json file:
+
+
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            ... other configurations
+        },
+        {
+            "name": "Python: Spark",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYSPARK_PYTHON": "/usr/local/bin/python3.9",
+                "SPARK_HOME": "/Users/<username>/.sdkman/candidates/spark/current",
+                "PYTHONPATH": "/Users/<username>/.sdkman/candidates/spark/current/python/lib/py4j-0.10.9-src.zip",
+                "PATH": "${SPARK_HOME}/bin;${PATH}",
+            }
+        }
+    ]
+}
+```
+
+> You must find the correct `py4j-<version>--src.zip` file name by navigating to the `SPARK_HOME/python/lib`.
+
+Use the above launch configuration to run the Python script.
+
+You have to add the `org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0` package to the `spark-defaults.conf`. For example, rename the spark-defaults.conf.template to `spark-defaults.conf`.
+
+```bash
+mv /Users/<username>/.sdkman/candidates/spark/current/conf/spark-defaults.conf.template /Users/<username>/.sdkman/candidates/spark/current/conf/spark-defaults.conf
+```
+
+Add the package to the `spark-defaults.conf` file, as shown in the second line:
+
+```
+# spark.executor.extraJavaOptions  -XX:+PrintGCDetails -Dkey=value -Dnumbers="one two three"
+spark.jars.packages                org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0
+```
+
+ 
+
+> If the configuration is not found, the error is `Failed to find data source: kafka.` will be generated. Alternatively, You can use `.config('spark.jars.packages','org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0)` in the spark configuration, but note recommended under the best practises.
+
+This package is necessary to connect with Kafka in the runtime.
+
 
 
 [^1]: Apache Kafka Series - Learn Apache Kafka for Beginners v3, Stéphane Maarek
 [^2]: [Spark Streaming Basics](https://ojitha.github.io/apache spark/2023/06/09/Spark-Streaming-part-1.html){:target="_blank"} 
 [^3]: [Spark Kafka Docker Configuration](https://ojitha.github.io/kafka/apache spark/2023/06/09/Spark-Streaming-part-2.html){:target="_blank"}
+[^4]: [Python my workflow](https://ojitha.blogspot.com/2020/09/python-my-workflow.html){:target="_blank"}
