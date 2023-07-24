@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  Conduktor Configuration
+title:  Kafka PySpark streaming example
 date:   2023-07-18
-categories: [Kafka]
+categories: [Kafka, Apache Spark]
 ---
 
 The diagram shows that the Kafka producer reads from Wikimedia and writes to the Kafka topic. Then Kafka Spark consumer pulls the data from the Kafka topic and writes the steam batches to disk.
