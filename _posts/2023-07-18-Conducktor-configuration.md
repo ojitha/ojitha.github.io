@@ -52,7 +52,7 @@ You can install Apache Spark 3.0.0 using SDKMAN on MacOS.
 
 ## Kafka Producer
 
-Kafka consumer[^1] reads the clickstream from https://stream.wikimedia.org/v2/stream/recentchange and writes to the 9092 port.  
+Kafka consumer[^1] reads the clickstream from https://stream.wikimedia.org/v2/stream/recentchange and writes to the Kafka topic via port 9092.  
 
 ```java
 package au.com.blogspot.ojitha.kafka.examples.wikimedia;
@@ -137,7 +137,7 @@ dependencies {
 
 ## Kafka Spark Consumer
 
-Here the simple Kafka Spark consumer reads from the Kafa and writes the stream to disk. This consumer is written in PySpark for simplicity.
+Here the simple Kafka Spark consumer reads from the Kafa topic and writes the stream to disk. This consumer is written in PySpark for simplicity.
 
 
 
@@ -189,10 +189,6 @@ container>spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0
  You can check the output as above.
 
 
-
-
-
-Contents goes here...
 
 [^1]: Apache Kafka Series - Learn Apache Kafka for Beginners v3, Stéphane Maarek
 [^2]: [Spark Streaming Basics](https://ojitha.github.io/apache spark/2023/06/09/Spark-Streaming-part-1.html){:target="_blank"} 
