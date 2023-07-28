@@ -9,7 +9,7 @@ The diagram shows that the Kafka producer reads from Wikimedia and writes to the
 
 
 
-![arcitecture of the streaming application](/Users/ojitha/GitHub/ojitha.github.io/assets/images/2023-07-18-Conducktor-configuration/image-20230728100732641.png)
+![arcitecture of the streaming application](/assets/images/2023-07-18-Conducktor-configuration/image-20230728100732641.png)
 
 <!--more-->
 
