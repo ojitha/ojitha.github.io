@@ -3,6 +3,8 @@ layout: post
 title:  Elastic Search Introduction
 date:   2020-07-11
 categories: [ELK]
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
+typora-copy-images-to: ./assets/images/${filename}
 ---
 
 This post is on ElasticSearch 8 and the Elastic Stack[^1]. 
@@ -691,7 +693,9 @@ GET ecommerce_data/_search
 
 ```
 
+create index with document
 
+![create index from a document](/assets/images/2023-09-29-elasticsearch-introduction/create index from a document.jpg)
 
 
 
