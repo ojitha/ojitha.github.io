@@ -142,12 +142,10 @@ networks:
    external: false
 ```
 
-Install Eland client:
+Start containers:
 
 ```bash
-git clone git@github.com:elastic/eland.git
-cd eland/
-docker build -t elastic/eland .
+docker compose up
 ```
 
 Select a NER model from the [third-party model reference list](https://www.elastic.co/guide/en/machine-learning/8.10/ml-nlp-model-ref.html#ml-nlp-model-ref-ner). This example uses an [uncased NER model](https://huggingface.co/elastic/distilbert-base-uncased-finetuned-conll03-english).
