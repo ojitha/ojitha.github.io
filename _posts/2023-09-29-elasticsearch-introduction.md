@@ -270,6 +270,187 @@ It should give you the result:
 
 To access the Kibana, use the follow url `http://<host ip>:5601` from anywhere.
 
+To check the health of the cluster:
+
+```bash
+curl --cacert ca.crt -u elastic:changeme https://localhost:9200/_cluster/health
+```
+
+Or in Kibana
+
+```
+GET _cluster/health
+```
+
+To enable trial version:
+
+```
+POST /_license/start_trial?acknowledge=true
+```
+
+
+
+## CURD
+
+You can create index as follows:
+
+```
+PUT fruits
+{
+  "settings": {
+    "number_of_shards": 3, 
+    "number_of_replicas": 2
+  }
+}
+```
+
+To get the details of the `fruits` index:
+
+```
+GET fruits/_settings
+```
+
+Add documents:
+
+```
+POST fruits/_doc
+{
+  "name":"Mango",
+  "qty": 2
+  
+}
+```
+
+### Add
+
+The `POST` will add the `_id` automatically.
+
+If you use `PUT`, you need to provide the document id as follows:
+
+```
+PUT fruits/_doc/1
+{
+  "name":"Mango",
+  "qty": 2
+  
+}
+```
+
+> Warning: The `_doc` endpoing will overwrite the existing document.
+
+Get the added document:
+
+```
+GET fruits/_search
+```
+
+output
+
+```json
+{
+  "took": 444,
+  "timed_out": false,
+  "_shards": {
+    "total": 3,
+    "successful": 3,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 2,
+      "relation": "eq"
+    },
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": "fruits",
+        "_id": "i7dcWosBlpsdZwgSyFwT",
+        "_score": 1,
+        "_source": {
+          "name": "Mango",
+          "qty": 2
+        }
+      },
+      {
+        "_index": "fruits",
+        "_id": "1",
+        "_score": 1,
+        "_source": {
+          "name": "Mango",
+          "qty": 2
+        }
+      }
+    ]
+  }
+}
+```
+
+To get the document by id
+
+```
+GET fruits/_doc/1
+```
+
+To avoid rewrite existing document use `create` endpoint.
+
+For example above following `PUT` will generate error:
+
+```
+PUT fruits/_create/1
+{
+  "name":"Mango",
+  "qty": 3
+  
+}
+```
+
+This will generate 409 error message.
+
+### Update
+
+To update only the quantity of the above document:
+
+```
+POST fruits/_update/1
+{
+  "doc":{
+    "qty": 3
+  }
+}
+```
+
+Here, used the `_update` endpoin.
+
+### Delete
+
+How to delete a document:
+
+```
+DELETE fruits/_doc/1
+```
+
+
+
+## Search
+
+When search query is sent, Elasticsearch retrieves **relevant** documents.
+
+| Index                  | ![CleanShot 2023-10-23 at 14.25.09@2x](./assets/images/2023-09-29-elasticsearch-introduction/CleanShot 2023-10-23 at 14.25.09@2x.png) |
+| ---------------------- | ------------------------------------------------------------ |
+| True & False Possitves | ![CleanShot 2023-10-23 at 14.29.30@2x](./assets/images/2023-09-29-elasticsearch-introduction/CleanShot 2023-10-23 at 14.29.30@2x.png) |
+| True & False Negatives | ![CleanShot 2023-10-23 at 14.30.45@2x](./assets/images/2023-09-29-elasticsearch-introduction/CleanShot 2023-10-23 at 14.30.45@2x.png) |
+| Precision              | ![CleanShot 2023-10-23 at 14.35.44@2x](./assets/images/2023-09-29-elasticsearch-introduction/CleanShot 2023-10-23 at 14.35.44@2x.png) |
+| Recall                 | ![CleanShot 2023-10-23 at 14.37.42@2x](./assets/images/2023-09-29-elasticsearch-introduction/CleanShot 2023-10-23 at 14.37.42@2x.png) |
+
+Precision: What portion of the retrieved data is actually relevant to the search query.
+
+Recall: What portion of relevant data is being returned as search results.
+
+Precision and Recall are inversely related.
+
+More relevant document are higher the score. The score is a value that represents how relevant a document is to that specific query as well as Elasticsearch compute the score for each document for that hit. To score, Elasticsearch uses TF/IDF.
+
 ## Mapping
 
 Index mapping is a process of defining how a document must be mapped in the search engine. Along with the data type, mapping allows you to set the field characteristics such as searchable, returnable, sortable, how to store, date format, whether the strings must be treated as full text fields, and so on.
@@ -417,19 +598,27 @@ You can group the field types under one or more of the following characteristics
 - Returnable: A returnable field is one which is stored and the field value can be returned as part of the search response.
 - Sortable: A sortable field is one, based on which the search results can be sorted in a particular order, either `desc` or `asc`. The search results can be ordered by one or more sortable fields.
 
-#### Default behavior
+## Common Data types
 
-The following table describes he default behavior of the various field types:
+None text-analysis process are ideal candidates for the `keyword` data type. Elasticsearch supports dates by providing a `date` type as well as additional options to format dates. Define a format of your own choosing, say you want to set `open_day` in UK format ("dd-MM-yyyy")
 
-| Field Type | Searchable | Analyzed | Returnable | Sortable |
-| ---------- | ---------- | -------- | ---------- | -------- |
-| Text       | Yes        | Yes      | No         | No       |
-| Keyword    | Yes        | No       | No         | Yes      |
-| Numeric    | Yes        | No       | No         | Yes      |
-| Boolean    | Yes        | No       | No         | Yes      |
-| Date       | Yes        | No       | No         | Yes      |
+```
+"open_day":{
+  "type": "date",
+  "format":"dd-MM-yyyy"
+}
+```
 
-Structured data, such as codes, bank accounts, or phone numbers, are represented by the `keyword` data type.
+or multiple formats as:
+
+```
+"open_day":{
+  "type": "date",
+  "format":"dd-MM-yyyy||dd/MM/yyyy||MM-dd-yyyy||MM/dd/yyyy"
+}
+```
+
+if you create mapping as follows:
 
 ```
 PUT universities
@@ -454,47 +643,68 @@ PUT universities
 }
 ```
 
-For example, 
+you can insert the following documents with different date formats:
 
 ```
-# Open day is UK date format dd-MM-yyyy
+# dd-MM-yyyy
 PUT universities/_doc/1
 {
-  "name":"University of Oxford",
+  "name":"University of A",
   "telephone_number":"01865270000",
-  "contact_email":"info@oxford.ac.uk",
+  "contact_email":"info@a.edu.au",
   "open_day":"02-09-2022"
 }
 
-# Open day is UK date format dd/MM/yyyy
-PUT universities/_doc/1
+# dd/MM/yyyy
+PUT universities/_doc/2
 {
-  "name":"University of Oxford",
-  "telephone_number":"01865270000",
-  "contact_email":"info@oxford.ac.uk",
+  "name":"University of B",
+  "telephone_number":"01865280000",
+  "contact_email":"info@b.edu.au",
   "open_day":"02/09/2022"
 }
 
-# Open day is USA date format MM-dd-yyyy
-PUT universities/_doc/1
+# MM-dd-yyyy
+PUT universities/_doc/3
 {
-  "name":"University of Oxford",
-  "telephone_number":"01865270000",
-  "contact_email":"info@oxford.ac.uk",
+  "name":"University of C",
+  "telephone_number":"01865290000",
+  "contact_email":"info@c.edu.au",
   "open_day":"09-02-2022"
 }
 
-# Open day is USA date format MM/dd/yyyy
-PUT universities/_doc/1
+# MM/dd/yyyy
+PUT universities/_doc/4
 {
-  "name":"University of Oxford",
-  "telephone_number":"01865270000",
-  "contact_email":"info@oxford.ac.uk",
+  "name":"University of D",
+  "telephone_number":"01865210000",
+  "contact_email":"info@d.edu.au",
   "open_day":"09/02/2022"
 }
 ```
 
-Elasticsearch provides five integer types to handle integer numbers: `byte`, `short`, `integer`, `long`, and `unsigned_long`.
+list the document by id 
+
+```
+# get document by the id of the document
+GET universities/_doc/2
+# get field type
+GET universities/_mapping/field/name
+```
+
+
+
+The following table describes he default behavior of the various field types:
+
+| Field Type | Searchable | Analyzed | Returnable | Sortable |
+| ---------- | ---------- | -------- | ---------- | -------- |
+| Text       | Yes        | Yes      | No         | No       |
+| Keyword    | Yes        | No       | No         | Yes      |
+| Numeric    | Yes        | No       | No         | Yes      |
+| Boolean    | Yes        | No       | No         | Yes      |
+| Date       | Yes        | No       | No         | Yes      |
+
+Structured data, such as codes, bank accounts, or phone numbers, are represented by the `keyword` data type.Elasticsearch provides five integer types to handle integer numbers: `byte`, `short`, `integer`, `long`, and `unsigned_long`.
 
 ```
 # create a index mappings
@@ -539,7 +749,7 @@ PUT employees/_doc/1
 GET employees/_search
 ```
 
-#### Declaring Multi-Types
+### Declaring Multi-Types
 
 Let’s look at the example schema definition that creates our single field `title` with multiple data types (text, keyword, and completion):
 
@@ -590,7 +800,7 @@ output schema is
 }
 ```
 
-#### Geo Point Data Type
+### Geo Point Data Type
 
 Location data is expressed as a `geo_point` data type, which represents longitude and latitude values on a map. You can use this to pinpoint an address for a restaurant, a school, a golf course, and others.
 
@@ -729,7 +939,7 @@ GET employees/_search
 }
 ```
 
-Joins
+## Joins
 
 Every document that gets indexed is independent and maintains no relationship with any others in that index. Elasticsearch de-normalizes the data to achieve speed and gain performance during indexing and search operations. Elasticsearch provides a `join` data type to consider parent-child relationships should you need them.
 
@@ -952,6 +1162,23 @@ The sample ndjson is
 ```
 
 NOTE: All the lines should be terminated by new line character `\n`.
+
+## Text Analysis
+
+The analyzer is a software module tasked with two functions[^6]: 
+
+1. tokenization: the process of splitting sentences into individual words 
+2. normalization: where the tokens (words) are massaged, transformed, modified, and enriched in the form of stemming, synonyms, stop words, and other features 
+
+> The `text` fields are thoroughly analyzed and stored in inverted indexes for advanced query matching.
+
+*Stemming* is an operation where words are reduced (stemmed) to their root words (for example, “author” is the root word for “authors”, “authoring”, and “authored”).
+
+Normalization also finds *synonyms* and adding them to the inverted index. For example, “author” may have additional synonyms, such as “wordsmith”, “novelist”, “writer”, and so on.
+
+The *Stop words* are such as English grammar articles they are irrelevant to find the relevant documents.
+
+## Appendix
 
 Download schema
 
@@ -1398,6 +1625,8 @@ REFERENSES:
 [^1]: [Elasticsearch 8 and the Elastic Stack: In-Depth and Hands-On](https://learning.oreilly.com/videos/elasticsearch-8-and/9781788995122/)[Frank Kane](https://learning.oreilly.com/search/?query=author%3A"Frank Kane"&sort=relevance&highlight=true){:target="_blank"}
 
 [^2]: [Getting started with the Elastic Stack and Docker-Compose](https://www.elastic.co/blog/getting-started-with-the-elastic-stack-and-docker-compose)
-[^3]:[News Headlines ver 2](News Headlines ver 2)
+[^3]:[News Headlines ver 2](https://www.kaggle.com/datasets/rmisra/news-category-dataset/versions/2)
 [^4]:[Beginner's Crash Course to Elastic Stack Series](https://github.com/LisaHJung/Part-2-Understanding-the-relevance-of-your-search-with-Elasticsearch-and-Kibana-#beginners-crash-course-to-elastic-stack-series)
 [^5]: [Creating an index mapping](https://www.ibm.com/docs/en/order-management-sw/10.0?topic=integration-creating-index-mapping)
+[^6]:[Working with Text Analyzers](https://learning.oreilly.com/scenarios/-/9781098134013/) 
+
