@@ -22,6 +22,9 @@
         </nav>
         {%- endif -%}
     </div>
+    {% if page.linkedinbagage %}
+    {% include linkedinbagage.html %}
+    {% endif %}
     {% if page.mermaid %}
     {% include mermaid.html %}
     {% endif %}
