@@ -27,6 +27,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 | Course                                                       | Association             | Credentials                                                  | Issued Date |
 | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------- |
+| [AWS Technical Essentials](https://explore.skillbuilder.aws/learn/course/1851){:target="_blank"} | AWS                     | [pdf](assets/images/about/1851_3_4320000_1701053421_AWS_Course_Completion_Certificate.pdf){:target="_blank"} | 07/11/2023  |
 | [Introduction to Amazon Athena](https://explore.skillbuilder.aws/learn/course/152){:target="_blank"} | AWS                     | [pdf](assets/images/about/152_3_1510486_1700984961_AWS Course_Completion_Certificate.pdf){:target="_blank"} | 16/10/2023  |
 | [AWS Hadoop Fundamentals](https://explore.skillbuilder.aws/learn/course/43){:target="_blank"} | AWS                     | [pdf](/assets/images/about/43_3_1510486_1697259883_AWS_Course_Completion_Certificate.pdf){:target="_blank"} | 11/09/2023  |
 | [Introduction to Amazon Kinesis Streams](https://explore.skillbuilder.aws/learn/course/157){:target="_blank"} | AWS                     | [pdf](assets/images/about/157_3_1510486_1700984962_AWS_Course_Completion_Certificate.pdf){:target="_blank"} | 09/09/2023  |
