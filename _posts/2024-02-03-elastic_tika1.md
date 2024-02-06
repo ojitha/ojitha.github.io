@@ -282,6 +282,92 @@ In the above Dockerfile:
 1. add the required whitelisted folders to the Livy.conf file.
 1. As a Glue user, you download Maven and copy all the necessary pom.xml dependencies to the spark/jars folder; otherwise, you must create jar files with dependencies.
 
+Dependencis are in the pom.xm:
+
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mycompany.app</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1</version>
+  <dependencies>
+  <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <!-- <version>2.9.1</version> -->
+  </dependency>   
+  
+  <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-microsoft-module</artifactId>
+      <!-- <version>2.9.1</version> -->
+  </dependency>
+  
+  <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-pdf-module</artifactId>
+      <!-- <version>2.9.1</version> -->
+  </dependency>
+
+  <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-image-module</artifactId>
+      <!-- <version>2.9.1</version> -->
+  </dependency>
+
+  <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parser-ocr-module -->
+  <dependency>
+    <groupId>org.apache.tika</groupId>
+    <artifactId>tika-parser-ocr-module</artifactId>
+    <!-- <version>2.9.1</version> -->
+  </dependency>
+
+  <!-- https://mvnrepository.com/artifact/com.github.jai-imageio/jai-imageio-core -->
+  <dependency>
+    <groupId>com.github.jai-imageio</groupId>
+    <artifactId>jai-imageio-core</artifactId>
+    <version>1.3.0</version>
+  </dependency>
+
+  <!-- https://mvnrepository.com/artifact/com.github.jai-imageio/jai-imageio-jpeg2000 -->
+  <dependency>
+    <groupId>com.github.jai-imageio</groupId>
+    <artifactId>jai-imageio-jpeg2000</artifactId>
+    <version>1.4.0</version>
+  </dependency>
+
+  
+<!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch-spark-30 -->
+<dependency>
+  <groupId>org.elasticsearch</groupId>
+  <artifactId>elasticsearch-spark-30_2.12</artifactId>
+  <version>8.7.1</version>
+</dependency>
+<!-- <dependency>
+  <groupId>org.elasticsearch</groupId>
+  <artifactId>elasticsearch-hadoop</artifactId>
+  <version>8.7.1</version>
+</dependency> -->
+
+
+</dependencies>
+<dependencyManagement>
+    <dependencies>
+      <dependency>
+       <groupId>org.apache.tika</groupId>
+       <artifactId>tika-bom</artifactId>
+       <version>2.9.1</version>
+       <type>pom</type>
+       <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
+
+```
+
+
+
 ## Spark Job
 
 This job will read a set of binary files to the Spark data frame and extract the data using the User Define Function (UDF).
@@ -435,7 +521,76 @@ libraryDependencies += "org.apache.tika" % "tika-parser-microsoft-module" % "2.9
 libraryDependencies += "org.apache.tika" % "tika-parser-image-module" % "2.9.1"
 ```
 
+Lest us do the testing using Jupyter notebooks
 
+import tika:
+
+```scala
+import org.apache.tika.Tika
+import org.apache.tika.parser.pdf
+val tika = new Tika()
+```
+
+Read the jpeg file:
+
+```scala
+val filename="data/PDF/Scan_3.jpeg"
+val df = spark.read.format("binaryFile").load(s"$filename")
+df.printSchema()
+df.show()
+```
+
+Detect the file type
+
+```scala
+import spark.implicits._
+val map = df.select("path","content").as[(String, Array[Byte])].collect.toMap
+
+import java.io.ByteArrayInputStream
+val doc = map(s"file:/home/glue_user/workspace/jupyter_workspace/$filename")
+tika.detect(doc)
+```
+
+Extract the text
+
+```scala
+import org.apache.tika.exception.TikaException
+import org.apache.tika.parser.ParseContext
+import org.apache.tika.parser.AutoDetectParser
+import org.apache.tika.sax.BodyContentHandler
+import org.apache.tika.metadata.Metadata
+
+import org.apache.tika.parser.pdf.PDFParser
+import java.io.ByteArrayInputStream
+
+import org.apache.tika.parser.Parser
+import org.apache.tika.parser.ocr.TesseractOCRConfig
+import org.apache.tika.parser.pdf.PDFParserConfig
+
+val handler = new BodyContentHandler();
+val metadata = new Metadata();
+val parser = new AutoDetectParser()
+val context = new ParseContext();
+
+val OCRConfig = new TesseractOCRConfig()
+// val pdfConfig = new PDFParserConfig();
+// pdfConfig.setExtractInlineImages(true)
+
+// context.set(classOf[PDFParserConfig], pdfConfig)
+context.set(classOf[TesseractOCRConfig], OCRConfig)
+context.set(classOf[Parser], parser)
+val text = parser.parse(new ByteArrayInputStream(doc), handler, metadata, context);
+print(handler.toString())
+```
+
+> NOTE: In the above code I've commnted where PDF parser can be used if you are using unsearchable PDF files.
+
+if necessary print all the meta data:
+
+```scala
+for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))
+spark.close() // close the spark session
+```
 
 
 
