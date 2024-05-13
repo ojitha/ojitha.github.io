@@ -18,7 +18,7 @@ Elastic Learned Sparse EncodeR(ELSER) is a retrieval model trained by Elastic th
 5. Reindex process to create embeddings
 6. Ready to do semantic search using text expansion queries
 
-I created this blog post on docker to demonstrate Linux-optimised ELSER v2 use. The Elasticsearch version I used is 8.11.1.
+I created this blog post on docker to demonstrate Linux-optimised ELSER v2. The Elasticsearch version I used is 8.11.1.
 
 <!--more-->
 
@@ -46,44 +46,10 @@ Embeddings returned by [Elastic Learned Sparse EncodeR model (ELSER)](https://ww
 
 > NOTE: Only the first 512 extracted tokens per field are considered during semantic search with ELSER.
 
-For this example you have to upload data to `test-data` index as explained in the [Tutorial: semantic search with ELSER](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html#semantic-search-elser) because I am elaborating the same tutorial using Linux based ELSER v2. Here the mappings fpr `test-data`:
+ELSER v2 was trained from a BERT[^2] base checkpoint. This has just over 100M parameters, which amounts to about 418 MB of storage for the weights using 32-bit floating point precision. 
 
-```json
-{
-  "test-data": {
-    "mappings": {
-      "_meta": {
-        "created_by": "file-data-visualizer"
-      },
-      "properties": {
-        "content": {
-          "type": "text"
-        },
-        "id": {
-          "type": "long"
-        }
-      }
-    }
-  }
-}
-```
 
-> NOTE: I've used a data visualiser to upload the file from [tsv file](https://github.com/elastic/stack-docs/blob/main/docs/en/stack/ml/nlp/data/msmarco-passagetest2019-unique.tsv). There are two fields:
->
-> 1. id of type long
-> 2. content of type text
->
-> It has created the pipeline to inject the data into the index.
-
-![Upload the tsv file](/assets/images/2024-05-11-ELSER_intro/Upload the tsv file.png)
-
-As shown in the (2), override the setting and change the columns as (1 & 2).
-
-![Create Source Index](/assets/images/2024-05-11-ELSER_intro/Create Source Index.png)
-
-The source index name is `test_data`. You have to use this index as a source index in the `reindex` request.
-
-### Install ELSER
+## Install ELSER
 
 ELSER should be available if you have a subscriptions. You can install as follows or should be provided by the DevOps team.
 
@@ -171,7 +137,45 @@ As shown in the following screenshot, if you navigate via the main menu to Machi
 
 Notice the deployed model in the above screenshot.
 
-## Desitnation Index
+## Source Index
+For this example, I have to upload data to the `test-data` index as explained in the [Tutorial: semantic search with ELSER](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html#semantic-search-elser) because I am elaborating the same tutorial using Linux-based ELSER v2. Here are the mappings for `test-data`:
+
+```json
+{
+  "test-data": {
+    "mappings": {
+      "_meta": {
+        "created_by": "file-data-visualizer"
+      },
+      "properties": {
+        "content": {
+          "type": "text"
+        },
+        "id": {
+          "type": "long"
+        }
+      }
+    }
+  }
+}
+```
+
+> NOTE: I've used a data visualiser to upload the file from [tsv file](https://github.com/elastic/stack-docs/blob/main/docs/en/stack/ml/nlp/data/msmarco-passagetest2019-unique.tsv). There are two fields:
+>
+> 1. id of type long
+> 2. content of type text
+>
+> It has created the pipeline to inject the data into the index.
+
+![Upload the tsv file](/assets/images/2024-05-11-ELSER_intro/Upload the tsv file.png)
+
+As shown in the (2), override the setting and change the columns as (1 & 2).
+
+![Create Source Index](/assets/images/2024-05-11-ELSER_intro/Create Source Index.png)
+
+The source index name is `test_data`. You have to use this index as a source index in the `reindex` request.
+
+## Destination Index
 
 You need to create destination index with the spare vector.
 
