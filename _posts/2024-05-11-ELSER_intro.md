@@ -64,11 +64,11 @@ For this example you have to upload data to `test-data` index as explained in th
 >
 > It has created the pipeline to inject the data into the index.
 
-![Upload the tsv file](./assets/images/2024-05-11-ELSER_intro/Upload the tsv file.png)
+![Upload the tsv file](/assets/images/2024-05-11-ELSER_intro/Upload the tsv file.png)
 
 As shown in the (2), override the setting and change the columns as (1 & 2).
 
-![Create Source Index](./assets/images/2024-05-11-ELSER_intro/Create Source Index.png)
+![Create Source Index](/assets/images/2024-05-11-ELSER_intro/Create Source Index.png)
 
 The source index name is `test_data`. You have to use this index as a source index in the `reindex` request.
 
@@ -89,7 +89,7 @@ PUT _ml/trained_models/.elser_model_2_linux-x86_64
 
 Or you can first download the model navigating via Machine Learning->Trained Models. After download, you can create the model as follows:
 
-![Trained model ELSER v2](./assets/images/2024-05-11-ELSER_intro/trained model elser v2.png)
+![Trained model ELSER v2](/assets/images/2024-05-11-ELSER_intro/trained model elser v2.png)
 
 > NOTE: As shown in the above, for me the recommended model is running on linux platform.
 
@@ -129,7 +129,7 @@ As shown in the above output that is 2.1GB(2101346304 bytes). At least one node 
 
 You can check the availble memory:
 
-![Find the available memory](./assets/images/2024-05-11-ELSER_intro/Find the available memory.png)
+![Find the available memory](/assets/images/2024-05-11-ELSER_intro/Find the available memory.png)
 
 As shown in the above, under the Momory usage, you can find the :
 
@@ -138,7 +138,7 @@ As shown in the above, under the Momory usage, you can find the :
 
 After the model is deployed: 
 
-![Trained model ELSER v2](./assets/images/2024-05-11-ELSER_intro/trained model elser v2.png)
+![Trained model ELSER v2](/assets/images/2024-05-11-ELSER_intro/trained model elser v2.png)
 
 
 
