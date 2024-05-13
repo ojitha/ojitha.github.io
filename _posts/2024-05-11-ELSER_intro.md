@@ -18,7 +18,7 @@ Elastic Learned Sparse EncodeR(ELSER) is a retrieval model trained by Elastic th
 5. Reindex process to create embeddings
 6. Ready to do semantic search using text expansion queries
 
-I created this blog post on docker to demonstrate Linux-optimised ELSER v2. The Elasticsearch version I used is 8.11.1.
+I created this blog post on docker to demonstrate Linux-optimised ELSER v2. The Elasticsearch version is 8.11.1.
 
 <!--more-->
 
@@ -135,7 +135,7 @@ As shown in the following screenshot, if you navigate via the main menu to Machi
 
 ![Find your model](/assets/images/2024-05-11-ELSER_intro/Find your model.png)
 
-Notice the deployed model in the above screenshot.
+Notice the `Deployed` model in the above screenshot.
 
 ## Source Index
 For this example, I have to upload data to the `test-data` index as explained in the [Tutorial: semantic search with ELSER](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html#semantic-search-elser) because I am elaborating the same tutorial using Linux-based ELSER v2. Here are the mappings for `test-data`:
