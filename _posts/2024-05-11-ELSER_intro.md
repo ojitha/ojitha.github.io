@@ -147,19 +147,11 @@ As shown in the above, under the Momory usage, you can find the :
 1. Estimated availbe memory for the model (2.3GB > 2.1GB)
 2. Java Heap memory
 
-After the model is deployed: 
+After the model is deployed, you can use the following command to check the status:
 
-![Trained model ELSER v2](/assets/images/2024-05-11-ELSER_intro/trained model elser v2.png)
-
-
-
-> NOTE: Now you can use the following command to check the status:
->
-> ```bash
-> GET _ml/trained_models/.elser_model_2_linux/_stats
-> ```
-
-As shown in the above screenshot, if you navigate via the main menu(1) to Machine learning(2), then under the Trained Models(3), you will find the ELSER(4) installed for the particular operating system. 
+```bash
+ GET _ml/trained_models/.elser_model_2_linux/_stats
+```
 
 To start the deployment:
 
@@ -170,16 +162,14 @@ POST _ml/trained_models/.elser_model_2_linux-x86_64/deployment/_start?wait_for=s
 To stop the deployment
 
 ```bash
-POST _ml/trained_models/.elser_model_2_linux/deployment/_stop
-```
-
-or
-
-```bash
 POST _ml/trained_models/elser_model_2_linux-x86_64/deployment/_stop
 ```
 
+As shown in the following screenshot, if you navigate via the main menu to Machine Learning, you will find the ELSER installed for the recommended operating system under the Trained Models.
 
+![Find your model](/assets/images/2024-05-11-ELSER_intro/Find your model.png)
+
+Notice the deployed model in the above screenshot.
 
 ## Desitnation Index
 
