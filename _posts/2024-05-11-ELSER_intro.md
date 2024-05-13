@@ -9,6 +9,17 @@ typora-copy-images-to: ../assets/images/${filename}
 
 Elastic Learned Sparse EncodeR(ELSER) is a retrieval model trained by Elastic that enables you to perform [semantic search](https://www.elastic.co/guide/en/elasticsearch/reference/8.13/semantic-search-elser.html) to retrieve more relevant search results.
 
+![Summary of ELSER process](/assets/images/2024-05-11-ELSER_intro/Summary of ELSER process.png)
+
+1. install ELSER v2: Only once (DevOPs will do for your)
+2. Create source index where you can insert all your documents
+3. Create target index
+4. Create ingestion pipeline
+5. Reindex process to create embeddings
+6. Ready to do semantic search using text expansion queries
+
+I created this blog post using ELSER v2 on docker (Linux).
+
 <!--more-->
 
 ------
@@ -29,7 +40,7 @@ The general way to generate embedding in the Elasticsearch is using the Sentence
     2. Which is designed to store inferences from the **ELSER**. 
     3. Multi-valued fields and negative values will be rejected.
     4. `sparse_vector` is the field type that should be used with [ELSER mappings](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html#elser-mappings).
-    5. Text expansion[^6] semantic search support. 
+    5. Text expansion semantic search support. 
 
 Embeddings returned by [Elastic Learned Sparse EncodeR model (ELSER)](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html) are a collection of tags (more appropriately called _features_), each with an assigned _weight_. The text expansion query uses a NLP model to convert the query text into a list of token-weight pairs which are then used in a query against a [sparse vector](https://www.elastic.co/guide/en/elasticsearch/reference/current/sparse-vector.html) or [rank features](https://www.elastic.co/guide/en/elasticsearch/reference/current/rank-features.html) field.
 
@@ -148,7 +159,7 @@ After the model is deployed: 
 > GET _ml/trained_models/.elser_model_2_linux/_stats
 > ```
 
-As shown in the above screenshot, if you nevigate via main menu(1) to Machine learning(2), then under the Trained Models(3), you will find the ELSER(4) installed for the particular operating system. 
+As shown in the above screenshot, if you navigate via the main menu(1) to Machine learning(2), then under the Trained Models(3), you will find the ELSER(4) installed for the particular operating system. 
 
 To start the deployment:
 
@@ -199,7 +210,7 @@ Here
 
 ## Ingestion
 
-Ingest pipelines let you perform common transformations on your data before indexing[^1]. A pipeline compose of a series of configurable tasks called [processors](https://www.elastic.co/guide/en/elasticsearch/reference/8.11/ingest.htmlprocessors.html "Ingest processor reference") which are runs sequentially, making specific changes to input documents. At the end, Elasticsearch adds the transformed documents to your index.
+Ingest pipelines let you transform your data before indexing[^1]. A pipeline comprises a series of configurable tasks called [processors,](https://www.elastic.co/guide/en/elasticsearch/reference/8.11/ingest.htmlprocessors.html "Ingest processor reference") which run sequentially, making specific changes to input documents. At the end, Elasticsearch adds the transformed documents to your target index.
 
 ```json
 PUT _ingest/pipeline/elser-v2-test
@@ -250,7 +261,7 @@ This may take hours to vectorise 180K+ documents. Every time when your run above
 
 ## Search
 
-For example here the text expansion query to search?
+For example, here is the text expansion[^6] query to search.
 
 ```json
 GET my-index/_search
@@ -311,9 +322,9 @@ This result hows the highest ranking document.
 
 REFERENCE
 
-[^1]: Ingest pipelines,https://www.elastic.co/guide/en/elasticsearch/reference/8.11/ingest.html
+[^1]: [Ingest pipelines](https://www.elastic.co/guide/en/elasticsearch/reference/8.11/ingest.html)
 [^2]: [Improving information retrieval in the Elastic Stack: Improved inference performance with ELSER v2](https://www.elastic.co/search-labs/blog/introducing-elser-v2-part-1)
-[^3]:SentenceTransformers(https://www.sbert.net/)
+[^3]:[SentenceTransformers](https://www.sbert.net/)
 [^4]: [Dense vector field type](https://www.elastic.co/guide/en/elasticsearch/reference/current/dense-vector.html#dense-vector)
 [^5]: [Sparse vector field type](https://www.elastic.co/guide/en/elasticsearch/reference/current/sparse-vector.html#sparse-vector)
 [^6]: [Text expansion](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-text-expansion-query.html#query-dsl-text-expansion-query)
