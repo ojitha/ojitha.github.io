@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Semantic search with ELSER on Linux
+title:  Semantic search with ELSER in Elasticsearch
 date:   2024-05-11
 categories: [ELK]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
@@ -18,7 +18,7 @@ Elastic Learned Sparse EncodeR(ELSER) is a retrieval model trained by Elastic th
 5. Reindex process to create embeddings
 6. Ready to do semantic search using text expansion queries
 
-I created this blog post using ELSER v2 on docker (Linux).
+I created this blog post on docker to demonstrate Linux-optimised ELSER v2 use. The Elasticsearch version I used is 8.11.1.
 
 <!--more-->
 
