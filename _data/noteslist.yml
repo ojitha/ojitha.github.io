@@ -10,6 +10,9 @@ docs:
 - title: Email
   url: email.html
 
+- title: Kubernetes
+  url: kubernetes.html  
+
 - title: Programming
   url: programming.html 
 
