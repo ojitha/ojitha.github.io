@@ -9,11 +9,21 @@ typora-copy-images-to: ../assets/images/${filename}
 
 * TOC
 {:toc}
-## Kubernetes
+# Kubernetes
 
-### Install cri-dockerd
+I am currently using Ubuntu 24.04 LTS on Raspberry Pi 5 for Kubernetes. As a first step[^2], extend the `/boot/firmware/cmdline.txt` with the following as a single line:
 
-Install necessary tools
+```
+cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1
+```
+
+> NOTE: This way, I've avoided the cgroup configuration[^3] via Kubernetes.
+
+## Install
+
+### cri-dockerd
+
+I found the default container communication in Ubuntu 24.04 is not the cir-docker and didn't find the proper binaries to install. I used the [`cri-dockerd`](https://mirantis.github.io/cri-dockerd/) adapter to integrate Docker Engine with Kubernetes. Therefore, it is installed[^4] from the source. Install the necessary tools on all the machines:
 
 ```bash
 # install make
@@ -22,15 +32,13 @@ sudo apt install make
 sudo snap install go --classic
 ```
 
-Clone
+Clone the repository to all the machines
 
 ```bash
 git clone https://github.com/Mirantis/cri-dockerd.git
 ```
 
 Then, build and install
-
-
 
 ```bash
 # Build
@@ -42,7 +50,7 @@ sudo mkdir -p /usr/local/bin
 sudo install -o root -g root -m 0755 cri-dockerd /usr/local/bin/cri-dockerd
 ```
 
-activate
+activate the cri-docker for communication.
 
 ```bash
 sudo install packaging/systemd/* /etc/systemd/system
@@ -51,12 +59,40 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now cri-docker.socket
 ```
 
-After installing kubectl add to the bash-completion
+### Docker
+
+To install
+
+```bas
+curl -sSL get.docker.com | sh
+```
+
+In addition to that, I added the user to the docker group: `sudo usermod -aG docker oj`
+
+After installing the docker, enable the routing as follows:
+
+Find the following line in the file `/etc/sysctl.conf` and uncomment
+
+```
+net.ipv4.ip_forward=1
+```
+
+You can verify the docker installation by running `docker run hello-world`.
+
+> NOTE: You have to install docker for all the cluster nodes.
+
+### Kubeadm
+
+Now you are ready to install the Kubeadm[^1] and, in this case, use the "Debian-based distributions".
+
+After installing Kubectl, add to the bash-completion
 
 ```bash
 sudo apt-mark hold kubelet kubeadm kubectl
 kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 ```
+
+## Cluster
 
 To create the cluster
 
@@ -135,7 +171,7 @@ Command to verify the cluster
 
 
 
-### General commands
+### Getting started
 
 The simple diagnostic for the cluster
 
@@ -297,3 +333,92 @@ To watch
 ```bash
 watch kubectl get pods --selector=run=hello
 ```
+
+## General commands
+
+### Common
+
+To describe the object
+
+```
+kubectl describe <resource-name> <obj-name>
+```
+
+For example,
+
+![Descrie Object](/assets/images/kubernetes/describe_object.png)
+
+1. Describe the `hello` service (which is to be deleted in the next) that is broken.
+2. Describe the nginx, which is currently running without a problem (http://192.168.1.121:30080) 
+
+> NOTE: From the NodePort value, you can find why `hello` service is not working
+
+
+
+To delete the already deployed service
+
+![Delete deployed service](/assets/images/kubernetes/del_deployed_ser.png)
+
+1. List the services
+2. Delete the first of the list that is `hello`
+3. verify the service `hello` was deleted.
+
+These records can be manipulated with the `edit-last-applied`, `set-last-applied`, and `view-last-applied`:
+
+![manipulated](/assets/images/kubernetes/manipulated.png)
+
+To label 
+
+![labeling](/assets/images/kubernetes/labelling.png)
+
+1. Label the pod `nginx-example`
+2. Show the pods, but no label shows
+3. Show the pods in wider, but no label shows
+4. use the `--show-labels`
+5. remove the label
+6. confirm the label has been removed.
+
+To see the logs `kubectl logs <pod-name>`
+
+![see the logs](/assets/images/kubernetes/see_the_logs.png)
+
+> NOTE: If you have multiple containers in your Pod, use the `-c` flag.
+
+Login to the pod `kubectl exec -it <pod-name> -- bash` with intractive shell
+
+![loging to the pod](/assets/images/kubernetes/login_to_the_pod.png)
+
+> Note: The `attach` command is similar to `Kubectl logs` but will allow you to send input to the running process.
+
+copy files (reverse also possible)
+
+```
+kubectl cp </path/to/local/file> <pod-name>:</path/to/remote/file> 
+```
+
+![copy local file to pod](/assets/images/kubernetes/copy_local_pod_file.png)
+
+1. create test.txt in the local machine
+2. list the local machine test.txt file
+3. copy local machine test.txt to the root of the nginx
+4. interactively login to the nginx-example pod via bash
+5. List the files
+
+Port forwarding to access via local machine
+
+```
+kubectl port-forward <pod-name> <local machine port>:<remote container>
+```
+
+Traffic from local machine to remote container.
+
+![port forwarding](./assets/images/kubernetes/port_forwarding.png)
+
+### Cluster Management
+
+References:
+
+[^1]: [Installing Kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+[^2]: [Setting up a Raspberry Pi Kubernetes Cluster with Ubuntu 20.04](https://www.learnlinux.tv/setting-up-a-raspberry-pi-kubernetes-cluster-with-ubuntu-20-04/)
+[^3]:[Configuring a cgroup driver](https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/configure-cgroup-driver/)
+[^4]:[Kubernetes installation blog](https://www.jjworld.fr/kubernetes-installation/#3_Installation_de_cri-dockerd)
