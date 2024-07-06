@@ -19,7 +19,7 @@ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1
 
 > NOTE: This way, I've avoided the cgroup configuration[^3] via Kubernetes.
 
-## Install
+## Install Dynamic IP
 
 ### cri-dockerd
 
@@ -94,6 +94,12 @@ kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 
 ## Cluster
 
+Find the routing before initiate cluster
+
+```bash
+ip route show
+```
+
 To create the cluster
 
 ```bash
@@ -120,6 +126,119 @@ Create network driver
 ```bash
 sysctl net.bridge.bridge-nf-call-iptables=1
 ```
+
+## Install for static IP
+
+### Allocate static IPs
+
+Update the file `/etc/netplan/50-cloud-init.yaml` master and worker nodes for static IP (160 for master and 163 for worker) with the broadcasting via `192.168.1.255`.
+
+The `Master` ip is `192.168.1.160/29`(within the range of 160 to 167) 
+
+```yaml
+network:
+    version: 2
+    ethernets:
+        eth0:
+            dhcp4: false
+            dhcp6: false
+            addresses:
+            - '192.168.1.160/29'
+            optional: true
+            routes:
+            - to: 0.0.0.0/0
+              via: 192.168.1.255
+    wifis:
+        renderer: networkd
+        wlan0:
+            access-points:
+                TP-LINK_872B_5G:
+                    password: <password already in>
+            dhcp4: true
+            optional: true
+```
+
+And the worker is 
+
+```yaml
+network:
+    version: 2
+    ethernets:
+        eth0:
+            dhcp4: false
+            dhcp6: false
+            addresses:
+            # worker1
+            - '192.168.1.163/29'
+            optional: true
+            routes:
+              - to: 0.0.0.0/0
+                via: 192.168.1.255
+    wifis:
+        renderer: networkd
+        wlan0:
+            access-points:
+                TP-LINK_872B_5G:
+                    password: <password is in>
+            dhcp4: true
+            optional: true
+```
+
+In the file `/etc/sysctl.conf` change the value of `net.ipv4.ip_forward` to `1`.
+
+![Verify port forwarding](./assets/images/kubernetes/Verify port forwarding.png)
+
+Reboot after apply
+
+```bash
+sudo netplan apply
+```
+
+Install the docker, and Kubeadm is explained in the next section.
+
+Install the default `containerd`
+
+```bash
+sudo containerd config default > /etc/containerd/config.toml
+```
+
+and change the value `SystemdCgroup = true`.
+
+and restart the service:
+
+```bash
+systemctl restart containerd
+```
+
+
+
+To create the cluster in the master
+
+```bash
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint=192.168.1.160
+```
+
+To join the worker node
+
+```bash
+kubeadm join 192.168.1.160:6443 --token 6h7zx8.narcgl4e12adlq6d \
+	--discovery-token-ca-cert-hash sha256:ce1f456deddc6eb416bdd60e52fe02f1065c0065412410234cfaae1fe58b0211
+oj@master:~$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+```
+
+Then 
+
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+
+
+
+
+### Network Layer 2 installation
 
 use the fannel as the driver
 
