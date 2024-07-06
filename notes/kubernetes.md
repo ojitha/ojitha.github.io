@@ -520,7 +520,7 @@ kubectl cp </path/to/local/file> <pod-name>:</path/to/remote/file>
 1. create test.txt in the local machine
 2. list the local machine test.txt file
 3. copy local machine test.txt to the root of the nginx
-4. interactively login to the nginx-example pod via bash
+4. interactively log in to the nginx-example pod via bash
 5. List the files
 
 Port forwarding to access via local machine
@@ -531,9 +531,126 @@ kubectl port-forward <pod-name> <local machine port>:<remote container>
 
 Traffic from local machine to remote container.
 
-![port forwarding](./assets/images/kubernetes/port_forwarding.png)
+![port forwarding](/assets/images/kubernetes/port_forwarding.png)
 
-### Cluster Management
+### Prometheus and Grafana
+
+Add the chart
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+```
+
+You can search and verify the availability:
+
+```bash
+helm search repo prometheus-community
+```
+
+Install Helm chart:
+
+```bash
+helm install prometheus prometheus-community/kube-prometheus-statck
+```
+
+To install the Grafana:
+
+```bash
+helm install prometheus prometheus-community/kube-prometheus-stack
+```
+
+
+
+You can use the following command to get the port to access the Grafana:
+
+```bash
+kubectl describe pods prometheus-grafana-56f54d5c96-sj9vm
+```
+
+Port forward to access the Grafana from the master node (192.168.1.160):
+
+```bash
+kubectl port-forward prometheus-grafana-56f54d5c96-sj9vm 8080:3000
+```
+
+Use the following command to access the port via localhost:
+
+```bash
+ssh -L 8080:localhost:8080 oj@192.168.1.160
+```
+
+Now, you can access the Grafana via http://localhost:8080.
+
+But you need user/password. Therefore, find the secrets to login to the Grafana:
+
+```bash
+kubectl get secret prometheus-grafana -o jsonpath='{.data}'
+```
+
+Use the following command to find the user/password:
+
+```bash
+echo <user/password> | base64 --decode
+```
+
+### Dashboard
+
+In the master, add the repository
+
+```bash
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+```
+
+In the master, install
+
+```bash
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+```
+
+Port forward in the master:
+
+```bash
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+```
+
+Create the fabric-rbac.yaml:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fabric8-rbac
+subjects:
+  - kind: ServiceAccount
+    # Reference to upper's `metadata.name`
+    name: default
+    # Reference to upper's `metadata.namespace`
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+```
+
+
+
+In the master, apply the following
+
+```bash
+kubectl apply -f fabric-rbac.yaml
+```
+
+NOTE: Please use the delete instead of apply if you want to delete.
+
+In the master, create the token:
+
+```bash
+kubectl -n default create token default
+```
+
+This token is the bearer token, which you can use to log in to the dashboard.
+
+
 
 References:
 
