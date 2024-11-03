@@ -162,31 +162,25 @@ And the worker is
 
 ```yaml
 network:
-    version: 2
-    ethernets:
-        eth0:
-            dhcp4: false
-            dhcp6: false
-            addresses:
-            # worker1
-            - '192.168.1.163/29'
-            optional: true
-            routes:
-              - to: 0.0.0.0/0
-                via: 192.168.1.255
-    wifis:
-        renderer: networkd
-        wlan0:
-            access-points:
-                TP-LINK_872B_5G:
-                    password: <password is in>
-            dhcp4: true
-            optional: true
+  ethernets:
+    eth0:
+      dhcp4: no
+      dhcp6: no
+      optional: false
+      addresses:
+        - 192.168.1.11/24
+      routes:
+        - via: 192.168.1.1
+          to: default
+      nameservers:
+          addresses: [192.168.1.1]
+  version: 2
+  renderer: networkd
 ```
 
 In the file `/etc/sysctl.conf` change the value of `net.ipv4.ip_forward` to `1`.
 
-![Verify port forwarding](./assets/images/kubernetes/Verify port forwarding.png)
+![Verify port forwarding](/assets/images/kubernetes/Verify port forwarding.png)
 
 Reboot after apply
 
@@ -194,15 +188,21 @@ Reboot after apply
 sudo netplan apply
 ```
 
-Install the docker, and Kubeadm is explained in the next section.
+Install the docker
 
-Install the default `containerd`
+```bash
+curl -sSL get.docker.com | sh
+```
+
+In addition to that, I added the user to the docker group: `sudo usermod -aG docker oj`
 
 ```bash
 sudo containerd config default > /etc/containerd/config.toml
 ```
 
-and change the value `SystemdCgroup = true`.
+ and change the value `SystemdCgroup = true`. 
+
+NOTE: I've got permission error. Therefore login as `sudo su` first.
 
 and restart the service:
 
@@ -210,20 +210,27 @@ and restart the service:
 systemctl restart containerd
 ```
 
+**Install the kubernetes as explained in the above section.**
 
+Find the default gateway with
+
+```bash
+ip route show
+```
+
+![verify docker ip route](/assets/images/kubernetes/verify docker ip route.png)
 
 To create the cluster in the master
 
 ```bash
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint=192.168.1.160
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address 192.168.1.11 --control-plane-endpoint 192.168.1.11
 ```
 
 To join the worker node
 
 ```bash
-kubeadm join 192.168.1.160:6443 --token 6h7zx8.narcgl4e12adlq6d \
-	--discovery-token-ca-cert-hash sha256:ce1f456deddc6eb416bdd60e52fe02f1065c0065412410234cfaae1fe58b0211
-oj@master:~$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo kubeadm join 192.168.1.11:6443 --token 447r22.zx6qjx2tnt56ksu9 \
+	--discovery-token-ca-cert-hash sha256:07db6cd942358d78d2a544d777e023f8a8f4b2aa50591e2f6b3b99cb1fc674d7
 ```
 
 Then 
@@ -240,7 +247,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ### Network Layer 2 installation
 
-use the fannel as the driver
+use the fannel as the driver only on master
 
 ```bash
 # no sudo need
@@ -263,7 +270,7 @@ kubectl get nodes
 
 ![CleanShot 2024-06-22 at 14.06.46@2x](/assets/images/UnixTools/CleanShot 2024-06-22 at 14.06.46@2x.png)
 
-Now, you have to install and activate the CRI in the worker nodes. After that join the worker to cluster
+If you use cri-dockerd, you have to install and activate the CRI in the worker nodes. After that join the worker to cluster, for example:
 
 ```
 kubeadm join 192.168.1.121:6443 --token f9zlr3.jrbkjy4gagp16ym7 \

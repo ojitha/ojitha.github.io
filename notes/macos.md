@@ -400,3 +400,8 @@ Alternatively, type the following to enable ClipboardSharingEnabled as the defau
 defaults write ~/Library/Preferences/com.apple.coreservices.useractivityd.plist ClipboardSharingEnabled 1
 ```
 
+### File sharing to Ubuntu
+
+First enable the sharing in the Mac as explained in the [Set up file sharing on Mac](https://support.apple.com/en-au/guide/mac-help/mh17131/mac).
+
+In the Ubuntu you can access this as follows
