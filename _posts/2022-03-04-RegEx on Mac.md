@@ -3,6 +3,8 @@ layout: post
 title:  RegEx on MacOS
 date:   2022-03-04
 categories: [RegEx]
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
+typora-copy-images-to: ../assets/images/${filename}
 ---
 
 
@@ -533,6 +535,32 @@ Look
 VSCode support the lookarounds as well.
 
 <img src="/assets/images/2022-03-04-RegEx on Mac/vscode_lookarounds.png" alt="VSCode lookarounds" style="zoom:50%;" />
+
+
+
+In the following example, I've used the [Glasp: PDF & Web Highlighter for Researchers & Learners](https://glasp.co/?ref=glasp_extension) to get the following transcript for the `https://www.youtube.com/watch?v=ZrSc_P6baQI&list=PLdQruVCKu10kK6ZD68hOdynzP_TyY4KV-` youtube video.
+
+```
+(00:04) why do dictionaries ...
+(00:35) exception it gives you a... 
+(01:04) characters and we look up ...
+```
+
+to update the above to have timeline markdown link, use the following regex
+
+search: `\((\d{2}):(\d{2})`
+
+Replace: `[$1:$2](https://www.youtube.com/watch?v=ZrSc_P6baQI&list=PLdQruVCKu10kK6ZD68hOdynzP_TyY4KV-&t=$1m$2s`
+
+The output will be something similar to 
+
+```
+[00:04](https://www.youtube.com/watch?v=ZrSc_P6baQI&list=PLdQruVCKu10kK6ZD68hOdynzP_TyY4KV-&t=00m04s) why do dictionaries ...
+[00:35](https://www.youtube.com/watch?v=ZrSc_P6baQI&list=PLdQruVCKu10kK6ZD68hOdynzP_TyY4KV-&t=00m35s) exception it gives you a...
+[01:04](https://www.youtube.com/watch?v=ZrSc_P6baQI&list=PLdQruVCKu10kK6ZD68hOdynzP_TyY4KV-&t=01m04s) characters and we look up ...
+```
+
+
 
 ## Stream editor
 
