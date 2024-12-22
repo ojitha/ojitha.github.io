@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.3.4"
+
 
 # Hello! This is where you manage which Jekyll version is used to run.
 # When you want to use a different version, change it below, save the
@@ -14,7 +14,7 @@ ruby "2.3.4"
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
 # gem "minima", "~> 2.5.1"
 # gem "minimal-mistakes-jekyll"
-gem 'jekyll', '~> 3.10.0'
+gem 'jekyll', '~> 3.6'
 
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
@@ -24,7 +24,7 @@ gem "github-pages", group: :jekyll_plugins
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.6"
-  gem 'jekyll-algolia'
+  gem 'jekyll-algolia', '~> 1.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
