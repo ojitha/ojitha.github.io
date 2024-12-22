@@ -1,5 +1,4 @@
 source "https://rubygems.org"
-ruby "3.2.3"
 
 # Hello! This is where you manage which Jekyll version is used to run.
 # When you want to use a different version, change it below, save the
@@ -20,7 +19,7 @@ gem 'jekyll', '~> 3.10.0'
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
 # uncomment the line below. To upgrade, run `bundle update github-pages`.
-gem "github-pages", group: :jekyll_plugins
+gem "github-pages", "232", group: :jekyll_plugins
 
 # If you have any plugins, put them here!
 ## previous jekyll-feed version is 0.6
