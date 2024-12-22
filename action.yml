@@ -1,0 +1,50 @@
+name: Algolia Jekyll Action
+description: Run jekyll-algolia plugin
+author: Ojitha Hewa Kumanayaka
+branding:
+  icon: 'search'
+  color: 'purple'
+inputs:
+  APIKEY:
+    description: 'Algolia API Key'
+    required: true
+  ruby-version:
+    description: 'Version of Ruby to use on build. Default is 3.3.4.'
+    required: false
+    default: '3.3.4'
+  cache-version:
+    description: 'The version of the cache, change this from the default (1) to start over with a fresh cache.'
+    required: false
+    default: 1
+  jekyll_src:  
+    description: 'The Jekyll website source directory'
+    required: false
+    default: ''
+ 
+    
+runs:
+  using: composite
+  steps:
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+        bundler-cache: true
+        cache-version: ${{ runner.os }}-gems-${{ inputs.ruby-version }}-${{ inputs.cache-version }}-${{ inputs.jekyll_src }}
+        working-directory: ${{ inputs.jekyll_src }}
+
+        
+    - name: Run jekyll-algolia
+      run: |
+        # Run Jekyll Algolia
+        cd  '${{ github.workspace }}/${{ inputs.jekyll_src }}'
+        # Bundle install
+        echo "::group::Jekyll folder"
+        echo "Building Jekyll from: $PWD"
+        echo "::endgroup::"
+        # Updating Algolia Index
+        echo "::group::Updating Algolia Index"
+        bundle exec jekyll algolia
+        echo "::endgroup::"
+      env:
+        ALGOLIA_API_KEY: '${{ inputs.APIKEY }}'
+      shell: bash

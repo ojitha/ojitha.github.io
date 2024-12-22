@@ -10,8 +10,8 @@ jobs:
     env:
       JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout
       - name: Algolia Jekyll Action
-        uses: dieghernan/algolia-jekyll-action@main
+        uses: ojitha/ojitha.github.io@main
         with:
           APIKEY: '${{ secrets.ALGOLIA_API_KEY }}'
