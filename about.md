@@ -27,6 +27,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 | Course                                                       | Association             | Credentials                                                  | Issued Date |
 | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------- |
+| [Knowledge Check: Get Started with Databricks for Data Engineering](https://customer-academy.databricks.com/learn/courses/2026/knowledge-check-get-started-with-databricks-for-data-engineering?hash=bc44379a9e7268c2a0a84289e6c69d8d9308abd2&generated_by=248029) | Databricks              | [pdf](assets/images/about/2026_3_248029_1737415341_Databricks - Generic.pdf){:target="_blank"} | 21/01/2025  |
 | Getting Started with AWS Control Tower                       | AWS                     | [pdf](assets/images/about/14823_3_4320000_1706403451_AWS Course Completion Certificate.pdf){:target="_blank"} | 28/01/2024  |
 | [AWS Technical Essentials](https://explore.skillbuilder.aws/learn/course/1851){:target="_blank"} | AWS                     | [pdf](assets/images/about/1851_3_4320000_1701053421_AWS_Course_Completion_Certificate.pdf){:target="_blank"} | 07/11/2023  |
 | [Introduction to Amazon Athena](https://explore.skillbuilder.aws/learn/course/152){:target="_blank"} | AWS                     | [pdf](assets/images/about/152_3_1510486_1700984961_AWS Course_Completion_Certificate.pdf){:target="_blank"} | 16/10/2023  |
