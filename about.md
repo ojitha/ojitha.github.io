@@ -57,3 +57,14 @@ typora-copy-images-to: /assets/images/${filename}
 | [Introduction to Recommender Systems](https://www.coursera.org/account/accomplishments/records/LU8A57ZX89HG){:target="_blank"} | University of Minnesota | [Coursera](assets/images/about/Coursera_LU8A57ZX89HG.pdf){:target="_blank"} | 10/2015     |
 |                                                              |                         |                                                              |             |
 
+## IEEE Research publications
+
+- Conference: [IEEE ICIIS 2007](https://ieeexplore.ieee.org/servlet/opac?punumber=4569827)
+    Ojitha Kumanayaka and Nalin Ranasinghe. [Formalism for ontology validation](https://ieeexplore.ieee.org/abstract/document/4579189). In IEEE Second International Conference on Industrial and Information Systems. Faculty of Engineering, University of Peradeniya, August 2007.
+
+- Conference: [IEEE ICIA 2006](https://ieeexplore.ieee.org/servlet/opac?punumber=4250170)
+    Ojitha Kumanayaka and Nalin Ranasinghe. [Ontology-based web service personalisation](https://ieeexplore.ieee.org/abstract/document/4250244). In IEEE Second International Conference on Information and Automation 2006, Galadari Hotel and Colombo and Sri Lanka, December 2006. IEEE Sri Lanka Section.
+
+- Conference: [IEEE ICIIS 2006](https://ieeexplore.ieee.org/servlet/opac?punumber=4216542)
+    Ojitha Kumanayaka and Nalin Ranasinghe. [Personalised web services creation via dynamic composition](https://ieeexplore.ieee.org/document/4216623). In IEEE First International Conference on Industrial and Information Systems. Faculty of Engineering, University of Peradeniya, August 2006.
+
