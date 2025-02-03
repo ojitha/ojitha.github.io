@@ -19,6 +19,7 @@ are the recent blogs.
 My [GitHub](https://github.com/ojitha) blogs:
 {% assign sorted = site.categories | sort: name  %}
 {% for category in sorted %}
+
 <h3>{{ category[0] }}</h3>
 <ul>
     {% for post in category[1] %}

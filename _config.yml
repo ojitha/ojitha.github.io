@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Ojitha @ GitHub
+title: Ojitha Hewa Kumanayaka
 author:
   name: Ojitha Kumanayaka
   email: "ojithak@gmail.com"
@@ -26,11 +26,12 @@ timezone: Australia/Sydney
 show_excerpts: true
 
 header_pages:
-  - about.md
-  - projects.md
+  - home.md
   - blog.md
   - notes.md
+  - projects.md  
   - search.html
+  - about.md
 
 # theme: minima
 remote_theme: jekyll/minima@41b97699af658128fa9983e5312ca5516641f335
