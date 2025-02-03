@@ -1,9 +1,10 @@
 ---
 layout: default
 ---
-<div style="background-color: #e7f3fe; border-left: 6px solid #2196F3;"> 
-  This is my tech workbook. Please visit <a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a> for my official Tech blog.</div>
-<div class="posts">
+<!-- <div style="background-color: #e7f3fe; border-left: 6px solid #2196F3;"> 
+  This is my tech workbook. Please visit <a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a> for my official Tech blog.</div> -->
+  <p style="background-color:#fff6e4; padding:15px; border-width:3px; border-color:#f5ecda; border-style:solid; border-radius:6px"> 📝 <b>Research :<code><a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a></code></b> for my lengthy articles.</p>
+  <div class="posts">
     {% for post in paginator.posts %}
     {% capture url_to_use %}{{ post.url }}{% endcapture %}
     {% if post.redirect_url %}
