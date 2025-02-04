@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Elastic Search NER
-date:   2020-07-11
+date:   2024-07-11
 categories: [ELK]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
@@ -151,7 +151,7 @@ docker compose up
 Select a NER model from the [third-party model reference list](https://www.elastic.co/guide/en/machine-learning/8.10/ml-nlp-model-ref.html#ml-nlp-model-ref-ner). This example uses an [uncased NER model](https://huggingface.co/elastic/distilbert-base-uncased-finetuned-conll03-english).
 
 ```bash
-docker run -it --rm --network elastic elastic/eland eland_import_hub_model --url http://es01:9200/ --hub-model-id elastic/distilbert-base-uncased-finetuned-conll03-english --task-type ner  --start --clear-previous
+docker run -it --rm --network elastic docker.elastic.co/eland/eland:latest eland_import_hub_model --url http://es01:9200/ --hub-model-id elastic/distilbert-base-uncased-finetuned-conll03-english --task-type ner  --start --clear-previous
 ```
 
 ## Inferencing
@@ -173,7 +173,7 @@ POST _ml/trained_models/elastic__distilbert-base-uncased-finetuned-conll03-engli
 
 create the pipeline
 
-```
+```json
 PUT _ingest/pipeline/ner
 {
   "description": "NER pipeline",
