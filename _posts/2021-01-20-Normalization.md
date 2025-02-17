@@ -7,7 +7,7 @@ mermaid: true
 maths: true
 ---
 
-E. F. Codd proposed three normal forms 1NF, 2NF and 3NF (1970). Revised definition (1974) was given by F. Boyce and Codd which is known as Boyce-Codd Normal Form (BCNF which is 3.5NF) to distinguish it from the old definition of third normal form. R. Faign introduced 4NF(1977) and 5NF(1979) and DKNF(1981). All the normal forms depend on the functional dependency, but 4NF and 5NF have been proposed which are based on the concept of multivalued dependency and joining dependency, respectively.
+E. F. Codd proposed three normal forms: 1NF, 2NF and 3NF (1970). A revised definition (1974) was given by F. Boyce and Codd, which is known as the Boyce-Codd Normal Form (BCNF, which is 3.5NF) to distinguish it from the old definition of the third normal form. R. Faign introduced 4NF(1977) and 5NF(1979) and DKNF(1981). All the normal forms depend on functional dependency, but 4NF and 5NF have been proposed based on the concepts of multivalued dependency and joining dependency.
 
 * TOC
 {:toc}
@@ -16,11 +16,11 @@ E. F. Codd proposed three normal forms 1NF, 2NF and 3NF (1970). Revised definiti
 
 ## Why Normalization?
 
-Normalization theory provides the guidelines to assess the quality of a database in designing process. 
+The normalisation theory provides guidelines for assessing the quality of a database during the design process. 
 
-> The normalization[^2] is the application of set of simple rules called Normal Forms (NF) to the relation schema.
+> The normalisation [^2] applies a set of simple rules called Normal Forms (NF) to the relation schema.
 
-Good schema has the following:
+A good schema has the following:
 
 - Minimum redundancy
     - Insertion anomaly:
@@ -28,7 +28,7 @@ Good schema has the following:
     - Modification anomaly
 - Fewer `null` values in Tuples
 
-## Decompostion
+## Decomposition
 
 The decomposition of relation schema $$R$$ defined as its replacement by a set of relation schemas such that each relation schema contains a subset of attributes of $$R$$. Ensure that each attribute in $$R$$ must appear in at least one relation schema $$R_{i}$$.
 
@@ -118,8 +118,111 @@ flowchart LR
 		order_date
 	end
 </div>
-
 The attribute `item` kept simple to show the normalization process clear. See more complex normalization example here[^1].
+
+## Student Example
+
+Here database normalization from 1NF to 3NF using a practical example of a Student Course Registration system.
+
+Let's start with an unnormalized table:
+
+```
+STUDENT_COURSES
+StudentID | StudentName | Address      | Course1 | Course1Fee | Course2 | Course2Fee | TeacherName1 | TeacherPhone1 | TeacherName2 | TeacherPhone2
+100       | John Smith | 123 Main St. | Math    | 500        | Physics | 600        | Dr. Brown    | 555-1234      | Dr. White    | 555-5678
+```
+
+1. First Normal Form (1NF):
+- Eliminate repeating groups
+- Each cell should contain atomic/single values
+- Each column should have a unique name
+
+```sql
+STUDENT_COURSE_1NF
+StudentID | StudentName | Address      | Course  | CourseFee | TeacherName | TeacherPhone
+100       | John Smith | 123 Main St. | Math    | 500       | Dr. Brown   | 555-1234
+100       | John Smith | 123 Main St. | Physics | 600       | Dr. White   | 555-5678
+```
+
+2. Second Normal Form (2NF):
+- Must be in 1NF
+- Remove partial dependencies (attributes that depend on only part of the primary key)
+- In this case, StudentName and Address only depend on StudentID, not on the Course
+
+```sql
+STUDENTS_2NF
+StudentID | StudentName | Address
+100       | John Smith | 123 Main St.
+
+ENROLLMENTS_2NF
+StudentID | Course  | CourseFee | TeacherName | TeacherPhone
+100       | Math    | 500       | Dr. Brown   | 555-1234
+100       | Physics | 600       | Dr. White   | 555-5678
+```
+
+3. Third Normal Form (3NF):
+- Must be in 2NF
+- Remove transitive dependencies (where non-key attributes depend on other non-key attributes)
+- TeacherName and TeacherPhone depend on the Course, not on StudentID
+
+```sql
+STUDENTS_3NF
+StudentID | StudentName | Address
+100       | John Smith | 123 Main St.
+
+COURSES_3NF
+CourseID | CourseName | CourseFee | TeacherID
+MATH101  | Math       | 500       | T1
+PHY101   | Physics    | 600       | T2
+
+TEACHERS_3NF
+TeacherID | TeacherName | TeacherPhone
+T1        | Dr. Brown   | 555-1234
+T2        | Dr. White   | 555-5678
+
+ENROLLMENTS_3NF
+StudentID | CourseID
+100       | MATH101
+100       | PHY101
+```
+
+Key benefits of this normalization:
+1. Eliminates data redundancy (student info stored once)
+2. Prevents update anomalies (changing a teacher's phone number in one place)
+3. Ensures data consistency (course fees are stored once per course)
+4. Makes the database more flexible for future changes
+
+The relationships can be visualized as:
+```mermaid
+erDiagram
+    STUDENTS ||--o{ ENROLLMENTS : enrolls
+    STUDENTS {
+        int StudentID PK
+        string StudentName
+        string Address
+    }
+    
+    ENROLLMENTS }o--|| COURSES : "belongs to"
+    ENROLLMENTS {
+        int StudentID FK
+        string CourseID FK
+    }
+    
+    COURSES }|--|| TEACHERS : "taught by"
+    COURSES {
+        string CourseID PK
+        string CourseName
+        decimal CourseFee
+        string TeacherID FK
+    }
+    
+    TEACHERS {
+        string TeacherID PK
+        string TeacherName
+        string TeacherPhone
+    }
+```
+
 REF
 
 [^1]: [What is Normalization? 1NF, 2NF, 3NF, BCNF Database Example](https://www.guru99.com/database-normalization.html)
