@@ -227,6 +227,69 @@ erDiagram
     }
 </div>
 
+
+
+```mermaid
+erDiagram
+    STUDENTS ||--o{ ENROLLMENTS : enrolls
+    STUDENTS {
+        int StudentID PK
+        string StudentName
+        string Address
+    }
+    
+    ENROLLMENTS }o--|| COURSES : "belongs to"
+    ENROLLMENTS {
+        int StudentID FK
+        string CourseID FK
+    }
+    
+    COURSES }|--|| TEACHERS : "taught by"
+    COURSES {
+        string CourseID PK
+        string CourseName
+        decimal CourseFee
+        string TeacherID FK
+    }
+    
+    TEACHERS {
+        string TeacherID PK
+        string TeacherName
+        string TeacherPhone
+    }
+
+```
+
+Cardinality is shown using notation:
+
+- `||` represents "exactly one"
+- `o{` represents "zero or many"
+- `}|` represents "many to one"
+
+
+
+This ERD (Entity Relationship Diagram):
+
+1. The four main entities after 3NF normalization:
+   - STUDENTS
+   - ENROLLMENTS (junction table)
+   - COURSES
+   - TEACHERS
+
+2. Relationships between entities:
+   - One student can enroll in many courses (1:M)
+   - One course can have many students (M:1)
+   - One teacher can teach many courses (1:M)
+
+3. Key attributes for each entity:
+   - Primary Keys (PK)
+   - Foreign Keys (FK)
+   - Regular attributes
+
+
+
+
+
 REF
 
 [^1]: [What is Normalization? 1NF, 2NF, 3NF, BCNF Database Example](https://www.guru99.com/database-normalization.html)
