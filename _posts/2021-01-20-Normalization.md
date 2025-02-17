@@ -227,39 +227,6 @@ erDiagram
     }
 </div>
 
-
-
-```mermaid
-erDiagram
-    STUDENTS ||--o{ ENROLLMENTS : enrolls
-    STUDENTS {
-        int StudentID PK
-        string StudentName
-        string Address
-    }
-    
-    ENROLLMENTS }o--|| COURSES : "belongs to"
-    ENROLLMENTS {
-        int StudentID FK
-        string CourseID FK
-    }
-    
-    COURSES }|--|| TEACHERS : "taught by"
-    COURSES {
-        string CourseID PK
-        string CourseName
-        decimal CourseFee
-        string TeacherID FK
-    }
-    
-    TEACHERS {
-        string TeacherID PK
-        string TeacherName
-        string TeacherPhone
-    }
-
-```
-
 Cardinality is shown using notation:
 
 - `||` represents "exactly one"
@@ -285,9 +252,6 @@ This ERD (Entity Relationship Diagram):
    - Primary Keys (PK)
    - Foreign Keys (FK)
    - Regular attributes
-
-
-
 
 
 REF
