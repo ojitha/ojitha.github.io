@@ -129,10 +129,11 @@ Let's start with an unnormalized table:
 ```
 STUDENT_COURSES
 StudentID | StudentName | Address      | Course1 | Course1Fee | Course2 | Course2Fee | TeacherName1 | TeacherPhone1 | TeacherName2 | TeacherPhone2
-100       | John Smith | 123 Main St. | Math    | 500        | Physics | 600        | Dr. Brown    | 555-1234      | Dr. White    | 555-5678
+100       | John Smith  | 123 Main St. | Math    | 500        | Physics | 600        | Dr. Brown    | 555-1234      | Dr. White    | 555-5678
 ```
 
-1. First Normal Form (1NF):
+### First Normal Form (1NF):
+
 - Eliminate repeating groups
 - Each cell should contain atomic/single values
 - Each column should have a unique name
@@ -140,11 +141,12 @@ StudentID | StudentName | Address      | Course1 | Course1Fee | Course2 | Course
 ```sql
 STUDENT_COURSE_1NF
 StudentID | StudentName | Address      | Course  | CourseFee | TeacherName | TeacherPhone
-100       | John Smith | 123 Main St. | Math    | 500       | Dr. Brown   | 555-1234
-100       | John Smith | 123 Main St. | Physics | 600       | Dr. White   | 555-5678
+100       | John Smith  | 123 Main St. | Math    | 500       | Dr. Brown   | 555-1234
+100       | John Smith  | 123 Main St. | Physics | 600       | Dr. White   | 555-5678
 ```
 
-2. Second Normal Form (2NF):
+### Second Normal Form (2NF):
+
 - Must be in 1NF
 - Remove partial dependencies (attributes that depend on only part of the primary key)
 - In this case, StudentName and Address only depend on StudentID, not on the Course
@@ -152,7 +154,7 @@ StudentID | StudentName | Address      | Course  | CourseFee | TeacherName | Tea
 ```sql
 STUDENTS_2NF
 StudentID | StudentName | Address
-100       | John Smith | 123 Main St.
+100       | John Smith  | 123 Main St.
 
 ENROLLMENTS_2NF
 StudentID | Course  | CourseFee | TeacherName | TeacherPhone
@@ -160,7 +162,8 @@ StudentID | Course  | CourseFee | TeacherName | TeacherPhone
 100       | Physics | 600       | Dr. White   | 555-5678
 ```
 
-3. Third Normal Form (3NF):
+### Third Normal Form (3NF):
+
 - Must be in 2NF
 - Remove transitive dependencies (where non-key attributes depend on other non-key attributes)
 - TeacherName and TeacherPhone depend on the Course, not on StudentID
@@ -168,7 +171,7 @@ StudentID | Course  | CourseFee | TeacherName | TeacherPhone
 ```sql
 STUDENTS_3NF
 StudentID | StudentName | Address
-100       | John Smith | 123 Main St.
+100       | John Smith  | 123 Main St.
 
 COURSES_3NF
 CourseID | CourseName | CourseFee | TeacherID
@@ -193,7 +196,8 @@ Key benefits of this normalization:
 4. Makes the database more flexible for future changes
 
 The relationships can be visualized as:
-```mermaid
+
+<div class="mermaid">
 erDiagram
     STUDENTS ||--o{ ENROLLMENTS : enrolls
     STUDENTS {
@@ -201,7 +205,7 @@ erDiagram
         string StudentName
         string Address
     }
-    
+
     ENROLLMENTS }o--|| COURSES : "belongs to"
     ENROLLMENTS {
         int StudentID FK
@@ -221,7 +225,7 @@ erDiagram
         string TeacherName
         string TeacherPhone
     }
-```
+</div>
 
 REF
 
