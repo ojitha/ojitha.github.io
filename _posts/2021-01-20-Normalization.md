@@ -47,12 +47,11 @@ Let `X` and `Y` are subset of se of attributes of a relation $$R$$ , then an ins
 
 The FD diagram is
 
-<!-- <div class="mermaid"> -->
 ```mermaid
     graph LR;
     X-->Y;
 ```    
-<!-- </div> -->
+
 
 > The large set of FDs can reduce the efficiency of database system. Generally an $$\left( FD\right) A\rightarrow B$$ is trivial, if and only if $$B\subseteq A$$. Only **non-trivial dependencies** are considered. 				
 > 									
@@ -73,8 +72,8 @@ Creating one tuple for each value in multivalued attributes in the CART is the e
 
 This level depends on full FD. An attribute `Y` of relation schema $$R$$ is said to be **fully functional dependent** on attribute `X` $$(X \rightarrow Y)$$, if there is no `A`, where `A` is proper subset of `X` such that $$A\rightarrow Y$$, otherwise this is called **partial functional dependency**.
 
-<div class="mermaid">
-flowchart LR
+```mermaid
+flowchart TB
   customer --> address
   order_number --> address  
   subgraph order_item
@@ -84,7 +83,7 @@ flowchart LR
   order_number-->order_date
   order_item --> item_qty
   order_number --> customer	
-</div>
+```
 
 A relation schema $$R$$ is said to be in 2NF if every non-key attribute `A` in $$R$$ is fully FD on the primary key.
 
@@ -102,24 +101,25 @@ The third normal form is based on the concept of transitive dependency. An attri
 
 For example, $$order\_number \rightarrow address$$ is transitive through `customer` as shown in the above diagram: $$order\_number\rightarrow customer$$ and $$customer\rightarrow address$$. To simplify the situation, I have introduce **surrogate key** `customer_id`.
 
-<div class="mermaid">
-flowchart LR
+```mermaid
+flowchart TB
 	subgraph customer
 		customer_id
 	end	
 	customer --> address  
-</div>
+```
 
-Now the remaining class is 
+Now the remaining classes are 
 
-<div class="mermaid">
-flowchart LR
+```mermaid
+flowchart TB
 	subgraph cart
 		order_number
 		customer_id
 		order_date
 	end
-</div>
+```
+
 The attribute `item` kept simple to show the normalization process clear. See more complex normalization example here[^1].
 
 ## Student Example
