@@ -47,10 +47,12 @@ Let `X` and `Y` are subset of se of attributes of a relation $$R$$ , then an ins
 
 The FD diagram is
 
-<div class="mermaid">
-graph LR;
+<!-- <div class="mermaid"> -->
+```mermaid
+    graph LR;
     X-->Y;
-</div>
+```    
+<!-- </div> -->
 
 > The large set of FDs can reduce the efficiency of database system. Generally an $$\left( FD\right) A\rightarrow B$$ is trivial, if and only if $$B\subseteq A$$. Only **non-trivial dependencies** are considered. 				
 > 									
@@ -197,7 +199,7 @@ Key benefits of this normalization:
 
 The relationships can be visualized as:
 
-<div class="mermaid">
+```mermaid
 erDiagram
     STUDENTS ||--o{ ENROLLMENTS : enrolls
     STUDENTS {
@@ -225,7 +227,7 @@ erDiagram
         string TeacherName
         string TeacherPhone
     }
-</div>
+```
 
 Cardinality is shown using notation:
 
