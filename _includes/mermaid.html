@@ -5,6 +5,15 @@
     securityLevel: 'loose',
     theme: 'base',
    });
+
+  mermaid.registerIconPacks([
+      {
+        name: 'logos',
+        loader: () =>
+          fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((res) => res.json()),
+      },
+  ]);
+
   document.querySelectorAll('pre > code.language-mermaid').forEach((codeBlock) => {
     codeBlock.parentElement.outerHTML = `<pre class="mermaid">${codeBlock.textContent}</pre>`;
   });
