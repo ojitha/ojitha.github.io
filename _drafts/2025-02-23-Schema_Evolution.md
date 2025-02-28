@@ -126,17 +126,6 @@ To use the AWS Glue Schema Registry, you can:
 
 
 
-:::::: {.cell .code execution_count=1}
-```python
-print("why so hard")
-```
-::: {.output .stream .stdout}
-```result
-why so hard
-```
-:::
-::::::
-
 ***
 
 [^1]:[3. Data Models and Query Languages,  Designing Data-Intensive Applications, 2nd Edition](https://learning.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/ch03.html)
