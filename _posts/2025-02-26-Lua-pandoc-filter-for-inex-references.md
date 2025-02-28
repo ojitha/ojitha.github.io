@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Lua filter for Pandoc
+title:  Lua filters for Pandoc
 date:   2025-02-28
 categories: [Lua]
 mermaid: true
@@ -444,7 +444,7 @@ return {
 }
 ```
 
-### Alerts
+## Alerts
 
 You can create GitHub-style alerts in Pandoc Markdown by leveraging **fenced `div` blocks** and **CSS styling**. Pandoc allows you to attach classes to these `div` blocks, which you can then target with CSS to create the visual alert boxes.
 
