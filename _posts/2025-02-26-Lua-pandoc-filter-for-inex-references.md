@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Lua filter for Pandoc Glossary creation
+title:  Lua filter for Pandoc
 date:   2025-02-28
 categories: [Lua]
 mermaid: true
@@ -8,13 +8,26 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-Lua filter using in Pandoc 3.6.3. This filter create glossary for ePub 3 using index term such as `[Important Concept]{.index}`. The links of the glossary item are pointing to this index item in the ePub book.
+Lua filter used in Pandoc 3.6.3. This blog has solutions for:
+
+- Creating Glossary for ePub ver 3 book
+- GitHub style alerts
+
+<!--more-->
+
+------
+
+* TOC
+{:toc}
+------
+
+## Glossary Filter
+
+This filter creates a glossary for ePub 3 using index term such as `[Important Concept]{.index}`. The links of the glossary item are pointing to this index item in the ePub book.
 
 ![Glossary Example](/assets/images/2025-02-26-Lua-pandoc-filter-for-inex-references/Glossary Example.jpg){:width="50%", hight="50%"}
 
 When number are the link sorted on start from the book. You can nevigate to the link. This is similar to the traditional index on page where you search the page number.
-
-<!--more-->
 
 **Section Number Tracking**:
 
@@ -431,3 +444,101 @@ return {
 }
 ```
 
+### Alerts
+
+You can create GitHub-style alerts in Pandoc Markdown by leveraging **fenced `div` blocks** and **CSS styling**. Pandoc allows you to attach classes to these `div` blocks, which you can then target with CSS to create the visual alert boxes.
+
+Here's how you can do it:
+
+### Markdown with Fenced Divs and Classes
+
+In your Markdown document (`my_document.md`), use fenced `div` blocks with classes to represent different alert types. Common GitHub alert types are:
+
+- **Note:** General information, hints.
+- **Tip/Important:** Important information, best practices.
+- **Warning:** Potential issues, things to be careful about.
+- **Danger/Error:** Critical issues, things to avoid.
+
+You can represent these like this in Markdown:
+
+```markdown
+::: note
+**Note:** This is a note alert box.
+It can contain multiple paragraphs and even lists.
+
+- Item 1
+- Item 2
+:::
+
+::: tip
+**Tip:** Here's a helpful tip!
+:::
+
+::: warning
+**Warning:**  Be careful with this action!
+:::
+
+::: danger
+**Danger:** This is a dangerous operation. Proceed with caution!
+:::
+
+```
+
+**Explanation of the Markdown Syntax:**
+
+- `::: note`, `::: tip`, `::: warning`, `::: danger`: These are fenced `div` blocks. The word after `:::` is treated as the **class name** for the `div` element in the output HTML (or other formats).
+- The content inside the `::: ... :::` block is the content of the `div`.
+- You can use standard Markdown formatting inside the alert boxes (bold, italics, lists, etc.).
+
+### CSS Styling (`styles.css`)
+
+Create a CSS file (e.g., `styles.css`) to style the `div` elements with the classes you used in your Markdown. This CSS will define the visual appearance of your alerts, mimicking GitHub's style (you can customise this to your liking).
+
+Here's an example `styles.css` that creates alert boxes with different background colors and border styles:
+
+```css
+.note, .tip, .warning, .danger {
+  padding: 1em;
+  margin-bottom: 1em;
+  border-radius: 5px;
+  border-left: 5px solid;
+}
+
+.note {
+  background-color: #e8f0fe; /* Light blue */
+  border-color: #4285f4;    /* Blue */
+}
+
+.tip {
+  background-color: #f0f9ed;   /* Light green */
+  border-color: #34a853;      /* Green */
+}
+
+.warning {
+  background-color: #fff8e1;  /* Light yellow */
+  border-color: #ffb300;     /* Yellow/Amber */
+}
+
+.danger {
+  background-color: #fde2e2;  /* Light red */
+  border-color: #e53935;     /* Red */
+  color: #842029;           /* Darker text for readability on red */
+}
+
+/* Optional: Style the bold title within alerts */
+.note strong, .tip strong, .warning strong, .danger strong {
+    display: block; /* Make the strong element a block for better spacing */
+    margin-bottom: 0.5em; /* Add some space below the title */
+}
+```
+
+**Explanation of the CSS:**
+
+- `.note, .tip, .warning, .danger`: This selector targets all the `div` elements with these classes.
+    - `padding`, `margin-bottom`, `border-radius`, `border-left`: Basic styling to create the box appearance.
+- `.note`, .tip, .warning, .danger` (individual styles): Specific styles for each alert type:
+    - `background-color`: Sets the background color.
+    - `border-color`: Sets the color of the left border (for visual emphasis, like GitHub).
+    - `color` (for `.danger`): Adjusts text color if needed for better contrast against the background.
+
+- `.note strong, .tip strong, .warning strong, .danger strong`: Optional styling to make the bold text (used for titles like "Note:", "Tip:", etc.) stand out a bit more within the alerts.
