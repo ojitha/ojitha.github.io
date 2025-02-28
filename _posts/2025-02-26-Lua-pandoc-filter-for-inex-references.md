@@ -10,7 +10,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 Lua filter using in Pandoc 3.6.3. This filter create glossary for ePub 3 using index term such as `[Important Concept]{.index}`. The links of the glossary item are pointing to this index item in the ePub book.
 
-![Glossary Example](./assets/images/2025-02-26-Lua-pandoc-filter-for-inex-references/Glossary Example.jpg)
+![Glossary Example](./assets/images/2025-02-26-Lua-pandoc-filter-for-inex-references/Glossary Example.jpg){: width="50%", hight="50%"}
 
 When number are the link sorted on start from the book. You can nevigate to the link. This is similar to the traditional index on page where you search the page number.
 
