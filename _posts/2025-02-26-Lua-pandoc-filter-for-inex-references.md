@@ -25,9 +25,10 @@ Lua filter used in Pandoc 3.6.3. This blog has solutions for:
 
 This filter creates a glossary for ePub 3 using index term such as `[Important Concept]{.index}`. The links of the glossary item are pointing to this index item in the ePub book.
 
+
 ![Glossary Example](/assets/images/2025-02-26-Lua-pandoc-filter-for-inex-references/Glossary Example.jpg){:width="50%", hight="50%"}
 
-When number are the link sorted on start from the book. You can nevigate to the link. This is similar to the traditional index on page where you search the page number.
+When the links are sorted by number, starting from the book, you can navigate to the link. This is similar to the traditional index on a page, where you search by page number.
 
 **Section Number Tracking**:
 
@@ -542,3 +543,38 @@ Here's an example `styles.css` that creates alert boxes with different backgroun
     - `color` (for `.danger`): Adjusts text color if needed for better contrast against the background.
 
 - `.note strong, .tip strong, .warning strong, .danger strong`: Optional styling to make the bold text (used for titles like "Note:", "Tip:", etc.) stand out a bit more within the alerts.
+
+Much more simplier icon[^1] with markdown may be the best:
+
+```
+:boom: DANGER, Will Robinson, DANGER
+> :memo: **This is a Note**: a pen in front of a paper
+
+> :warning: **This is a Note**: an exclamation mark in front of a triangle
+
+> :bulb: **This is a Note**: a light bulb
+
+> :heavy_check_mark: **This is a Note**: a check mark
+
+:sleeping: This text is all part of a single *admonition* block.
+```
+
+Output:
+
+:boom: DANGER, Will Robinson, DANGER
+
+> :memo: **This is a Note**: a pen in front of a paper
+
+> :warning: **This is a Note**: an exclamation mark in front of a triangle
+
+> :bulb: **This is a Note**: a light bulb
+
+> :heavy_check_mark: **This is a Note**: a check mark
+
+:sleeping: This text is all part of a single *admonition* block.
+
+Reference:
+
+****
+
+[^1]: [A markdown version emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet/tree/master)
