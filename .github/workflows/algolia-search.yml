@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  algolia-search:
+  build:
     runs-on: ubuntu-latest
     env:
       JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
