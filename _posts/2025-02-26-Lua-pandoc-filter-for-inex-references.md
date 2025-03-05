@@ -30,9 +30,6 @@ This filter creates a glossary for ePub 3 using index term such as `[Important C
 
 When the links are sorted by number, starting from the book, you can navigate to the link. This is similar to the traditional index on a page, where you search by page number.
 
-::: 
-**Tip:** Here's a helpful tip!
-:::
 
 **Section Number Tracking**:
 
@@ -608,4 +605,4 @@ Reference:
 ****
 
 [^1]: [A markdown version emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet/tree/master)
-[^2]: [pandoc-crossref(1) | pandoc-crossref](https://lierdakil.github.io/pandoc-crossref/#customization)
+[^2]: [pandoc-crossref](https://lierdakil.github.io/pandoc-crossref/#customization)
