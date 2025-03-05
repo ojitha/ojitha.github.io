@@ -15,7 +15,7 @@ source "https://rubygems.org"
 # gem "minima", "~> 2.5.1"
 # gem "minimal-mistakes-jekyll"
 gem 'jekyll', '~> 4.2'
-gem gem 'github-pages', '~> 232'
+gem  'github-pages', '~> 232'
 
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
