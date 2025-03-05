@@ -27,6 +27,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.1'      
         run: bundle install        
       - name: Setup Pages
         uses: actions/configure-pages@v5
