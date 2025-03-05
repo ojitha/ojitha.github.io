@@ -88,5 +88,3 @@ To create a topic:
 ```bash
 ./kafka-topics.sh --create --topic my-topic --bootstrap-server broker:29092
 ```
-https://careers.au.baesystems.com/jobtools/jncustomsearch.viewFullSingle?in_organid=16804&in_jncounter=226178096&in_site=BAESYSTEMS_LinkedIn
-https://careers.au.baesystems.com/jobtools/jncustomsearch.viewFullSingle?in_organid=16804&in_jnCounter=226178096&in_orderby=dateinput%20desc&in_sessionid=1133579276328264987
