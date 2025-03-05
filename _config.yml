@@ -67,6 +67,7 @@ plugins:
   - jekyll-paginate
   - jekyll-algolia
   - jemoji
+  - jekyll-gfm-admonitions
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

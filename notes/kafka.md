@@ -88,4 +88,3 @@ To create a topic:
 ```bash
 ./kafka-topics.sh --create --topic my-topic --bootstrap-server broker:29092
 ```
-my testing to search ddbbyy
