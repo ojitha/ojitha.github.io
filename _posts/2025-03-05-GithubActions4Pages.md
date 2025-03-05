@@ -1,3 +1,0 @@
-
-GitHub Actions are a powerful tool for automating workflows, including building and deploying Jekyll sites to GitHub Pages. The actions you mentioned—actions/checkout@v4, actions/configure-pages@v5, actions/jekyll-build-pages@v1, actions/upload-pages-artifact@v3, and actions/deploy-pages@v4—are commonly used in Jekyll workflows to provide a flexible and customizable way to manage Jekyll sites beyond the limitations of the default GitHub Pages setup. Below, I’ll explain each action in detail, its purpose, why it’s necessary for Jekyll, and provide an example of how they fit together in a workflow.
-
