@@ -30,6 +30,10 @@ This filter creates a glossary for ePub 3 using index term such as `[Important C
 
 When the links are sorted by number, starting from the book, you can navigate to the link. This is similar to the traditional index on a page, where you search by page number.
 
+::: 
+**Tip:** Here's a helpful tip!
+:::
+
 **Section Number Tracking**:
 
 - Added section tracking functionality that extracts section numbers from headers when Pandoc uses `--number-sections`
