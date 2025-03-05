@@ -14,7 +14,7 @@ source "https://rubygems.org"
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
 # gem "minima", "~> 2.5.1"
 # gem "minimal-mistakes-jekyll"
-gem 'jekyll', '~> 3.9'
+gem 'jekyll', '~> 4.2'
 
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
@@ -26,7 +26,6 @@ group :jekyll_plugins do
   gem "jekyll-feed"
   gem 'jekyll-algolia'
   gem "jekyll-remote-theme"
-  gem "minimal-mistakes-jekyll"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
