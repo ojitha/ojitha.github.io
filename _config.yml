@@ -33,8 +33,8 @@ header_pages:
   - search.html
   - about.md
 
-theme: minima
-# remote_theme: jekyll/minima@41b97699af658128fa9983e5312ca5516641f335
+# theme: minima
+remote_theme: jekyll/minima
 minima:
   skin: classic
   social_links:
