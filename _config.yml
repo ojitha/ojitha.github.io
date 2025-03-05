@@ -34,7 +34,7 @@ header_pages:
   - about.md
 
 # theme: minima
-remote_theme: jekyll/minima
+remote_theme: jekyll/minima@41b97699af658128fa9983e5312ca5516641f335
 minima:
   skin: classic
   social_links:
