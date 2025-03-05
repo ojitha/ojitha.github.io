@@ -34,7 +34,7 @@ header_pages:
   - about.md
 
 # theme: minima
-remote_theme: jekyll/minima@41b97699af658128fa9983e5312ca5516641f335
+remote_theme: benbalter/retlab
 minima:
   skin: classic
   social_links:
@@ -67,6 +67,7 @@ plugins:
   - jekyll-paginate
   - jekyll-algolia
   - jemoji
+  - jekyll-remote-theme
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
