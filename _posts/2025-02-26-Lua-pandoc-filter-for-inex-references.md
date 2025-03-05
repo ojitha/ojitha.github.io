@@ -573,8 +573,35 @@ Output:
 
 :sleeping: This text is all part of a single *admonition* block.
 
+## pandoc-crossref
+Here is simple configuration as in the crossref[^2]
+
+```
+---
+codeBlockCaptions: True
+figureTitle: |
+  Fig.
+figPrefix:
+    - "Fig."
+    - "Figs"
+tblPrefix:
+    - "Table"
+    - "Tables"
+lofTitle: |
+  ## List of Figures
+lotTitle: |
+  ## List of Tables
+lolTitle: |
+  ## List of Listings
+tableTemplate: |
+  *$$tableTitle$$ $$i$$*$$titleDelim$$ $$t$$
+autoSectionLabels: True
+---
+```
+
 Reference:
 
 ****
 
 [^1]: [A markdown version emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet/tree/master)
+[^2]: [pandoc-crossref(1) | pandoc-crossref](https://lierdakil.github.io/pandoc-crossref/#customization)

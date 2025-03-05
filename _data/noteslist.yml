@@ -10,6 +10,9 @@ docs:
 - title: Email
   url: email.html
 
+- title: Kafka
+  url: kafka.html
+
 - title: Kubernetes
   url: kubernetes.html  
 
