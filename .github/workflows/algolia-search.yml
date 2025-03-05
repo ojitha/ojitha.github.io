@@ -1,9 +1,11 @@
+name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+
 on:
   push:
     branches:
-      - master
+      - [$default-branch]
 
-name: algolia-search
+
 jobs:
   algolia-search:
     runs-on: ubuntu-latest
