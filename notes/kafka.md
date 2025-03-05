@@ -6,8 +6,8 @@ title: Kafka
 ## Getting Started with Confluent CLI
 Reference: [Apache Kafka® Quick Start - Local Install With Docker](https://developer.confluent.io/quickstart/kafka-local/)
 
-> [!NOTE]
->  :heavy_check_mark: I've alreay installed
+
+> I've alreay installed
 > - Docker Desktop
 > - `brew install confluentinc/tap/cli`
 > - I have `bash-completion` installed. 
@@ -81,7 +81,7 @@ To find the kafka version:
 ```bash
 ./kafka-topics.sh --version
 ```
-> :heavy_check_mark: I am using Kafka 3.9.0.
+> I am using Kafka 3.9.0.
 
 To create a topic:
 
