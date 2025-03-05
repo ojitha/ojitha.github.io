@@ -67,7 +67,8 @@ plugins:
   - jekyll-paginate
   - jekyll-algolia
   - jemoji
-
+  - jekyll-gfm-admonitions
+  - jekyll-optional-front-matter
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
@@ -82,3 +83,6 @@ exclude:
     - exec
     - jekyll
     - build
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
