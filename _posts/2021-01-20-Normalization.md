@@ -48,6 +48,7 @@ Let `X` and `Y` are subset of se of attributes of a relation $$R$$ , then an ins
 The FD diagram is
 
 ```mermaid
+%%{init: {'theme': 'neutral' } }%%
     graph LR;
     X-->Y;
 ```    
@@ -73,6 +74,7 @@ Creating one tuple for each value in multivalued attributes in the CART is the e
 This level depends on full FD. An attribute `Y` of relation schema $$R$$ is said to be **fully functional dependent** on attribute `X` $$(X \rightarrow Y)$$, if there is no `A`, where `A` is proper subset of `X` such that $$A\rightarrow Y$$, otherwise this is called **partial functional dependency**.
 
 ```mermaid
+%%{init: {'theme': 'neutral' } }%%
 flowchart TB
   customer --> address
   order_number --> address  
@@ -102,6 +104,7 @@ The third normal form is based on the concept of transitive dependency. An attri
 For example, $$order\_number \rightarrow address$$ is transitive through `customer` as shown in the above diagram: $$order\_number\rightarrow customer$$ and $$customer\rightarrow address$$. To simplify the situation, I have introduce **surrogate key** `customer_id`.
 
 ```mermaid
+%%{init: {'theme': 'neutral' } }%%
 flowchart TB
 	subgraph customer
 		customer_id
@@ -112,6 +115,7 @@ flowchart TB
 Now the remaining classes are 
 
 ```mermaid
+%%{init: {'theme': 'neutral' } }%%
 flowchart TB
 	subgraph cart
 		order_number
@@ -200,6 +204,7 @@ Key benefits of this normalization:
 The relationships can be visualized as:
 
 ```mermaid
+%%{init: {'theme': 'neutral' } }%%
 erDiagram
     STUDENTS ||--o{ ENROLLMENTS : enrolls
     STUDENTS {
