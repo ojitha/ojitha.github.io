@@ -1,89 +1,90 @@
 .site-title::before {
-    content: url(https://avatars.githubusercontent.com/ojitha?s=90&v=4);
-    //display: flex;
-    position: relative;
-    width: 10px;
-    top: 10px;
-    right: 5px;
+  content: url(https://avatars.githubusercontent.com/ojitha?s=90&v=4);
+  //display: flex;
+  position: relative;
+  width: 10px;
+  top: 10px;
+  right: 5px;
 }
 
 .posts>.post {
-    padding-bottom: 2em;
-    border-bottom: 1px solid $lightGray;
+  padding-bottom: 2em;
+  border-bottom: 1px solid $lightGray;
 }
 
 .posts>.post:last-child {
-    padding-bottom: 1em;
-    border-bottom: none;
+  padding-bottom: 1em;
+  border-bottom: none;
 }
 
 .post {
-    blockquote {
-      padding: 1em 1.5em 1em 1.5em; /* Adjusted padding, removed extra left padding for icons */
-      margin-bottom: 1em;
-      border-radius: 3px;
-      border-left: 0.25em solid;
-      position: relative;
-      font-size: 0.95em;
-      line-height: 1.5;
-      background-color: #f0f2f5;
-      border-color: #1779ba;
-      color: #333;
-      
-    }
-    .comments {
-        margin-top: 10px;
-    }
-    .read-more {
-        text-transform: uppercase;
-        font-size: 15px;
-    }
-}
+  blockquote {
+    background-color: #f0f2f5;
+    border-color: #1779ba;
+    color: #333;
 
+  }
 
-/* added by Ojitha for Github alerts */
-.note, .tip, .warning, .danger .blockquote {
-    padding: 1em 1.5em 1em 1.5em; /* Adjusted padding, removed extra left padding for icons */
+  .comments {
+    margin-top: 10px;
+  }
+
+  .read-more {
+    text-transform: uppercase;
+    font-size: 15px;
+  }
+
+  /* added by Ojitha for Github alerts */
+  .note,
+  .tip,
+  .warning,
+  .danger, blockquote {
+    padding: 1em 1.5em 1em 1.5em;
+    /* Adjusted padding, removed extra left padding for icons */
     margin-bottom: 1em;
     border-radius: 3px;
     border-left: 0.25em solid;
     position: relative;
     font-size: 0.95em;
     line-height: 1.5;
+    font-style: normal;
   }
-  
+
   .note {
     background-color: #f0f2f5;
     border-color: #1779ba;
     color: #333;
   }
-  
-  
+
+
   .tip {
     background-color: #f0f9f4;
     border-color: #3ab777;
     color: #333;
   }
-  
+
   .warning {
     background-color: #fff8f0;
     border-color: #f7c046;
     color: #333;
   }
-  
+
   .danger {
     background-color: #fdeded;
     border-color: #da2c43;
     color: #333;
   }
-  
+
   /* Optional: Style the bold title within alerts - slightly adjusted margin */
-  .note strong, .tip strong, .warning strong, .danger strong {
-      display: block;
-      margin-bottom: 0.3em;
-      font-weight: bold;
+  .note strong,
+  .tip strong,
+  .warning strong,
+  .danger strong {
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: bold;
   }
-  
+
   .hl {
     background: yellow;
   }
@@ -91,15 +92,16 @@
   .message[color="blue"] {
     color: blue;
   }
-  
+
   .message[color="green"] {
     color: green;
   }
-  
+
   .message[color="brown"] {
     color: brown;
   }
-  
+
   .message[color="red"] {
     color: red;
   }
+}
