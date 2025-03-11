@@ -36,6 +36,7 @@
 
   /* added by Ojitha for Github alerts */
   .note,
+  .info,
   .tip,
   .warning,
   .danger, blockquote {
@@ -56,6 +57,10 @@
     color: #333;
   }
 
+  .info {
+    background-color: #f0f2f5;
+    color: #333;
+  }
 
   .tip {
     background-color: #f0f9f4;
@@ -104,4 +109,15 @@
   .message[color="red"] {
     color: red;
   }
+
+  .info-box {
+      border: 1px solid #6943ff;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      max-width: 800px;
+      margin: 20px auto;
+  }
+        
 }
