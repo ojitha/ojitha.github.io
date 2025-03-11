@@ -19,12 +19,17 @@
 
 .post {
     blockquote {
-        margin: 1.8em .8em;
-        border-left: 2px solid $gray;
-        padding: 0.1em 1em;
-        color: $gray;
-        font-size: 22px;
-        font-style: italic;
+      padding: 1em 1.5em 1em 1.5em; /* Adjusted padding, removed extra left padding for icons */
+      margin-bottom: 1em;
+      border-radius: 3px;
+      border-left: 0.25em solid;
+      position: relative;
+      font-size: 0.95em;
+      line-height: 1.5;
+      background-color: #f0f2f5;
+      border-color: #1779ba;
+      color: #333;
+      
     }
     .comments {
         margin-top: 10px;
@@ -37,7 +42,7 @@
 
 
 /* added by Ojitha for Github alerts */
-.note, .tip, .warning, .danger {
+.note, .tip, .warning, .danger .blockquote {
     padding: 1em 1.5em 1em 1.5em; /* Adjusted padding, removed extra left padding for icons */
     margin-bottom: 1em;
     border-radius: 3px;
