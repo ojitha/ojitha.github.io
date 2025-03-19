@@ -119,5 +119,22 @@
       max-width: 800px;
       margin: 20px auto;
   }
+
+  em {
+    background-color: yellow; /* Light blue background */
+    padding: 0 3px; /* Add a little padding for better appearance */
+  }
+  
+  strong em {
+    background-color:   blueviolet; /* Light blue background */
+    color: wheat;
+    padding: 0 3px; /* Add a little padding for better appearance */
+  }
+  
+  u {
+    background-color: lightgreen; /* Lavender blush background */
+    padding: 0 3px;
+    text-decoration-color: lightgray; /* Change underline color */
+  }
         
 }
