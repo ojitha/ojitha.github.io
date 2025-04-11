@@ -484,7 +484,42 @@ but if you call static method `MethodDeco.myStaticMethod(1)` the output is:
 (1,)
 ```
 
+Docker-compose
 
+```dockerfile
+  dev:
+    build:
+      context: ./
+      target: mydev
+      args:
+        - ENV_ROOT=/usr/local/pyenv
+        - PYTHON_VER=3.8.20
+    privileged: true 
+    volumes:
+      - .:/opt/spark/work-dir:rw  
+    ports:
+      - 8888:8888
+      - 8998:8998        
+      - 4040:4040      
+    depends_on:
+      - spark-master
+      - spark-worker-1  
+    container_name: dev
+```
+
+Setup_sparkmagic
+
+```bash
+eval "$(pyenv init -)"
+pyenv activate notebook 
+SM_DIR=`pip list -v | grep sparkmagic | xargs echo | awk '{print $3}'`
+cd $SM_DIR
+echo "spark magic directory is $SM_DIR"
+jupyter nbextension enable --py --sys-prefix widgetsnbextension 
+jupyter-kernelspec install sparkmagic/kernels/sparkkernel
+jupyter-kernelspec install sparkmagic/kernels/pysparkkernel
+jupyter serverextension enable --py sparkmagic
+```
 
 
 
