@@ -521,6 +521,35 @@ jupyter-kernelspec install sparkmagic/kernels/pysparkkernel
 jupyter serverextension enable --py sparkmagic
 ```
 
+entry
+
+```bash
+# Dockerfile
+ARG http_proxy
+ARG https_proxy
+ARG ftp_proxy
+
+RUN if [ -n "$http_proxy" ]; then \
+    export http_proxy="$http_proxy"; \
+    fi && \
+    if [ -n "$https_proxy" ]; then \
+    export https_proxy="$https_proxy"; \
+    fi && \
+    if [ -n "$ftp_proxy" ]; then \
+    export ftp_proxy="$ftp_proxy"; \
+    fi && \
+    # Your build commands that require network access
+    apt-get update && apt-get install -y some-package
+```
+
+nad
+
+```
+docker build --build-arg http_proxy="http://user:password@proxy-host:port" \
+             --build-arg https_proxy="http://user:password@proxy-host:port" \
+             --build-arg ftp_proxy="http://user:password@proxy-host:port" -t your_image .
+```
+
 
 
 
