@@ -28,6 +28,9 @@ docs:
 - title: macOS
   url: macos.html
 
+- title: Spark
+  url: spark.html
+
 - title: REST
   url: REST.html
   
