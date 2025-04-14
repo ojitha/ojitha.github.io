@@ -299,7 +299,7 @@ jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/gl
 
 ## Docker Applications
 
-### Jupyter
+### Jupyter for PDF metadata extraction
 
 Here the Jupyter example
 
@@ -375,6 +375,55 @@ for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))
 ```
 
 use the `spark.stop()` close the sesstion.
+
+### Example for JPEG metadata extraction
+
+Initiate the Tika
+
+```scala
+import org.apache.tika.Tika
+val tika = new Tika()
+```
+
+Create dataframe from images
+
+```scala
+val filename="data/PDF/Scan_3.jpeg"
+val df = spark.read.format("binaryFile").load(s"$filename")
+df.printSchema()
+df.show()
+```
+
+extract binary to avoid UDF:
+
+```scala
+import spark.implicits._
+val map = df.select("path","content").as[(String, Array[Byte])].collect.toMap
+```
+
+Detect the document
+
+```scala
+import java.io.ByteArrayInputStream
+val doc = map(s"file:/home/glue_user/workspace/jupyter_workspace/$filename")
+tika.detect(doc)
+```
+
+parser the document
+
+```scala
+import java.io.ByteArrayInputStream
+val doc = map(s"file:/home/glue_user/workspace/jupyter_workspace/$filename")
+tika.detect(doc)
+```
+
+iterate over metadata:
+
+```scala
+for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))
+```
+
+You can close the spark session with  `spark.stop()`.
 
 ### Scala Job
 
