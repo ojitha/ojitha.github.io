@@ -299,6 +299,85 @@ jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/gl
 
 ## Docker Applications
 
+### Jupyter
+
+Here the Jupyter example
+
+specify the filename to extract metadata
+
+```scala
+// Example with one file
+val filename="/opt/spark/work-dir/data/test.pdf"
+```
+
+Create a dataframe from that
+
+```scala
+val df = spark.read.format("binaryFile").load(s"$filename")
+df.printSchema()
+df.show()
+```
+
+Get the binary data
+
+```scala
+import spark.implicits._
+val map = df.select("path","content").as[(String, Array[Byte])].collect.toMap
+```
+
+initiate Tika
+
+```scala
+import org.apache.tika.Tika
+import org.apache.tika.parser.pdf
+val tika = new Tika()
+```
+
+Detect the document
+
+```scala
+import java.io.ByteArrayInputStream
+val doc = map(s"file:$filename")
+tika.detect(doc)
+```
+
+Parser the data
+
+```scala
+import org.apache.tika.exception.TikaException
+import org.apache.tika.parser.ParseContext
+import org.apache.tika.parser.AutoDetectParser
+import org.apache.tika.sax.BodyContentHandler
+import org.apache.tika.metadata.Metadata
+
+import org.apache.tika.parser.pdf.PDFParser
+import java.io.ByteArrayInputStream
+
+val handler = new BodyContentHandler();
+val metadata = new Metadata();
+val pdfparser = new PDFParser()
+val context = new ParseContext();
+
+val text = pdfparser.parse(new ByteArrayInputStream(doc), handler, metadata, context);
+// print(handler.toString())
+```
+
+List the metadata:
+
+```scala
+for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))
+```
+
+OCR
+
+```scala
+for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))
+```
+
+use the `spark.stop()` close the sesstion.
+
+### Scala Job
+
 Here is the sample Docker application written in Java and Scala for Spark 3.
 
 the pom.xml:
