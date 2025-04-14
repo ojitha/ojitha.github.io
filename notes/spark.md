@@ -13,7 +13,10 @@ title: Apache Spark
 
 ---
 
-## Create Spark 3.4.4 Docker container from Amazon Linux 2
+## Spark Docker configurations
+
+### Create Spark 3.4.4 Docker container from Amazon Linux 2
+
 I haven't found direct way to access Spark server from the Jupyter lab. 
 Therefore, I've used the Apache Livy server. Here the docker file:
 
@@ -181,7 +184,7 @@ To create a container:
 docker run  -it --rm  -p 8888:8888 -p 4040:4040  -p 8998:8998  -v $(pwd):/app   spark-dev
 ```
 
-## Update the Dockerfile to use Tika
+### Update the Dockerfile to use Tika
 
 Simply replace the `findspark` line in the above script with the following lines:
 
@@ -253,3 +256,45 @@ The pom.xml file:
 </project>
 ```
 
+### Dockerfile from Glue
+
+The simplest way to create working Spark single cluster for Jupyter.
+
+```dockerfile
+FROM amazon/aws-glue-libs:glue_libs_4.0.0_image_01 as base
+USER root
+# RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN yum -y update
+RUN yum -y install tesseract
+RUN echo -e "\n# === Ojitha added file locations ===" >> /etc/livy/conf/livy.conf
+RUN echo "livy.file.local-dir-whitelist = /home/glue_user/.livy-sessions,/home/glue_user/workspace/jars" >> /etc/livy/conf/livy.conf
+RUN echo -e "\n# === END of file locations ===" >> /etc/livy/conf/livy.conf
+# RUN yum -y install tesseract-lang
+
+FROM base as runtime
+USER glue_user
+COPY pom.xml .
+RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.zip
+RUN unzip apache-maven-3.9.5-bin.zip
+RUN apache-maven-3.9.5/bin/mvn dependency:copy-dependencies
+RUN cp target/dependency/*.* ~/spark/jars/
+RUN rm -rf apache-maven-3.9.5-bin.zip
+RUN rm -rf apache-maven-3.9.5
+RUN rm -rf target
+WORKDIR /home/glue_user/workspace/jupyter_workspace
+ENV DISABLE_SSL=true
+CMD [ "./start.sh" ]
+```
+
+To enable the Tika capablilities, use the above `pom.xml` file.
+
+Here the `start.sh` :
+
+```bash 
+livy-server start
+jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/glue_user/workspace/jupyter_workspace/ --ServerApp.token='pyspark' --ServerApp.password=''
+```
+
+
+
+## Docker Applications
