@@ -286,9 +286,9 @@ ENV DISABLE_SSL=true
 CMD [ "./start.sh" ]
 ```
 
-To enable the Tika capablilities, use the above `pom.xml` file.
+To enable the Tika capabilities, use the above `pom.xml` file.
 
-Here the `start.sh` :
+Here is the `start.sh` :
 
 ```bash 
 livy-server start
@@ -298,3 +298,222 @@ jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/gl
 
 
 ## Docker Applications
+
+Here is the sample Docker application written in Java and Scala for Spark 3.
+
+the pom.xml:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.ojitha.blog.de.findmetadata</groupId>
+    <artifactId>metaextract</artifactId>
+    <version>1-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scala.version>2.12.15</scala.version>
+        <scala.binary.version>2.12</scala.binary.version>
+        <spark.version>3.4.4</spark.version>
+        <tika.version>3.0.0</tika.version>
+        <java.version>11</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- Scala -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+        <!-- Apache Spark -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Apache Tika -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers-standard-package</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.binary.version}</artifactId>
+            <version>3.2.15</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <plugins>
+            <!-- Scala Compiler -->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>4.8.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Shade Plugin for creating uber JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>io.github.ojitha.blog.de.findmetadata.MetadataExtractor</mainClass>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Java Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+Scala source
+
+```scala
+package io.github.ojitha.blog.de.findmetadata
+
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.tika.metadata.Metadata
+import org.apache.tika.parser.{AutoDetectParser, ParseContext}
+import org.apache.tika.sax.BodyContentHandler
+import org.xml.sax.ContentHandler
+
+import java.io.{ByteArrayInputStream, FileNotFoundException}
+import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
+
+object MetadataExtractor {
+  def main(args: Array[String]): Unit = {
+    if (args.length != 2) {
+      System.err.println("Usage: MetadataExtractor <input_path> <output_path>")
+      System.exit(1)
+    }
+
+    val inputPath = args(0)
+    val outputPath = args(1)
+
+    // Initialize Spark
+    val conf = new SparkConf()
+      .setAppName("Document Metadata Extractor")
+    val sc = new SparkContext(conf)
+
+    try {
+      // Read all files from input directory
+      val files = sc.binaryFiles(inputPath)
+
+      // Process each file to extract metadata
+      val results = files.map { case (path, content) =>
+        val fileName = path.split("/").last
+        extractMetadata(fileName, content.toArray())
+      }
+
+      // Save results
+      results.saveAsTextFile(outputPath)
+    } finally {
+      sc.stop()
+    }
+  }
+
+  private def extractMetadata(fileName: String, content: Array[Byte]): String = {
+    Try {
+      val parser = new AutoDetectParser()
+      val metadata = new Metadata()
+      val context = new ParseContext()
+      
+      // Set filename for better mime type detection
+      // metadata.set(Metadata.RESOURCE_NAME_KEY, fileName)
+      
+      // Use empty content handler to avoid content parsing
+      val handler: ContentHandler = new BodyContentHandler(-1)
+      
+      // Parse metadata only
+      parser.parse(new ByteArrayInputStream(content), handler, metadata, context)
+      
+      // Convert metadata to map
+      val metadataMap = metadata.names().map(name => 
+        name -> metadata.get(name)
+      ).toMap
+      
+      s"File: $fileName\nMetadata: ${metadataMap.mkString(", ")}"
+    } match {
+      case Success(result) => result
+      case Failure(e) => s"Error processing $fileName: ${e.getMessage}"
+    }
+  }
+}
+```
+
+submit to the Spark:
+
+```bash
+spark-submit \
+  --class io.github.ojitha.blog.de.findmetadata.MetadataExtractor \
+  --master local[*] \
+  apps/metaextract/target/metaextract-1-SNAPSHOT.jar \
+  apps/data/BaB.pdf \
+  apps/data/file_metadata
+```
+
