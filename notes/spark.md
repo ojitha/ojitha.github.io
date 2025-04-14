@@ -297,9 +297,11 @@ jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/gl
 
 
 
-## Docker Applications
+## Spark Applications
 
-### Jupyter for PDF metadata extraction
+### Jupyter 
+
+#### PDF metadata extraction
 
 Here the Jupyter example
 
@@ -376,7 +378,7 @@ for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))
 
 use the `spark.stop()` close the sesstion.
 
-### Example for JPEG metadata extraction
+#### JPEG metadata extraction
 
 Initiate the Tika
 
@@ -412,9 +414,33 @@ tika.detect(doc)
 parser the document
 
 ```scala
+import org.apache.tika.exception.TikaException
+import org.apache.tika.parser.ParseContext
+import org.apache.tika.parser.AutoDetectParser
+import org.apache.tika.sax.BodyContentHandler
+import org.apache.tika.metadata.Metadata
+
+import org.apache.tika.parser.pdf.PDFParser
 import java.io.ByteArrayInputStream
-val doc = map(s"file:/home/glue_user/workspace/jupyter_workspace/$filename")
-tika.detect(doc)
+
+import org.apache.tika.parser.Parser
+import org.apache.tika.parser.ocr.TesseractOCRConfig
+import org.apache.tika.parser.pdf.PDFParserConfig
+
+val handler = new BodyContentHandler();
+val metadata = new Metadata();
+val parser = new AutoDetectParser()
+val context = new ParseContext();
+
+val OCRConfig = new TesseractOCRConfig()
+// val pdfConfig = new PDFParserConfig();
+// pdfConfig.setExtractInlineImages(true)
+
+// context.set(classOf[PDFParserConfig], pdfConfig)
+context.set(classOf[TesseractOCRConfig], OCRConfig)
+context.set(classOf[Parser], parser)
+val text = parser.parse(new ByteArrayInputStream(doc), handler, metadata, context);
+print(handler.toString())
 ```
 
 iterate over metadata:
@@ -425,9 +451,11 @@ for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))
 
 You can close the spark session with  `spark.stop()`.
 
-### Scala Job
+### Scala 
 
-Here is the sample Docker application written in Java and Scala for Spark 3.
+#### Auto Parser
+
+Here is the sample application written in Java and Scala for Spark 3.
 
 the pom.xml:
 
