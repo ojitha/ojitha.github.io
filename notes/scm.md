@@ -4,11 +4,20 @@ title: Software Configuration Management
 ---
 
 
-## Software Configuration Management
+# Software Configuration Management
+{:.no_toc}
 
+---
+
+* TOC
+{:toc}
+
+---
+
+## Git
 Git is the main version control system I am using currently.
 
-### Git
+### Configuration
 Configuration commands are:
 
 ```bash
@@ -17,7 +26,7 @@ git config --global user.email
 git config --global --list
 ```
 
-Here the log to show all the branches
+Here is the log to show all the branches
 
 ```bash
 git log --oneline --all --graph --decorate

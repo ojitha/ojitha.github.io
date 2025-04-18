@@ -2,14 +2,23 @@
 layout: notes 
 title: DevOps
 ---
-**Notes on DevOps**
+# Notes on DevOps
+{:.no_toc}
 
 * TOC
 {:toc}
 
 Here the important commands and information collected while programming. 
 
-## AWS
+## AWS DevOps
+
+### Caller Identity
+
+```bash
+echo $(aws sts get-caller-identity --query='Account' --output=text)
+```
+
+Command to get the token.
 
 ### EC2
 #### Dev environment Tools to install
@@ -461,30 +470,7 @@ docker ps -a
 #start that container id
 docker start <container-id>
 ```
-## Status Codes
-
-- 1nn: informational
-- 2nn: success
-- 3nn: redirection
-- 4nn: client errors
-- 5nn: server errors
-
-## 200 common
-
-- 200 ok: everything ok
-- 201 created: Returns a location header for new resources
-- 202 Accepted: Server has accepted the request, but it is not yet complete.
-
-## 400 common
-
-- 400 Bad Request: Malformed Syntax, retry with change
-- 401 Unauthorized: Authentication is required
-- 403 Forbidded: Server has understood, but refuses request
-- 404 Not Found: Server can't find a resource for URI
-- 406 Incompatible: Incompatible Accept headers specified
-- 409 Conflict: Resource conflicts with client request
-
-## Dynamodb
+### Dynamodb
 
 List all the tables
 
@@ -500,16 +486,115 @@ aws dynamodb describe-table --table-name <table name>
 
 
 
-## Access AWS account from bash
+## HTTP
 
-```bash
-echo $(aws sts get-caller-identity --query='Account' --output=text)
+### Status Codes
+
+- 1nn: informational
+- 2nn: success
+- 3nn: redirection
+- 4nn: client errors
+- 5nn: server errors
+
+### 200 common
+
+- 200 ok: everything ok
+- 201 created: Returns a location header for new resources
+- 202 Accepted: Server has accepted the request, but it is not yet complete.
+
+### 400 common
+
+- 400 Bad Request: Malformed Syntax, retry with change
+- 401 Unauthorized: Authentication is required
+- 403 Forbidded: Server has understood, but refuses request
+- 404 Not Found: Server can't find a resource for URI
+- 406 Incompatible: Incompatible Accept headers specified
+- 409 Conflict: Resource conflicts with client request
+
+
+
+## Azure DevOps
+
+### Azure Docker build pipeline
+
+Here the folder structure
+
+```
+.
+├── Dockerfile
+├── README.md
+└── azure-pipelines.yml
+```
+
+
+
+Sample Dockerfile
+
+```dockerfile
+FROM bitnami/minideb:latest
+CMD ["/bin/bash"]
+```
+
+build pipeline:
+
+```yaml
+# Docker
+# Build a Docker image and save it as a tar file
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # tag: '$(Build.BuildId)'
+  tag: 'latest'
+  DOCKER_BUILDKIT: 1
+  imageName: 'ojitha/test'
+  # Create a simpler output filename without the repository path structure
+  imageFileName: 'test-$(tag).tar'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: Ubuntu 
+      demands: 
+      - agent.name -equals ojitha
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        repository: $(imageName)
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+    
+    - script: |
+        # Create the directory if it doesn't exist
+        mkdir -p $(Build.ArtifactStagingDirectory)
+        
+        # Save the Docker image to a tar file with a simpler name
+        docker save $(imageName):$(tag) -o $(Build.ArtifactStagingDirectory)/$(imageFileName)
+        
+        # Display saved file for verification
+        ls -la $(Build.ArtifactStagingDirectory)
+      displayName: 'Save Docker image to tar file'
+    
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'docker-image'
+      displayName: 'Publish Docker image tar file as artifact'
 ```
 
 
 
 
 
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzODU4MjM3NzAsLTU3NDc5MTM5N119
--->

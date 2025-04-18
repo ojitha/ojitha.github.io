@@ -3,7 +3,9 @@ layout: notes
 title: Python
 ---
 
-**Notes on Python**
+# Notes on Python
+{:.no_toc}
+
 
 * TOC
 {:toc}
@@ -542,12 +544,50 @@ RUN if [ -n "$http_proxy" ]; then \
     apt-get update && apt-get install -y some-package
 ```
 
-nad
+## Conda
+
+After install the conda,
+
+If you are need proxy setting, then setup that in the file `miniconda3/.condarc`:
 
 ```
-docker build --build-arg http_proxy="http://user:password@proxy-host:port" \
-             --build-arg https_proxy="http://user:password@proxy-host:port" \
-             --build-arg ftp_proxy="http://user:password@proxy-host:port" -t your_image .
+ssl_verify: false
+proxy_servers:
+	http://...
+	https://...<same as above>
+channels:
+	- default
+	- conda-forge
+```
+
+To create a new environment
+
+```bash
+conda create --name myenv python=3.11.11
+```
+
+To get all the existing environments
+
+```bash
+conda info --envs
+```
+
+To activate the environment:
+
+```bash
+conda activiate myenv
+```
+
+To deactivate
+
+```bash
+conda deactivate
+```
+
+To delete the environment
+
+```bash
+conda remove -n myenv --all
 ```
 
 
