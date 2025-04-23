@@ -515,6 +515,26 @@ aws dynamodb describe-table --table-name <table name>
 
 ## Azure DevOps
 
+List the regions
+
+```bash
+az account list-locations --query "[].{Name: name, DisplayName: displayName}" --output table
+```
+
+Set the default region to Sydney
+
+```bash
+az configure --defaults location=australiaeast
+```
+
+In the cloudeshell created random number generator
+
+```bash
+resourceSuffix=$RANDOM
+```
+
+
+
 ### Azure Docker build pipeline
 
 Here the folder structure

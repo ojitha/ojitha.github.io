@@ -673,3 +673,36 @@ spark-submit \
   apps/data/file_metadata
 ```
 
+## Bloom Filter
+
+### PySpark Boom filter
+
+example Jupyter script:
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+# Create a SparkSession
+spark = SparkSession.builder.appName("BloomFilterExample").getOrCreate()
+
+# Create a DataFrame
+data = [("Alice", 25), ("Bob", 30), ("Charlie", 35), ("David", 40)]
+columns = ["name", "age"]
+df = spark.createDataFrame(data, columns)
+
+# Build a Bloom filter over the "name" column
+bloom_filter_df = df.stat.bloomFilter("name", 100, 0.01)
+
+# Access the Bloom filter
+bloom_filter = bloom_filter_df.first()[0]
+
+# Check if an element is present in the Bloom filter
+print(bloom_filter.mightContain("Alice"))
+print(bloom_filter.mightContain("Eve"))
+
+# Stop the SparkSession
+spark.stop()
+
+```
+
