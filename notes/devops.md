@@ -614,7 +614,45 @@ stages:
       displayName: 'Publish Docker image tar file as artifact'
 ```
 
+## Maven
 
+Configure proxy with `settings.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <profiles>
+    <!-- Single default profile with proxy and SSL insecure settings -->
+    <profile>
+      <id>corporate-proxy</id>
+      <activation>
+        <!-- Activate this profile by default -->
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <!-- Disable SSL certificate checks for HTTP repositories -->
+        <maven.wagon.http.ssl.insecure>true</maven.wagon.http.ssl.insecure>
+      </properties>
+      <proxies>
+        <proxy>
+          <id>default-proxy</id>
+          <active>true</active>
+          <protocol>http</protocol>
+          <host>corporate-proxy.example.com</host>
+          <port>8080</port>
+          <username>proxyuser</username>
+          <password>proxypass</password>
+          <nonProxyHosts>localhost|*.internal.example.com</nonProxyHosts>
+        </proxy>
+      </proxies>
+    </profile>
+  </profiles>
+
+</settings>
+```
 
 
 
