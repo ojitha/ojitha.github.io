@@ -13,6 +13,8 @@ title: Apache Spark
 
 ---
 
+
+
 ## Spark Docker configurations
 
 ### Create Spark 3.4.4 Docker container from Amazon Linux 2
@@ -704,5 +706,16 @@ print(bloom_filter.mightContain("Eve"))
 # Stop the SparkSession
 spark.stop()
 
+```
+
+## PySpark Package not Found
+
+For the `JavaPackage object is not callable` error in the PySpark:
+
+```python
+import findspark
+findspark.init()
+from py4j.java_gateway import java_import
+java_import(spark._sc._jvm, "org.apache.spark.sql.api.python.*")
 ```
 
