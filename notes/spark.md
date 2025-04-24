@@ -685,25 +685,48 @@ example Jupyter script:
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 
-# Create a SparkSession
+# Initialize Spark session
 spark = SparkSession.builder.appName("BloomFilterExample").getOrCreate()
 
-# Create a DataFrame
-data = [("Alice", 25), ("Bob", 30), ("Charlie", 35), ("David", 40)]
-columns = ["name", "age"]
-df = spark.createDataFrame(data, columns)
+# Create sample DataFrames
+# DataFrame 1: Events with IDs
+events_data = [(0, "event0"), (1, "event1"), (2, "event2"), (3, "event3"), (4, "event4"), (5, "event5")]
+events_df = spark.createDataFrame(events_data, ["id", "event"])
 
-# Build a Bloom filter over the "name" column
-bloom_filter_df = df.stat.bloomFilter("name", 100, 0.01)
+# DataFrame 2: List of IDs to filter by
+ids_data = [(0,), (1,), (2,)]
+ids_df = spark.createDataFrame(ids_data, ["id"])
 
-# Access the Bloom filter
-bloom_filter = bloom_filter_df.first()[0]
+# Create a Bloom filter on the 'id' column of ids_df
+expected_num_items = 1000  # Estimate of distinct items
+fpp = 0.01  # 1% false positive probability
+bloom_filter = ids_df.stat.bloomFilter("id", expected_num_items, fpp)
 
-# Check if an element is present in the Bloom filter
-print(bloom_filter.mightContain("Alice"))
-print(bloom_filter.mightContain("Eve"))
+# Broadcast the Bloom filter to executors
+bloom_filter_bc = spark.sparkContext.broadcast(bloom_filter)
 
-# Stop the SparkSession
+# Define a UDF to check membership in the Bloom filter
+from pyspark.sql.functions import udf
+from pyspark.sql.types import BooleanType
+
+def might_contain(id_val):
+    return bloom_filter_bc.value.mightContain(id_val) if id_val is not None else False
+
+might_contain_udf = udf(might_contain, BooleanType())
+
+# Filter events_df using the Bloom filter
+filtered_df = events_df.filter(might_contain_udf(col("id")))
+
+# Show results
+print("Original Events DataFrame:")
+events_df.show()
+print("IDs DataFrame:")
+ids_df.show()
+print("Filtered Events DataFrame:")
+filtered_df.show()
+
+# Clean up
+bloom_filter_bc.unpersist()
 spark.stop()
 
 ```
