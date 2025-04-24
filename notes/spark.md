@@ -677,7 +677,57 @@ spark-submit \
 
 ## Bloom Filter
 
-### PySpark Boom filter
+### Scala Bloom Filter
+
+Example Jupyter notebook
+
+```scala
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.col
+
+// Initialize Spark session
+val spark = SparkSession.builder().appName("BloomFilterExample").getOrCreate()
+import spark.implicits._
+
+// Create sample DataFrames
+// DataFrame 1: Events with IDs
+val events = Seq((0, "event0"), (1, "event1"), (2, "event2"), (3, "event3"))
+val eventsDF = events.toDF("id", "event")
+
+// DataFrame 2: IDs to filter by
+val ids = Seq((0), (1), (2))
+val idsDF = ids.toDF("id")
+
+// Create Bloom filter on 'id' column of idsDF
+val expectedNumItems = 1000L // Estimated distinct items
+val fpp = 0.01 // 1% false positive probability
+val bloomFilter = idsDF.stat.bloomFilter(col("id"), expectedNumItems, fpp)
+
+// Broadcast Bloom filter to executors
+val bloomFilterBC = spark.sparkContext.broadcast(bloomFilter)
+
+// Filter eventsDF using Bloom filter
+val filteredDF = eventsDF.filter { row =>
+  val id = row.getAs[Int]("id")
+  bloomFilterBC.value.mightContain(id)
+}
+
+// Show results
+println("Original Events DataFrame:")
+eventsDF.show()
+println("IDs DataFrame:")
+idsDF.show()
+println("Filtered Events DataFrame:")
+filteredDF.show()
+
+// Clean up
+bloomFilterBC.unpersist()
+spark.stop()
+```
+
+
+
+### PySpark Bloom filter
 
 example Jupyter script:
 
