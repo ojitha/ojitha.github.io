@@ -31,40 +31,39 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 import hashlib
 
-def derive_key(salt_key, salt):
-    """Derive an encryption key from the salt key and salt."""
+def decrypt_password(encrypted_string, salt_key):
+    """Decrypt a password that was encrypted with the bash script."""
+    # Split the components
+    parts = encrypted_string.split(':')
+    if len(parts) != 3:
+        raise ValueError("Invalid encrypted string format")
+    
+    salt, iv, encrypted_b64 = parts
+    
+    # Convert to bytes
+    salt_bytes = salt.encode('utf-8')
+    iv_bytes = iv.encode('utf-8')
+    encrypted_data = base64.b64decode(encrypted_b64)
+    
+    # Derive the key from the salt key and salt (matching OpenSSL's algorithm)
     key = hashlib.pbkdf2_hmac(
         'sha256',
-        salt_key.encode(),
-        salt,
-        100000,  # Number of iterations
-        32  # Key length in bytes
+        salt_key.encode('utf-8'),
+        salt_bytes,
+        1,  # OpenSSL default iteration count for enc command
+        32  # Key length (256 bits)
     )
-    return key
-
-def decrypt_password(encrypted_password, salt_key):
-    """Decrypt a password using AES-256-CBC with the salt key."""
-    # Base64 decode the encrypted password
-    encrypted_data = base64.b64decode(encrypted_password)
-    
-    # Extract the salt (first 16 bytes) and IV (next 16 bytes)
-    salt = encrypted_data[:16]
-    iv = encrypted_data[16:32]
-    ciphertext = encrypted_data[32:]
-    
-    # Derive the key from the salt key and salt
-    key = derive_key(salt_key, salt)
     
     # Create a cipher object
     cipher = Cipher(
         algorithms.AES(key),
-        modes.CBC(iv),
+        modes.CBC(iv_bytes),
         backend=default_backend()
     )
     
     # Decrypt the ciphertext
     decryptor = cipher.decryptor()
-    padded_data = decryptor.update(ciphertext) + decryptor.finalize()
+    padded_data = decryptor.update(encrypted_data) + decryptor.finalize()
     
     # Unpad the data
     unpadder = padding.PKCS7(128).unpadder()
@@ -109,24 +108,12 @@ fi
 SECRET="$1"
 SALT_KEY="$2"
 
-# Generate a random 16-byte salt
-SALT=$(openssl rand -hex 16 | xxd -r -p)
-
-# Generate a random 16-byte IV
-IV=$(openssl rand -hex 16 | xxd -r -p)
-
-# Derive key from salt_key and salt using PBKDF2
-KEY=$(echo -n "$SALT_KEY" | openssl dgst -sha256 -hmac "$SALT" -binary)
-
-# Encrypt the secret using AES-256-CBC
-# PKCS7 padding is automatically applied
-ENCRYPTED=$(echo -n "$SECRET" | openssl enc -aes-256-cbc -K $(xxd -p -c 32 <<< "$KEY") -iv $(xxd -p -c 32 <<< "$IV") -nosalt -binary)
-
-# Combine salt + IV + encrypted data and base64 encode
-COMBINED=$(echo -n "$SALT$IV$ENCRYPTED" | base64 -w 0)
+# Use OpenSSL's built-in password-based encryption
+# This is much simpler and more reliable across different OS versions
+ENCRYPTED=$(echo -n "$SECRET" | openssl enc -aes-256-cbc -pbkdf2 -iter 10000 -pass "pass:$SALT_KEY" -base64)
 
 # Output the encrypted result
-echo "$COMBINED"
+echo "$ENCRYPTED"
 ```
 
 ## Create the Dockerfile
@@ -135,26 +122,25 @@ Now, let's create a Dockerfile that encrypts the database password at build time
 
 ```dockerfile
 # syntax=docker/dockerfile:1.2
-FROM python:3.9-slim
+FROM amazonlinux:2
+
+# Install required packages
+RUN yum update -y && \
+    yum install -y openssl python3 python3-pip && \
+    yum clean all
 
 WORKDIR /app
 
-# Install required packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssl \
-    xxd \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy encryption script and make it executable
-COPY encrypt.sh /tmp/
-RUN chmod +x /tmp/encrypt.sh
+COPY encrypt_simple.sh /tmp/
+RUN chmod +x /tmp/encrypt_simple.sh
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY app.py .
+COPY decrypt_simple.py ./app.py
 
 # Secrets that should not be in the image
 ARG DB_PASSWORD="my_super_secret_password"
@@ -164,12 +150,12 @@ ARG SALT_KEY="my_build_time_salt_key"
 # The encrypted password will be stored in the environment variable, but the original password won't be in the image
 RUN --mount=type=secret,id=salt_key,target=/run/secrets/salt_key \
     SALT_KEY=$(cat /run/secrets/salt_key) && \
-    ENCRYPTED_DB_PASSWORD=$(/tmp/encrypt.sh "$DB_PASSWORD" "$SALT_KEY") && \
+    ENCRYPTED_DB_PASSWORD=$(/tmp/encrypt_simple.sh "$DB_PASSWORD" "$SALT_KEY") && \
     echo "ENCRYPTED_DB_PASSWORD=$ENCRYPTED_DB_PASSWORD" >> /app/.env && \
-    rm /tmp/encrypt.sh
+    rm /tmp/encrypt_simple.sh
 
 # Set the entrypoint
-CMD ["python", "app.py"]
+CMD ["python3", "app.py"]
 ```
 
 ## Create the Requirements File
