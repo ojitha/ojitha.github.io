@@ -184,8 +184,28 @@ python-dotenv>=0.19.0
 to fix the xxd error
 
 ```
+#!/bin/bash
+
+# Check if the required arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <secret_to_encrypt> <salt_key>"
+    exit 1
+fi
+
+SECRET="$1"
+SALT_KEY="$2"
+
+# Generate a random 16-byte salt
+SALT=$(openssl rand 16 | openssl base64 | head -c 16)
+
+# Generate a random 16-byte IV
+IV=$(openssl rand 16 | openssl base64 | head -c 16)
+
 # Use OpenSSL's built-in password-based encryption instead of manually deriving keys
 # This avoids the xxd issues
 ENCRYPTED=$(echo -n "$SECRET" | openssl enc -aes-256-cbc -pass "pass:$SALT_KEY" -S $(echo -n "$SALT" | hexdump -v -e '/1 "%02x"') -iv $(echo -n "$IV" | hexdump -v -e '/1 "%02x"') -base64)
+
+# Output the encrypted result with metadata so we can decrypt later
+echo "$SALT:$IV:$ENCRYPTED"
 ```
 
