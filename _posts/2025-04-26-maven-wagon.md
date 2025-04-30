@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Maven Proxy handling
-date:   2024-04-26
+date:   2025-04-26
 categories: [Maven]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
@@ -172,10 +172,6 @@ export MAVEN_OPTS="-Djavax.net.ssl.trustStore=/path/to/your/custom_truststore.jk
 ```
 
 Then, import the certificate into this custom truststore instead of the default `cacerts`.
-
-
-
-Contents goes here...
 
 [^1]: [Import security certificate to the JRE Keystore - IBM Documentation](https://www.ibm.com/docs/en/tnpm/1.4.2?topic=security-import-certificate-jre-keystore)
 
