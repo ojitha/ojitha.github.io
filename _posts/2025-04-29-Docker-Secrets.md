@@ -181,4 +181,11 @@ cryptography>=39.0.0
 python-dotenv>=0.19.0
 ```
 
+to fix the xxd error
+
+```
+# Use OpenSSL's built-in password-based encryption instead of manually deriving keys
+# This avoids the xxd issues
+ENCRYPTED=$(echo -n "$SECRET" | openssl enc -aes-256-cbc -pass "pass:$SALT_KEY" -S $(echo -n "$SALT" | hexdump -v -e '/1 "%02x"') -iv $(echo -n "$IV" | hexdump -v -e '/1 "%02x"') -base64)
+```
 
