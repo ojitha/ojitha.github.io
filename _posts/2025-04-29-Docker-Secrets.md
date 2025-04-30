@@ -26,51 +26,26 @@ First, let's create a Python script that can decrypt the password:
 ```python
 import os
 import base64
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.primitives import padding
-from cryptography.hazmat.backends import default_backend
 import hashlib
 
-def decrypt_password(encrypted_string, salt_key):
-    """Decrypt a password that was encrypted with the bash script."""
+def decrypt_password(encrypted_data, salt_key):
+    """
+    Decrypt a password that was encrypted with the simple MD5-based script.
+    """
     # Split the components
-    parts = encrypted_string.split(':')
-    if len(parts) != 3:
-        raise ValueError("Invalid encrypted string format")
+    encoded_secret, stored_key = encrypted_data.split(':')
     
-    salt, iv, encrypted_b64 = parts
+    # Generate MD5 hash from salt key
+    key = hashlib.md5(salt_key.encode()).hexdigest()
     
-    # Convert to bytes
-    salt_bytes = salt.encode('utf-8')
-    iv_bytes = iv.encode('utf-8')
-    encrypted_data = base64.b64decode(encrypted_b64)
+    # Verify the key matches
+    if key != stored_key:
+        raise ValueError("Invalid salt key")
     
-    # Derive the key from the salt key and salt (matching OpenSSL's algorithm)
-    key = hashlib.pbkdf2_hmac(
-        'sha256',
-        salt_key.encode('utf-8'),
-        salt_bytes,
-        1,  # OpenSSL default iteration count for enc command
-        32  # Key length (256 bits)
-    )
+    # Base64 decode the secret
+    secret = base64.b64decode(encoded_secret).decode('utf-8')
     
-    # Create a cipher object
-    cipher = Cipher(
-        algorithms.AES(key),
-        modes.CBC(iv_bytes),
-        backend=default_backend()
-    )
-    
-    # Decrypt the ciphertext
-    decryptor = cipher.decryptor()
-    padded_data = decryptor.update(encrypted_data) + decryptor.finalize()
-    
-    # Unpad the data
-    unpadder = padding.PKCS7(128).unpadder()
-    data = unpadder.update(padded_data) + unpadder.finalize()
-    
-    # Return the decrypted password
-    return data.decode('utf-8')
+    return secret
 
 # Usage example
 if __name__ == "__main__":
@@ -108,9 +83,14 @@ fi
 SECRET="$1"
 SALT_KEY="$2"
 
-# Use OpenSSL's built-in password-based encryption
-# This is much simpler and more reliable across different OS versions
-ENCRYPTED=$(echo -n "$SECRET" | openssl enc -aes-256-cbc -pbkdf2 -iter 10000 -pass "pass:$SALT_KEY" -base64)
+# Generate a simple MD5 hash of the salt key
+KEY=$(echo -n "$SALT_KEY" | md5sum | cut -d' ' -f1)
+
+# Base64 encode the secret
+ENCODED=$(echo -n "$SECRET" | base64)
+
+# Combine the encoded secret with the MD5 hash as a simple "encryption"
+ENCRYPTED="$ENCODED:$KEY"
 
 # Output the encrypted result
 echo "$ENCRYPTED"
@@ -124,35 +104,30 @@ Now, let's create a Dockerfile that encrypts the database password at build time
 # syntax=docker/dockerfile:1.2
 FROM amazonlinux:2
 
-# Install required packages
+# Install required packages (minimal requirements)
 RUN yum update -y && \
-    yum install -y openssl python3 python3-pip && \
+    yum install -y python3 python3-pip && \
     yum clean all
 
 WORKDIR /app
 
 # Copy encryption script and make it executable
-COPY encrypt_simple.sh /tmp/
-RUN chmod +x /tmp/encrypt_simple.sh
-
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+COPY encrypt_md5_simple.sh /tmp/
+RUN chmod +x /tmp/encrypt_md5_simple.sh
 
 # Copy application code
-COPY decrypt_simple.py ./app.py
+COPY decrypt_md5_simple.py ./app.py
 
 # Secrets that should not be in the image
 ARG DB_PASSWORD="my_super_secret_password"
 ARG SALT_KEY="my_build_time_salt_key"
 
 # Encrypt the database password during build
-# The encrypted password will be stored in the environment variable, but the original password won't be in the image
 RUN --mount=type=secret,id=salt_key,target=/run/secrets/salt_key \
     SALT_KEY=$(cat /run/secrets/salt_key) && \
-    ENCRYPTED_DB_PASSWORD=$(/tmp/encrypt_simple.sh "$DB_PASSWORD" "$SALT_KEY") && \
+    ENCRYPTED_DB_PASSWORD=$(/tmp/encrypt_md5_simple.sh "$DB_PASSWORD" "$SALT_KEY") && \
     echo "ENCRYPTED_DB_PASSWORD=$ENCRYPTED_DB_PASSWORD" >> /app/.env && \
-    rm /tmp/encrypt_simple.sh
+    rm /tmp/encrypt_md5_simple.sh
 
 # Set the entrypoint
 CMD ["python3", "app.py"]
