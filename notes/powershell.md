@@ -271,6 +271,28 @@ function Export-SiteCertificate {
 Export-SiteCertificate -ComputerName "example.com" -OutputPath ".\example_cert.cer"
 ```
 
+copy windows to WSL
+
+```powershell
+# Export a specific certificate by thumbprint
+Export-Certificate -Cert (Get-Item Cert:\LocalMachine\Root\[THUMBPRINT]) -FilePath C:\temp\certificate.cer
+
+# Or export all root certificates
+Get-ChildItem -Path Cert:\LocalMachine\Root | ForEach-Object { Export-Certificate -Cert $_ -FilePath "C:\temp\$($_.Thumbprint).cer" }
+```
+
+import to WSL
+```bash
+# In WSL, install the ca-certificates package if not already installed
+sudo apt update && sudo apt install -y ca-certificates
+
+# Copy the exported certificate
+sudo cp /mnt/c/temp/certificate.cer /usr/local/share/ca-certificates/windows-cert.crt
+
+# Update the certificate store
+sudo update-ca-certificates
+```
+
 
 
 
