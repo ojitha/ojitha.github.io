@@ -48,7 +48,7 @@ Parameters can be positional or with the name such as `Filter`:
  Get-ChildItem 'C:\Local\xxxx\forms' -Filter *.pdf
 ```
  This will shows only the PDF files.
- 
+
 ## Calculated parameters
 
 you can calculate the process id 1100 as follows
@@ -82,13 +82,13 @@ Here the Unix `tail` equivalent:
 
 ```bash  
  Get-Content .\<log file name>.log -Tail 4 -Wait
- ```
+```
  ## Kill Process
 
 ```bash
   netstat -ano | findstr :9007
   taskkill /PID 4448 /F
- ```
+```
 
 
 ## WSL 2
@@ -117,7 +117,7 @@ First update to the [WSL2 Linux kernel update package for x64 machines](https://
 Download [Amazon Linux 2](https://github.com/yosukes-dev/AmazonWSL/releases/download/2.0.20200722.0-update.2/Amazon2.zip) and extract to the `c:\wsl` folder.
 ```bash
 C:\WSL\Amazon2\Amazon2.exe
-``` 
+```
 Now run the following command:
 ```bash
 wsl -s Amazon2
@@ -172,7 +172,7 @@ aws/install
 ```
 
 NOTE: This is the best container to execute Dynamodb queries
- 
+
 
 ### Develop Glue on Amazon Linux 2 on Windows
 
@@ -243,15 +243,38 @@ s3 =
     signature_version = s3v4
 ```
 
+SSL commands
+
+```powershell
+function Export-SiteCertificate {
+    param(
+        [Parameter(Mandatory=$true)][string]$ComputerName,
+        [string]$OutputPath = ".\certificate.cer"
+    )
+    
+    try {
+        $webRequest = [Net.HttpWebRequest]::Create("https://$ComputerName")
+        $webRequest.GetResponse().Dispose()
+        
+        $cert = New-Object Security.Cryptography.X509Certificates.X509Certificate2($webRequest.ServicePoint.Certificate)
+        $bytes = $cert.Export([Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+        [IO.File]::WriteAllBytes($OutputPath, $bytes)
+        
+        Write-Host "Certificate exported to $OutputPath" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "Failed to export certificate: $_" -ForegroundColor Red
+    }
+}
+
+# Usage
+Export-SiteCertificate -ComputerName "example.com" -OutputPath ".\example_cert.cer"
+```
+
+
+
+
+
+
 [^session]: [boto3 not caching STS MFA sessions](https://github.com/boto/boto3/issues/1179)
 
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMjEzMzM2NDA1OCwtMTIwMTc2NTkzNSwxOD
-c3NjEzNzQyLC03NjEwODQ1MjMsLTIwNTU4NTM3NzAsLTQ0ODg1
-NzI4OSwxODUzMzQ4MjIyLC0xNzg1NzU1ODk4LC0xMjU2NDA2Nz
-g5LDgzMzg4MDA0NSwtMTQ2MTM3MDk0NiwtMTcxMzk0NzcyNSwt
-MTQxMDAxMDg0NywtMTY1NTc3MDE4NywtOTI3MTAzOTgsMzc4MD
-EzNzEzLC0xODA0MDY4ODU1LC05OTEyMDkxNTIsLTE5ODk5OTcx
-MjUsMTY3NzQ4NzEyNV19
--->

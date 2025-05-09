@@ -8,13 +8,9 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-AWS Bedrock Foundation Models
+Dive into the essentials of Large Language Models (LLMs) and Foundation Models (FMs) on Amazon Web Services (AWS). This guide explores leveraging AWS Bedrock and related services for building and interacting with powerful generative AI models. 
 
-![](https://community.aws/_next/image?url=https%3A%2F%2Fassets.community.aws%2Fa%2F2Z6xS7JPynHLcGuWpq2UEpKbdRt.png%3FimgSize%3D1024x580&w=1920&q=75)
-
-[Source: community.aws](https://community.aws/content/2Z5p3y9E4lCvybNVVdgQYmQKn98/inside-aws-bedrock-capabilities-analysis-impact)
-
-
+Learn about key concepts including prompt engineering, fine-tuning techniques like prompt-based learning and domain adaptation, and managing inference parameters such as Temperature, Top K, and Top P. Discover how to utilize AWS FM APIs. This post provides the foundational knowledge needed to start with LLMs on AWS.
 
 <!--more-->
 
@@ -178,6 +174,34 @@ In details:
 
 ### InvokeModel
 
+You can use the following AWS CLI to invoke:
+
+```bash
+aws bedrock-runtime invoke-model \
+--model-id amazon.titan-text-express-v1 \
+--body '{"inputText": "What is the capital of Australia?.",
+ "textGenerationConfig" : {"maxTokenCount": 512, "temperature": 0.5, "topP": 0.9}}' \
+--cli-binary-format raw-in-base64-out \
+output-text.txt
+```
+
+The output is a output-text.txt file:
+
+```json
+{
+    "inputTextTokenCount": 7,
+    "results": [
+        {
+            "tokenCount": 10,
+            "outputText": "\nThe capital of Australia is Canberra.\n\n",
+            "completionReason": "FINISH"
+        }
+    ]
+}
+```
+
+
+
 The API[^5] method ***InvokeModel*** runs inference for text models, image models, and embedding models.
 
 ```python
@@ -288,7 +312,53 @@ sample output:
 
 ### Converse
 
-Converse[^4] API across all models that support messages. The same template can be reused with different models, while inference parameters may change due to the model's acceptance.
+See the example AWS CLI converse:
+
+```bash
+aws bedrock-runtime converse \
+--model-id amazon.titan-text-express-v1 \
+--messages '[{"role": "user", "content": [{"text": "What is the capital of Australia?"}]}]' \
+--inference-config '{"maxTokens": 512, "temperature": 0.5, "topP": 0.9}'
+```
+
+Output is:
+
+```json
+{
+    "output": {
+        "message": {
+            "role": "assistant",
+            "content": [
+                {
+                    "text": "The capital of Australia is Canberra. The city is located in the Australian Capital Territory, and it is the smallest city in Australia."
+                }
+            ]
+        }
+    },
+    "stopReason": "end_turn",
+    "usage": {
+        "inputTokens": 10,
+        "outputTokens": 30,
+        "totalTokens": 40
+    },
+    "metrics": {
+        "latencyMs": 1324
+    }
+}
+```
+
+
+
+Converse[^4] API across all models that support messages. 
+
+- unified message-structured invocations
+- Same parameters and bodies, independently of the model chosen.
+- Handles basic prompt format translation for system/user/assistant prompts.
+- Consistent output format for all models.
+- Support for native function-calling from most model providers via unified Tool configuration.
+- Easy app implementation
+
+The same template can be reused with different models, while inference parameters may change due to the model's acceptance.
 
 
 
@@ -308,7 +378,7 @@ system_prompts = [{"text": "Help as a travel guide."}]
 conversation = [
     {
         "role": "user",
-        "content": [{"text": "what are the option to travel from Perth to Sydeny in Australia?"}]
+        "content": [{"text": "what are the options to travel from Perth to Sydeny in Australia?"}]
     }
 ]
 # Use converse API
@@ -410,9 +480,14 @@ flowchart TD
     class C,H,I,J,K,N,O,Q process;
 ```
 
+Context permits only a limited number of tokens. This is especially problematic when personalised responses are required. Here are some patterns you can follow to get the required AI assistance:
 
+- **Zero-shot** basic AI assistance is straightforward, and the response is very general.
+- A **prompt template** provides some context to the AI, which is a more formal way of handling the AI assistant, but different from each FM. 
+- Provide the **persona** to narrow down to the required subject or domain.
+- The **Contextual-aware AI assistance** is how RAG provides context through external sources via vector embeddings. 
 
-
+Further learning: check the Bedrock workshop[^11].
 
 
 
@@ -443,6 +518,8 @@ flowchart TD
 [^9]: [How to improve LLM RAG responses using search data](https://aws.amazon.com/marketplace/build-learn/data-analytics/smarter-llm?trk=57c1c9ea-340f-4b49-aefb-72ade899047f&sc_channel=el)
 
 [^10]: [Getting your generative AI pilot ready for production](https://aws.amazon.com/marketplace/build-learn/data-analytics/production-ready-generative-ai?trk=a416fcd4-9e30-4f1a-872b-d58578817812&sc_channel=em&mkt_tok=MTEyLVRaTS03NjYAAAGaG5ZAGfQ-9v9erUCIve5U8flL2c6swfV1VVFUn_SiPbS_yw5CtKk4h_zQMYOlA8nL530VFja7wS7FQxGex_kKEB1Pc663IwVR1WuAAuIehlYrzL_bw9J4tw)
+
+[^11]: [Amazon Bedrock Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US)
 
 
 

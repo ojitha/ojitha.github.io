@@ -26,7 +26,17 @@ typora-copy-images-to: ../assets/images/${filename}
 | Ctrl+w   | delete word by word backward                     |
 | Ctrl+x+e | Open in text editor while typing in the terminal |
 
-## File redirection
+## File
+
+### Find
+
+To list all the files, including subdirectories, that contain the phrase:
+
+```bash
+find . -name "*.md" -exec grep -l "MSK" {} \;
+```
+
+### redirection
 
 Here the command to redirect the console:
 
