@@ -75,29 +75,111 @@ curl --request GET \
 
 ## Monitoring network traffic
 
-
-
-### tcpdump
-
 Network interfaces are built to perform filtering, not to overwhelm the receiving operating system. They check the media access control (MAC) address in the frame's destination[^2]. 
 
 The frame is the *layer two headers* for communication on the local, physical network. If the destination MAC address (belongs to IP) matches the address associated with the network interface (the physical address), the associated packet is forwarded to the OS. 
 
+To find network interfaces:
+
+```bash
+tcpdump -D
+```
+
+![tcpdump network interfaces](./assets/images/REST/tcpdump_network_interfaces.jpg)
+
 > To run tcpdump, you need sudo access.
+
+### tcpdump
+
+You can run tcpdump on the br-xxx(from the above command find the bridge interface) interface for Dockers:
+
+```bash
+tcpdump -i br-1eb30f278167
+```
+
+![tcpdump On Interface](./assets/images/REST/tcpdumpOnInterface.jpg)
 
 Berkeley Packet Filters (BPF) to limit. BPF is a simple language that indicates elements of packets you want to filter on.
 
-For example, if you want see only the network traffic for the GitHub API
+For example, if you want to see only the network traffic for the GitHub API
 
 ```bash
 sudo tcpdump host 4.237.22.34
 ```
 
-Use the `nslookup api.github.io` to get the above IP address. Only for soruce or destination use `src` or `dst` instead of `host`.
+Use the `nslookup api.github.io` to get the above IP address. Only for source or destination use `src` or `dst` instead of `host`.
 
 ### tshark
 
-You can use the tshark same as above
+In many cases, the host will have one more interface. For example in the WSL:
+
+```bash
+ip link
+```
+
+![ip link](./assets/images/REST/ubuntu_ip_link.jpg)
+
+you can use following command to find the route for example in the docker:
+
+```bash
+ip route
+```
+
+For example, see how ubuntu and the dockers are bound on the
+
+![Docker connect to Ubuntu via network interface](./assets/images/REST/Docker_connect_to_Ubuntu_via interface.jpg)
+
+To find all scanable interfaces, Tshark also provides the `-D` or `--list-interfaces` arguments that will list all scannable interfaces.
+
+```bash
+tshark -D
+```
+
+To run on the above interface:
+
+```bash
+tshark -i br-1eb30f278167
+```
+
+![tshark run on interface](./assets/images/REST/tshark_run_on_interface.jpg)
+
+If you are runing a docker the better command is:
+
+```bash
+ip -brie a  | grep br- | awk '{print $1}' | xargs tshark -i
+```
+
+Above is the bridge network where dockers are connected.
+
+To save to the file:
+
+```bash
+tshark -w FILENAME.pcap -i br-1eb30f278167
+```
+
+To read the file
+
+```bash
+tshark -r FILENAME.pcap
+```
+
+To export in JSON:
+
+```bash
+tshark -T json -i br-1eb30f278167
+```
+
+If you only want `http`:
+
+```bash
+tshark -f "port http" -i br-1eb30f278167
+```
+
+```bash
+tshark -f "icmp[icmptype]==icmp-echo" -i br-1eb30f278167
+```
+
+You can use tshark the same way you can use tpcdump.
 
 ```bash
 sudo tshark host 4.237.22.34
@@ -112,7 +194,7 @@ tshark -Tfields -e ip.src
 At a high level, 
 
 1. When initiating a TCP connection between a client and server, the client sends the server a "SYN" request, asking for a connection to be established. 
-2. Once the server has processed the response, a "SYN-ACK" response is sent back to the client, acknowledging it has been received. 
+2. Once the server has processed the response, a "SYN-ACK" response is sent back to the client, acknowledging receipt. 
 3. The client answers with an "ACK," and communication is established once the server receives it. This three-phase sequence of events is called the TCP 3-way handshake.
 
 ```mermaid
