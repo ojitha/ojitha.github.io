@@ -113,7 +113,28 @@ At a high level,
 
 1. When initiating a TCP connection between a client and server, the client sends the server a "SYN" request, asking for a connection to be established. 
 2. Once the server has processed the response, a "SYN-ACK" response is sent back to the client, acknowledging it has been received. 
-3. The client answers with an "ACK," and once the server has received it, communication has been established. This three-phase sequence of events is called the TCP 3-way handshake.
+3. The client answers with an "ACK," and communication is established once the server receives it. This three-phase sequence of events is called the TCP 3-way handshake.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    
+    Note over Client,Server: TCP 3-Way Handshake
+    
+    Client->>Server: 1. SYN: Synchronize
+    Note right of Client: Client initiates connection<br>with synchronization request
+    
+    Server->>Client: 2. SYN-ACK: Synchronize-Acknowledge
+    Note left of Server: Server acknowledges and<br>sends its own synchronization
+    
+    Client->>Server: 3. ACK: Acknowledge
+    Note right of Client: Client acknowledges<br>server's synchronization
+    
+    Note over Client,Server: Connection Established
+```
+
+
 
 ### nmap
 
@@ -125,13 +146,17 @@ sudo apt install nmap -y
 
 *TCP Connect Scan* uses the full TCP 3-way handshake to establish a connection to a host and see what ports are: 
 
-| State           | Explantation                                                 |
+| State           | Comment                                                      |
 | :-------------- | :----------------------------------------------------------- |
 | Open            | Service that is accepting TCP, UDP, SCTP packets.            |
 | Closed          | A port with no active service taking requests.               |
 | Filtered        | Unable to differentiate as the packets are being filtered, preventing the probes from reaching the port. |
 | Open/Filtered   | Unable to determine between Open or Filtered and occurs when open ports typically do not give a response. |
 | Closed/Filtered | Unable to determine between Closed or Filtered.              |
+
+#### TCP Connect Scan (-sT)
+
+*TCP Connect Scan* uses the full TCP 3-way handshake to establish a connection to a host:
 
 ```bash
 nmap -sT 4.237.22.34
@@ -140,6 +165,68 @@ nmap -sT 4.237.22.34
 
 
 ![nmap on Github](/assets/images/REST/nmap_on_Github.jpg)
+
+To limit the ports
+
+```bash
+nmap -sT -p 1-100 4.237.22.34
+```
+
+The following are the TCP connection scans:
+
+| Status   | Response                | Comment                                   |
+| :------- | :---------------------- | :---------------------------------------- |
+| Open     | TCP SYN-ACK             | The service is listening on the port.     |
+| Closed   | TCP RST                 | The service is not listening on the port. |
+| Filtered | No response from target | The port is firewalled.                   |
+
+#### TCP SYN Scan (-sS)
+
+*TCP SYN Scan* is the most popular scan when using Nmap and is often called "half-open scanning".
+
+For TCP SYN use `-sS` insted of `-sT`.
+
+| Status   | Response                                                | Comment                                   |
+| :------- | :------------------------------------------------------ | :---------------------------------------- |
+| Open     | TCP SYN-ACK                                             | The service is listening on the port.     |
+| Closed   | TCP RST                                                 | The Service is not listening on the port. |
+| Filtered | No response from target or ICMP destination unreachable | The port is firewalled.                   |
+
+For the specific port:
+
+```bash
+nmap -sS -p 443 4.237.22.34
+```
+
+![TCP SYN Scan](./assets/images/REST/TCP_SYN_Scan.jpg)
+
+#### TCP FIN Scan (-sF)
+
+Use TCP FIN Scan if a firewall has spotted a SYN or TCP Connect scan. This type of scan sends a FIN packet to a target port and expects an RST packet back. If the port is open, it would have ignored the FIN packet; however, if the port is closed, an RST packet is sent.
+
+```bash
+sudo nmap -sF -p 443 4.237.22.34
+```
+
+![TCP FIN Scan](./assets/images/REST/TCP_FIN_Scan.jpg)
+
+status codes can be marked as follows:
+
+| Status        | Response                        | Comment                              |
+| :------------ | :------------------------------ | :----------------------------------- |
+| Filtered      | ICMP unreachable error received | Closed port should respond with RST. |
+| Closed        | RST packet received             | Closed port should respond with RST. |
+| Open/Filtered | No response received            | Open port should drop FIN.           |
+
+#### Host discovery
+
+By default the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to port 80, and ICMP timestamp request.
+
+```bash
+ sudo nmap -sn 4.237.22.34
+```
+
+![nmap Host scanning](./assets/images/REST/nmap_Host_scanning.jpg)
 
 
 
