@@ -1,6 +1,9 @@
 ---
 layout: notes 
 title: Utils
+mermaid: true
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
+typora-copy-images-to: ../assets/images/${filename}
 ---
 
 # Utils
