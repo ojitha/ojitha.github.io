@@ -6,8 +6,12 @@ title: REST
 # Notes on REST
 {:.no_toc}
 
+---
+
 * TOC
 {:toc}
+
+---
 
 ## Richardson Maturity Model
 

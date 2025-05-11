@@ -6,9 +6,13 @@ title: Python
 # Notes on Python
 {:.no_toc}
 
+---
 
 * TOC
 {:toc}
+
+---
+
 ## First Class Objects
 
 Python can treates function (including anonymous function `lambda`) as an object. A function that takes a function as an argument or returns a function as the result is a higher-order function[^1].

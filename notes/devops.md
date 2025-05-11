@@ -5,8 +5,12 @@ title: DevOps
 # Notes on DevOps
 {:.no_toc}
 
+---
+
 * TOC
 {:toc}
+
+---
 
 Here the important commands and information collected while programming. 
 

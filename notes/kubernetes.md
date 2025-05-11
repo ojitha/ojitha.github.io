@@ -5,11 +5,15 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-**Kubernetes notes**
+# Kubernetes
+{:.no_toc}
+
+---
 
 * TOC
 {:toc}
-# Kubernetes
+
+---
 
 I am currently using Ubuntu 24.04 LTS on Raspberry Pi 5 for Kubernetes. As a first step[^2], extend the `/boot/firmware/cmdline.txt` with the following as a single line:
 

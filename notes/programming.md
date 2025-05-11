@@ -3,10 +3,15 @@ layout: notes
 title: Programming
 ---
 
-**Notes on Programming**
+# Notes on Programming
+{:.no_toc}
+
+---
 
 * TOC
 {:toc}
+
+---
 
 Here the important commands and information collected while programming. 
 
@@ -258,5 +263,4 @@ Above insertion sort can be rewritten as:
 ```haskell
 isort xs = foldr insertNum [] xs
 ```
-
 

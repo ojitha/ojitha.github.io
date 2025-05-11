@@ -3,10 +3,15 @@ layout: notes
 title: Powershell
 ---
 
-**Notes on Windows PowerShell**
+# Notes on Windows PowerShell
+{:.no_toc}
+
+---
 
 * TOC
 {:toc}
+
+---
 
 ## Syntax
 Here the syntax for the commandlet.

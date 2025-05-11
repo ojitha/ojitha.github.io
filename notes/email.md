@@ -1,8 +1,17 @@
 ---
 layout: notes 
-title: Email
+title: Utils
 ---
 
+# Utils
+{:.no_toc}
+
+---
+
+* TOC
+{:toc}
+
+---
 
 ## Email
 

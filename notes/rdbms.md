@@ -2,11 +2,16 @@
 layout: notes 
 title: RDBMS
 ---
-**Notes on Relational Databases**
+
+# Notes on Relational Databases
+{:.no_toc}
+
+---
 
 * TOC
 {:toc}
 
+---
 ## H2 Database
 
 For testing use the following to run in the watch expression:
@@ -79,7 +84,7 @@ select to_char(current_timestamp AT TIME ZONE 'UTC', 'yyyymmdd')
 ```
 
 In the following example, the field `issue-date` is varchar type. To convert varchar to date, use the `convert` function.
-  
+
 ```sql
 select * from "schema"."ViewOrTable"
 where convert(TIMESTAMP ,"issue-date") >  date '2023-04-17' and convert(TIMESTAMP ,"issue-date") <  date '2023-04-19' 

@@ -5,10 +5,15 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-**Notes on UNIX tools**
+# Notes on UNIX tools
+{:.no_toc}
+
+---
 
 * TOC
 {:toc}
+
+---
 ## Mac terminal
 
 ### shortcut keys

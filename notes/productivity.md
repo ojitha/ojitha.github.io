@@ -5,7 +5,15 @@ mermaid: true
 ---
 
 
-**Notes on Productivity tools**
+# Notes on Productivity tools
+{:.no_toc}
+
+---
+
+* TOC
+{:toc}
+
+---
 
 * TOC
 {:toc}

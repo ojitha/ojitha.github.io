@@ -2,10 +2,17 @@
 layout: notes 
 title: macOS
 ---
-**Notes on macOS**
+
+# Notes on macOS
+{:.no_toc}
+
+---
 
 * TOC
 {:toc}
+
+---
+
 ## Shell
 
 change the shell to zsh

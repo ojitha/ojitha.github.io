@@ -3,6 +3,16 @@ layout: notes
 title: Kafka
 ---
 
+Kafka Notes
+{:.no_toc}
+
+---
+
+* TOC
+{:toc}
+
+---
+
 ## Getting Started with Confluent CLI
 Reference: [Apache Kafka® Quick Start - Local Install With Docker](https://developer.confluent.io/quickstart/kafka-local/)
 
@@ -31,7 +41,7 @@ To continue your Confluent Local experience, run `confluent local kafka topic cr
 I've created `quickstart` topic:
 ```bash
 confluent local kafka topic create quickstart
-``` 
+```
 
 ## Using Docker Compose
 

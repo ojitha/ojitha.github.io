@@ -3,7 +3,15 @@ layout: notes
 title: Mongo DB
 ---
 
-## MongoDB
+# MongoDB
+{:.no_toc}
+
+---
+
+* TOC
+{:toc}
+
+---
 
 How to tunnel to mongo db using ssh:
 
