@@ -85,7 +85,7 @@ To find network interfaces:
 tcpdump -D
 ```
 
-![tcpdump network interfaces](./assets/images/REST/tcpdump_network_interfaces.jpg)
+![tcpdump network interfaces](/assets/images/REST/tcpdump_network_interfaces.jpg)
 
 > To run tcpdump, you need sudo access.
 
@@ -97,7 +97,7 @@ You can run tcpdump on the br-xxx(from the above command find the bridge interfa
 tcpdump -i br-1eb30f278167
 ```
 
-![tcpdump On Interface](./assets/images/REST/tcpdumpOnInterface.jpg)
+![tcpdump On Interface](/assets/images/REST/tcpdumpOnInterface.jpg)
 
 Berkeley Packet Filters (BPF) to limit. BPF is a simple language that indicates elements of packets you want to filter on.
 
@@ -117,7 +117,7 @@ In many cases, the host will have one more interface. For example in the WSL:
 ip link
 ```
 
-![ip link](./assets/images/REST/ubuntu_ip_link.jpg)
+![ip link](/assets/images/REST/ubuntu_ip_link.jpg)
 
 you can use following command to find the route for example in the docker:
 
@@ -127,7 +127,7 @@ ip route
 
 For example, see how ubuntu and the dockers are bound on the
 
-![Docker connect to Ubuntu via network interface](./assets/images/REST/Docker_connect_to_Ubuntu_via interface.jpg)
+![Docker connect to Ubuntu via network interface](/assets/images/REST/Docker_connect_to_Ubuntu_via interface.jpg)
 
 To find all scanable interfaces, Tshark also provides the `-D` or `--list-interfaces` arguments that will list all scannable interfaces.
 
@@ -141,7 +141,7 @@ To run on the above interface:
 tshark -i br-1eb30f278167
 ```
 
-![tshark run on interface](./assets/images/REST/tshark_run_on_interface.jpg)
+![tshark run on interface](/assets/images/REST/tshark_run_on_interface.jpg)
 
 If you are runing a docker the better command is:
 
@@ -280,7 +280,7 @@ For the specific port:
 nmap -sS -p 443 4.237.22.34
 ```
 
-![TCP SYN Scan](./assets/images/REST/TCP_SYN_Scan.jpg)
+![TCP SYN Scan](/assets/images/REST/TCP_SYN_Scan.jpg)
 
 #### TCP FIN Scan (-sF)
 
@@ -290,7 +290,7 @@ Use TCP FIN Scan if a firewall has spotted a SYN or TCP Connect scan. This type 
 sudo nmap -sF -p 443 4.237.22.34
 ```
 
-![TCP FIN Scan](./assets/images/REST/TCP_FIN_Scan.jpg)
+![TCP FIN Scan](/assets/images/REST/TCP_FIN_Scan.jpg)
 
 status codes can be marked as follows:
 
@@ -308,7 +308,7 @@ By default the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to 
  sudo nmap -sn 4.237.22.34
 ```
 
-![nmap Host scanning](./assets/images/REST/nmap_Host_scanning.jpg)
+![nmap Host scanning](/assets/images/REST/nmap_Host_scanning.jpg)
 
 
 
