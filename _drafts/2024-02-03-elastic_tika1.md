@@ -7,7 +7,7 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-This post explains how to extract text from binary files of large data sets. Spark the best solution to handle the large dataset. Apache Tika plays the role of getting text from searchable PDF files. However, you have to have a Tesseract to do the OCR. The output will be written into the Elasticsearch.
+This post explains how to extract text from binary files of large data sets. Spark is the best solution to handle a large dataset. Apache Tika plays the role of getting text from searchable PDF files. However, you have to have a Tesseract to do the OCR. The output will be written into the Elasticsearch.
 
 <!--more-->
 
@@ -198,13 +198,13 @@ LS_MEM_LIMIT=1073741824
 ENCRYPTION_KEY=c34d38b3a14956121ff2170e5030b471551370178f43e5626eec58b04a30fae2
 ```
 
-before run the docker compose up, it is important to fix the vm map maximum value as following:
+Before run the docker compose up, it is important to fix the vm map maximum value as follows:
 
 ```bash
 docker run -it --rm --privileged --pid=host justincormack/nsenter1
 ```
 
-In the above containers bash prompt:
+In the above containers, bash prompt:
 
 ```
 sysctl -w vm.max_map_count=262144
@@ -221,11 +221,9 @@ docker compose up -d
 
 ## Install Spark
 
-I am using an AWS Glue container to run the spark 3.x.
+I am using an AWS Glue container to run Spark 3.x.
 
-
-
-Here the docker-compose.yaml file:
+Here is the docker-compose.yaml file:
 
 ```bash
 version: '3.9'
@@ -583,9 +581,9 @@ val text = parser.parse(new ByteArrayInputStream(doc), handler, metadata, contex
 print(handler.toString())
 ```
 
-> NOTE: In the above code I've commnted where PDF parser can be used if you are using unsearchable PDF files.
+> NOTE: In the above code, I've commented where the PDF parser can be used if you are using unsearchable PDF files.
 
-if necessary print all the meta data:
+if necessary, print all the meta data:
 
 ```scala
 for (name <- metadata.names()) println($" ${name} :"+metadata.get(name))

@@ -243,7 +243,7 @@ s3 =
     signature_version = s3v4
 ```
 
-SSL commands
+### Export Site Certificate
 
 ```powershell
 function Export-SiteCertificate {

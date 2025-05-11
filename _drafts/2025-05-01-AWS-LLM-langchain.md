@@ -91,12 +91,12 @@ output is
 content='Colombo is the largest city in Sri Lanka.\n\nSri Jayawardenepura Kotte (commonly known as Kotte) is the official administrative capital of Sri Lanka.\n\nHowever, Colombo is still considered the commercial capital and the seat of most government institutions, making it the de facto capital of the country. Many people often refer to Colombo as the capital due to its prominence and importance in Sri Lankan affairs.' additional_kwargs={} response_metadata={'stop_reason': 'end_turn', 'stop_sequence': None, 'model_name': 'anthropic.claude-3-5-sonnet-20241022-v2:0'} id='run-515565ac-8aad-4eb0-849d-4f09f8bd1348-0' usage_metadata={'input_tokens': 24, 'output_tokens': 95, 'total_tokens': 119, 'input_token_details': {'cache_creation': 0, 'cache_read': 0}}
 ```
 
-when you change the questions to find about 'Australa' instead of 'Sri Lanka':
+When you change the questions to find out about 'Australia' instead of 'Sri Lanka':
 
 ```python
 messages = [
     HumanMessage(content="What is the largest city in Australia?"),
-    HumanMessage(content="What is the capital of Australaia?")
+    HumanMessage(content="What is the capital of Australia?")
     ]
 ```
 
@@ -283,7 +283,7 @@ Output:
 {'country': 'Sri Lanka', 'text': "Sri Lanka is renowned for its rich cultural heritage, stunning natural landscapes, and ancient architectural marvels. Here's a list of some of the most popular sightseeing places in Sri Lanka:\n\n1. Sigiriya Rock Fortress\n2. Dambulla Cave Temple\n3. Temple of the Tooth Relic (Sri Dalada Maligawa) in Kandy\n4. Galle Dutch Fort\n5. Yala National Park\n6. Mirissa Beach\n7. Ella Rock\n8. Nuwara Eliya (Tea Plantations and Hill Country)\n9. Polonnaruwa Ancient City\n10. Anuradhapura Ancient City\n11. Arugam Bay (for surfing)\n12. Horton Plains National Park\n13. Pinnawala Elephant Orphanage\n14. Sinharaja Forest Reserve\n15. Mihintale\n16. Minneriya National Park\n17. Bundala National Park\n18. Knuckles Mountain Range\n19. Kirigalpoththa Archaeological Reserve\n20. Ranweli Wewa (Ranweli Lake)\n\nThese places showcase Sri Lanka's rich cultural heritage, stunning natural beauty, ancient cities, wildlife reserves, beaches, and more. The list provides a diverse range of experiences, from exploring UNESCO World Heritage Sites to enjoying outdoor adventures and scenic landscapes."}
 ```
 
-Following mechanisms are used in basic chain:
+The following mechanisms are used in the basic chain:
 
 1. RAG Application
 2. RouterChain
