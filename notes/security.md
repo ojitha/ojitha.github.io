@@ -211,7 +211,7 @@ curl -v https://example.com
 curl --trace-ascii curl_trace.txt https://example.com
 ```
 
-Find more information https://github.com/amaiya/devsetup/blob/main/wsl.md.
+Information for the [Jupyter in WSL](https://github.com/amaiya/devsetup/blob/main/wsl.md).
 
 ## Python Requests
 
@@ -219,7 +219,7 @@ A CA-bundle (Certificate Authority bundle) is a collection of trusted root certi
 
 What It Is:
 
-- A file containing multiple certificate authority (CA) certificates concatenated together
+- A file containing multiple certificate authorities (CA) certificates concatenated together
 - Typically in PEM format (text-based with `.crt`, `.pem`, or `.bundle` extension)
 - Contains base64-encoded certificates with BEGIN/END CERTIFICATE markers
 - Used as a trust store for verifying server certificates
@@ -345,5 +345,79 @@ except requests.exceptions.SSLError as e:
     print(f"SSL Error: {e}")
 except requests.exceptions.RequestException as e:
     print(f"Request failed: {e}")
+```
+
+### Full certificate chain
+
+Connect to a server and show the full certificate chain. The `-showcerts` option with `s_client` will display the entire chain as presented by the server. Look for multiple `BEGIN CERTIFICATE` blocks.
+
+```bash
+openssl s_client -connect example.com:443 -showcerts
+```
+
+Step 1: Extract and Save the Certificate Chain
+
+```bash
+# Save the full certificate chain to a file
+openssl s_client -connect example.com:443 -showcerts </dev/null | sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p' > certificate_chain.pem
+```
+
+Step 2: Using with curl
+
+```bash
+# Use the entire chain
+curl --cacert certificate_chain.pem https://example.com
+
+# Or set as environment variable
+export CURL_CA_BUNDLE=certificate_chain.pem
+curl https://example.com
+```
+
+To extract individual certificates if needed:
+
+```bash
+# Split the PEM file into individual certificates
+csplit -f cert- certificate_chain.pem '/-----BEGIN CERTIFICATE-----/' '{*}'
+```
+
+Step 3: Using with Python Requests
+
+```python
+import requests
+
+# Basic usage with certificate chain
+response = requests.get('https://example.com', verify='certificate_chain.pem')
+
+# For a session (multiple requests)
+session = requests.Session()
+session.verify = 'certificate_chain.pem'
+response = session.get('https://example.com')
+
+# Using environment variable approach
+import os
+os.environ['REQUESTS_CA_BUNDLE'] = 'certificate_chain.pem'
+response = requests.get('https://example.com')
+```
+
+To extract only the root or a specific certificate:
+
+```bash
+# Get the first certificate (usually the server certificate)
+openssl s_client -connect example.com:443 </dev/null | sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p' | head -n 25 > server_cert.pem
+
+# Extract all individual certificates from the chain
+openssl s_client -connect example.com:443 -showcerts </dev/null | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/{ if(/BEGIN CERTIFICATE/){a++}; out="cert"a".pem"; print >out}'
+```
+
+For client certificate authentication:
+
+```bash
+# With curl
+curl --cacert certificate_chain.pem --cert client.crt --key client.key https://example.com
+
+# With Python
+response = requests.get('https://example.com', 
+                      verify='certificate_chain.pem',
+                      cert=('client.crt', 'client.key'))
 ```
 
