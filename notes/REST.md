@@ -75,6 +75,16 @@ curl --request GET \
 
 ## Monitoring network traffic
 
+Any machine that communicates over the network has at least one network adapter. All the components between this adapter and an application form a networking stack[^5]: a set of networking components that process and move networking traffic. In traditional scenarios, the networking stack is small, and all the packet routing and switching happens in external devices.
+
+![[Microsoft: networking stack](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/media/networking-stack.png)](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/media/networking-stack.png)
+
+However, with the advent of network virtualization, the size of the networking stack has multiplied.
+
+![[Microsoft: network virtualisation](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/media/packet-capture.png)](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/media/packet-capture.png)
+
+Packet Monitor intercepts packets at multiple locations throughout the networking stack, exposing the packet route. The microsoft tool **pktmon**[^6] supports TXT log analysis based on **TcpDump** packet parsing.
+
 Network interfaces are built to perform filtering, not to overwhelm the receiving operating system. They check the media access control (MAC) address in the frame's destination[^2]. 
 
 The frame is the *layer two headers* for communication on the local, physical network. If the destination MAC address (belongs to IP) matches the address associated with the network interface (the physical address), the associated packet is forwarded to the OS. 
@@ -91,7 +101,7 @@ tcpdump -D
 
 ### tcpdump
 
-You can run tcpdump on the br-xxx(from the above command find the bridge interface) interface for Dockers:
+You can run tcpdump[^4] on the br-xxx(from the above command, find the bridge interface) interface for Docker:
 
 ```bash
 tcpdump -i br-1eb30f278167
@@ -185,7 +195,7 @@ You can use tshark the same way you can use tpcdump.
 sudo tshark host 4.237.22.34
 ```
 
-To display only certain fields in tshark, you can use the switch `-Tfields`[^3].
+To display only specific fields in tshark, you can use the switch `-Tfields`[^3].
 
 ```bash
 tshark -Tfields -e ip.src
@@ -292,7 +302,7 @@ sudo nmap -sF -p 443 4.237.22.34
 
 ![TCP FIN Scan](/assets/images/REST/TCP_FIN_Scan.jpg)
 
-status codes can be marked as follows:
+Status codes can be marked as follows:
 
 | Status        | Response                        | Comment                              |
 | :------------ | :------------------------------ | :----------------------------------- |
@@ -302,13 +312,30 @@ status codes can be marked as follows:
 
 #### Host discovery
 
-By default the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to port 80, and ICMP timestamp request.
+By default, the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to port 80, and an ICMP timestamp request.
 
 ```bash
  sudo nmap -sn 4.237.22.34
 ```
 
 ![nmap Host scanning](/assets/images/REST/nmap_Host_scanning.jpg)
+
+comible certificates
+
+```bash
+# Extract certificates
+csplit -f "cert-" -b "%02d.pem" input.pem '/-----BEGIN CERTIFICATE-----/' '{*}'
+rm cert-00.pem 2>/dev/null
+
+# Identify each certificate
+for f in cert-*.pem; do
+  echo "$f:"
+  openssl x509 -in $f -noout -subject -issuer
+done
+
+# Combine in the correct order (typically: server cert first, then intermediates, then root)
+cat cert-01.pem cert-02.pem cert-03.pem > chain.crt
+```
 
 
 
@@ -317,3 +344,9 @@ By default the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to 
 [^2]: [Interactive Lab: Security Testing and Monitoring with Kali Linux: Capturing Network Traffic Using tcpdump](https://learning.oreilly.com/interactive-lab/security-testing-and/9781098110857/lab/)
 
 [^3]: [Wireshark · Display Filter Reference: Index](https://www.wireshark.org/docs/dfref/)
+
+[^4]: [tcpdump(1) man page | TCPDUMP & LIBPCAP](https://www.tcpdump.org/manpages/tcpdump.1.html)
+
+[^5]: [Packet Monitor (Pktmon) | Microsoft Learn](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon)
+
+[^6]: [Pktmon command formatting | Microsoft Learn](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon-syntax)
