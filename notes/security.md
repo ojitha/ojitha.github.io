@@ -211,3 +211,139 @@ curl -v https://example.com
 curl --trace-ascii curl_trace.txt https://example.com
 ```
 
+Find more information https://github.com/amaiya/devsetup/blob/main/wsl.md.
+
+## Python Requests
+
+A CA-bundle (Certificate Authority bundle) is a collection of trusted root certificates combined into a single file that applications use to verify the authenticity of SSL/TLS connections.
+
+What It Is:
+
+- A file containing multiple certificate authority (CA) certificates concatenated together
+- Typically in PEM format (text-based with `.crt`, `.pem`, or `.bundle` extension)
+- Contains base64-encoded certificates with BEGIN/END CERTIFICATE markers
+- Used as a trust store for verifying server certificates
+
+Key Purposes:
+
+- Provides a set of trusted root certificates to verify website identity
+- Allows verification of SSL/TLS connections without requiring individual certificate installations
+- Establishes the chain of trust for secure communications
+- Enables applications to determine which certificate issuers to trust
+
+common locations:
+
+```bash
+# Debian/Ubuntu
+/etc/ssl/certs/ca-certificates.crt
+
+# RHEL/CentOS/Fedora
+/etc/pki/tls/certs/ca-bundle.crt
+
+# macOS
+/etc/ssl/cert.pem
+
+# Windows
+C:\Windows\System32\curl-ca-bundle.crt (for curl)
+```
+
+### Using SSL Certificates
+
+Basic Certificate Verification
+
+```python
+import requests
+
+# Basic HTTPS request (uses system CA bundle)
+response = requests.get('https://example.com')
+
+# Specify a custom CA bundle
+response = requests.get('https://example.com', verify='/path/to/ca-bundle.crt')
+
+# Disable certificate verification (not recommended for production)
+response = requests.get('https://example.com', verify=False)
+# This will show a warning unless you disable it:
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+```
+
+### Using Client Certificates (mTLS)
+
+```python
+# Client certificate and key in separate files
+response = requests.get('https://example.com', 
+                      cert=('/path/to/client.crt', '/path/to/client.key'))
+
+# Client certificate with key in single file
+response = requests.get('https://example.com', 
+                      cert='/path/to/client.pem')
+
+# With password-protected private key
+response = requests.get('https://example.com',
+                      cert=('/path/to/client.crt', ('/path/to/client.key', 'password')))
+```
+
+### Using Session Objects (for multiple requests)
+
+```python
+session = requests.Session()
+session.verify = '/path/to/ca-bundle.crt'
+session.cert = ('/path/to/client.crt', '/path/to/client.key')
+
+response1 = session.get('https://example.com/endpoint1')
+response2 = session.get('https://example.com/endpoint2')
+```
+
+### Using environment variables
+
+```python
+# Set these before running your Python script
+import os
+os.environ['REQUESTS_CA_BUNDLE'] = '/path/to/ca-bundle.crt'
+
+# Now all requests will use this CA bundle by default
+requests.get('https://example.com')
+```
+
+### Advanced Certificate Handling
+
+```python
+import ssl
+import requests
+
+# Create a custom SSL context
+context = ssl.create_default_context(cafile='/path/to/ca-bundle.crt')
+context.load_cert_chain('/path/to/client.crt', '/path/to/client.key')
+context.verify_mode = ssl.CERT_REQUIRED
+
+# Use with requests via an adapter (more advanced)
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+
+class SSLAdapter(HTTPAdapter):
+    def __init__(self, ssl_context=None, **kwargs):
+        self.ssl_context = ssl_context
+        super().__init__(**kwargs)
+        
+    def init_poolmanager(self, *args, **kwargs):
+        kwargs['ssl_context'] = self.ssl_context
+        return super().init_poolmanager(*args, **kwargs)
+
+session = requests.Session()
+adapter = SSLAdapter(ssl_context=context)
+session.mount('https://', adapter)
+response = session.get('https://example.com')
+```
+
+### Error Handling
+
+```python
+try:
+    response = requests.get('https://example.com', verify='/path/to/ca-bundle.crt')
+    response.raise_for_status()
+except requests.exceptions.SSLError as e:
+    print(f"SSL Error: {e}")
+except requests.exceptions.RequestException as e:
+    print(f"Request failed: {e}")
+```
+
