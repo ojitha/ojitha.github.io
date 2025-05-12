@@ -1,8 +1,6 @@
 docs_list_title: My Notes
 docs:
 
-- title: Productivity
-  url: productivity.html
 
 - title: DevOps
   url: devops.html
@@ -16,6 +14,9 @@ docs:
 - title: Kubernetes
   url: kubernetes.html  
 
+- title: Productivity
+  url: productivity.html
+  
 - title: Programming
   url: programming.html 
 
@@ -28,6 +29,9 @@ docs:
 - title: macOS
   url: macos.html
 
+- title: Powershell
+  url: powershell.html
+
 - title: Spark
   url: spark.html
 
@@ -37,11 +41,11 @@ docs:
 - title: RDBMS
   url: rdbms.html
 
-- title: Powershell
-  url: powershell.html
-
 - title: SCM
-  url: scm.html  
+  url: scm.html 
+
+- title: Security
+  url: security.html
 
 - title: Unix Tools
   url: UnixTools.html 

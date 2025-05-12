@@ -320,22 +320,7 @@ By default, the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to
 
 ![nmap Host scanning](/assets/images/REST/nmap_Host_scanning.jpg)
 
-comible certificates
 
-```bash
-# Extract certificates
-csplit -f "cert-" -b "%02d.pem" input.pem '/-----BEGIN CERTIFICATE-----/' '{*}'
-rm cert-00.pem 2>/dev/null
-
-# Identify each certificate
-for f in cert-*.pem; do
-  echo "$f:"
-  openssl x509 -in $f -noout -subject -issuer
-done
-
-# Combine in the correct order (typically: server cert first, then intermediates, then root)
-cat cert-01.pem cert-02.pem cert-03.pem > chain.crt
-```
 
 
 
