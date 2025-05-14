@@ -421,3 +421,16 @@ response = requests.get('https://example.com',
                       cert=('client.crt', 'client.key'))
 ```
 
+```
+nested_schema = StructType([
+    ("id", StringType()),
+    ("user", StructType([
+        ("name", StringType()),
+        ("profile", StructType([
+            ("age", IntegerType()),
+            ("email", StringType())
+        ]))
+    ]))
+])
+```
+
