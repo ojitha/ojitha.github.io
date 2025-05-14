@@ -421,16 +421,96 @@ response = requests.get('https://example.com',
                       cert=('client.crt', 'client.key'))
 ```
 
+## OpenSSL
+
+Openssl supports X.509 certificates, SSL, TLS, and DTLS protocols, as well as other less popular cryptography-related technologies.
+
+To get information of a handshake:
+
+```bash
+openssl s_client -connect example.org:443
 ```
-nested_schema = StructType([
-    ("id", StringType()),
-    ("user", StructType([
-        ("name", StringType()),
-        ("profile", StructType([
-            ("age", IntegerType()),
-            ("email", StringType())
-        ]))
-    ]))
-])
+
+Verification of the server certificate and its hostname by adding the `-verify_return_error`:
+
+```bash
+openssl s_client -connect example.org:443 -verify_return_error -verify_hostname example.org
+```
+
+> In the Ubuntu Linux system, the system-installed OpenSSL looks for the trusted certificates in the /etc/ssl/certs directory
+
+You can provide trusted CA certificates to OpenSSL using any of the following methods:
+
+- Copying
+- Set the `SSL_CERT_DIR` environment variable
+- Add a `-CApath /etc/ssl/certs` switch to the `openssl s_client` command
+
+ You can download Mozilla’s trusted CA certificate [Mozilla’s trusted CA certificate](https://curl.se/ca/cacert.pem):
+
+```bash
+curl --remote-name https://curl.se/ca/cacert.pem
+```
+
+Provide the downloaded certificate bundle to Openssl using any of the following methods:
+
+- Set the `SSL_CERT_FILE` environment variable to the absolute or relative path of the downloaded **cacert.pem** file
+- Add the `-CAfile path/to/cacerts.pem` switch to the **openssl s_client** command
+
+### OCSP on the command line
+
+List the certificates:
+
+```bash
+echo | openssl s_client -connect revoked.badssl.com:443 -showcerts
+```
+
+Save the first and second certificates to cert1.pem and cert2.pem
+
+Run and get the OCSP uri
+
+```bash
+openssl x509 -in cert1.pem -noout -ocsp_uri
+```
+
+output is `http://e5.o.lencr.org`.
+
+Check the certificate validity:
+
+```bash
+openssl ocsp -issuer cert2.pem -cert cert1.pem -url http://e5.o.lencr.org
+```
+
+![img000295@2x](/assets/images/security/img000295@2x.jpg)
+
+### Issuer Certificate
+
+Find issuer certificate:
+
+```bash
+openssl x509 -in cert1.pem -text
+```
+
+and find the signing URL
+
+
+
+![img000296@2x](/assets/images/security/img000296@2x.jpg)
+
+Now download the signing certificate:
+
+```bash
+curl http://e5.i.lencr.org/ >signer.der
+```
+
+convert the signing certificate to pem
+
+```bash
+openssl x509 -inform der -in signer.der -out signer.pem
+```
+
+Display the issuer certificate:
+
+```bash
+openssl x509 -in signer.pem -text
 ```
 
