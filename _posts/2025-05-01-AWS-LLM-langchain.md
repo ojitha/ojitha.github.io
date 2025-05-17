@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  Langchain for AWS Bedrock
+title:  LangChain for AWS Bedrock
 date:   2025-05-01
-categories: [Cat1, Cat2]
+categories: [AI, AWS, LangChain]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-Brief introduction
+The [first part]({% post_url 2025-04-27-AWS-LLM-Basics %}) explained the LLM basics of AWS Bedrock. This second part describes how to integrate LangChain with AWS Bedrock to build AI applications. It covers the implementation of AWS Bedrock with Amazon Titan and Claude models, as well as key LangChain components, including prompt templates, embeddings, memory, and chains. Code examples demonstrate everything from basic model invocation to creating conversational agents with memory, perfect for developers building production AI solutions. 
 
 <!--more-->
 
@@ -19,16 +19,16 @@ Brief introduction
 
 ## LangChain
 
-LangChain can integrate LLMs with other sources of data. LangChain Expression Language, or LCEL[^4], is a declarative way to easily compose chains together. LangChain integrations are:
+LangChain can integrate large language models (LLMS) with other sources of data. LangChain Expression Language, or LCEL[^4], is a declarative way to compose chains together easily. LangChain integrations are:
 
 - models
 - Prompt templates
 - indexes (AWS Kendra)
 - Memory: The **memory** component provides the mechanism to store and summarise prior conversational elements that are included in the context on subsequent invocations.
 - Chain
-- Agents: LangChain **agents** can interact with external sources, like search engines, calculators, APIs, or databases. **Agents** can also run code to perform actions to assist the LLMs in generating accurate responses.
+- Agents: LangChain **agents** can interact with external sources, such as search engines, calculators, APIs or databases. **Agents** can also run code to perform actions to assist the LLMs in generating accurate responses.
 
-The **retriever** is the component for fetching relevant documents to combine with language models.
+The **retriever** is the component responsible for fetching relevant documents to be combined with language models.
 The **document loaders** component is responsible for loading documents from various sources. The **VectorStore** class is used to query supported vector stores for relevant data. 
 
 ### Setup
@@ -65,7 +65,7 @@ print(response)
 
 I have used the Bedrock user guide[^2] to select the `service_name` above.
 
-LangChain provides a chat model component to build conversational applications.
+LangChain offers a chat model component for building conversational applications.
 
 ```python
 from langchain_aws import ChatBedrock as Bedrock
@@ -110,7 +110,7 @@ content="Sydney is the largest city in Australia by population, with approximate
 
 To install the latest LangChain version 3:
 
-create a new environment and activate:
+Create a new environment and activate:
 
 ```bash
 pyenv virtualenv 3.11.10 langchain
@@ -178,7 +178,7 @@ Prompt templates help to translate user input and parameters into instructions f
 
 ## Indexes
 
-Text embedding models take text as input and then output numerical representations of the text as a vector of floating-point numbers. The embedding vector represents the phrase's semantics, not the string. 
+Text embedding models take text as input and then output numerical representations of the text as a vector of floating-point numbers. The embedding vector represents the phrase's semantics, not its string representation. 
 
 ```python
 from langchain_community.embeddings import BedrockEmbeddings
@@ -207,7 +207,7 @@ Instead of text, you can load documents[^3] to retrieve large data sets from doc
 
 ## Memory
 
-LLM can respond human-like if it can remember previous interactions with the user. However, LLMS are stateless in the conversation by default; therefore, prompts must maintain the conversation history, which LangChain can do. For example:
+LLM can respond in a human-like manner if it can remember previous interactions with the user. However, LLMS are stateless in the conversation by default; therefore, prompts must maintain the conversation history, which LangChain can do. For example:
 
 ```python
 import boto3
@@ -243,7 +243,7 @@ Output:
  'response': 'Bot: Hi! I am a chatbot designed by Wix. I can provide you with a list of tourist sightseeing places in Sri Lanka.\n\nHere are some of the tourist sightseeing places in Sri Lanka:\n1. Sigiriya\n2. Kandy\n3. Nuwara Eliya\n4. Galle\n5. Yala National Park\n\nWould you like to know more about these places?'}
 ```
 
-Then you can ask second question based on the above:
+Then you can ask the second question based on the above:
 
 ```python
 print(conversation.predict(input="...?"))
@@ -253,7 +253,7 @@ and so on.
 
 ## Chain
 
-chain is a set of components that run together. Chain call set of other chains and create complex workflows.
+A chain is a set of components that run together. Chain calls a set of other chains, creating complex workflows.
 
 ```python
 from langchain import PromptTemplate
@@ -291,7 +291,7 @@ The following mechanisms are used in the basic chain:
 
 
 
-Form more information, see the workshop[^6].
+For more information, see the workshop[^6].
 
 {:rtxt: .message color="red"} 
 

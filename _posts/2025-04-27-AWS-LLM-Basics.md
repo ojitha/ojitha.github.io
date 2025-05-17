@@ -10,7 +10,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 Dive into the essentials of Large Language Models (LLMs) and Foundation Models (FMs) on Amazon Web Services (AWS). This guide explores leveraging AWS Bedrock and related services for building and interacting with powerful generative AI models. 
 
-Learn about key concepts including prompt engineering, fine-tuning techniques like prompt-based learning and domain adaptation, and managing inference parameters such as Temperature, Top K, and Top P. Discover how to utilize AWS FM APIs. This post provides the foundational knowledge needed to start with LLMs on AWS.
+Learn about key concepts including prompt engineering, fine-tuning techniques like prompt-based learning and domain adaptation, and managing inference parameters such as Temperature, Top K, and Top P. Discover how to utilise AWS FM APIs. This post provides the foundational knowledge required to get started with LLMS on AWS. The [second part]({% post_url 2025-05-01-AWS-LLM-langchain %}) describes how to use LangChain with AWS Bedrock.
 
 <!--more-->
 
