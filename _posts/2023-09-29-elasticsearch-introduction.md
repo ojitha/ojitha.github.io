@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Elastic Search Introduction
-date:   2020-07-11
+date:   2023-09-29
 categories: [ELK]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
@@ -1178,7 +1178,7 @@ Normalization also finds *synonyms* and adding them to the inverted index. For e
 
 The *Stop words* are such as English grammar articles they are irrelevant to find the relevant documents.
 
-## Appendix
+## Appendix - Examples
 
 Download schema
 
@@ -1616,6 +1616,181 @@ client = Elasticsearch(
 )
 
 client.info()
+```
+
+## Appendix - Elasticsearch 8.18.1
+
+Sample without a password
+
+```yaml
+version: '3'
+
+volumes:
+ esdata01:
+   driver: local
+ esdata02:
+   driver: local
+ kibanadata:
+   driver: local
+
+services:
+  es01:
+    # container_name: es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    environment: 
+      # - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - node.name=es01
+      - cluster.name=${CLUSTER_NAME}
+      # 
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es02
+      # - discovery.type=single-node
+      # 
+      - bootstrap.memory_lock=true
+      
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - xpack.license.self_generated.type=${LICENSE}
+      - xpack.ml.enabled=true
+      - xpack.ml.max_machine_memory_percent=50
+    mem_limit: ${ES_MEM_LIMIT}  
+    labels:
+      co.elastic.logs/module: elasticsearch
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - ${ES_PORT}:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:9200",
+        ]        
+      interval: 10s
+      timeout: 10s
+      retries: 120
+  es02:
+    depends_on:
+      es01:
+        condition: service_healthy
+    # container_name: es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    environment: 
+      # - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - node.name=es02
+      - cluster.name=${CLUSTER_NAME}
+      # 
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es01
+      # - discovery.type=single-node
+      # 
+      - bootstrap.memory_lock=true
+      
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - xpack.license.self_generated.type=${LICENSE}
+      - xpack.ml.max_machine_memory_percent=50
+    mem_limit: 2147483648
+    labels:
+      co.elastic.logs/module: elasticsearch
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    # ports:
+    #   - ${ES_PORT}:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:9200",
+        ]        
+      interval: 10s
+      timeout: 10s
+      retries: 120
+
+  kibana:
+    depends_on:
+     es01:
+       condition: service_healthy
+     es02:
+       condition: service_healthy
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    labels:
+     co.elastic.logs/module: kibana
+    volumes:
+      - kibanadata:/usr/share/kibana/data     
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://es01:9200
+      # - ELASTICSEARCH_USERNAME=kibana_system
+      # - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - XPACK_SECURITY_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+      - XPACK_REPORTING_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+    mem_limit: ${KB_MEM_LIMIT}
+    ports:
+      - ${KIBANA_PORT}:5601
+
+
+networks:
+ default:
+   name: elastic
+   external: false
+```
+
+`.env` file:
+
+```
+# Project namespace (defaults to the current folder name if not set)
+#COMPOSE_PROJECT_NAME=myproject
+
+
+# Password for the 'elastic' user (at least 6 characters)
+ELASTIC_PASSWORD=changeme
+
+
+# Password for the 'kibana_system' user (at least 6 characters)
+KIBANA_PASSWORD=changeme
+
+
+# Version of Elastic products
+# STACK_VERSION=8.11.2
+STACK_VERSION=8.18.1
+
+
+# Set the cluster name
+CLUSTER_NAME=docker-cluster
+
+
+# Set to 'basic' or 'trial' to automatically start the 30-day trial
+# POST /_license/start_trial?acknowledge=true
+LICENSE=basic
+# LICENSE=trial
+
+
+# Port to expose Elasticsearch HTTP API to the host
+ES_PORT=9200
+
+
+# Port to expose Kibana to the host
+KIBANA_PORT=5601
+
+
+# Increase or decrease based on the available host memory (in bytes)
+ES_MEM_LIMIT= 5368709120 #4831838208 #=>4.5GB #4GB 4294967296 2GB 3221225472  
+KB_MEM_LIMIT=2147483648
+LS_MEM_LIMIT=2147483648
+
+
+# SAMPLE Predefined Key only to be used in POC environments
+ENCRYPTION_KEY=c34d38b3a14956121ff2170e5030b471551370178f43e5626eec58b04a30fae2
 ```
 
 
