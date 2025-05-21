@@ -318,3 +318,28 @@ git push origin HEAD:refs/for/<target branch>%topic=<topic to show in the dashbo
 ```
 
 is the review command to run in Git prompt.
+
+## Git Credential Manager
+
+Using wget you can download the package. For example to install this on WSL 2 (ubuntu) use the `sudo dpkg -i gcm-linux_amd64.2.6.1.deb`. 
+
+Configure using
+
+```bash
+git-credential-manager configure
+```
+
+Set the PAT location:
+
+```bash
+git config --global credential.CredentialStore plaintext
+```
+
+Now you can run the clone command.
+
+Check your git configuration:
+
+```bash
+git config --global --get credential.helper
+```
+

@@ -16,6 +16,16 @@ typora-copy-images-to: ../assets/images/${filename}
 
 ---
 
+## Hashes
+
+In the WSL
+
+```bash
+md5sum <filename>
+```
+
+You can check the validaity of the certificates using the https://www.geocerts.com/ssl-checker.
+
 ## Winodows certificates on WSL
 
 To display the Windows certificate, use the `certmgr.msc`. To enable Windows certificates in WSL, you need to export them from Windows and import them into the WSL certificate store. Here are several methods:
@@ -514,4 +524,3 @@ Display the issuer certificate:
 openssl x509 -in signer.pem -text
 ```
 
-E1DF2FE2-24F3-4261-A552-091AC965C4BD
