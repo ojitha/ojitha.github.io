@@ -7,7 +7,7 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-This post is on ElasticSearch 8 and the Elastic Stack[^1]. 
+Learn Elasticsearch from zero to hero with this comprehensive guide covering installation, CRUD operations, mapping, and advanced search techniques.
 
 <!--more-->
 
@@ -19,7 +19,7 @@ This post is on ElasticSearch 8 and the Elastic Stack[^1].
 
 ## Install
 
-In this post, I have used Docker to install ElasticSearch. This has minimised the effort of getting started. Here the docker-compose.yml file taken from a official article[^2]:
+In this post, I have used Docker to install ElasticSearch 8 and the Elastic Stack[^1]. This has minimised the effort of getting started. Here the docker-compose.yml file taken from a official article[^2]:
 
 ```yaml
 version: "3.8"
