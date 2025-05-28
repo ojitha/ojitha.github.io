@@ -555,14 +555,170 @@ RUN apt-get update && \
 # Copy the Nginx configuration template
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
-# Copy SSL certificates (these will be mounted via volume from host)
-# This COPY is primarily for structure and to ensure the directories exist.
-# The actual certs will come from the mounted volume.
+# Create SSL directory
 RUN mkdir -p /etc/nginx/ssl
 
 # Entrypoint command is handled by docker-compose to use envsubst
 # and then start nginx in the foreground
 ```
+
+Here the nginx.conf.template
+
+```json
+worker_processes auto;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    # OAuth2 Proxy upstream
+    upstream oauth2_proxy {
+        server oauth2-proxy:4180;
+    }
+
+    # Kibana upstream
+    upstream kibana_backend {
+        server kibana:5601;
+    }
+
+    # HTTP server block
+    server {
+        listen 80;
+        server_name ${KIBANA_DOMAIN};
+
+        # OAuth2 Proxy endpoints
+        location /oauth2/ {
+            proxy_pass http://oauth2_proxy;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Scheme $scheme;
+            proxy_set_header X-Auth-Request-Redirect $request_uri;
+        }
+
+        # Authentication endpoint for Nginx auth_request
+        location = /oauth2/auth {
+            proxy_pass http://oauth2_proxy;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Uri $request_uri;
+            proxy_set_header Content-Length "";
+            proxy_pass_request_body off;
+        }
+
+        # Kibana application location
+        location / {
+            auth_request /oauth2/auth;
+            error_page 401 = /oauth2/sign_in;
+
+            # Pass user identity headers from OAuth2 Proxy to Kibana
+            auth_request_set $user $upstream_http_x_auth_request_user;
+            auth_request_set $email $upstream_http_x_auth_request_email;
+            proxy_set_header X-Proxy-User $user;
+            proxy_set_header X-Proxy-Email $email;
+            proxy_set_header X-Auth-Request-User $user;
+            proxy_set_header X-Auth-Request-Email $email;
+
+            # If OAuth2 Proxy sets a Set-Cookie header for session refresh
+            auth_request_set $auth_cookie $upstream_http_set_cookie;
+            add_header Set-Cookie $auth_cookie;
+
+            proxy_pass http://oauth2_proxy/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_redirect off;
+
+            # Adjust buffer sizes if cookie size is an issue
+            proxy_buffer_size 128k;
+            proxy_buffers 4 256k;
+            proxy_busy_buffers_size 256k;
+        }
+
+        # Health check endpoint
+        location /health {
+            access_log off;
+            return 200 "OK\n";
+            add_header Content-Type text/plain;
+        }
+    }
+
+    # HTTPS server block (optional for POC, using self-signed cert)
+    server {
+        listen 443 ssl;
+        server_name ${KIBANA_DOMAIN};
+
+        ssl_certificate /etc/nginx/ssl/nginx.crt;
+        ssl_certificate_key /etc/nginx/ssl/nginx.key;
+
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 10m;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384';
+        ssl_prefer_server_ciphers on;
+
+        # Same location blocks as HTTP server
+        location /oauth2/ {
+            proxy_pass http://oauth2_proxy;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Scheme $scheme;
+            proxy_set_header X-Auth-Request-Redirect $request_uri;
+        }
+
+        location = /oauth2/auth {
+            proxy_pass http://oauth2_proxy;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Uri $request_uri;
+            proxy_set_header Content-Length "";
+            proxy_pass_request_body off;
+        }
+
+        location / {
+            auth_request /oauth2/auth;
+            error_page 401 = /oauth2/sign_in;
+
+            auth_request_set $user $upstream_http_x_auth_request_user;
+            auth_request_set $email $upstream_http_x_auth_request_email;
+            proxy_set_header X-Proxy-User $user;
+            proxy_set_header X-Proxy-Email $email;
+            proxy_set_header X-Auth-Request-User $user;
+            proxy_set_header X-Auth-Request-Email $email;
+
+            auth_request_set $auth_cookie $upstream_http_set_cookie;
+            add_header Set-Cookie $auth_cookie;
+
+            proxy_pass http://oauth2_proxy/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_redirect off;
+
+            proxy_buffer_size 128k;
+            proxy_buffers 4 256k;
+            proxy_busy_buffers_size 256k;
+        }
+    }
+}
+
+```
+
+
 
 #### OAuth2 Proxy Dockerfile (`oauth2-proxy/Dockerfile`)
 
@@ -570,9 +726,6 @@ This Dockerfile builds the image for OAuth2 Proxy, ensuring it has the necessary
 
 ```dockerfile
 FROM quay.io/oauth2-proxy/oauth2-proxy:latest
-
-# No additional commands needed as the base image contains the binary
-# and configuration is handled via environment variables in docker-compose.yml
 ```
 
 ### Configuration Files Content
@@ -586,49 +739,53 @@ cluster.name: docker-cluster
 network.host: 0.0.0.0
 http.port: 9200
 
-# Memory settings (adjust based on available RAM)
+# Memory settings
 bootstrap.memory_lock: true
-# ES_JAVA_OPTS are set via environment variables in docker-compose.yml
 
 # X-Pack Security Configuration
 xpack.security.enabled: true
 
-# PKI Realm for Kibana communication and potential delegation
-xpack.security.authc.realms.pki.pki1:
-  order: 1
-  delegation.enabled: true
-  truststore.path: certs/ca/ca.crt # Path to the CA certificate trusted by this PKI realm
-  username_pattern: "CN=(.*?)(?:,|$)" # Extract Common Name as username
+# PKI Realm for Kibana communication
+# xpack.security.authc.realms.pki.pki1:
+#   order: 1
+#   delegation.enabled: true
+#   certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca/ca.crt" ]
+#   username_pattern: "CN=(.*?)(?:,|$)"
 
-# Enable Token-based authentication (required for PKI delegation)
+# Enable Token-based authentication
 xpack.security.authc.token.enabled: true
 
 # HTTP SSL/TLS configuration
 xpack.security.http.ssl.enabled: true
-xpack.security.http.ssl.certificate: certs/elasticsearch/elasticsearch.crt
-xpack.security.http.ssl.key: certs/elasticsearch/elasticsearch.key
-xpack.security.http.ssl.certificate_authorities: certs/ca/ca.crt
-xpack.security.http.ssl.client_authentication: optional # Allow clients without certs for direct access
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/elasticsearch/elasticsearch.crt
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/elasticsearch/elasticsearch.key
+xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca/ca.crt" ]
+xpack.security.http.ssl.client_authentication: optional
 
-# Transport SSL/TLS configuration (for inter-node communication)
+# Transport SSL/TLS configuration
 xpack.security.transport.ssl.enabled: true
-xpack.security.transport.ssl.certificate: certs/elasticsearch/elasticsearch.crt
-xpack.security.transport.ssl.key: certs/elasticsearch/elasticsearch.key
-xpack.security.transport.ssl.certificate_authorities: certs/ca/ca.crt
-xpack.security.transport.ssl.client_authentication: required # Require client certs for transport
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/elasticsearch/elasticsearch.crt
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/elasticsearch/elasticsearch.key
+xpack.security.transport.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca/ca.crt" ]
+xpack.security.transport.ssl.client_authentication: required
 
-# Internal Proxies (Crucial for trusting headers from Kibana)
-# The IP address of the Kibana container within the Docker network
-# This must be dynamically determined or set to a broad range for POC.
-# For a production setup, specify the exact IP or subnet of trusted Kibana instances.
-# For this POC, we assume the internal IP of Kibana is trusted by Elasticsearch.
-# In a real scenario, you'd find Kibana's internal IP (e.g., `docker inspect <kibana_container_id>`)
-# and add it here, or configure it via API after network initialization.
-# For simplicity in docker-compose, this might be handled by a broader setting or a
-# security plugin's internal proxy configuration if available.
-# Example: xpack.security.http.filter.allow_remote_host: ["kibana_internal_ip"]
-# Or for Open Distro/Search Guard:
-# opendistro_security.internalProxies: '172.16.0.0/16' # Example, adjust to your docker network subnet
+# File realm for initial setup/admin
+xpack.security.authc.realms.file.file1:
+  order: 0
+
+# Native realm
+xpack.security.authc.realms.native.native1:
+  order: 2
+
+# Enable API keys
+xpack.security.authc.api_key.enabled: true
+
+# Discovery settings for single-node
+discovery.type: single-node
+
+# License settings
+xpack.license.self_generated.type: basic
+
 ```
 
 `kibana/config/kibana.yml`
@@ -637,13 +794,11 @@ xpack.security.transport.ssl.client_authentication: required # Require client ce
 server.name: kibana
 server.host: "0.0.0.0"
 server.port: 5601
-server.basePath: "${KIBANA_BASE_PATH}"
-server.rewriteBasePath: true
 
 # Elasticsearch connection settings
 elasticsearch.hosts: ["https://elasticsearch:9200"]
 elasticsearch.username: "kibana_system"
-elasticsearch.password: "${ELASTIC_PASSWORD}"
+elasticsearch.password: "elasticpassword123"
 
 # Kibana's PKI client certificate for connecting to Elasticsearch
 elasticsearch.ssl.verificationMode: full
@@ -651,17 +806,27 @@ elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca/ca
 elasticsearch.ssl.certificate: /usr/share/kibana/config/certs/kibana/kibana.crt
 elasticsearch.ssl.key: /usr/share/kibana/config/certs/kibana/kibana.key
 
-# Encryption key for Kibana API keys
-xpack.encryptedSavedObjects.encryptionKey: "${KIBANA_ENCRYPTION_KEY}"
+# Encryption key for Kibana
+xpack.encryptedSavedObjects.encryptionKey: "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
 
-# Proxy Authentication settings (using Open Distro/Search Guard syntax as example)
-# Adjust these for Elastic's X-Pack Security if using a different version/flavor
-opendistro_security.auth.type: "proxy"
-opendistro_security.proxycache.user_header: "x-proxy-user"
-opendistro_security.proxycache.roles_header: "x-proxy-roles"
+# Disable Kibana's own authentication since OAuth2-Proxy handles it
+# xpack.security.authc.providers.anonymous.anonymous1:
+#   order: 0
+#   credentials:
+#     username: "anonymous"
+#     password: "anonymous"
+# Enable basic authentication
+xpack.security.authc.providers.basic.basic1:
+  order: 0
+  enabled: true
 
-# Whitelist headers that Kibana will accept and forward to Elasticsearch
-elasticsearch.requestHeadersWhitelist: ["securitytenant", "Authorization", "x-forwarded-for", "x-proxy-user", "x-proxy-roles"]
+   
+# Allow embedding in iframes from the same origin (for OAuth2-Proxy)
+server.securityResponseHeaders.disableEmbedding: false
+
+# Whitelist headers that Kibana will accept
+elasticsearch.requestHeadersWhitelist: ["authorization", "x-forwarded-for", "x-proxy-user", "x-proxy-roles", "x-auth-request-user", "x-auth-request-email"]
+
 ```
 
 `nginx/nginx.conf.template`
@@ -782,12 +947,34 @@ instances:
       - 127.0.0.1
 ```
 
-`elasticsearch/config/role_mapping.yml` (Conceptual)
+elasticsearch/config/role_mapping.yml:
 
 ```yaml
 kibana_system:
-  - "CN=kibana,OU=IT,O=YourOrg,L=City,ST=State,C=Country" # Replace with actual DN from Kibana cert
+  - "CN=kibana,OU=Elastic,O=Elastic,L=Mountain View,ST=CA,C=US"
 ```
+
+elasticsearch/config/certificates/instances.yml:
+
+```yaml
+instances:
+  - name: elasticsearch
+    dns:
+      - elasticsearch
+      - localhost
+    ip:
+      - 127.0.0.1
+  - name: kibana
+    dns:
+      - kibana
+      - localhost
+    ip:
+      - 127.0.0.1
+```
+
+
+
+
 
 ## Deployment and Testing
 
