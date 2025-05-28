@@ -715,7 +715,6 @@ http {
         }
     }
 }
-
 ```
 
 
@@ -829,107 +828,9 @@ elasticsearch.requestHeadersWhitelist: ["authorization", "x-forwarded-for", "x-p
 
 ```
 
-`nginx/nginx.conf.template`
 
-```
-worker_processes auto;
 
-events {
-    worker_connections 1024;
-}
-
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-
-    sendfile        on;
-    keepalive_timeout  65;
-
-    # OAuth2 Proxy upstream
-    upstream oauth2_proxy {
-        server oauth2-proxy:4180;
-    }
-
-    # Kibana upstream
-    upstream kibana_backend {
-        server kibana:5601;
-    }
-
-    # HTTP to HTTPS redirect
-    server {
-        listen 80;
-        server_name ${KIBANA_DOMAIN};
-        return 301 https://$host$request_uri;
-    }
-
-    # HTTPS server block
-    server {
-        listen 443 ssl http2;
-        server_name ${KIBANA_DOMAIN};
-
-        ssl_certificate /etc/nginx/ssl/your_domain.crt; # Mount your domain's SSL certificate
-        ssl_certificate_key /etc/nginx/ssl/your_domain.key; # Mount your domain's SSL private key
-
-        ssl_session_cache shared:SSL:10m;
-        ssl_session_timeout 10m;
-        ssl_protocols TLSv1.2 TLSv1.3;
-        ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384';
-        ssl_prefer_server_ciphers on;
-
-        # OAuth2 Proxy endpoints
-        location /oauth2/ {
-            proxy_pass http://oauth2_proxy;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Scheme $scheme;
-            proxy_set_header X-Auth-Request-Redirect $request_uri;
-        }
-
-        # Authentication endpoint for Nginx auth_request
-        location = /oauth2/auth {
-            proxy_pass http://oauth2_proxy;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Uri $request_uri;
-            proxy_set_header Content-Length "";
-            proxy_pass_request_body off;
-        }
-
-        # Kibana application location
-        location ${KIBANA_BASE_PATH}/ {
-            auth_request /oauth2/auth;
-            error_page 401 = /oauth2/sign_in; # Redirect to OAuth2 Proxy sign-in on 401
-
-            # Pass user identity headers from OAuth2 Proxy to Kibana
-            auth_request_set $user $upstream_http_x_auth_request_user;
-            auth_request_set $email $upstream_http_x_auth_request_email;
-            proxy_set_header X-Proxy-User $user;
-            proxy_set_header X-Proxy-Email $email; # Kibana can use this if configured
-
-            # If OAuth2 Proxy sets a Set-Cookie header for session refresh
-            auth_request_set $auth_cookie $upstream_http_set_cookie;
-            add_header Set-Cookie $auth_cookie;
-
-            proxy_pass http://kibana_backend${KIBANA_BASE_PATH}/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Host $host;
-            proxy_redirect off;
-
-            # Adjust buffer sizes if cookie size is an issue with ADFS [4, 6]
-            proxy_buffer_size 128k;
-            proxy_buffers 4 256k;
-            proxy_busy_buffers_size 256k;
-        }
-    }
-}
-```
-
-`elasticsearch/config/certificates/instances.yml` (for `create_certs` service)
+elasticsearch/config/certificates/instances.yml (for `create_certs` service)
 
 ```yaml
 instances:
@@ -953,26 +854,6 @@ elasticsearch/config/role_mapping.yml:
 kibana_system:
   - "CN=kibana,OU=Elastic,O=Elastic,L=Mountain View,ST=CA,C=US"
 ```
-
-elasticsearch/config/certificates/instances.yml:
-
-```yaml
-instances:
-  - name: elasticsearch
-    dns:
-      - elasticsearch
-      - localhost
-    ip:
-      - 127.0.0.1
-  - name: kibana
-    dns:
-      - kibana
-      - localhost
-    ip:
-      - 127.0.0.1
-```
-
-
 
 
 
