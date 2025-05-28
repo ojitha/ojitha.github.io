@@ -855,6 +855,51 @@ kibana_system:
   - "CN=kibana,OU=Elastic,O=Elastic,L=Mountain View,ST=CA,C=US"
 ```
 
+middleware/Dockerfile:
+
+```dockerfile
+# middleware/Dockerfile
+FROM node:16-alpine
+WORKDIR /app
+RUN npm install express http-proxy-middleware@2.0.6
+COPY middleware.js .
+CMD ["node", "middleware.js"]
+```
+
+middleware/middleware.js:
+
+```javascript
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const app = express();
+
+const SHARED_PASSWORD = 'password';
+
+app.use((req, res, next) => {
+  // Get username from OAuth2-Proxy headers
+  const username = req.headers['x-auth-request-user'] || req.headers['x-forwarded-user'];
+  console.log(`Received request for user: ${username}`);
+  if (username) {
+    // Create Basic Auth header
+    const credentials = Buffer.from(`${username}:${SHARED_PASSWORD}`).toString('base64');
+    req.headers['authorization'] = `Basic ${credentials}`;
+    console.log(`Injecting auth for user: ${username}`);
+  }
+  
+  next();
+});
+
+// Proxy to Kibana
+app.use('/', createProxyMiddleware({
+  target: 'http://kibana:5601',
+  changeOrigin: true
+}));
+
+app.listen(5602, () => {
+  console.log('Middleware proxy listening on port 5602');
+});
+```
+
 
 
 ## Deployment and Testing
@@ -877,26 +922,28 @@ This section outlines the steps to deploy the POC and verify its functionality, 
     - Fill in all the environment variables as specified in Table 1 (Section 4), replacing placeholder values with your actual ADFS credentials, domain, and generated secrets. For `OAUTH2_PROXY_COOKIE_SECRET`, use a command like `openssl rand -base64 32` to generate a secure value. For `KIBANA_ENCRYPTION_KEY`, generate a random 32-character alphanumeric string.
 
         ```ini
-        # ADFS Configuration
-        ADFS_CLIENT_ID="your-adfs-client-id"
-        ADFS_CLIENT_SECRET="your-adfs-client-secret"
-        ADFS_AUTH_URL="https://adfs.yourdomain.com/adfs/oauth2/authorize/"
-        ADFS_TOKEN_URL="https://adfs.yourdomain.com/adfs/oauth2/token/"
-        ADFS_JWKS_URL="https://adfs.yourdomain.com/adfs/certs"
+        # ADFS Configuration (Using mock values for POC without ADFS)
+        ADFS_CLIENT_ID="mock-client-id-12345"
+        ADFS_CLIENT_SECRET="CH6Ko884AhtQ5AjN449n0LDnnuqR1Bim"
+        
+        # For POC without ADFS, we'll use Keycloak or mock endpoints
+        ADFS_AUTH_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/auth"
+        ADFS_TOKEN_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/token"
+        ADFS_JWKS_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/certs"
         
         # Kibana and Nginx Domain Configuration
-        KIBANA_DOMAIN="kibana.yourdomain.com"
-        KIBANA_BASE_PATH="/kibana"
+        KIBANA_DOMAIN="localhost"
+        KIBANA_BASE_PATH="/kibana" # set by Ojitha
         
         # OAuth2 Proxy Configuration
-        OAUTH2_PROXY_COOKIE_SECRET="$(openssl rand -base64 32)" # Generate a random 32-byte base64 encoded string
+        OAUTH2_PROXY_COOKIE_SECRET="WoJtEJJBe5jlBvvnHSKjJ8s2wjAqFLaH3VOFbLJztug="
         
         # Elasticsearch and Kibana Passwords/Keys
-        ELASTIC_PASSWORD="yourstrongelasticpassword"
-        KIBANA_ENCRYPTION_KEY="yourrandom32charalphanumeric" # Generate a random 32-character alphanumeric value
-        ES_PKI_TRUSTSTORE_PASSWORD="yourpkitruststorepassword" # Only if your JKS truststore is password protected
+        ELASTIC_PASSWORD="elasticpassword123"
+        KIBANA_ENCRYPTION_KEY="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
+        ES_PKI_TRUSTSTORE_PASSWORD="truststorepassword123"
         
-        # Elastic Stack Version (adjust as needed)
+        # Elastic Stack Version
         ELASTIC_VERSION="8.13.0"
         ```
 
