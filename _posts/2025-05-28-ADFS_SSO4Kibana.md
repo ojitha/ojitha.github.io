@@ -777,6 +777,26 @@ http {
 }
 ```
 
+Create self-signed certificates for Nginx:
+
+```bash
+# Create SSL directory if it doesn't exist
+mkdir -p nginx/ssl
+
+# Generate private key
+openssl genpkey -algorithm RSA -out nginx/ssl/nginx.key -pkeyopt rsa_keygen_bits:2048
+
+# Generate certificate signing request
+openssl req -new -key nginx/ssl/nginx.key -out nginx/ssl/nginx.csr \
+  -subj "/C=US/ST=CA/L=Mountain View/O=POC/CN=localhost"
+
+# Generate self-signed certificate
+openssl x509 -req -days 365 -in nginx/ssl/nginx.csr -signkey nginx/ssl/nginx.key -out nginx/ssl/nginx.crt
+
+# Remove CSR as it's no longer needed
+rm nginx/ssl/nginx.csr
+```
+
 
 
 #### OAuth2 Proxy Dockerfile (`oauth2-proxy/Dockerfile`)
