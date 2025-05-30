@@ -1,15 +1,16 @@
 ---
 layout: post
 title: SSO with Nginx, ADFS, and Elasticsearch PKI in Docker
-date: 2024-11-24
+date: 2023-11-24
 categories: [ELK]
+mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
 Struggling to secure your open-source Kibana? This post offers a robust solution. Implement Single Sign-On (SSO) to Kibana using Nginx as a reverse proxy.
 
-Integrate seamlessly with Windows Active Directory Federation Services (ADFS) for centralized authentication. Fortify your Elastic Stack with Public Key Infrastructure (PKI) certificates. Ensure secure Kibana-to-Elasticsearch communication. All components are containerized and orchestrated with Docker Compose for easy deployment. Enhance security, streamline user access, and leverage existing AD infrastructure. A must-read for engineers seeking enterprise-grade Kibana security. Transform your data visualization with uncompromised access control.
+Integrate seamlessly with Keycloak (LDAP or Active Directory) for centralised authentication. Fortify your Elastic Stack with Public Key Infrastructure (PKI) certificates. Ensure secure Kibana-to-Elasticsearch communication. All components are containerised and orchestrated with Docker Compose for easy deployment. Enhance security, streamline user access, and leverage existing AD infrastructure. A must-read for engineers seeking enterprise-grade Kibana security. Transform your data visualisation with uncompromised access control.
 
 <!--more-->
 
@@ -41,6 +42,52 @@ A client's request for Kibana initiates a series of interactions across the inte
 4.  **ADFS (Active Directory Federation Services):** As the Identity Provider (IdP), ADFS[^3] is responsible for authenticating users against the Windows Active Directory[^4]. It participates in the OIDC flow, authenticating the user and issuing ID tokens and access tokens upon successful verification.  
 5.  **Kibana:** This data visualization dashboard receives requests from Nginx. It is configured to recognize and trust the user identity information passed via specific HTTP headers from the Nginx reverse proxy. Kibana then uses this identity to interact with Elasticsearch. Furthermore, *Kibana connects to Elasticsearch using PKI[^5] certificates*, ensuring a secure backend communication channel.  
 6.  **Elasticsearch:** The core distributed search and analytics engine. It is configured with a PKI realm, which authenticates incoming connections from Kibana (and potentially delegated end-user PKI authentication) based on X.509 client certificates. Role mappings within Elasticsearch then assign appropriate permissions to the authenticated Kibana instance or users based on the Distinguished Names (DNs) from these certificates.
+
+```mermaid
+sequenceDiagram
+    participant User as User Browser
+    participant Nginx as Nginx (Port 80/443)
+    participant OAuth2 as OAuth2-Proxy (Port 4180)
+    participant Keycloak as Keycloak (Port 8080)
+    participant Middleware as Middleware (Port 5602)
+    participant Kibana as Kibana (Port 5601)
+    participant ES as Elasticsearch (Port 9200)
+
+    User->>Nginx: 1. Request Kibana URL
+    Nginx->>OAuth2: 2. Auth Request (/oauth2/auth)
+    
+    alt User Not Authenticated
+        OAuth2-->>Nginx: 3. 401 Unauthorized
+        Nginx-->>User: 4. Redirect to /oauth2/sign_in
+        User->>OAuth2: 5. Access sign-in page
+        OAuth2-->>User: 6. Redirect to Keycloak
+        User->>Keycloak: 7. OIDC Authentication
+        Keycloak-->>User: 8. Authentication form
+        User->>Keycloak: 9. Submit credentials
+        Keycloak->>OAuth2: 10. Authorization code
+        OAuth2->>Keycloak: 11. Exchange code for tokens
+        Keycloak-->>OAuth2: 12. JWT tokens + user info
+        OAuth2-->>User: 13. Set session cookie & redirect
+    end
+    
+    User->>Nginx: 14. Request with session cookie
+    Nginx->>OAuth2: 15. Auth Request validation
+    OAuth2-->>Nginx: 16. 200 OK + user headers
+    Nginx->>OAuth2: 17. Proxy request to upstream
+    OAuth2->>Middleware: 18. Forward with X-Auth-Request-User
+    
+    Note over Middleware: Extract username<br/>Inject Basic Auth header
+    
+    Middleware->>Kibana: 19. Request with Basic Auth
+    Kibana->>ES: 20. Query with PKI certificate
+    ES-->>Kibana: 21. Response
+    Kibana-->>Middleware: 22. Kibana UI response
+    Middleware-->>OAuth2: 23. Forward response
+    OAuth2-->>Nginx: 24. Forward response
+    Nginx-->>User: 25. Final Kibana interface
+```
+
+Instead of Azure/Windows AD, I've used Keycloak as an Active Directory(AD).
 
 ### OAuth2 Proxy for OIDC Integration
 
@@ -239,6 +286,19 @@ PUT /_security/role_mapping/kibana_pki_role {
   "enabled": true
 }
 ```
+
+You have to set up `Kibana_system` user as well:
+
+```bash
+# Set up kibana_system user
+echo "Setting up kibana_system user..."
+curl -k -X POST "https://localhost:9200/_security/user/kibana_system/_password" \
+  -H "Content-Type: application/json" \
+  -u elastic:${ELASTIC_PASSWORD} \
+  -d "{\"password\":\"${ELASTIC_PASSWORD}\"}"
+```
+
+
 
 ### Elasticsearch PKI Realm Configuration Parameters (in `elasticsearch.yml`)
 
@@ -1047,9 +1107,200 @@ curl -k -X POST -u elastic:elasticpassword123 https://localhost:9200/_license/st
 
 
 
+```mermaid
+graph TB
+    subgraph "Docker Host System"
+        subgraph "elk-network (Bridge Network)"
+            subgraph "Entry Point Layer"
+                NGINX["`**nginx**
+                Container: nginx
+                Image: Custom Build
+                Ports: 80:80, 443:443
+                
+                **Volumes:**
+                • ./nginx/nginx.conf.template:/etc/nginx/nginx.conf.template:ro
+                • ./nginx/ssl:/etc/nginx/ssl:ro
+                
+                **Environment:**
+                • KIBANA_DOMAIN=${KIBANA_DOMAIN}
+                • KIBANA_BASE_PATH=${KIBANA_BASE_PATH}
+                
+                **Command:** envsubst + nginx
+                **Depends:** oauth2-proxy`"]
+            end
+            
+            subgraph "Authentication Layer"
+                OAUTH2["`**oauth2-proxy**
+                Container: oauth2-proxy
+                Image: Custom Build
+                Port: 4180:4180
+                
+                **Environment:**
+                • OAUTH2_PROXY_PROVIDER=oidc
+                • OAUTH2_PROXY_CLIENT_ID=${ADFS_CLIENT_ID}
+                • OAUTH2_PROXY_CLIENT_SECRET=${ADFS_CLIENT_SECRET}
+                • OAUTH2_PROXY_OIDC_ISSUER_URL=...
+                • OAUTH2_PROXY_REDIRECT_URL=...
+                • OAUTH2_PROXY_UPSTREAMS=http://middleware:5602
+                • OAUTH2_PROXY_SKIP_AUTH_REGEX=^/api/.*|...
+                
+                **Depends:** kibana (healthy)`"]
+                
+                KEYCLOAK["`**keycloak** (Commented Out)
+                Container: keycloak
+                Image: quay.io/keycloak/keycloak:24.0.1
+                Port: 8080:8080
+                
+                **Environment:**
+                • KEYCLOAK_ADMIN=admin
+                • KEYCLOAK_ADMIN_PASSWORD=admin
+                • KC_HTTP_ENABLED=true
+                
+                **Command:** start-dev
+                **Health Check:** curl health endpoint`"]
+            end
+            
+            subgraph "Middleware Layer"
+                MIDDLEWARE["`**middleware**
+                Container: middleware
+                Image: Custom Build
+                Port: 5602:5602
+                
+                **Function:**
+                • Express.js proxy
+                • Credential injection
+                • Basic Auth header creation
+                
+                **Depends:** kibana (healthy)`"]
+            end
+            
+            subgraph "Application Layer"
+                KIBANA["`**kibana**
+                Container: kibana
+                Image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+                Port: 5601:5601
+                
+                **Environment:**
+                • SERVER_NAME=${KIBANA_DOMAIN}
+                • ELASTICSEARCH_HOSTS=https://elasticsearch:9200
+                • ELASTICSEARCH_USERNAME=kibana_system
+                • ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+                • SSL Configuration with PKI certs
+                
+                **Volumes:**
+                • ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+                • ./certs:/usr/share/kibana/config/certs
+                
+                **Depends:** elasticsearch (healthy)
+                **Health Check:** curl /api/status`"]
+            end
+            
+            subgraph "Data Layer"
+                ELASTICSEARCH["`**elasticsearch**
+                Container: elasticsearch
+                Image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+                Port: 9200:9200
+                
+                **Environment:**
+                • cluster.name=docker-cluster
+                • ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+                • xpack.security.enabled=true
+                • SSL/PKI Configuration
+                • discovery.type=single-node
+                
+                **Volumes:**
+                • elasticsearch_data:/usr/share/elasticsearch/data
+                • ./elasticsearch/config/elasticsearch.yml:...
+                • ./certs:/usr/share/elasticsearch/config/certs
+                • ./elasticsearch/config/role_mapping.yml:...
+                
+                **Health Check:** curl with basic auth`"]
+            end
+            
+            subgraph "Setup Services"
+                CERTS["`**create_certs**
+                Container: create_certs
+                Image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+                
+                **Purpose:** One-time PKI certificate generation
+                
+                **Volumes:**
+                • ./certs:/certs
+                • ./elasticsearch/config/certificates:/usr/share/elasticsearch/config/certificates
+                
+                **Command:** bash script for cert generation
+                **User:** root (0)
+                **Mode:** run --rm (temporary)`"]
+            end
+        end
+        
+        subgraph "Docker Volumes"
+            ESVOL["`**elasticsearch_data**
+                Named Volume
+                Persistent Elasticsearch data`"]
+        end
+        
+        subgraph "Host Bind Mounts"
+            HOSTFILES["`**Configuration Files:**
+            • ./nginx/ → Nginx config & SSL
+            • ./kibana/config/ → Kibana config
+            • ./elasticsearch/config/ → ES config
+            • ./certs/ → PKI certificates
+            • ./oauth2-proxy/ → OAuth2 config
+            • ./middleware/ → Middleware code
+            • .env → Environment variables`"]
+        end
+    end
+    
+    subgraph "External Access"
+        USER["`**User Browser**
+        Access Points:
+        • http://localhost:80
+        • https://localhost:443
+        • http://localhost:8080 (Keycloak)
+        • Direct ports for troubleshooting`"]
+    end
+    
+    %% Network connections
+    USER -.->|HTTP/HTTPS| NGINX
+    USER -.->|Direct Access| KEYCLOAK
+    
+    %% Container dependencies
+    NGINX -->|depends_on| OAUTH2
+    OAUTH2 -->|depends_on| KIBANA
+    MIDDLEWARE -->|depends_on| KIBANA
+    KIBANA -->|depends_on| ELASTICSEARCH
+    
+    %% Service communication
+    NGINX -.->|auth_request| OAUTH2
+    NGINX -.->|proxy_pass| OAUTH2
+    OAUTH2 -.->|upstream| MIDDLEWARE
+    MIDDLEWARE -.->|proxy| KIBANA
+    KIBANA -.->|HTTPS + PKI| ELASTICSEARCH
+    
+    %% Volume mounts
+    ELASTICSEARCH -.->|mounts| ESVOL
+    CERTS -.->|generates| HOSTFILES
+    ELASTICSEARCH -.->|mounts| HOSTFILES
+    KIBANA -.->|mounts| HOSTFILES
+    NGINX -.->|mounts| HOSTFILES
+    
+    %% Styling
+    classDef containerStyle fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef volumeStyle fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef serviceStyle fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef userStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef disabledStyle fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px,stroke-dasharray: 5 5
+    
+    class NGINX,OAUTH2,MIDDLEWARE,KIBANA,ELASTICSEARCH,CERTS containerStyle
+    class ESVOL,HOSTFILES volumeStyle
+    class USER userStyle
+    class KEYCLOAK disabledStyle
+```
+
+In the above diagram, Keycloak has been commented out because it runs on a different machine (as a Docker container) with an IP address of 192.168.1.139.
+
 The API Key approach is complex because OAuth2-Proxy doesn't natively support dynamic header injection based on the authenticated user.
-
-
 
 
 {:rtxt: .message color="red"} 
