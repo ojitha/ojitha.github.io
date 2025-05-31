@@ -1113,18 +1113,6 @@ Instead, the recommended approach for testing the SSO flow for a POC is:
     
     This method effectively demonstrates a "hard-coded" authenticated request to Kibana after the initial browser-based SSO handshake has established a session, fulfilling the spirit of the user's requirement.
 
-To check the lic
-
-```bash
-curl -k -u elastic:elasticpassword123 https://localhost:9200/_license
-```
-
-To start with trial lic
-
-```bash
-curl -k -X POST -u elastic:elasticpassword123 https://localhost:9200/_license/start_trial?acknowledge=true
-```
-
 
 
 ```mermaid
@@ -1321,7 +1309,21 @@ graph TB
 
 In the above diagram, Keycloak has been commented out because it runs on a different machine (as a Docker container) with an IP address of 192.168.1.139.
 
-The API Key approach is complex because OAuth2-Proxy doesn't natively support dynamic header injection based on the authenticated user.
+The API Key approach is complex because OAuth2-Proxy doesn't natively support dynamic header injection based on the authenticated user. It is recommended to use other than basic authentication in the Kibana. For that you need to have license which either pro level or more:
+
+To check the license
+
+```bash
+curl -k -u elastic:elasticpassword123 https://localhost:9200/_license
+```
+
+To start with trial license
+
+```bash
+curl -k -X POST -u elastic:elasticpassword123 https://localhost:9200/_license/start_trial?acknowledge=true
+```
+
+
 
 
 {:rtxt: .message color="red"} 
