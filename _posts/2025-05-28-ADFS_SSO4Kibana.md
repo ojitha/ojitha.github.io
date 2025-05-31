@@ -1132,153 +1132,154 @@ graph TB
     subgraph "Docker Host System"
         subgraph "elk-network (Bridge Network)"
             subgraph "Entry Point Layer"
-                NGINX["`**nginx**
+                NGINX["nginx
                 Container: nginx
                 Image: Custom Build
                 Ports: 80:80, 443:443
-                
-                **Volumes:**
-                • ./nginx/nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-                • ./nginx/ssl:/etc/nginx/ssl:ro
-                
-                **Environment:**
-                • KIBANA_DOMAIN=${KIBANA_DOMAIN}
-                • KIBANA_BASE_PATH=${KIBANA_BASE_PATH}
-                
-                **Command:** envsubst + nginx
-                **Depends:** oauth2-proxy`"]
+                ---
+                Volumes:
+                ✓ nginx.conf.template (ro)
+                ✓ ssl directory (ro)
+                ---
+                Environment:
+                ✓ KIBANA_DOMAIN
+                ✓ KIBANA_BASE_PATH
+                ---
+                Command: envsubst + nginx
+                Depends: oauth2-proxy"]
             end
             
             subgraph "Authentication Layer"
-                OAUTH2["`**oauth2-proxy**
+                OAUTH2["oauth2-proxy
                 Container: oauth2-proxy
                 Image: Custom Build
                 Port: 4180:4180
+                ---
+                Environment:
+                ✓ OAUTH2_PROXY_PROVIDER=oidc
+                ✓ OAUTH2_PROXY_CLIENT_ID
+                ✓ OAUTH2_PROXY_CLIENT_SECRET
+                ✓ OAUTH2_PROXY_OIDC_ISSUER_URL
+                ✓ OAUTH2_PROXY_REDIRECT_URL
+                ✓ OAUTH2_PROXY_UPSTREAMS=middleware:5602
+                ✓ OAUTH2_PROXY_SKIP_AUTH_REGEX
+                ---
+                Depends: kibana (healthy)"]
                 
-                **Environment:**
-                • OAUTH2_PROXY_PROVIDER=oidc
-                • OAUTH2_PROXY_CLIENT_ID=${ADFS_CLIENT_ID}
-                • OAUTH2_PROXY_CLIENT_SECRET=${ADFS_CLIENT_SECRET}
-                • OAUTH2_PROXY_OIDC_ISSUER_URL=...
-                • OAUTH2_PROXY_REDIRECT_URL=...
-                • OAUTH2_PROXY_UPSTREAMS=http://middleware:5602
-                • OAUTH2_PROXY_SKIP_AUTH_REGEX=^/api/.*|...
-                
-                **Depends:** kibana (healthy)`"]
-                
-                KEYCLOAK["`**keycloak** (Commented Out)
+                KEYCLOAK["keycloak (Commented Out)
                 Container: keycloak
                 Image: quay.io/keycloak/keycloak:24.0.1
                 Port: 8080:8080
-                
-                **Environment:**
-                • KEYCLOAK_ADMIN=admin
-                • KEYCLOAK_ADMIN_PASSWORD=admin
-                • KC_HTTP_ENABLED=true
-                
-                **Command:** start-dev
-                **Health Check:** curl health endpoint`"]
+                ---
+                Environment:
+                ✓ KEYCLOAK_ADMIN=admin
+                ✓ KEYCLOAK_ADMIN_PASSWORD=admin
+                ✓ KC_HTTP_ENABLED=true
+                ---
+                Command: start-dev
+                Health Check: curl health endpoint"]
             end
             
             subgraph "Middleware Layer"
-                MIDDLEWARE["`**middleware**
+                MIDDLEWARE["middleware
                 Container: middleware
                 Image: Custom Build
                 Port: 5602:5602
-                
-                **Function:**
-                • Express.js proxy
-                • Credential injection
-                • Basic Auth header creation
-                
-                **Depends:** kibana (healthy)`"]
+                ---
+                Function:
+                ✓ Express.js proxy
+                ✓ Credential injection
+                ✓ Basic Auth header creation
+                ---
+                Depends: kibana (healthy)"]
             end
             
             subgraph "Application Layer"
-                KIBANA["`**kibana**
+                KIBANA["kibana
                 Container: kibana
-                Image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+                Image: docker.elastic.co/kibana/kibana:8.13.0
                 Port: 5601:5601
-                
-                **Environment:**
-                • SERVER_NAME=${KIBANA_DOMAIN}
-                • ELASTICSEARCH_HOSTS=https://elasticsearch:9200
-                • ELASTICSEARCH_USERNAME=kibana_system
-                • ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
-                • SSL Configuration with PKI certs
-                
-                **Volumes:**
-                • ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
-                • ./certs:/usr/share/kibana/config/certs
-                
-                **Depends:** elasticsearch (healthy)
-                **Health Check:** curl /api/status`"]
+                ---
+                Environment:
+                ✓ SERVER_NAME (KIBANA_DOMAIN)
+                ✓ ELASTICSEARCH_HOSTS=https://elasticsearch:9200
+                ✓ ELASTICSEARCH_USERNAME=kibana_system
+                ✓ ELASTICSEARCH_PASSWORD
+                ✓ SSL Configuration with PKI certs
+                ---
+                Volumes:
+                ✓ kibana.yml config
+                ✓ certs directory
+                ---
+                Depends: elasticsearch (healthy)
+                Health Check: curl /api/status"]
             end
             
             subgraph "Data Layer"
-                ELASTICSEARCH["`**elasticsearch**
+                ELASTICSEARCH["elasticsearch
                 Container: elasticsearch
-                Image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+                Image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
                 Port: 9200:9200
-                
-                **Environment:**
-                • cluster.name=docker-cluster
-                • ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-                • xpack.security.enabled=true
-                • SSL/PKI Configuration
-                • discovery.type=single-node
-                
-                **Volumes:**
-                • elasticsearch_data:/usr/share/elasticsearch/data
-                • ./elasticsearch/config/elasticsearch.yml:...
-                • ./certs:/usr/share/elasticsearch/config/certs
-                • ./elasticsearch/config/role_mapping.yml:...
-                
-                **Health Check:** curl with basic auth`"]
+                ---
+                Environment:
+                ✓ cluster.name=docker-cluster
+                ✓ ELASTIC_PASSWORD
+                ✓ xpack.security.enabled=true
+                ✓ SSL/PKI Configuration
+                ✓ discovery.type=single-node
+                ---
+                Volumes:
+                ✓ elasticsearch_data (named volume)
+                ✓ elasticsearch.yml config
+                ✓ certs directory
+                ✓ role_mapping.yml
+                ---
+                Health Check: curl with basic auth"]
             end
             
             subgraph "Setup Services"
-                CERTS["`**create_certs**
+                CERTS["create_certs
                 Container: create_certs
-                Image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-                
-                **Purpose:** One-time PKI certificate generation
-                
-                **Volumes:**
-                • ./certs:/certs
-                • ./elasticsearch/config/certificates:/usr/share/elasticsearch/config/certificates
-                
-                **Command:** bash script for cert generation
-                **User:** root (0)
-                **Mode:** run --rm (temporary)`"]
+                Image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+                ---
+                Purpose: One-time PKI certificate generation
+                ---
+                Volumes:
+                ✓ ./certs:/certs
+                ✓ elasticsearch/config/certificates
+                ---
+                Command: bash script for cert generation
+                User: root (0)
+                Mode: run --rm (temporary)"]
             end
         end
         
         subgraph "Docker Volumes"
-            ESVOL["`**elasticsearch_data**
+            ESVOL["elasticsearch_data
                 Named Volume
-                Persistent Elasticsearch data`"]
+                Persistent Elasticsearch data"]
         end
         
         subgraph "Host Bind Mounts"
-            HOSTFILES["`**Configuration Files:**
-            • ./nginx/ → Nginx config & SSL
-            • ./kibana/config/ → Kibana config
-            • ./elasticsearch/config/ → ES config
-            • ./certs/ → PKI certificates
-            • ./oauth2-proxy/ → OAuth2 config
-            • ./middleware/ → Middleware code
-            • .env → Environment variables`"]
+            HOSTFILES["Configuration Files:
+            ✓ ./nginx/ → Nginx config & SSL
+            ✓ ./kibana/config/ → Kibana config
+            ✓ ./elasticsearch/config/ → ES config
+            ✓ ./certs/ → PKI certificates
+            ✓ ./oauth2-proxy/ → OAuth2 config
+            ✓ ./middleware/ → Middleware code
+            ✓ .env → Environment variables"]
         end
     end
     
     subgraph "External Access"
-        USER["`**User Browser**
+        USER["User Browser
+        ---
         Access Points:
-        • http://localhost:80
-        • https://localhost:443
-        • http://localhost:8080 (Keycloak)
-        • Direct ports for troubleshooting`"]
+        ✓ localhost:80
+        ✓ localhost:443
+        ✓ localhost:8080 (Keycloak)
+        ✓ Direct ports for troubleshooting"]
     end
     
     %% Network connections
@@ -1305,12 +1306,12 @@ graph TB
     KIBANA -.->|mounts| HOSTFILES
     NGINX -.->|mounts| HOSTFILES
     
-    %% Styling
-    classDef containerStyle fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef volumeStyle fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef serviceStyle fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    classDef userStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef disabledStyle fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px,stroke-dasharray: 5 5
+    %% Styling with left text alignment
+    classDef containerStyle fill:#e1f5fe,stroke:#01579b,stroke-width:2px,text-align:left
+    classDef volumeStyle fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,text-align:left
+    classDef serviceStyle fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px,text-align:left
+    classDef userStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px,text-align:left
+    classDef disabledStyle fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px,stroke-dasharray: 5 5,text-align:left
     
     class NGINX,OAUTH2,MIDDLEWARE,KIBANA,ELASTICSEARCH,CERTS containerStyle
     class ESVOL,HOSTFILES volumeStyle
