@@ -818,6 +818,369 @@ stages:
 
 
 
+## How to Download and Import Docker Images in WSL2
+
+### Step 1: Download Artifacts from Azure DevOps
+
+#### Method A: Using Azure DevOps Web Interface
+
+1. Navigate to your Azure DevOps project
+2. Go to **Pipelines** → **Runs**
+3. Click on the specific pipeline run
+4. Navigate to the **Summary** tab
+5. Scroll down to find **Related** section
+6. Click on **Artifacts** → **docker-images**
+7. Click **Download** to download the zip file
+
+#### Method B: Using Azure CLI
+
+```bash
+# Install Azure CLI if not already installed
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# Login to Azure
+az login
+
+# Set defaults
+az devops configure --defaults organization=https://dev.azure.com/YOUR_ORG project=YOUR_PROJECT
+
+# Download artifacts
+az pipelines runs artifact download \
+  --artifact-name "docker-images" \
+  --path "./docker-artifacts" \
+  --run-id "BUILD_ID"
+```
+
+#### Method C: Using REST API
+
+```bash
+# Get the artifact download URL
+curl -u "username:PAT_TOKEN" \
+  "https://dev.azure.com/YOUR_ORG/YOUR_PROJECT/_apis/build/builds/BUILD_ID/artifacts?artifactName=docker-images&api-version=6.0"
+
+# Download the artifact
+wget -O docker-images.zip "DOWNLOAD_URL_FROM_ABOVE"
+```
+
+### Step 2: Prepare WSL2 Environment
+
+#### Ensure Docker is Installed in WSL2
+
+```bash
+# Update Ubuntu
+sudo apt update && sudo apt upgrade -y
+
+# Install Docker
+sudo apt install -y docker.io
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+
+# Start Docker service
+sudo service docker start
+
+# Enable Docker to start automatically
+sudo systemctl enable docker
+
+# Verify Docker installation
+docker --version
+docker info
+```
+
+#### Alternative: Install Docker Desktop for Windows
+- Docker Desktop automatically integrates with WSL2
+- Provides better performance and resource management
+
+### Step 3: Extract and Import Docker Images
+
+#### Extract Downloaded Artifacts
+
+```bash
+# Navigate to downloads directory
+cd ~/Downloads
+
+# Extract the artifact zip file
+unzip docker-images.zip -d ./docker-artifacts
+
+# Navigate to extracted directory
+cd docker-artifacts
+
+# List contents
+ls -la
+```
+
+#### Import Docker Images
+
+```bash
+# Method 1: Import regular tar file
+docker load -i myapp-123.tar
+
+# Method 2: Import compressed tar file
+gunzip -c myapp-123.tar.gz | docker load
+
+# Method 3: Import with verbose output
+docker load --input myapp-123.tar
+
+# Verify imported images
+docker images | grep myapp
+```
+
+#### Example Import Script
+
+```bash
+#!/bin/bash
+
+# Script to import Docker images from Azure Pipeline artifacts
+
+ARTIFACT_DIR="./docker-artifacts"
+LOG_FILE="import.log"
+
+echo "Starting Docker image import..." | tee $LOG_FILE
+echo "Date: $(date)" | tee -a $LOG_FILE
+
+# Check if Docker is running
+if ! docker info >/dev/null 2>&1; then
+    echo "Docker is not running. Starting Docker..." | tee -a $LOG_FILE
+    sudo service docker start
+    sleep 5
+fi
+
+# Import all tar files in the directory
+for tar_file in $ARTIFACT_DIR/*.tar; do
+    if [ -f "$tar_file" ]; then
+        echo "Importing: $tar_file" | tee -a $LOG_FILE
+        docker load -i "$tar_file" | tee -a $LOG_FILE
+        echo "Import completed for: $tar_file" | tee -a $LOG_FILE
+    fi
+done
+
+# Import compressed tar files
+for tar_gz_file in $ARTIFACT_DIR/*.tar.gz; do
+    if [ -f "$tar_gz_file" ]; then
+        echo "Importing compressed: $tar_gz_file" | tee -a $LOG_FILE
+        gunzip -c "$tar_gz_file" | docker load | tee -a $LOG_FILE
+        echo "Import completed for: $tar_gz_file" | tee -a $LOG_FILE
+    fi
+done
+
+# Display imported images
+echo "=== Imported Images ===" | tee -a $LOG_FILE
+docker images | tee -a $LOG_FILE
+
+echo "Import process completed!" | tee -a $LOG_FILE
+```
+
+### Step 4: Verify and Test Imported Images
+
+#### List All Images
+
+```bash
+# List all Docker images
+docker images
+
+# Filter by image name
+docker images myapp
+
+# Show image details
+docker inspect myapp:latest
+```
+
+#### Test the Imported Image
+
+```bash
+# Run the container
+docker run --rm -p 3000:3000 myapp:latest
+
+# Run in detached mode
+docker run -d --name myapp-test -p 3000:3000 myapp:latest
+
+# Check container logs
+docker logs myapp-test
+
+# Stop and remove container
+docker stop myapp-test
+docker rm myapp-test
+```
+
+#### Run with Custom Configuration
+
+```bash
+# Run with environment variables
+docker run --rm \
+  -e NODE_ENV=production \
+  -e PORT=8080 \
+  -p 8080:8080 \
+  myapp:latest
+
+# Run with volume mapping
+docker run --rm \
+  -v $(pwd)/data:/app/data \
+  -p 3000:3000 \
+  myapp:latest
+
+# Run interactively
+docker run --rm -it myapp:latest /bin/sh
+```
+
+### Step 5: Automate the Process
+
+#### PowerShell Script for Windows
+
+```powershell
+# PowerShell script to download and import Docker images
+
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$BuildId,
+    
+    [Parameter(Mandatory=$true)]
+    [string]$Organization,
+    
+    [Parameter(Mandatory=$true)]
+    [string]$Project,
+    
+    [Parameter(Mandatory=$true)]
+    [string]$PAT
+)
+
+# Set up variables
+$artifactName = "docker-images"
+$downloadPath = "$env:TEMP\docker-artifacts"
+
+# Create download directory
+New-Item -ItemType Directory -Force -Path $downloadPath
+
+# Download artifact using REST API
+$headers = @{
+    Authorization = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$PAT"))
+}
+
+$uri = "https://dev.azure.com/$Organization/$Project/_apis/build/builds/$BuildId/artifacts?artifactName=$artifactName&api-version=6.0"
+$artifact = Invoke-RestMethod -Uri $uri -Headers $headers
+
+# Download and extract
+$downloadUrl = $artifact.resource.downloadUrl
+Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile "$downloadPath\artifacts.zip"
+Expand-Archive -Path "$downloadPath\artifacts.zip" -DestinationPath $downloadPath -Force
+
+# Import to WSL2
+Write-Host "Importing to WSL2..."
+wsl -d Ubuntu -e bash -c "cd /mnt/c/Users/$env:USERNAME/AppData/Local/Temp/docker-artifacts && docker load -i *.tar"
+
+Write-Host "Import completed!"
+```
+
+#### Bash Script for Automated Download and Import
+
+```bash
+#!/bin/bash
+
+# Configuration
+ORG="your-organization"
+PROJECT="your-project"
+PAT="your-personal-access-token"
+BUILD_ID="$1"
+
+if [ -z "$BUILD_ID" ]; then
+    echo "Usage: $0 <build-id>"
+    exit 1
+fi
+
+# Download artifact
+echo "Downloading artifacts for build: $BUILD_ID"
+curl -u ":$PAT" \
+  "https://dev.azure.com/$ORG/$PROJECT/_apis/build/builds/$BUILD_ID/artifacts?artifactName=docker-images&\$format=zip" \
+  -o docker-images.zip
+
+# Extract
+unzip docker-images.zip -d ./docker-artifacts
+
+# Import
+cd docker-artifacts
+for tar_file in *.tar; do
+    if [ -f "$tar_file" ]; then
+        echo "Importing: $tar_file"
+        docker load -i "$tar_file"
+    fi
+done
+
+# Clean up
+cd ..
+rm -f docker-images.zip
+rm -rf docker-artifacts
+
+echo "Docker images imported successfully!"
+docker images
+```
+
+### Troubleshooting
+
+#### Common Issues and Solutions
+
+1. **Docker not running in WSL2**
+   ```bash
+   sudo service docker start
+   # Or enable systemd in WSL2
+   ```
+
+2. **Permission denied errors**
+   ```bash
+   sudo usermod -aG docker $USER
+   # Logout and login again
+   ```
+
+3. **Out of disk space**
+   ```bash
+   # Clean up Docker
+   docker system prune -a
+   
+   # Check disk usage
+   df -h
+   ```
+
+4. **Import fails with "no space left on device"**
+   ```bash
+   # Increase WSL2 memory limit in .wslconfig
+   echo -e "[wsl2]\nmemory=8GB\nswap=2GB" > ~/.wslconfig
+   ```
+
+5. **Image not found after import**
+   ```bash
+   # Check if import was successful
+   docker images
+   
+   # Re-import with verbose output
+   docker load -i image.tar --quiet=false
+   ```
+
+### Performance Optimization
+
+#### Reduce Image Size
+
+1. Use compressed artifacts (tar.gz)
+2. Use multi-stage builds in Dockerfile
+3. Remove unnecessary files before creating image
+
+#### Speed Up Transfer
+
+1. Use Azure Storage for large artifacts
+2. Implement incremental builds
+3. Cache base images locally
+
+#### WSL2 Optimization
+
+```bash
+# Optimize WSL2 for Docker
+echo -e "[wsl2]\nmemory=4GB\nprocessors=4\nswap=2GB\nlocalhostForwarding=true" > ~/.wslconfig
+
+# Restart WSL2
+wsl --shutdown
+```
+
+This guide provides a complete workflow for downloading Docker images from Azure Pipeline artifacts and importing them into WSL2 without using any Docker registries.
+
+
+
 ## Maven
 
 Configure proxy with `settings.xml`
