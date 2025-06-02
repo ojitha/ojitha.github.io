@@ -343,3 +343,16 @@ Check your git configuration:
 git config --global --get credential.helper
 ```
 
+### GCM to download artifacts from Azure DevOps
+
+```bash
+# Replace YOUR_ORG, YOUR_PROJECT, BUILD_ID with your values
+PAT=$(echo "protocol=https
+host=dev.azure.com
+path=YOUR_ORG" | git credential fill 2>/dev/null | grep "password=" | cut -d'=' -f2)
+
+wget --header="Authorization: Basic $(echo -n ":$PAT" | base64)" \
+     "https://dev.azure.com/YOUR_ORG/YOUR_PROJECT/_apis/build/builds/BUILD_ID/artifacts?artifactName=docker-images&\$format=zip&api-version=6.0" \
+     -O artifact.zip
+```
+
