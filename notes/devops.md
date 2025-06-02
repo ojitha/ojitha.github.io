@@ -621,6 +621,203 @@ stages:
       displayName: 'Publish Docker image tar file as artifact'
 ```
 
+## Azure pipeline to save the docker images to pipeline artifacts
+
+You can save the docker generated artifacts as follows:
+
+![img000304@2x](./assets/images/devops/img000304@2x.jpg)
+
+Here the azure-pipelines.yml:
+
+```yaml
+trigger:
+ - main
+
+pool:
+   vmImage: 'ubuntu-latest' 
+
+variables:
+  # Docker image configuration
+  imageName: 'myapp'
+  imageTag: '$(Build.BuildNumber)'
+  dockerfilePath: '$(Build.SourcesDirectory)/app/Dockerfile'
+  
+  # Artifact configuration
+  artifactName: 'docker-images'
+  dockerTarFileName: '$(imageName)-$(imageTag).tar'
+
+stages:
+- stage: BuildDockerImage
+  displayName: 'Build Docker Image'
+  jobs:
+  - job: BuildAndSaveImage
+    displayName: 'Build and Save Docker Image'
+    steps:
+    
+    # Checkout source code
+    - checkout: self
+      displayName: 'Checkout source code'
+    
+    # Display environment info
+    - script: |
+        echo "Pipeline: $(Build.DefinitionName)"
+        echo "Build Number: $(Build.BuildNumber)"
+        echo "Source Branch: $(Build.SourceBranchName)"
+        echo "Docker Image: $(imageName):$(imageTag)"
+        echo "Dockerfile Path: $(dockerfilePath)"
+        docker --version
+        df -h
+      displayName: 'Display build information'
+    
+    # Build Docker image
+    - script: |
+        echo "Building Docker image: $(imageName):$(imageTag)"
+        docker build -t $(imageName):$(imageTag) -f $(dockerfilePath) .
+        
+        # Also tag as latest for convenience
+        docker tag $(imageName):$(imageTag) $(imageName):latest
+        
+        # Display images
+        docker images | grep $(imageName)
+      displayName: 'Build Docker image'
+      workingDirectory: '$(Build.SourcesDirectory)'
+    
+    # Optional: Test the Docker image
+    - script: |
+        echo "Testing Docker image..."
+        # Run basic container test
+        docker run --rm $(imageName):$(imageTag) --version || true
+        
+        # Check image size
+        docker images $(imageName):$(imageTag) --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+      displayName: 'Test Docker image'
+      condition: succeeded()
+    
+    # Save Docker image to tar file
+    - script: |
+        echo "Saving Docker image to tar file..."
+        mkdir -p $(Agent.TempDirectory)/docker-artifacts
+        
+        # Save both tagged version and latest
+        docker save $(imageName):$(imageTag) $(imageName):latest -o $(Agent.TempDirectory)/docker-artifacts/$(dockerTarFileName)
+        
+        # Display file info
+        ls -lh $(Agent.TempDirectory)/docker-artifacts/
+        echo "Docker image saved as: $(dockerTarFileName)"
+        echo "File size: $(du -h $(Agent.TempDirectory)/docker-artifacts/$(dockerTarFileName) | cut -f1)"
+      displayName: 'Save Docker image to tar file'
+    
+    # Create metadata file
+    - script: |
+        echo "Creating metadata file..."
+        cat > $(Agent.TempDirectory)/docker-artifacts/image-info.txt << EOF
+        Docker Image Information
+        ========================
+        Image Name: $(imageName)
+        Image Tag: $(imageTag)
+        Build Number: $(Build.BuildNumber)
+        Build Date: $(date)
+        Source Branch: $(Build.SourceBranchName)
+        Commit ID: $(Build.SourceVersion)
+        Pipeline: $(Build.DefinitionName)
+        
+        Tar File: $(dockerTarFileName)
+        
+        Import Instructions:
+        ===================
+        1. Download the artifact from Azure DevOps
+        2. Extract the tar file
+        3. Load into Docker: docker load -i $(dockerTarFileName)
+        4. Verify: docker images | grep $(imageName)
+        5. Run: docker run --rm $(imageName):$(imageTag)
+        EOF
+        
+        cat $(Agent.TempDirectory)/docker-artifacts/image-info.txt
+      displayName: 'Create metadata file'
+    
+    # Optional: Create compressed version to save space
+    - script: |
+        echo "Creating compressed version..."
+        cd $(Agent.TempDirectory)/docker-artifacts
+        
+        # Compress the tar file
+        gzip -c $(dockerTarFileName) > $(dockerTarFileName).gz
+        
+        # Display sizes
+        echo "Original size: $(du -h $(dockerTarFileName) | cut -f1)"
+        echo "Compressed size: $(du -h $(dockerTarFileName).gz | cut -f1)"
+        
+        # Keep both versions
+        ls -lh
+      displayName: 'Create compressed version'
+      condition: succeeded()
+    
+    # Publish Docker image as pipeline artifact
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Agent.TempDirectory)/docker-artifacts'
+        artifactName: '$(artifactName)'
+        publishLocation: 'pipeline'
+      displayName: 'Publish Docker image artifact'
+    
+    # Clean up local Docker images to save space
+    - script: |
+        echo "Cleaning up local Docker images..."
+        docker rmi $(imageName):$(imageTag) $(imageName):latest || true
+        docker system prune -f
+        df -h
+      displayName: 'Clean up Docker images'
+      condition: always()
+
+# Optional: Additional stage for multi-architecture builds
+- stage: BuildMultiArch
+  displayName: 'Build Multi-Architecture Images'
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
+  dependsOn: []
+  jobs:
+  - job: BuildMultiArchImage
+    displayName: 'Build Multi-Arch Docker Image'
+    steps:
+    - checkout: self
+    
+    # Set up Docker Buildx for multi-platform builds
+    - script: |
+        # Enable experimental features
+        echo '{"experimental": true}' | sudo tee /etc/docker/daemon.json
+        sudo systemctl restart docker
+        
+        # Set up buildx
+        docker buildx create --name multiarch --use
+        docker buildx inspect --bootstrap
+      displayName: 'Setup Docker Buildx'
+    
+    # Build multi-architecture images
+    - script: |
+        echo "Building multi-architecture Docker images..."
+        
+        # Build for multiple platforms
+        docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+          --tag $(imageName):$(imageTag)-multiarch \
+          --file $(dockerfilePath) \
+          --output type=docker,dest=$(Agent.TempDirectory)/$(imageName)-$(imageTag)-multiarch.tar \
+          .
+        
+        ls -lh $(Agent.TempDirectory)/$(imageName)-$(imageTag)-multiarch.tar
+      displayName: 'Build multi-architecture image'
+      workingDirectory: '$(Build.SourcesDirectory)'
+    
+    # Publish multi-arch artifact
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Agent.TempDirectory)/$(imageName)-$(imageTag)-multiarch.tar'
+        artifactName: 'docker-images-multiarch'
+        publishLocation: 'pipeline'
+      displayName: 'Publish multi-arch Docker artifact'
+```
+
+
+
 ## Maven
 
 Configure proxy with `settings.xml`
@@ -664,30 +861,7 @@ Configure proxy with `settings.xml`
 ## Install Node on Amazon Linux 2
 
 ```dockerfile
-FROM amazonlinux:2
 
-# Install dependencies
-RUN yum update -y && \
-    yum install -y curl && \
-    yum clean all
-
-# Install NVM
-ENV NVM_DIR=/root/.nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-
-# Install Node.js using NVM
-RUN . $NVM_DIR/nvm.sh && \
-    nvm install 20 && \
-    nvm use 20 && \
-    nvm alias default 20
-
-# Add node and npm to PATH
-ENV PATH=$NVM_DIR/versions/node/v20.11.0/bin:$PATH
-
-# Verify installation
-RUN node --version && npm --version
-
-WORKDIR /app
 ```
 
 
