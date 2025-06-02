@@ -661,5 +661,34 @@ Configure proxy with `settings.xml`
 </settings>
 ```
 
+## Install Node on Amazon Linux 2
+
+```dockerfile
+FROM amazonlinux:2
+
+# Install dependencies
+RUN yum update -y && \
+    yum install -y curl && \
+    yum clean all
+
+# Install NVM
+ENV NVM_DIR=/root/.nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Install Node.js using NVM
+RUN . $NVM_DIR/nvm.sh && \
+    nvm install 20 && \
+    nvm use 20 && \
+    nvm alias default 20
+
+# Add node and npm to PATH
+ENV PATH=$NVM_DIR/versions/node/v20.11.0/bin:$PATH
+
+# Verify installation
+RUN node --version && npm --version
+
+WORKDIR /app
+```
+
 
 

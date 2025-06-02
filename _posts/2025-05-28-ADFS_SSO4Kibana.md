@@ -10,7 +10,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 Struggling to secure your open-source Kibana? This post offers a robust solution. Implement Single Sign-On (SSO) to Kibana using Nginx as a reverse proxy.
 
-Integrate seamlessly with Keycloak (LDAP or Active Directory) for centralised authentication. Fortify your Elastic Stack with Public Key Infrastructure (PKI) certificates. Ensure secure Kibana-to-Elasticsearch communication. All components are containerised and orchestrated with Docker Compose for easy deployment. Enhance security, streamline user access, and leverage existing AD infrastructure. A must-read for engineers seeking enterprise-grade Kibana security. Transform your data visualisation with uncompromised access control.
+Integrate seamlessly with Keycloak as an OpenID Connect provider for centralised authentication. Fortify your Elastic Stack with Public Key Infrastructure (PKI) certificates. Ensure secure Kibana-to-Elasticsearch communication. All components are containerised and orchestrated with Docker Compose for easy deployment. Enhance security, streamline user access, and leverage existing AD infrastructure. A must-read for engineers seeking enterprise-grade Kibana security. Transform your data visualisation with uncompromised access control.
 
 <!--more-->
 
@@ -39,9 +39,11 @@ A client's request for Kibana initiates a series of interactions across the inte
 > The [Nginx `auth_request` directive](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html) allows Nginx to authenticate requests via the oauth2-proxy's `/auth` endpoint, which *only returns a 202 Accepted response or a 401 Unauthorized response* without proxying the request through.
 
 3.  **OAuth2 Proxy:** <span>This component functions as an OpenID Connect (OIDC) client</span>{:gtxt}. When Nginx delegates an authentication request, OAuth2 Proxy initiates the OIDC flow with ADFS. It handles the redirect to ADFS for user login, processes the authorization code, exchanges it for tokens, and manages user sessions (often via cookies). Critically, it extracts user identity attributes (e.g., email, username) from the ADFS tokens and sets them as HTTP headers (e.g., `X-Auth-Request-User`, `X-Auth-Request-Email`) for the upstream Nginx server.  
-4.  **ADFS (Active Directory Federation Services):** As the Identity Provider (IdP), ADFS[^3] is responsible for authenticating users against the Windows Active Directory[^4]. It participates in the OIDC flow, authenticating the user and issuing ID tokens and access tokens upon successful verification.  
-5.  **Kibana:** This data visualization dashboard receives requests from Nginx. It is configured to recognize and trust the user identity information passed via specific HTTP headers from the Nginx reverse proxy. Kibana then uses this identity to interact with Elasticsearch. Furthermore, *Kibana connects to Elasticsearch using PKI[^5] certificates*, ensuring a secure backend communication channel.  
-6.  **Elasticsearch:** The core distributed search and analytics engine. It is configured with a PKI realm, which authenticates incoming connections from Kibana (and potentially delegated end-user PKI authentication) based on X.509 client certificates. Role mappings within Elasticsearch then assign appropriate permissions to the authenticated Kibana instance or users based on the Distinguished Names (DNs) from these certificates.
+4.  **Keycloak (or ADFS):** As the Identity Provider (IdP), Keycloak[^3] (used in this POC as a replacement for ADFS) is responsible for authenticating users. It participates in the OIDC flow, authenticating the user and issuing ID tokens and access tokens upon successful verification. For production deployments, this can be replaced with ADFS or any OIDC-compliant identity provider.  
+5.  **Middleware Service:** A Node.js Express application that acts as a bridge between OAuth2 Proxy and Kibana. It extracts the authenticated username from OAuth2 Proxy headers (X-Auth-Request-User) and converts it into Basic Authentication headers that Kibana can understand. This middleware uses a shared password approach where all authenticated users share the same password but have different usernames.
+
+6.  **Kibana:** This data visualization dashboard receives requests from the middleware service. It is configured with basic authentication enabled and trusts the Basic Auth headers injected by the middleware. Kibana connects to Elasticsearch using the kibana_system user credentials and PKI[^5] certificates for secure backend communication.  
+7.  **Elasticsearch:** The core distributed search and analytics engine. It is configured with X-Pack security enabled, using native and file realms for authentication. While the infrastructure supports PKI authentication, the current implementation primarily uses username/password authentication through the native realm. The system creates specific users (like 'anonymous' and custom users) that map to the authenticated OAuth2 users.
 
 ```mermaid
 sequenceDiagram
@@ -76,7 +78,7 @@ sequenceDiagram
     Nginx->>OAuth2: 17. Proxy request to upstream
     OAuth2->>Middleware: 18. Forward with X-Auth-Request-User
     
-    Note over Middleware: Extract username<br/>Inject Basic Auth header
+    Note over Middleware: Extract username from<br/>X-Auth-Request-User header<br/>Create Basic Auth with<br/>shared password
     
     Middleware->>Kibana: 19. Request with Basic Auth
     Kibana->>ES: 20. Query with PKI certificate
@@ -87,17 +89,25 @@ sequenceDiagram
     Nginx-->>User: 25. Final Kibana interface
 ```
 
-Instead of Azure/Windows AD, I've used Keycloak as an Active Directory(AD).
+This POC uses Keycloak as the OpenID Connect provider instead of ADFS. Keycloak runs as a separate service (at IP 192.168.1.139:8080 in this example) and provides the same OIDC authentication flow that ADFS would provide in a production environment.
 
-### OAuth2 Proxy for OIDC Integration
+### OAuth2 Proxy and Middleware Architecture
 
 Nginx-based SSO with ADFS could theoretically be met by directly integrating OpenID Connect functionality into Nginx using its `njs` (NGINX JavaScript) module[^6]. The `njs` is also available for Nginx Open Source(open-source project specifically designed to act as an OAuth2/OIDC proxy), implementing a full OIDC client, including state management, token handling, and session management, would necessitate extensive custom JavaScript scripting within Nginx.
 
 By leveraging OAuth2 Proxy, the complex intricacies of the OIDC authentication handshake, token validation, and session management are offloaded from Nginx. This allows Nginx to focus on its primary functions as a reverse proxy and an authentication gatekeeper via its `auth_request` directive, significantly simplifying the overall Nginx configuration and reducing the need for advanced scripting[^7].
 
-### ADFS Pre-configuration
+However, since Kibana's open-source version doesn't natively support header-based authentication for individual users, this POC introduces a **middleware service**. This Node.js-based middleware:
+- Receives authenticated requests from OAuth2 Proxy with user identity in headers
+- Extracts the username from `X-Auth-Request-User` header
+- Creates Basic Authentication headers using the username and a shared password
+- Forwards the request to Kibana with proper authentication
 
-The ADFS server[^8] must be pre-configured to support the OpenID Connect flow with OAuth2 Proxy. This involves creating an Application Group and noting specific credentials and endpoints:
+This approach allows multiple users to access Kibana with their individual identities while working within the constraints of the open-source version.
+
+### Identity Provider Configuration (Keycloak/ADFS)
+
+For this POC, Keycloak is used as the OIDC provider instead of ADFS. If using ADFS in production, the ADFS server[^8] must be pre-configured to support the OpenID Connect flow with OAuth2 Proxy. This involves creating an Application Group and noting specific credentials and endpoints:
 
 -   **ADFS Server URL:** The base URL of your ADFS instance (e.g., `https://adfs.yourdomain.com`). This will be used by OAuth2 Proxy to initiate authentication requests.
 -   **Application Group Creation:** Within the ADFS Management console, an Application Group must be created. This group should be configured as a "Server application" under the "Standalone applications" template. This template is appropriate for applications that can securely maintain a client secret.  
@@ -262,9 +272,19 @@ xpack:
             username_pattern: "CN=(.*?)(?:,|$)" # Example: extract CN as username
 ```
 
-### Mapping Distinguished Names (DNs) from Certificates to Elasticsearch Roles
+### User Authentication Strategy
 
-In Elasticsearch's security model, PKI users are identified by the Distinguished Name (DN) found in their X.509 certificate. To grant appropriate permissions, these DNs must be mapped to specific Elasticsearch roles. This can be achieved either through the `_security/role_mapping` API or by defining mappings in a `role_mapping.yml` file.
+While the infrastructure supports PKI-based authentication, this POC implements a simpler authentication strategy suitable for the open-source version of Kibana:
+
+1. **OAuth2 Authentication**: Users authenticate via Keycloak/ADFS through OAuth2 Proxy
+2. **Middleware Translation**: The middleware service converts OAuth2 user identities to Basic Auth
+3. **Elasticsearch Users**: The setup creates specific users in Elasticsearch:
+   - `elastic`: Superuser for administration
+   - `kibana_system`: System user for Kibana-Elasticsearch communication
+   - `anonymous`: A special user with read permissions for authenticated OAuth2 users
+   - Additional users can be created as needed
+
+The PKI certificates are still generated and used for securing the Kibana-to-Elasticsearch connection, but user authentication relies on the username/password mechanism rather than certificate-based authentication.
 
 For Kibana's connection, its client certificate's DN (e.g., `CN=kibana.yourdomain.com,OU=IT,O=YourOrg,L=City,ST=State,C=Country`) will be mapped to a role that grants it the necessary permissions to manage Kibana and interact with Elasticsearch, such as `kibana_system` or a custom `kibana_user` role.
 
@@ -287,7 +307,7 @@ PUT /_security/role_mapping/kibana_pki_role {
 }
 ```
 
-You have to set up `Kibana_system` user as well:
+The POC includes a setup script (`setup-elasticsearch-users.sh`) that automatically creates the necessary users:
 
 ```bash
 # Set up kibana_system user
@@ -296,6 +316,18 @@ curl -k -X POST "https://localhost:9200/_security/user/kibana_system/_password" 
   -H "Content-Type: application/json" \
   -u elastic:${ELASTIC_PASSWORD} \
   -d "{\"password\":\"${ELASTIC_PASSWORD}\"}"
+
+# Create anonymous user for OAuth2-authenticated users
+echo "Creating anonymous user..."
+curl -k -X PUT "https://localhost:9200/_security/user/anonymous" \
+  -H "Content-Type: application/json" \
+  -u elastic:${ELASTIC_PASSWORD} \
+  -d '{
+    "password": "anonymous",
+    "roles": ["anonymous_kibana_user", "kibana_system"],
+    "full_name": "Anonymous User",
+    "email": "anonymous@example.com"
+  }'
 ```
 
 
@@ -312,17 +344,23 @@ curl -k -X POST "https://localhost:9200/_security/user/kibana_system/_password" 
 | `xpack.security.http.ssl.client_authentication`           | Defines whether client certificates are `required`, `optional`, or `none` for HTTP connections. | `required`               |                       |
 | `xpack.security.transport.ssl.client_authentication`      | Defines whether client certificates are `required`, `optional`, or `none` for transport layer connections. | `required`               |                       |
 
-### PKI for Service-to-Service Authentication & Potential User Delegation
+### PKI for Secure Service Communication
 
-The PKI setup in this case is for a dual purpose. Primarily, it establishes a secure, mutually authenticated channel for communication between Kibana and Elasticsearch. When Kibana connects to Elasticsearch, it presents its client certificate, which Elasticsearch validates against its configured PKI realm and trusted CA. This ensures that only authorized Kibana instances can interact with the Elasticsearch cluster.
+In this POC, PKI certificates serve primarily to secure the communication channel between Kibana and Elasticsearch. The certificates ensure:
 
-Beyond this crucial service-to-service authentication, the `delegation.enabled` setting within the Elasticsearch PKI realm signifies a more advanced capability. It prepares Elasticsearch to validate _end-user_ certificates that might be presented to Kibana and then forwarded to Elasticsearch. This means that while the immediate focus is on Kibana's authentication to Elasticsearch, the architecture lays the groundwork for a potential future scenario where end-users could also authenticate directly via PKI through Kibana, with their certificates being validated by Elasticsearch. The `truststore` configuration within the PKI realm is fundamental to this entire process, as it dictates which Certificate Authorities Elasticsearch will accept as valid issuers for any incoming client certificates, thereby enforcing a strict trust boundary.
+1. **Encrypted Communication**: All traffic between Kibana and Elasticsearch is encrypted using TLS
+2. **Service Authentication**: Kibana authenticates to Elasticsearch using its certificate
+3. **Certificate Validation**: Both services validate certificates against the shared CA
+
+While the infrastructure supports end-user PKI authentication through the commented-out PKI realm configuration, the current implementation focuses on securing service-to-service communication. User authentication is handled through the OAuth2/Basic Auth bridge provided by the middleware service.
 
 ## Kibana Configuration for Proxy Authentication
 
 Kibana must be specifically configured to integrate with the Nginx and OAuth2 Proxy layers, expecting authentication details to be passed via HTTP headers and establishing its own secure connection to Elasticsearch using PKI.  
 
 ### Basic Kibana Settings
+
+The Kibana configuration in this POC is set up to work with both the middleware service and Elasticsearch:
 
 Several foundational settings in `kibana.yml` are necessary for Kibana to function correctly behind a reverse proxy and within the Docker network:
 
@@ -331,9 +369,23 @@ Several foundational settings in `kibana.yml` are necessary for Kibana to functi
 -   **Elasticsearch Connection:** `elasticsearch.hosts` must point to the Elasticsearch service's internal name and port within the Docker network (e.g., `https://elasticsearch:9200`).
 -   **Internal User (Fallback/Setup):** While PKI is the primary authentication for Kibana to Elasticsearch, it's common to configure `elasticsearch.username` and `elasticsearch.password` for Kibana's internal user (e.g., `kibana_system`)[^12]. This provides a fallback or initial connection mechanism, especially during setup or if PKI experiences issues.
 
-### Enabling Proxy Authentication in `kibana.yml`
+### Kibana Authentication Configuration
 
-Kibana's security features allow it to delegate user authentication to an upstream proxy. This is enabled by setting X-Pack setting for Elastic Stack's built-in security[^14]. This configuration instructs Kibana to expect authentication details from an external proxy rather than presenting its own login form. Crucially, Kibana must be explicitly told which HTTP headers to trust for user identity information. This is achieved by whitelisting these headers in `elasticsearch.requestHeadersWhitelist`. This whitelist should include headers like `Authorization` (if used for internal communication), `x-forwarded-for` (essential for proxy functionality), and the custom headers that OAuth2 Proxy and Nginx will use to pass user details (e.g., `x-proxy-user`, `x-proxy-roles`).
+In this POC, Kibana is configured with basic authentication enabled:
+
+```yaml
+# Enable basic authentication
+xpack.security.authc.providers.basic.basic1:
+  order: 0
+  enabled: true
+```
+
+The middleware service handles the translation from OAuth2 Proxy headers to Basic Authentication headers that Kibana understands. Kibana also whitelists certain headers to allow proper proxy operation:
+
+```yaml
+# Whitelist headers that Kibana will accept
+elasticsearch.requestHeadersWhitelist: ["authorization", "x-forwarded-for", "x-proxy-user", "x-proxy-roles", "x-auth-request-user", "x-auth-request-email"]
+```
 
 ### The Trust Boundary of Proxy Authentication
 
@@ -370,6 +422,8 @@ version: '3.8'
 
 services:
   # Keycloak as OIDC provider (replacing ADFS for POC)
+  # Note: Keycloak is commented out as it runs on a separate machine (192.168.1.139:8080)
+  # Uncomment and modify if you want to run Keycloak locally
   # keycloak:
   #   image: quay.io/keycloak/keycloak:24.0.1
   #   container_name: keycloak
@@ -470,7 +524,8 @@ services:
       - ELASTICSEARCH_SSL_CERTIFICATE=/usr/share/kibana/config/certs/kibana/kibana.crt
       - ELASTICSEARCH_SSL_KEY=/usr/share/kibana/config/certs/kibana/kibana.key
       - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${KIBANA_ENCRYPTION_KEY}
-      # Anonymous access for OAuth2-Proxy
+      # Note: Anonymous access is commented out as the POC uses basic authentication
+      # through the middleware service instead
       # - XPACK_SECURITY_AUTHC_PROVIDERS_ANONYMOUS_ANONYMOUS1_ORDER=0
       # - XPACK_SECURITY_AUTHC_PROVIDERS_ANONYMOUS_ANONYMOUS1_CREDENTIALS_USERNAME=anonymous
       # - XPACK_SECURITY_AUTHC_PROVIDERS_ANONYMOUS_ANONYMOUS1_CREDENTIALS_PASSWORD=anonymous
@@ -501,7 +556,7 @@ services:
       - OAUTH2_PROXY_CLIENT_SECRET=${ADFS_CLIENT_SECRET}
       - OAUTH2_PROXY_OIDC_ISSUER_URL=http://192.168.1.139:8080/realms/master
       - OAUTH2_PROXY_REDIRECT_URL=http://${KIBANA_DOMAIN}/oauth2/callback
-      - OAUTH2_PROXY_UPSTREAMS=http://middleware:5602
+      - OAUTH2_PROXY_UPSTREAMS=http://middleware:5602  # Points to middleware, not directly to Kibana
       # Skip auth for Kibana API endpoints
       - OAUTH2_PROXY_SKIP_AUTH_REGEX=^/api/.*|^/bundles/.*|^/built_assets/.*|^/ui/.*
       - OAUTH2_PROXY_HTTP_ADDRESS=0.0.0.0:4180
@@ -578,21 +633,26 @@ networks:
 
 ### Service Breakdown:
 
-- **`create_certs`:** This ephemeral service is responsible for generating the PKI certificates required for Elasticsearch and Kibana. It uses the official Elasticsearch Docker image to run `elasticsearch-certutil`, which simplifies the certificate generation process. The certificates are output to the shared `certs/` volume, making them accessible to other services. This service is designed to be run once manually () before the main stack is brought up.
+- **`create_certs`:** This ephemeral service is responsible for generating the PKI certificates required for Elasticsearch and Kibana. It uses the official Elasticsearch Docker image to run `elasticsearch-certutil`, which simplifies the certificate generation process. The certificates are output to the shared `certs/` volume, making them accessible to other services. This service is designed to be run once manually before the main stack is brought up.
 
     ```bash
     docker-compose -f docker-compose.yml run --rm create_certs
     ```
 
-    
+- **`elasticsearch`:** This service runs the Elasticsearch container. It mounts a persistent volume for data (`elasticsearch_data`) and the `certs/` volume for its PKI certificates. Environment variables configure its cluster name, memory limits, and crucially, enable X-Pack security with native and file realms for authentication. It also mounts its `elasticsearch.yml` and `role_mapping.yml` for custom configurations.
 
-- **`elasticsearch`:** This service runs the Elasticsearch container. It mounts a persistent volume for data (`elasticsearch_data`) and the `certs/` volume for its PKI certificates. Environment variables configure its cluster name, memory limits, and crucially, enable X-Pack security, including the PKI realm for authentication. It also mounts its `elasticsearch.yml` and `role_mapping.yml` for custom configurations.  
+- **`kibana`:** This service runs the Kibana container. It depends on Elasticsearch being healthy. It mounts its `kibana.yml` and the `certs/` volume for its PKI client certificate to connect to Elasticsearch. The service is configured with basic authentication enabled and connects to Elasticsearch using the `kibana_system` user credentials.
 
-- **`kibana`:** This service runs the Kibana container. It depends on Elasticsearch being healthy. It mounts its `kibana.yml` and the `certs/` volume for its PKI client certificate to connect to Elasticsearch. Environment variables configure its base path, Elasticsearch connection details, and settings for proxy-based authentication, including whitelisting headers and specifying user/role headers.  
+- **`oauth2-proxy`:** This service builds and runs the OAuth2 Proxy container. It is configured with environment variables to connect to Keycloak (or ADFS in production), including Client ID, Client Secret, OIDC endpoints, and the Redirect URL. It specifies the middleware service as its upstream (not Kibana directly). It also configures which headers to set for the upstream, such as `X-Auth-Request-User` and `X-Auth-Request-Email`.
 
-- **`oauth2-proxy`:** This service builds and runs the OAuth2 Proxy container. It is configured with environment variables to connect to ADFS, including Client ID, Client Secret, ADFS endpoints, and the Redirect URL. It specifies Kibana as its upstream service. It also configures which headers to set for the upstream Nginx, such as `X-Auth-Request-User` and `X-Auth-Request-Email`.  
+- **`middleware`:** This Node.js Express service acts as a bridge between OAuth2 Proxy and Kibana. It:
+  - Listens on port 5602
+  - Extracts the username from the `X-Auth-Request-User` header
+  - Creates Basic Authentication headers using the username and a shared password
+  - Proxies the request to Kibana on port 5601
+  - This service is crucial for translating OAuth2 authentication to a format Kibana's open-source version can understand
 
--   **`nginx`:** This service builds and runs the Nginx reverse proxy. It mounts its `nginx.conf.template` and the SSL certificates for the Kibana domain. The `command` uses `envsubst` to dynamically inject environment variables (like `KIBANA_DOMAIN` and `KIBANA_BASE_PATH`) into the Nginx configuration file at runtime. Nginx is configured to listen on ports 80 and 443, redirect HTTP to HTTPS, and use the `auth_request` directive to delegate authentication to the `oauth2-proxy` service. It then proxies authenticated requests to Kibana, forwarding the user identity headers received from OAuth2 Proxy.  
+- **`nginx`:** This service builds and runs the Nginx reverse proxy. It mounts its `nginx.conf.template` and the SSL certificates for the Kibana domain. The `command` uses `envsubst` to dynamically inject environment variables into the Nginx configuration file at runtime. Nginx is configured to listen on ports 80 and 443, use the `auth_request` directive to delegate authentication to the `oauth2-proxy` service, and proxy authenticated requests through the OAuth2 Proxy to the middleware and ultimately to Kibana.  
 
 #### Network Configuration
 
@@ -824,7 +884,9 @@ bootstrap.memory_lock: true
 # X-Pack Security Configuration
 xpack.security.enabled: true
 
-# PKI Realm for Kibana communication
+# PKI Realm for Kibana communication (currently disabled in POC)
+# Note: The POC uses basic authentication through the middleware instead of PKI realm
+# Uncomment below to enable PKI authentication
 # xpack.security.authc.realms.pki.pki1:
 #   order: 1
 #   delegation.enabled: true
@@ -1002,18 +1064,20 @@ This section outlines the steps to deploy the POC and verify its functionality, 
     - Fill in all the environment variables as specified in Table 1 (Section 4), replacing placeholder values with your actual ADFS credentials, domain, and generated secrets. For `OAUTH2_PROXY_COOKIE_SECRET`, use a command like `openssl rand -base64 32` to generate a secure value. For `KIBANA_ENCRYPTION_KEY`, generate a random 32-character alphanumeric string.
 
         ```ini
-        # ADFS Configuration (Using mock values for POC without ADFS)
-        ADFS_CLIENT_ID="mock-client-id-12345"
-        ADFS_CLIENT_SECRET="CH6Ko884AhtQ5AjN449n0LDnnuqR1Bim"
-        
-        # For POC without ADFS, we'll use Keycloak or mock endpoints
-        ADFS_AUTH_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/auth"
-        ADFS_TOKEN_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/token"
-        ADFS_JWKS_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/certs"
+        # OIDC Configuration (Using Keycloak for POC)
+# Note: These environment variables retain 'ADFS' prefix for compatibility
+# but actually point to Keycloak endpoints
+ADFS_CLIENT_ID="mock-client-id-12345"
+ADFS_CLIENT_SECRET="CH6Ko884AhtQ5AjN449n0LDnnuqR1Bim"
+
+# Keycloak OIDC endpoints (replace with ADFS URLs for production)
+ADFS_AUTH_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/auth"
+ADFS_TOKEN_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/token"
+ADFS_JWKS_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/certs"
         
         # Kibana and Nginx Domain Configuration
         KIBANA_DOMAIN="localhost"
-        KIBANA_BASE_PATH="/kibana" # set by Ojitha
+        KIBANA_BASE_PATH="/kibana" # Note: Currently not used in nginx configuration
         
         # OAuth2 Proxy Configuration
         OAUTH2_PROXY_COOKIE_SECRET="WoJtEJJBe5jlBvvnHSKjJ8s2wjAqFLaH3VOFbLJztug="
@@ -1027,7 +1091,8 @@ This section outlines the steps to deploy the POC and verify its functionality, 
         ELASTIC_VERSION="8.13.0"
         ```
 
-        
+
+​        
 
 3.  **Generate PKI Certificates:**
 
@@ -1307,9 +1372,11 @@ graph TB
     class KEYCLOAK disabledStyle
 ```
 
-In the above diagram, Keycloak has been commented out because it runs on a different machine (as a Docker container) with an IP address of 192.168.1.139.
+In the above diagram, Keycloak has been commented out because it runs on a different machine (as a Docker container) with an IP address of 192.168.1.139. The middleware service is shown as a crucial component that bridges OAuth2 Proxy and Kibana by converting OAuth2 authentication headers to Basic Authentication.
 
-The API Key approach is complex because OAuth2-Proxy doesn't natively support dynamic header injection based on the authenticated user. It is recommended to use other than basic authentication in the Kibana. For that you need to have license which either pro level or more:
+### License Considerations
+
+The approach used in this POC with the middleware service and basic authentication is designed for the open-source version of Kibana. For more advanced authentication features like native OAuth2/OIDC support or header-based authentication, you would need a commercial license (Gold or Platinum). You can check and manage your license status:
 
 To check the license
 
