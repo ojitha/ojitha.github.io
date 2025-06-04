@@ -320,13 +320,15 @@ By default, the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to
 
 ![nmap Host scanning](/assets/images/REST/nmap_Host_scanning.jpg)
 
-## Livy Server Access
+## Spark Remote Connections
 
-### REST API endpoints and curl syntax
+### Livy Server Access
+
+#### REST API endpoints and curl syntax
 
 Apache Livy offers two primary submission approaches: interactive sessions for exploratory work and batch jobs for production workloads. [Zeotap +3](https://zeotap.com/blog/apachelivy/)
 
-#### Session-based approach for interactive development
+##### Session-based approach for interactive development
 
 Interactive sessions provide the most flexibility for development and testing. Create a PySpark session first, then submit code statements within that session context. [Cloudera +2](https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.5/running-spark-applications/content/running_an_interactive_session_with_the_livy_api.html)
 
@@ -347,7 +349,7 @@ curl -X POST \
   http://localhost:8998/sessions
 ```
 
-### Livy Server
+#### Livy Server
 
 Livy server is a REST API for the Spark 2. Here the sample
 
@@ -715,6 +717,176 @@ df = spark.createDataFrame([
 ])
 df.show()
 time.sleep(30) 
+```
+
+### Spark Connect Setup and Job Submission
+
+```bash
+# Navigate to your Spark home directory
+cd $SPARK_HOME
+
+# Start Spark Connect server (default port 15002)
+./sbin/start-connect-server.sh
+
+# Verify it's running
+netstat -tulpn | grep 15002
+# Should show: tcp6 0 0 :::15002 :::* LISTEN
+```
+
+Direct python spark connect library:
+
+```python
+#!/usr/bin/env python3
+"""
+Direct Spark Connect job submission
+Compatible with Spark 3.4.4
+"""
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import explode, split, lower, trim, count
+import sys
+
+def submit_wordcount_job(spark_connect_url="sc://localhost:15002"):
+    """
+    Submit a word count job using Spark Connect
+    """
+    try:
+        # Create Spark session with Connect
+        spark = SparkSession.builder \
+            .remote(spark_connect_url) \
+            .appName("SparkConnect-WordCount") \
+            .getOrCreate()
+        
+        print(f"✅ Connected to Spark Connect at {spark_connect_url}")
+        print(f"Spark version: {spark.version}")
+        
+        # Sample data for word count
+        sample_texts = [
+            "Apache Spark is a unified analytics engine",
+            "Spark Connect enables remote Spark connectivity", 
+            "PySpark jobs can be submitted programmatically",
+            "REST APIs provide flexible job submission"
+        ]
+        
+        # Create DataFrame from sample data
+        df = spark.createDataFrame([(text,) for text in sample_texts], ["text"])
+        
+        print("\n📊 Processing sample data:")
+        df.show(truncate=False)
+        
+        # Perform word count operation
+        words_df = df.select(explode(split(lower(trim(df.text)), " ")).alias("word"))
+        word_counts = words_df.groupBy("word").count().orderBy("count", ascending=False)
+        
+        print("\n📈 Word count results:")
+        word_counts.show()
+        
+        # Collect results for return
+        results = word_counts.collect()
+        
+        # Stop the session
+        spark.stop()
+        
+        print("✅ Job completed successfully!")
+        return {"status": "success", "word_count": len(results), "top_words": [row.asDict() for row in results[:5]]}
+        
+    except Exception as e:
+        print(f"❌ Job failed: {str(e)}")
+        return {"status": "error", "message": str(e)}
+
+if __name__ == "__main__":
+    # Allow custom Spark Connect URL as command line argument
+    connect_url = sys.argv[1] if len(sys.argv) > 1 else "sc://localhost:15002"
+    result = submit_wordcount_job(connect_url)
+    print(f"\n🔄 Final result: {result}")
+```
+
+Run the python script:
+
+```bash
+# Save as spark_connect_wordcount.py
+python3 spark_connect_wordcount.py
+
+# Or with custom URL
+python3 spark_connect_wordcount.py sc://your-server:15002
+```
+
+### Python Client Library for Easy integration
+
+```python
+#!/usr/bin/env python3
+"""
+Python client library for Spark Connect REST API
+"""
+import requests
+import json
+import time
+
+class SparkConnectClient:
+    def __init__(self, api_url="http://localhost:8080"):
+        self.api_url = api_url.rstrip('/')
+        
+    def submit_job(self, job_config):
+        """Submit a job and return job ID"""
+        response = requests.post(
+            f"{self.api_url}/submit-connect-job",
+            json=job_config,
+            headers={"Content-Type": "application/json"}
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    def get_job_status(self, job_id):
+        """Get job status"""
+        response = requests.get(f"{self.api_url}/job-status/{job_id}")
+        response.raise_for_status()
+        return response.json()
+    
+    def get_job_result(self, job_id):
+        """Get job results"""
+        response = requests.get(f"{self.api_url}/job-result/{job_id}")
+        response.raise_for_status()
+        return response.json()
+    
+    def wait_for_completion(self, job_id, timeout=300, poll_interval=5):
+        """Wait for job to complete"""
+        start_time = time.time()
+        
+        while time.time() - start_time < timeout:
+            status = self.get_job_status(job_id)
+            
+            if status['status'] in ['completed', 'failed']:
+                return status
+                
+            time.sleep(poll_interval)
+        
+        raise TimeoutError(f"Job {job_id} did not complete within {timeout} seconds")
+
+# Usage example
+if __name__ == "__main__":
+    client = SparkConnectClient()
+    
+    # Submit job
+    job_config = {
+        "job_type": "wordcount",
+        "app_name": "Python-Client-Example",
+        "input_data": [
+            "Python client libraries simplify integration",
+            "Spark Connect provides excellent remote capabilities"
+        ]
+    }
+    
+    result = client.submit_job(job_config)
+    job_id = result['job_id']
+    print(f"✅ Job submitted: {job_id}")
+    
+    # Wait for completion
+    final_status = client.wait_for_completion(job_id)
+    print(f"🏁 Job completed with status: {final_status['status']}")
+    
+    # Get results
+    if final_status['status'] == 'completed':
+        results = client.get_job_result(job_id)
+        print("📊 Results:", json.dumps(results, indent=2))
 ```
 
 
