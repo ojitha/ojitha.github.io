@@ -320,7 +320,402 @@ By default, the scan sends an ICMP echo request, TCP SYN to port 443, TCP ACK to
 
 ![nmap Host scanning](/assets/images/REST/nmap_Host_scanning.jpg)
 
+## Livy Server Access
 
+### REST API endpoints and curl syntax
+
+Apache Livy offers two primary submission approaches: interactive sessions for exploratory work and batch jobs for production workloads. [Zeotap +3](https://zeotap.com/blog/apachelivy/)
+
+#### Session-based approach for interactive development
+
+Interactive sessions provide the most flexibility for development and testing. Create a PySpark session first, then submit code statements within that session context. [Cloudera +2](https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.5/running-spark-applications/content/running_an_interactive_session_with_the_livy_api.html)
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "X-Requested-By: admin" \
+  -d '{
+    "kind": "pyspark",
+    "driverMemory": "2g",
+    "executorMemory": "1g",
+    "executorCores": 2,
+    "numExecutors": 2,
+    "conf": {
+      "spark.sql.adaptive.enabled": "true"
+    }
+  }' \
+  http://localhost:8998/sessions
+```
+
+### Livy Server
+
+Livy server is a REST API for the Spark 2. Here the sample
+
+```python
+import requests
+import json
+import time
+import sys
+import os
+
+# Configuration
+livy_url = "http://localhost:8998"  # Default Livy port, adjust if needed
+max_retries = 20
+retry_interval = 10  # seconds
+
+def check_livy_server():
+    """Check if Livy server is running"""
+    try:
+        response = requests.get(f"{livy_url}/sessions")
+        if response.status_code == 200:
+            print("Livy server is running.")
+            return True
+        else:
+            print(f"Livy server returned status code: {response.status_code}")
+            return False
+    except requests.exceptions.ConnectionError:
+        print("Cannot connect to Livy server.")
+        return False
+
+def get_active_sessions():
+    """Get list of active sessions"""
+    try:
+        response = requests.get(f"{livy_url}/sessions")
+        if response.status_code == 200:
+            return response.json()["sessions"]
+        else:
+            print(f"Error listing sessions: {response.status_code}")
+            return []
+    except requests.exceptions.ConnectionError:
+        print("Cannot connect to Livy server.")
+        return []
+
+def check_session_statements(session_id):
+    """Check if session has any active statements running"""
+    try:
+        response = requests.get(f"{livy_url}/sessions/{session_id}/statements")
+        if response.status_code == 200:
+            statements = response.json().get("statements", [])
+            active_statements = [s for s in statements if s.get("state") not in ["available", "cancelled", "error"]]
+            if active_statements:
+                print(f"Session {session_id} has {len(active_statements)} active statements running.")
+                return False  # Session is busy
+            else:
+                print(f"Session {session_id} has no active statements running.")
+                return True  # Session is not busy
+        else:
+            print(f"Error checking statements for session {session_id}: {response.status_code}")
+            return False
+    except requests.exceptions.ConnectionError:
+        print("Cannot connect to Livy server.")
+        return False
+
+def create_session(name="PySpark-Job-Session", spark_conf=None):
+    """Create a new Spark session"""
+    # Default session configuration
+    data = {
+        "kind": "pyspark",
+        "name": name,
+        "heartbeatTimeoutInSecond": 60
+    }
+    
+    # Add custom Spark configurations if provided
+    if spark_conf:
+        data["conf"] = spark_conf
+    
+    headers = {"Content-Type": "application/json"}
+    
+    try:
+        print("Creating a new Spark session...")
+        response = requests.post(
+            f"{livy_url}/sessions", 
+            data=json.dumps(data), 
+            headers=headers
+        )
+        
+        if response.status_code == 201:  # 201 Created
+            session_info = response.json()
+            session_id = session_info["id"]
+            print(f"Created new session with ID: {session_id}")
+            return session_id
+        else:
+            print(f"Failed to create session. Status code: {response.status_code}")
+            print(f"Response: {response.text}")
+            return None
+    except requests.exceptions.ConnectionError:
+        print("Cannot connect to Livy server.")
+        return None
+
+def check_session_state(session_id):
+    """Check the state of a specific session"""
+    try:
+        response = requests.get(f"{livy_url}/sessions/{session_id}")
+        if response.status_code == 200:
+            session_info = response.json()
+            state = session_info.get("state")
+            print(f"Session {session_id} state: {state}")
+            return state
+        else:
+            print(f"Error checking session {session_id}: {response.status_code}")
+            return None
+    except requests.exceptions.ConnectionError:
+        print("Cannot connect to Livy server.")
+        return None
+
+def wait_for_session_to_be_ready(session_id):
+    """Wait until a session is in 'idle' state (ready to accept statements)"""
+    for i in range(max_retries):
+        state = check_session_state(session_id)
+        
+        if state == "idle":
+            print(f"Session {session_id} is now ready.")
+            return True
+        elif state in ["dead", "error", "killed", "shutting_down"]:
+            print(f"Session {session_id} failed with state: {state}")
+            return False
+        
+        print(f"Waiting for session to be ready... (Attempt {i+1}/{max_retries})")
+        time.sleep(retry_interval)
+    
+    print("Max retries reached. Session still not ready.")
+    return False
+
+def find_or_create_available_session():
+    """Find a session that is not busy or create a new one if none found"""
+    # First check if Livy server is running
+    if not check_livy_server():
+        for i in range(max_retries):
+            print(f"Retrying Livy server connection in {retry_interval} seconds...")
+            time.sleep(retry_interval)
+            if check_livy_server():
+                break
+        else:
+            print("Max retries reached. Livy server is not available.")
+            return None
+    
+    # Check for active sessions
+    sessions = get_active_sessions()
+    
+    if sessions:
+        print(f"Found {len(sessions)} active sessions:")
+        for session in sessions:
+            print(f"Session ID: {session['id']}, State: {session['state']}, Name: {session.get('name', 'N/A')}")
+        
+        # First priority: Find an idle session with no active statements
+        for session in sessions:
+            if session['state'] == 'idle':
+                session_id = session['id']
+                print(f"Checking if session {session_id} is busy...")
+                if check_session_statements(session_id):
+                    print(f"Using existing non-busy session with ID: {session_id}")
+                    return session_id
+                else:
+                    print(f"Session {session_id} is currently busy, checking others...")
+        
+        # Second priority: Wait for any non-terminal session to become idle
+        for session in sessions:
+            if session['state'] not in ["dead", "error", "killed", "shutting_down"]:
+                session_id = session['id']
+                print(f"Waiting for session {session_id} to become ready...")
+                if wait_for_session_to_be_ready(session_id):
+                    if check_session_statements(session_id):
+                        print(f"Using session {session_id} which is now idle and not busy")
+                        return session_id
+    
+    # No suitable active sessions found, create a new one
+    print("No available non-busy sessions found. Creating a new session...")
+    session_id = create_session()
+    
+    if session_id is not None:
+        if wait_for_session_to_be_ready(session_id):
+            return session_id
+    
+    return None
+
+def submit_job_to_livy(session_id, job_path="job.py", job_args=None):
+    """Submit a PySpark job to Livy server"""
+    # Read the content of the job script
+    try:
+        with open(job_path, 'r') as file:
+            job_code = file.read()
+    except Exception as e:
+        print(f"Failed to read job script: {e}")
+        return False
+    
+    # Prepare the code to be submitted
+    # If job_args were provided, we'll add them as variables at the top
+    if job_args and len(job_args) > 0:
+        args_dict = {}
+        for i in range(0, len(job_args), 2):
+            if i + 1 < len(job_args):
+                # Convert arg name from --arg-name to arg_name
+                arg_name = job_args[i].lstrip('-').replace('-', '_')
+                arg_value = job_args[i + 1]
+                args_dict[arg_name] = arg_value
+        
+        # Add arguments as variables at the top of the code
+        args_code = "# Command line arguments\n"
+        for name, value in args_dict.items():
+            # Try to convert to appropriate type if it looks like a number
+            if value.isdigit():
+                args_code += f"{name} = {value}\n"
+            else:
+                args_code += f"{name} = \"{value}\"\n"
+        
+        job_code = args_code + "\n" + job_code
+    
+    # Prepare the request data
+    data = {
+        "code": job_code
+    }
+    
+    headers = {"Content-Type": "application/json"}
+    
+    try:
+        print(f"Submitting job to Livy session {session_id}...")
+        response = requests.post(
+            f"{livy_url}/sessions/{session_id}/statements",
+            data=json.dumps(data),
+            headers=headers
+        )
+        
+        if response.status_code == 201:  # 201 Created
+            statement_info = response.json()
+            statement_id = statement_info["id"]
+            print(f"Job submitted successfully. Statement ID: {statement_id}")
+            return track_statement_progress(session_id, statement_id)
+        else:
+            print(f"Failed to submit job. Status code: {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+    except requests.exceptions.ConnectionError:
+        print("Cannot connect to Livy server.")
+        return False
+
+def track_statement_progress(session_id, statement_id):
+    """Track the progress of a submitted statement/job"""
+    print(f"Tracking progress of statement {statement_id}...")
+    
+    for i in range(max_retries * 2):  # More retries for job execution
+        try:
+            response = requests.get(f"{livy_url}/sessions/{session_id}/statements/{statement_id}")
+            
+            if response.status_code == 200:
+                statement_info = response.json()
+                state = statement_info.get("state")
+                
+                print(f"Statement {statement_id} state: {state}")
+                
+                if state == "available":
+                    # Job completed
+                    output = statement_info.get("output", {})
+                    status = output.get("status")
+                    
+                    if status == "ok":
+                        # Print the result if any
+                        data = output.get("data", {})
+                        if "text/plain" in data:
+                            print(f"Job Result:\n{data['text/plain']}")
+                        print("Job completed successfully")
+                        return True
+                    elif status == "error":
+                        # Print error information
+                        traceback = output.get("traceback", [])
+                        if traceback:
+                            print("Job Error:")
+                            for line in traceback:
+                                print(line)
+                        else:
+                            print(f"Job failed: {output.get('evalue', 'Unknown error')}")
+                        return False
+                
+                elif state == "error" or state == "cancelled":
+                    print(f"Job failed with state: {state}")
+                    return False
+                
+                # Still running
+                print(f"Job is still running. Checking again in {retry_interval} seconds...")
+                time.sleep(retry_interval)
+            else:
+                print(f"Error checking statement: {response.status_code}")
+                return False
+                
+        except requests.exceptions.ConnectionError:
+            print("Cannot connect to Livy server.")
+            return False
+    
+    print("Max retries reached. Job is taking too long.")
+    return False
+
+if __name__ == "__main__":
+    print("Finding or creating an available Spark session for PySpark job...")
+    session_id = find_or_create_available_session()
+    
+    if session_id is not None:
+        print(f"Found non-busy session with ID: {session_id}. Ready to run PySpark job.")
+        
+        # Get job.py path from command line args if provided, otherwise use default
+        job_script = "job.py"
+        additional_args = []
+        
+        # Parse command line args
+        if len(sys.argv) > 1:
+            # First argument could be job script path
+            if sys.argv[1].endswith(".py"):
+                job_script = sys.argv[1]
+                additional_args = sys.argv[2:]
+            else:
+                # All arguments are for the job
+                additional_args = sys.argv[1:]
+        
+        # Check if job script exists
+        if not os.path.exists(job_script):
+            print(f"ERROR: Job script '{job_script}' does not exist.")
+            sys.exit(1)
+        
+        # Submit the PySpark job to Livy
+        success = submit_job_to_livy(session_id, job_script, additional_args)
+        
+        if not success:
+            sys.exit(1)
+    else:
+        print("Failed to find or create an available Spark session. PySpark job will not run.")
+        sys.exit(1)
+```
+
+Sample Job
+
+```python
+from pyspark.sql import SparkSession
+import findspark
+import time
+
+findspark.init()
+
+
+spark = SparkSession \
+    .builder.appName("job-0") \
+        .config("spark.sql.legacy.timeParserPolicy","LEGACY") \
+    .getOrCreate()
+
+sc = spark.sparkContext
+
+# sel the log leve
+sc.setLogLevel('ERROR')
+
+from py4j.java_gateway import java_import
+java_import(spark._sc._jvm, "org.apache.spark.sql.api.python.*")
+
+from pyspark.sql import Row
+
+MyDate = Row('name', 'a_date', 'b_date')
+df = spark.createDataFrame([
+    MyDate('A', '2021-02-10', '2021-06-10')
+    , MyDate('B', '2021-02-11', '2022-02-11')
+])
+df.show()
+time.sleep(30) 
+```
 
 
 
