@@ -639,23 +639,40 @@ class JSONFormatter(logging.Formatter):
 Shows how to use `python-json-logger` for simpler setup:
 
 ```python
-# Method 2: Using python-json-logger library
-def setup_json_logger_with_library():
-    """Setup logger using python-json-logger library"""
-    logger = logging.getLogger('app_logger')
-    logger.setLevel(logging.DEBUG)
+import logging
+import sys
+from pythonjsonlogger import jsonlogger
+
+def setup_json_logger(name='app', level=logging.INFO):
+    """
+    Initialize JSON logger once - call this only from main module
+    """
+    logger = logging.getLogger(name)
     
-    # Create console handler
-    handler = logging.StreamHandler(sys.stdout)
+    # Prevent duplicate handlers if called multiple times
+    if logger.handlers:
+        return logger
     
-    # Create JSON formatter
+    logger.setLevel(level)
+    
+    # Console handler with JSON formatting
+    console_handler = logging.StreamHandler(sys.stdout)
+    
+    # JSON formatter with custom fields
     formatter = jsonlogger.JsonFormatter(
-        '%(timestamp)s %(level)s %(name)s %(message)s %(module)s %(funcName)s %(lineno)d',
-        rename_fields={'levelname': 'level', 'asctime': 'timestamp'}
+        '%(asctime)s %(name)s %(levelname)s %(message)s %(module)s %(funcName)s %(lineno)d',
+        rename_fields={
+            'asctime': 'timestamp',
+            'levelname': 'level',
+            'name': 'logger'
+        }
     )
     
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    
+    # Prevent propagation to root logger
+    logger.propagate = False
     
     return logger
 ```
