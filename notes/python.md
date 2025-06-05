@@ -597,6 +597,69 @@ To delete the environment
 conda remove -n myenv --all
 ```
 
+## Logging
+
+### Custom JSON Formatter 
+
+Creates structured logs with timestamp, level, message, and metadata
+
+```python
+# Method 1: Custom JSON Formatter
+class JSONFormatter(logging.Formatter):
+    def format(self, record):
+        log_entry = {
+            'timestamp': datetime.utcnow().isoformat() + 'Z',
+            'level': record.levelname,
+            'logger': record.name,
+            'message': record.getMessage(),
+            'module': record.module,
+            'function': record.funcName,
+            'line': record.lineno,
+        }
+        
+        # Add exception info if present
+        if record.exc_info:
+            log_entry['exception'] = self.formatException(record.exc_info)
+        
+        # Add any extra fields
+        for key, value in record.__dict__.items():
+            if key not in ['name', 'msg', 'args', 'levelname', 'levelno', 'pathname', 
+                          'filename', 'module', 'exc_info', 'exc_text', 'stack_info',
+                          'lineno', 'funcName', 'created', 'msecs', 'relativeCreated',
+                          'thread', 'threadName', 'processName', 'process', 'getMessage']:
+                log_entry[key] = value
+        
+        return json.dumps(log_entry, default=str)
+```
+
+
+
+### Library Integration 
+
+Shows how to use `python-json-logger` for simpler setup:
+
+```python
+# Method 2: Using python-json-logger library
+def setup_json_logger_with_library():
+    """Setup logger using python-json-logger library"""
+    logger = logging.getLogger('app_logger')
+    logger.setLevel(logging.DEBUG)
+    
+    # Create console handler
+    handler = logging.StreamHandler(sys.stdout)
+    
+    # Create JSON formatter
+    formatter = jsonlogger.JsonFormatter(
+        '%(timestamp)s %(level)s %(name)s %(message)s %(module)s %(funcName)s %(lineno)d',
+        rename_fields={'levelname': 'level', 'asctime': 'timestamp'}
+    )
+    
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
+    return logger
+```
+
 
 
 
