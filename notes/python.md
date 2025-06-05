@@ -677,6 +677,32 @@ def setup_json_logger(name='app', level=logging.INFO):
     return logger
 ```
 
+Spark basic logger initialisation:
+
+```python
+from pyspark.sql import SparkSession
+from pyspark import SparkContext
+
+# Create SparkSession with log4j2 configuration
+spark = SparkSession.builder \
+    .appName("MyPySparkApp") \
+    .config("spark.driver.extraJavaOptions", "-Dlog4j2.configurationFile=log4j2.properties") \
+    .config("spark.executor.extraJavaOptions", "-Dlog4j2.configurationFile=log4j2.properties") \
+    .getOrCreate()
+
+# Get the SparkContext
+sc = spark.sparkContext
+
+# Get the log4j logger
+log4j = sc._jvm.org.apache.log4j
+logger = log4j.LogManager.getLogger(__name__)
+
+# Use the logger
+logger.info("This is an info message from PySpark")
+logger.warn("This is a warning message")
+logger.error("This is an error message")
+```
+
 
 
 
