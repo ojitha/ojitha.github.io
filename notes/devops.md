@@ -117,7 +117,7 @@ Execute AWS stepfunction:
 jq -c . <input file>.json | xargs -0 aws stepfunctions start-execution --state-machine-arn <stepfunction arn>--input
 ```
 
-#### EC2 Role for the vscode
+#### EC2 Role for the VSCode
 If your EC2 instance has been created in the private subnet, you have to create a role with the following policies:
 NOTE: Trust relationship should be the EC2 and the developer should be with the `PowerUserAccess`.
 
@@ -540,6 +540,88 @@ In the cloudeshell created random number generator
 resourceSuffix=$RANDOM
 ```
 
+Azure Simple pipeline with stages
+
+![img000305@2x](/assets/images/devops/img000305@2x.jpg)
+
+Here the code for the above Build and release pipeline
+
+```yaml
+trigger:
+- azure-pipelines
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Build
+  jobs:
+    - job: build_job
+      steps:
+        - bash: echo 'Build stage job.'
+          displayName: 'Run a one-line script'
+- stage: Release
+  jobs:
+    - job: release_job
+      steps:
+        - bash: echo 'Relase stage job'
+          displayName: 'Run a one-line script' 
+```
+
+To run the pipeline on CRON[^1]:
+
+```yaml
+schedules:
+- cron: '0 0 * * *'
+  displayName: Daily midnight build
+  branches:
+    include:
+    - main
+```
+
+To force a pipeline to run even when there are no code changes, you can use the `always` keyword.
+
+```yaml
+schedules:
+- cron: ...
+  ...
+  always: true
+```
+
+For the following
+
+Every Monday - Friday at 3:00 AM (UTC + 5:30 time zone), build branches that meet the `features/india/*` branch filter criteria
+
+![](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/media/triggers/scheduled-trigger-git-india.png?view=azure-devops)
+
+```yaml
+schedules:
+- cron: '30 21 * * Sun-Thu'
+  displayName: M-F 3:00 AM (UTC + 5:30) India daily build
+  branches:
+    include:
+    - /features/india/*
+```
+
+The cron syntax (`mm HH DD MM DW`) is `30 21 * * Sun-Thu`. Minutes and Hours - `30 21` - This maps to `21:30 UTC` (`9:30 PM UTC`). Since the specified time zone in the classic editor is **UTC + 5:30**, we need to subtract 5 hours and 30 minutes from the desired build time of 3:00 AM to arrive at the desired UTC time to specify for the YAML trigger.
+
+> Days of the week - `Sun-Thu` - because of the timezone conversion, for our builds to run at 3:00 AM in the UTC + 5:30 India time zone, we need to specify starting them the previous day in UTC time. We could also specify the days of the week as `0-4` or `0,1,2,3,4`.
+
+Every Monday - Friday at 3:00 AM (UTC - 5:00 time zone), build branches that meet the `features/nc/*` branch filter criteria
+
+![](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/media/triggers/scheduled-trigger-git-nc.png?view=azure-devops)
+
+The CRON is
+
+```yaml
+...
+- cron: '0 8 * * Mon-Fri'
+  displayName: M-F 3:00 AM (UTC - 5) NC daily build
+  branches:
+    include:
+    - /features/nc/*
+```
+
 
 
 ### Azure Docker build pipeline
@@ -621,11 +703,11 @@ stages:
       displayName: 'Publish Docker image tar file as artifact'
 ```
 
-## Azure pipeline to save the docker images to pipeline artifacts
+### Azure pipeline to save the Docker images to pipeline artifacts
 
 You can save the docker generated artifacts as follows:
 
-![img000304@2x](./assets/images/devops/img000304@2x.jpg)
+![img000304@2x](/assets/images/devops/img000304@2x.jpg)
 
 Here the azure-pipelines.yml:
 
@@ -815,6 +897,490 @@ stages:
         publishLocation: 'pipeline'
       displayName: 'Publish multi-arch Docker artifact'
 ```
+
+### Template for Dockerfiles
+
+azure-pipelines.yml:
+
+```yaml
+trigger:
+  branches:
+    include:
+      - main
+      - master
+
+variables:
+  # Global build configuration
+  buildNumber: '$(Build.BuildNumber)'
+  sourceBranch: '$(Build.SourceBranchName)'
+
+# Build Docker images using the template
+stages:
+- stage: BuildDockerImages
+  displayName: 'Build Docker Images'
+  jobs:
+  # Build the main application Docker image
+  - template: templates/docker-build-template.yml
+    parameters:
+      imageName: 'myapp'
+      imageTag: '$(buildNumber)'
+      dockerfilePath: 'app/Dockerfile'
+      buildContext: '.'
+      artifactName: 'docker-images'
+      enableCompression: true
+      runTests: true
+      testCommand: '--version'  # or 'none' to skip container testing
+
+  # Example: Build additional Docker image (uncomment and modify as needed)
+  # - template: templates/docker-build-template.yml
+  #   parameters:
+  #     imageName: 'myapp-worker'
+  #     imageTag: '$(buildNumber)'
+  #     dockerfilePath: 'worker/Dockerfile'
+  #     buildContext: '.'
+  #     artifactName: 'docker-images'
+  #     enableCompression: true
+  #     runTests: true
+  #     testCommand: '--help'
+
+  # Example: Build a different component with custom build args
+  # - template: templates/docker-build-template.yml
+  #   parameters:
+  #     imageName: 'myapp-api'
+  #     imageTag: '$(buildNumber)'
+  #     dockerfilePath: 'api/Dockerfile'
+  #     buildContext: 'api'
+  #     buildArgs: 'NODE_ENV=production API_VERSION=v2'
+  #     artifactName: 'docker-images'
+  #     enableCompression: true
+  #     runTests: true
+  #     testCommand: 'node --version'
+
+# Optional: Deployment stage that depends on all build stages
+- stage: PostBuild
+  displayName: 'Post-Build Activities'
+  dependsOn: 
+    - BuildDockerImages
+  condition: succeeded()
+  jobs:
+  - job: PostBuildTasks
+    displayName: 'Post-Build Tasks'
+    steps:
+    
+    # Display build summary
+    - script: |
+        echo "========================================"
+        echo "Build Summary"
+        echo "========================================"
+        echo "Build completed successfully!"
+        echo "Build Number: $(buildNumber)"
+        echo "Source Branch: $(sourceBranch)"
+        echo "Commit: $(Build.SourceVersion)"
+        echo ""
+        echo "Images built:"
+        echo "- myapp:$(buildNumber)"
+        echo ""
+        echo "Artifacts available:"
+        echo "- docker-images-myapp"
+        echo ""
+        echo "Next steps:"
+        echo "1. Download artifacts from this build"
+        echo "2. Load Docker images: docker load -i <tar-file>"
+        echo "3. Deploy to target environment"
+        echo "========================================"
+      displayName: 'Build Summary'
+    
+    # Optional: Send notification or trigger deployment pipeline
+    # Add your post-build tasks here
+
+# Optional: Example of conditional builds based on changed files
+# This stage only runs if files in the 'app' directory changed
+- stage: BuildOnAppChanges
+  displayName: 'Build App (Only on Changes)'
+  condition: |
+    and(
+      succeeded(),
+      or(
+        contains(variables['Build.SourceVersionMessage'], 'app/'),
+        eq(variables['Build.Reason'], 'Manual')
+      )
+    )
+  dependsOn: []
+  jobs:
+  - template: templates/docker-build-template.yml
+    parameters:
+      imageName: 'myapp-changed'
+      imageTag: '$(buildNumber)-hotfix'
+      dockerfilePath: 'Dockerfile'
+      buildContext: '.'
+      artifactName: 'hotfix-images'
+      enableCompression: true
+      runTests: true
+```
+
+templates/docker-build-template.yml:
+
+```yaml
+parameters:
+  # Required parameters
+  - name: imageName
+    type: string
+    displayName: 'Docker image name'
+    
+  - name: dockerfilePath
+    type: string
+    displayName: 'Path to Dockerfile relative to repository root'
+    
+  # Optional parameters with defaults
+  - name: imageTag
+    type: string
+    displayName: 'Docker image tag'
+    default: '$(Build.BuildNumber)'
+    
+  - name: buildContext
+    type: string
+    displayName: 'Docker build context path'
+    default: '$(Build.SourcesDirectory)'
+    
+  - name: buildArgs
+    type: string
+    displayName: 'Docker build arguments (space-separated)'
+    default: ''
+    
+  - name: artifactName
+    type: string
+    displayName: 'Pipeline artifact name'
+    default: 'docker-images'
+    
+  - name: enableCompression
+    type: boolean
+    displayName: 'Enable gzip compression of tar file'
+    default: true
+    
+  - name: runTests
+    type: boolean
+    displayName: 'Run basic container tests'
+    default: true
+    
+  - name: testCommand
+    type: string
+    displayName: 'Command to test the container (optional)'
+    default: '--version'
+
+jobs:
+- job: BuildDockerImage
+  displayName: 'Build Docker Image'
+  pool:
+    vmImage: 'ubuntu-latest'
+  variables:
+    dockerTarFileName: '${{ parameters.imageName }}-${{ parameters.imageTag }}.tar'
+    fullImageName: '${{ parameters.imageName }}:${{ parameters.imageTag }}'
+  steps:
+  - checkout: self
+    displayName: 'Checkout source code'
+
+  - script: |
+      set -e
+      echo "========================================"
+      echo "Docker Build Information"
+      echo "========================================"
+      echo "Pipeline: $(Build.DefinitionName)"
+      echo "Build Number: $(Build.BuildNumber)"
+      echo "Source Branch: $(Build.SourceBranchName)"
+      echo "Commit ID: $(Build.SourceVersion)"
+      echo ""
+      echo "Docker Configuration:"
+      echo "- Image Name: ${{ parameters.imageName }}"
+      echo "- Image Tag: ${{ parameters.imageTag }}"
+      echo "- Full Image: $(fullImageName)"
+      echo "- Dockerfile Path: ${{ parameters.dockerfilePath }}"
+      echo "- Build Context: ${{ parameters.buildContext }}"
+      echo "- Build Args: ${{ parameters.buildArgs }}"
+      echo ""
+      echo "Build Options:"
+      echo "- Run Tests: ${{ parameters.runTests }}"
+      echo "- Enable Compression: ${{ parameters.enableCompression }}"
+      echo ""
+      echo "System Information:"
+      docker --version
+      echo "Available disk space:"
+      df -h
+      echo "========================================"
+    displayName: 'Display build information'
+
+
+  # Validate Dockerfile exists
+  - script: |
+      set -e
+      if [ ! -f "${{ parameters.dockerfilePath }}" ]; then
+        echo "Error: Dockerfile not found at ${{ parameters.dockerfilePath }}"
+        exit 1
+      fi
+      echo "✓ Dockerfile found at ${{ parameters.dockerfilePath }}"
+      
+      # Show Dockerfile contents (first 20 lines)
+      echo ""
+      echo "Dockerfile preview:"
+      echo "==================="
+      head -20 "${{ parameters.dockerfilePath }}"
+      echo "==================="
+    displayName: 'Validate Dockerfile'
+  
+  # Build Docker image
+  - script: |
+      set -e
+      echo "Building Docker image: $(fullImageName)"
+      echo "Context: ${{ parameters.buildContext }}"
+      
+      # Prepare build command
+      BUILD_CMD="docker build -t $(fullImageName) -f ${{ parameters.dockerfilePath }}"
+      
+      # Add build args if provided
+      if [ -n "${{ parameters.buildArgs }}" ]; then
+        for arg in ${{ parameters.buildArgs }}; do
+          BUILD_CMD="$BUILD_CMD --build-arg $arg"
+        done
+        echo "Build arguments: ${{ parameters.buildArgs }}"
+      fi
+      
+      # Add build context
+      BUILD_CMD="$BUILD_CMD ${{ parameters.buildContext }}"
+      
+      echo "Executing: $BUILD_CMD"
+      eval $BUILD_CMD
+      
+      # Also tag as latest for convenience
+      docker tag $(fullImageName) ${{ parameters.imageName }}:latest
+      
+      # Display built images
+      echo ""
+      echo "Built images:"
+      docker images | grep ${{ parameters.imageName }}
+    displayName: 'Build Docker image'
+  
+  # Test the Docker image (if enabled)
+  - script: |
+      set -e
+      echo "Testing Docker image: $(fullImageName)"
+      
+      # Basic image inspection
+      echo "Image details:"
+      docker inspect $(fullImageName) --format='{{.Config.ExposedPorts}}'
+      docker inspect $(fullImageName) --format='{{.Config.Env}}'
+      
+      # Run test command if provided
+      if [ -n "${{ parameters.testCommand }}" ] && [ "${{ parameters.testCommand }}" != "none" ]; then
+        echo "Running test command: ${{ parameters.testCommand }}"
+        docker run --rm $(fullImageName) ${{ parameters.testCommand }} || {
+          echo "⚠️ Test command failed, but continuing build..."
+        }
+      fi
+      
+      # Check image size
+      echo ""
+      echo "Image size information:"
+      docker images $(fullImageName) --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.CreatedAt}}"
+      
+      # Check for security issues (basic)
+      echo ""
+      echo "Basic security check:"
+      docker run --rm $(fullImageName) whoami 2>/dev/null || echo "Cannot check user (expected for some images)"
+    displayName: 'Test Docker image'
+    condition: eq(${{ parameters.runTests }}, true)
+  
+  # Save Docker image to tar file
+  - script: |
+      set -e
+      echo "Saving Docker image to tar file..."
+      mkdir -p $(Agent.TempDirectory)/docker-artifacts
+      
+      # Save both tagged version and latest
+      echo "Saving images: $(fullImageName) and ${{ parameters.imageName }}:latest"
+      docker save $(fullImageName) ${{ parameters.imageName }}:latest -o $(Agent.TempDirectory)/docker-artifacts/$(dockerTarFileName)
+      
+      # Display file info
+      echo ""
+      echo "Artifact created:"
+      ls -lh $(Agent.TempDirectory)/docker-artifacts/
+      echo "Docker image saved as: $(dockerTarFileName)"
+      
+      file_size=$(du -h $(Agent.TempDirectory)/docker-artifacts/$(dockerTarFileName) | cut -f1)
+      echo "File size: $file_size"
+      
+      # Store file size for use in metadata
+      echo "##vso[task.setvariable variable=dockerTarFileSize]$file_size"
+    displayName: 'Save Docker image to tar file'
+  
+  # Create compressed version (if enabled)
+  - script: |
+      set -e
+      echo "Creating compressed version..."
+      cd $(Agent.TempDirectory)/docker-artifacts
+
+      # Compress the tar file
+      echo "Compressing $(dockerTarFileName)..."
+      gzip -c $(dockerTarFileName) > $(dockerTarFileName).gz
+
+      # Display sizes (use stat -c on Linux instead of -f)
+      original_size=$(stat -c%s $(dockerTarFileName))
+      compressed_size=$(stat -c%s $(dockerTarFileName).gz)
+
+      echo "Compression results:"
+      echo "- Original size: $(du -h $(dockerTarFileName) | cut -f1)"
+      echo "- Compressed size: $(du -h $(dockerTarFileName).gz | cut -f1)"
+
+      # Calculate compression ratio
+      ratio=$(echo "scale=1; $compressed_size * 100 / $original_size" | bc -l)
+      echo "- Compression ratio: ${ratio}%"
+
+      echo ""
+      echo "All artifacts:"
+      ls -lh
+    displayName: 'Create compressed version'
+    condition: eq(${{ parameters.enableCompression }}, true)
+  
+  # Create metadata file
+  - script: |
+      set -e
+      echo "Creating metadata file..."
+      metadata_file="$(Agent.TempDirectory)/docker-artifacts/image-info.txt"
+      
+      cat > "$metadata_file" << EOF
+      Docker Image Build Information
+      ==============================
+      
+      Build Details:
+      --------------
+      Image Name: ${{ parameters.imageName }}
+      Image Tag: ${{ parameters.imageTag }}
+      Full Image: $(fullImageName)
+      Build Number: $(Build.BuildNumber)
+      Build Date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+      Source Branch: $(Build.SourceBranchName)
+      Commit ID: $(Build.SourceVersion)
+      Pipeline: $(Build.DefinitionName)
+      
+      Configuration:
+      --------------
+      Dockerfile Path: ${{ parameters.dockerfilePath }}
+      Build Context: ${{ parameters.buildContext }}
+      Build Args: ${{ parameters.buildArgs }}
+      
+      Artifact Details:
+      -----------------
+      Tar File: $(dockerTarFileName)
+      File Size: $(dockerTarFileSize)
+      Compressed: ${{ parameters.enableCompression }}
+      
+      Usage Instructions:
+      ===================
+      1. Download the artifact from Azure DevOps
+      2. Extract the tar file from the artifact zip
+      3. Load into Docker: 
+         docker load -i $(dockerTarFileName)
+      4. Verify images: 
+         docker images | grep ${{ parameters.imageName }}
+      5. Run container: 
+         docker run --rm $(fullImageName)
+      
+      Available tags after import:
+      - $(fullImageName)
+      - ${{ parameters.imageName }}:latest
+      EOF
+      
+      echo "Metadata file created:"
+      cat "$metadata_file"
+    displayName: 'Create metadata file'
+  
+  # Publish Docker image as pipeline artifact
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Agent.TempDirectory)/docker-artifacts'
+      artifactName: '${{ parameters.artifactName }}-${{ parameters.imageName }}'
+      publishLocation: 'pipeline'
+    displayName: 'Publish Docker image artifact'
+  
+  # Clean up local Docker images to save space
+  - script: |
+      set -e
+      echo "Cleaning up local Docker images..."
+      docker rmi $(fullImageName) ${{ parameters.imageName }}:latest || true
+      
+      # Clean up any dangling images
+      docker system prune -f
+      
+      echo "Remaining disk space:"
+      df -h
+    displayName: 'Clean up Docker images'
+    condition: always()
+```
+
+### Enable logs in the Azure DevOps pipeline
+
+Add the following steps to the pipeline
+
+```yaml
+steps:
+# Step 1: SSH to remote server and extract nginx logs to a file
+- task: SSH@0
+  displayName: 'Extract Nginx Logs to File'
+  inputs:
+    sshEndpoint: 'MySSHConnection'
+    runOptions: 'inline'
+    inline: |
+      cd /path/to/your/compose/directory
+      
+      # Create logs directory if it doesn't exist
+      mkdir -p /tmp/pipeline-logs
+      
+      # Extract nginx logs with timestamp
+      echo "=== Nginx Logs - $(date) ===" > /tmp/pipeline-logs/nginx-logs.txt
+      podman-compose logs nginx --tail=1000 >> /tmp/pipeline-logs/nginx-logs.txt
+      
+      # Extract error logs separately
+      echo "" >> /tmp/pipeline-logs/nginx-logs.txt
+      echo "=== Nginx Error Logs ===" >> /tmp/pipeline-logs/nginx-logs.txt
+      podman-compose logs nginx 2>&1 | grep -i error >> /tmp/pipeline-logs/nginx-logs.txt || echo "No errors found" >> /tmp/pipeline-logs/nginx-logs.txt
+      
+      # Container status for context
+      echo "" >> /tmp/pipeline-logs/nginx-logs.txt
+      echo "=== Container Status ===" >> /tmp/pipeline-logs/nginx-logs.txt
+      podman-compose ps >> /tmp/pipeline-logs/nginx-logs.txt
+      
+      # Show file was created
+      ls -la /tmp/pipeline-logs/
+      echo "Log file size: $(wc -l < /tmp/pipeline-logs/nginx-logs.txt) lines"
+
+# Step 2: Copy the log file from remote server to pipeline agent
+- task: CopyFilesOverSSH@0
+  displayName: 'Download Nginx Logs from Remote Server'
+  inputs:
+    sshEndpoint: 'MySSHConnection'
+    sourceFolder: '/tmp/pipeline-logs'
+    contents: '*.txt'
+    targetFolder: '$(Pipeline.Workspace)/nginx-logs'
+    isDownloadFiles: true  # This is key - it downloads FROM the remote server
+    cleanTargetFolder: true
+
+# Step 3: Publish logs as pipeline artifact
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Nginx Logs as Artifact'
+  inputs:
+    targetPath: '$(Pipeline.Workspace)/nginx-logs'
+    artifact: 'nginx-logs'
+    publishLocation: 'pipeline'
+  condition: always()  # Publish even if previous steps failed
+```
+
+
+
+## Docker Compose
+
+```
+mkdir azagent;cd azagent;curl -fkSL -o vstsagent.tar.gz https://download.agent.dev.azure.com/agent/4.255.0/vsts-agent-linux-x64-4.255.0.tar.gz;tar -zxvf vstsagent.tar.gz; if [ -x "$(command -v systemctl)" ]; then ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token FGUGxbsi3BkFOz1UYFHsNhpdjH4qx3dGGmSsmwnMZeRteBlckVvTJQQJ99BFACAAAAABmc7YAAASAZDO1IEd --runasservice; sudo ./svc.sh install; sudo ./svc.sh start; else ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token FGUGxbsi3BkFOz1UYFHsNhpdjH4qx3dGGmSsmwnMZeRteBlckVvTJQQJ99BFACAAAAABmc7YAAASAZDO1IEd; ./run.sh; fi
+```
+
+
 
 
 
@@ -1221,11 +1787,10 @@ Configure proxy with `settings.xml`
 </settings>
 ```
 
-## Install Node on Amazon Linux 2
-
-```dockerfile
-
-```
+## 
 
 
 
+
+
+[^1]: [Configure schedules to run pipelines - Azure Pipelines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/scheduled-triggers?view=azure-devops&tabs=yaml#scheduled-runs-view)
