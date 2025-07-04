@@ -711,6 +711,7 @@ You can save the docker generated artifacts as follows:
 
 Here the azure-pipelines.yml:
 
+{% raw %}
 ```yaml
 trigger:
  - main
@@ -897,6 +898,7 @@ stages:
         publishLocation: 'pipeline'
       displayName: 'Publish multi-arch Docker artifact'
 ```
+{% endraw %}
 
 ### Template for Dockerfiles
 
@@ -1020,6 +1022,7 @@ stages:
 
 templates/docker-build-template.yml:
 
+{% raw %}
 ```yaml
 parameters:
   # Required parameters
@@ -1172,7 +1175,7 @@ jobs:
       if [ -n "${{ parameters.testCommand }}" ] && [ "${{ parameters.testCommand }}" != "none" ]; then
         echo "Running test command: ${{ parameters.testCommand }}"
         docker run --rm $(fullImageName) ${{ parameters.testCommand }} || {
-          echo "⚠️ Test command failed, but continuing build..."
+          echo "Test command failed, but continuing build..."
         }
       fi
       
@@ -1314,7 +1317,7 @@ jobs:
     displayName: 'Clean up Docker images'
     condition: always()
 ```
-
+{% endraw %}
 ### Enable logs in the Azure DevOps pipeline
 
 Add the following steps to the pipeline
@@ -1787,10 +1790,5 @@ Configure proxy with `settings.xml`
 </settings>
 ```
 
-## 
 
-
-
-
-
-[^1]: [Configure schedules to run pipelines - Azure Pipelines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/scheduled-triggers?view=azure-devops&tabs=yaml#scheduled-runs-view)
+[^1]: [Configure schedules to run pipelines](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/scheduled-triggers?view=azure-devops&tabs=yaml#scheduled-runs-view)

@@ -41,7 +41,15 @@ To list all the files, including subdirectories, that contain the phrase:
 find . -name "*.md" -exec grep -l "MSK" {} \;
 ```
 
-### redirection
+Find all the Makefiles and sort them in ascending order:
+
+```bash
+find /path/to/search -name "Makefile" 2>/dev/null | xargs ls -ltrT | awk '{print $6, $7, $8, $9, $10}'
+```
+
+
+
+### Redirection
 
 Here the command to redirect the console:
 
