@@ -1,5 +1,5 @@
-# Use Ruby 3.0 for better Jekyll compatibility
-FROM ruby:3.0
+# Use Ruby 3.1 for better Jekyll compatibility
+FROM ruby:3.1
 
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y \
@@ -13,27 +13,38 @@ RUN apt-get update -qq && apt-get install -y \
 # Set the working directory
 WORKDIR /app
 
-# Install bundler
-RUN gem install bundler:2.3.26
+# Install bundler (use a compatible version with github-pages)
+RUN gem install bundler:2.4.22
 
-# Configure bundle
-RUN bundle config set --local path 'vendor/bundle'
-RUN bundle config set --local without 'production'
+# Configure bundle to use a directory that won't be overridden by volume mounts
+RUN bundle config set --global path '/usr/local/bundle'
+RUN bundle config set --global without 'production'
 
-# Copy Gemfile and Gemfile.lock (if it exists) first for better caching
-COPY Gemfile* ./
+# Create a script to handle gem installation at runtime
+COPY <<EOF /usr/local/bin/entrypoint.sh
+#!/bin/bash
+set -e
 
-# Clear any existing lock file to avoid version conflicts
-RUN rm -f Gemfile.lock
+# Ensure we're in the app directory
+cd /app
 
-# Install gems
-RUN bundle install
+# Install gems if Gemfile exists and gems aren't already installed
+if [ -f Gemfile ]; then
+    echo "Installing gems..."
+    bundle check || bundle install
+fi
 
-# Note: We don't copy the rest of the app here since we're using volumes in docker-compose
-# The volume mount will provide the source code at runtime
+# Execute the main command
+exec "\$@"
+EOF
+
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose ports
 EXPOSE 4000 35729
+
+# Use the entrypoint script
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Default command
 CMD ["bundle", "exec", "jekyll", "serve", "--host", "0.0.0.0", "--livereload", "--force_polling"]
