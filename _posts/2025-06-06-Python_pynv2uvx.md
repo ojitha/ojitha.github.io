@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  UVX is better than Pyenv for Python
+title:  UV is better than Pyenv for Python
 date:   2025-06-06
 categories: [Python]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
