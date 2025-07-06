@@ -96,16 +96,10 @@ if you are still need to keep pyenv and need to use uv:
 pip install uv
 ```
 
-On Mac or Windows OS:
+On MacOS:
 
 ```bash
-# 2. INSTALL PYTHON 3.10.1
-# -------------------------
-# uv automatically downloads and manages Python versions
-uv python install 3.10.1
-
-# List available Python versions
-uv python list
+brew install uv
 ```
 
 List installed Python versions
@@ -121,6 +115,10 @@ For example,
 1. Installing Python 3.10.1: This downloads and installs Python 3.10.1 automatically. uv manages the installation location and makes it available for your projects.
 
     ```bash
+    # List available Python versions
+    uv python list
+    
+    # INSTALL PYTHON 3.10.1
     uv python install 3.10.1
     ```
 
