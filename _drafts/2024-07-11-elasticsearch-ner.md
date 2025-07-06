@@ -172,7 +172,7 @@ POST _ml/trained_models/elastic__distilbert-base-uncased-finetuned-conll03-engli
 [Download](https://github.com/elastic/stack-docs/blob/8.5/docs/en/stack/ml/nlp/data/les-miserables-nd.json) the novel text split by paragraph as a JSON file, then upload it by using the [Data Visualizer](https://www.elastic.co/guide/en/kibana/8.10/connect-to-elasticsearch.html#upload-data-kibana). Give the new index the name `book` when uploading the file.
 
 create the pipeline
-
+{% raw %}
 ```json
 PUT _ingest/pipeline/ner
 {
@@ -231,11 +231,6 @@ POST _reindex
   }
 }
 ```
-
-
-
-
-
-
+{% endraw %}
 
 [^1]: [How to deploy named entity recognition](https://www.elastic.co/guide/en/machine-learning/current/ml-nlp-ner-example.html#ml-nlp-ner-example)
