@@ -1,4 +1,4 @@
-# Use Ruby 3.1 for better Jekyll compatibility
+# Tested for the ruby:3.3.4
 FROM ruby:3.1
 
 # Install dependencies

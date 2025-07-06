@@ -1,6 +1,6 @@
 ---
 layout: post
-title: SSO with Nginx, ADFS, and Elasticsearch PKI in Docker
+title: Nginx SSO for Elasticsearch to use ADFS
 date: 2023-11-24
 categories: [ELK]
 mermaid: true

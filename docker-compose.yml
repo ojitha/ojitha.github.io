@@ -12,7 +12,7 @@ services:
     environment:
       - JEKYLL_ENV=development
       - BUNDLE_PATH=/app/vendor/bundle
-    command: bundle exec jekyll serve --host 0.0.0.0 --livereload --force_polling --incremental
+    command: bundle exec jekyll serve --host 0.0.0.0 --livereload --force_polling --incremental --drafts
 
 
 volumes:
