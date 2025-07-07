@@ -1063,8 +1063,8 @@ This section outlines the steps to deploy the POC and verify its functionality, 
 
     - Fill in all the environment variables as specified in Table 1 (Section 4), replacing placeholder values with your actual ADFS credentials, domain, and generated secrets. For `OAUTH2_PROXY_COOKIE_SECRET`, use a command like `openssl rand -base64 32` to generate a secure value. For `KIBANA_ENCRYPTION_KEY`, generate a random 32-character alphanumeric string.
 
-        ```ini
-        # OIDC Configuration (Using Keycloak for POC)
+```ini
+# OIDC Configuration (Using Keycloak for POC)
 # Note: These environment variables retain 'ADFS' prefix for compatibility
 # but actually point to Keycloak endpoints
 ADFS_CLIENT_ID="mock-client-id-12345"
@@ -1075,21 +1075,21 @@ ADFS_AUTH_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/a
 ADFS_TOKEN_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/token"
 ADFS_JWKS_URL="http://192.168.1.139:8080/realms/master/protocol/openid-connect/certs"
         
-        # Kibana and Nginx Domain Configuration
-        KIBANA_DOMAIN="localhost"
-        KIBANA_BASE_PATH="/kibana" # Note: Currently not used in nginx configuration
+# Kibana and Nginx Domain Configuration
+KIBANA_DOMAIN="localhost"
+KIBANA_BASE_PATH="/kibana" # Note: Currently not used in nginx configuration
         
-        # OAuth2 Proxy Configuration
-        OAUTH2_PROXY_COOKIE_SECRET="WoJtEJJBe5jlBvvnHSKjJ8s2wjAqFLaH3VOFbLJztug="
-        
-        # Elasticsearch and Kibana Passwords/Keys
-        ELASTIC_PASSWORD="elasticpassword123"
-        KIBANA_ENCRYPTION_KEY="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
-        ES_PKI_TRUSTSTORE_PASSWORD="truststorepassword123"
-        
-        # Elastic Stack Version
-        ELASTIC_VERSION="8.13.0"
-        ```
+# OAuth2 Proxy Configuration
+OAUTH2_PROXY_COOKIE_SECRET="WoJtEJJBe5jlBvvnHSKjJ8s2wjAqFLaH3VOFbLJztug="
+
+# Elasticsearch and Kibana Passwords/Keys
+ELASTIC_PASSWORD="elasticpassword123"
+KIBANA_ENCRYPTION_KEY="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
+ES_PKI_TRUSTSTORE_PASSWORD="truststorepassword123"
+
+# Elastic Stack Version
+ELASTIC_VERSION="8.13.0"
+```
 
 
 ​        
