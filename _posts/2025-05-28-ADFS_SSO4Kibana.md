@@ -1,16 +1,17 @@
 ---
 layout: post
 title: Implementing ADFS SSO for Kibana with Nginx & Elasticsearch
-date: 2023-11-24
+date: 2024-11-24
 categories: [ELK]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-Struggling to secure your open-source Kibana? This post offers a robust solution. Implement Single Sign-On (SSO) to Kibana using Nginx as a reverse proxy.
+| ![NginxSSOElastic](./assets/images/2025-05-28-ADFS_SSO4Kibana/NginxSSOElastic.png) | Struggling to secure your open-source Kibana? This post offers a robust solution. Implement Single Sign-On (SSO) to Kibana using Nginx as a reverse proxy. Integrate seamlessly with Keycloak as an OpenID Connect provider for centralised authentication. Fortify your Elastic Stack with Public Key Infrastructure (PKI) certificates. Ensure secure Kibana-to-Elasticsearch communication. All components are containerised and orchestrated with Docker Compose for easy deployment. Enhance security, streamline user access, and leverage existing AD infrastructure. A must-read for engineers seeking enterprise-grade Kibana security. Transform your data visualisation with uncompromised access control. |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 
-Integrate seamlessly with Keycloak as an OpenID Connect provider for centralised authentication. Fortify your Elastic Stack with Public Key Infrastructure (PKI) certificates. Ensure secure Kibana-to-Elasticsearch communication. All components are containerised and orchestrated with Docker Compose for easy deployment. Enhance security, streamline user access, and leverage existing AD infrastructure. A must-read for engineers seeking enterprise-grade Kibana security. Transform your data visualisation with uncompromised access control.
+
 
 <!--more-->
 
