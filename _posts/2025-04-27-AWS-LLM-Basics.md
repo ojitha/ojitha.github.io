@@ -8,9 +8,60 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-Dive into the essentials of Large Language Models (LLMs) and Foundation Models (FMs) on Amazon Web Services (AWS). This guide explores leveraging AWS Bedrock and related services for building and interacting with powerful generative AI models. 
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
 
-Learn about key concepts including prompt engineering, fine-tuning techniques like prompt-based learning and domain adaptation, and managing inference parameters such as Temperature, Top K, and Top P. Discover how to utilise AWS FM APIs. This post provides the foundational knowledge required to get started with LLMS on AWS. The [second part]({% post_url 2025-05-01-AWS-LLM-langchain %}) describes how to use LangChain with AWS Bedrock.
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+/* Ensure image is responsive and centered within its column */
+.image-column img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Removes extra space below image */
+    margin: 0 auto; /* Centers the image if it's smaller than its column */
+}
+
+/* For smaller screens, stack the columns */
+@media (max-width: 768px) {
+    .image-text-container {
+        flex-direction: column; /* Stacks items vertically */
+    }
+    .image-column, .text-column {
+        max-width: 100%; /* Take full width when stacked */
+        min-width: unset; /* Remove min-width constraint when stacked */
+    }
+}
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2025-04-27-AWS-LLM-Basics/AWS_LLM_Basics.png" alt="ADFS SSO for Kibana Diagram">
+    </div>
+    <div class="text-column">
+<p>Dive into the essentials of Large Language Models (LLMs) and Foundation Models (FMs) on Amazon Web Services (AWS). This guide explores leveraging AWS Bedrock and related services for building and interacting with powerful generative AI models. </P>
+<p>Learn about key concepts including prompt engineering, fine-tuning techniques like prompt-based learning and domain adaptation, and managing inference parameters such as Temperature, Top K, and Top P. Discover how to utilise AWS FM APIs. This post provides the foundational knowledge required to get started with LLMS on AWS.</p>
+    </div>
+</div>
+
+📚  The [second part]({% post_url 2025-05-01-AWS-LLM-langchain %}) describes how to use LangChain with AWS Bedrock.
 
 <!--more-->
 

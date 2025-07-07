@@ -73,7 +73,7 @@ This second part describes how to integrate LangChain with AWS Bedrock to build 
 
 
 
-![AWS_LC_cartoon](/assets/images/2025-05-01-AWS-LLM-langchain/AWS_LC_cartoon.png)LangChain can integrate large language models (LLMS) with other sources of data. LangChain Expression Language, or LCEL[^4], is a declarative way to compose chains together easily. LangChain integrations are:
+LangChain can integrate large language models (LLMS) with other sources of data. LangChain Expression Language, or LCEL[^4], is a declarative way to compose chains together easily. LangChain integrations are:
 
 - models
 - Prompt templates
