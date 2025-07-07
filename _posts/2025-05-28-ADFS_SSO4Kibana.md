@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Nginx SSO for Elasticsearch to use ADFS
+title: Implementing ADFS SSO for Kibana with Nginx & Elasticsearch: A Comprehensive Guide
 date: 2023-11-24
 categories: [ELK]
 mermaid: true
