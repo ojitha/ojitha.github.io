@@ -7,7 +7,61 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-UV is an excellent alternative to Pyenv, though they serve slightly different purposes. I have been using pyenv for more than 10 years. Is this the time for the alternative? It is important to note that UV doesn't support Python 3.
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
+
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+/* Ensure image is responsive and centered within its column */
+.image-column img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Removes extra space below image */
+    margin: 0 auto; /* Centers the image if it's smaller than its column */
+}
+
+
+
+/* For smaller screens, stack the columns */
+@media (max-width: 768px) {
+    .image-text-container {
+        flex-direction: column; /* Stacks items vertically */
+    }
+    .image-column, .text-column {
+        max-width: 100%; /* Take full width when stacked */
+        min-width: unset; /* Remove min-width constraint when stacked */
+    }
+}
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2025-06-06-Python_pynv2uvx/UVvsPyenv.png" alt="ADFS SSO for Kibana Diagram" width="100" height="100">
+    </div>
+    <div class="text-column">
+<p>UV is an excellent alternative to Pyenv, though they serve slightly different purposes. I have been using pyenv for more than 10 years. Is this the time for the alternative? It is important to note that UV doesn't support Python 3.</p>
+    </div>
+</div>
+
+
 
 <!--more-->
 
