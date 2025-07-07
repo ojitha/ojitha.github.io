@@ -57,7 +57,7 @@ typora-copy-images-to: ../assets/images/${filename}
         <img src="/assets/images/2025-06-06-Python_pynv2uvx/UVvsPyenv.png" alt="ADFS SSO for Kibana Diagram" width="100" height="100">
     </div>
     <div class="text-column">
-<p>UV is an excellent alternative to Pyenv, though they serve slightly different purposes. I have been using pyenv for more than 10 years. Is this the time for the alternative? It is important to note that UV doesn't support Python 3.</p>
+<p>UV is an excellent alternative to Pyenv, though they serve slightly different purposes. I have been using pyenv for more than 10 years. Is this the time for the alternative? It is important to note that UV doesn't support Python 2.*.</p>
     </div>
 </div>
 
