@@ -1,13 +1,13 @@
 ---
 layout: post
 title:  Azure DevOps pipeline to deploy Kibana
-date:   2025-01-01
+date:   2025-05-10
 categories: [Azure, Elastic]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-Breif introduction
+This guide provides a comprehensive walkthrough for deploying an Elasticsearch application on an Azure Virtual Machine using an automated Azure DevOps pipeline. The process is broken down into four main parts: Azure VM Setup, Azure DevOps Pipeline Setup, Troubleshooting and Optimisation, and Security Recommendations.
 
 <!--more-->
 
@@ -30,7 +30,7 @@ brew install azure-cli
 az login
 ```
 
-Lets create the resources group
+Let's create the resources group
 
 ```bash
 az group create \
@@ -130,8 +130,6 @@ Azure NSG rules need unique priorities between **100-4096**:
 | 300-999   | Standard services                         |
 | 1000-1999 | Common services (SSH typically uses 1000) |
 | 2000-4096 | Low priority rules                        |
-
-
 
 Get VM Details
 
@@ -254,7 +252,7 @@ az vm show -d \
 2. Click **Create Pipeline**
 3. Choose **Azure Repos Git** (or your repo location)
 4. Select your repository
-5. Choose **Existing Azure Pipelines YAML file**
+5. Choose an **Existing Azure Pipelines YAML file**
 6. Select `/azure-pipelines.yml`
 7. Click **Continue**
 
