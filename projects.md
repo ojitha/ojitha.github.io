@@ -17,7 +17,9 @@ async function loadGitHubProjects() {
     const repos = await response.json();
     
     const excludeList = ['ojitha.github.io', 'blog'];
-    const publicRepos = repos.filter(repo => !repo.fork && !excludeList.includes(repo.name));
+    const publicRepos = repos
+      .filter(repo => !repo.fork && !excludeList.includes(repo.name))
+      .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
     
     let tableHTML = `
       <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
@@ -25,6 +27,7 @@ async function loadGitHubProjects() {
           <tr style="background-color: #f8f9fa;">
             <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Project</th>
             <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Description</th>
+            <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Created</th>
           </tr>
         </thead>
         <tbody>
@@ -32,12 +35,14 @@ async function loadGitHubProjects() {
     
     publicRepos.forEach(repo => {
       const description = repo.description || 'No description available';
+      const createdDate = new Date(repo.created_at).toLocaleDateString();
       tableHTML += `
         <tr>
           <td style="border: 1px solid #dee2e6; padding: 12px;">
             <a href="${repo.html_url}" target="_blank" style="color: #007bff; text-decoration: none;">${repo.name}</a>
           </td>
           <td style="border: 1px solid #dee2e6; padding: 12px;">${description}</td>
+          <td style="border: 1px solid #dee2e6; padding: 12px;">${createdDate}</td>
         </tr>
       `;
     });
