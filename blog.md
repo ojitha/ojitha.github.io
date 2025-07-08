@@ -4,23 +4,26 @@ title: Tags
 permalink: /blog/
 ---
 
-## Tech
-My official tech [blog](https://ojitha.blogspot.com.au):
+<style>
+.folder-category {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  position: relative;
+}
+.folder-category::before {
+  content: "📁";
+  margin-right: 8px;
+}
+</style>
 
-- [Mac keyboard shortcut to copy file path as markdown](https://ojitha.blogspot.com/2020/06/macos-quick-action-to-copy-markdown.html)
-- [How to create step guides](https://ojitha.blogspot.com/2020/05/annotated-screenshot-in-mac-preview.html)
-- [Toolbox for bloggers](https://ojitha.blogspot.com/2020/05/animated-gif-for-blogger.html)
-- [Python my workflow](https://ojitha.blogspot.com/2020/05/python-my-workflow.html)
-- [MAC shortcuts](https://ojitha.blogspot.com/2020/04/mac-shortcuts.html)
-
-are the recent blogs.
-
-## GitHub
-My [GitHub](https://github.com/ojitha) blogs:
+å
 {% assign sorted = site.categories | sort: name  %}
 {% for category in sorted %}
 
-<h3>{{ category[0] }}</h3>
+<h3 class="folder-category">{{ category[0] }}</h3>
 <ul>
     {% for post in category[1] %}
       <li><a href="{{ post.url }}">{{ post.title }}</a></li>
