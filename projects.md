@@ -16,7 +16,7 @@ async function loadGitHubProjects() {
     const response = await fetch('https://api.github.com/users/ojitha/repos?type=public&sort=updated&per_page=100');
     const repos = await response.json();
     
-    const excludeList = ['ojitha.github.io', 'blog'];
+    const excludeList = ['ojitha.github.io', 'blog','JSFEx1'];
     const publicRepos = repos
       .filter(repo => !repo.fork && !excludeList.includes(repo.name))
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
