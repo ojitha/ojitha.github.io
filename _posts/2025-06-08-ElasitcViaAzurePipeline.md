@@ -54,7 +54,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 <div class="image-text-container">
     <div class="image-column">
-        <img src="/assets/images/2025-06-08-ElasitcViaAzurePipeline/AzureDevOps4Elasticsearch.png" alt="Azure pipeline to deploy Elasticsearch" width="150" height="150">
+        <img src="/assets/images/2025-06-08-ElasitcViaAzurePipeline/AzureDevOps4Elasticsearch.png" alt="Azure pipeline to deploy Elasticsearch" width="200" height="200">
     </div>
     <div class="text-column">
 <p>This guide provides a comprehensive walkthrough for deploying an Elasticsearch application on an Azure Virtual Machine using an automated Azure DevOps pipeline. The process is broken down into four main parts: Azure VM Setup, Azure DevOps Pipeline Setup, Troubleshooting and Optimisation, and Security Recommendations.</p>
