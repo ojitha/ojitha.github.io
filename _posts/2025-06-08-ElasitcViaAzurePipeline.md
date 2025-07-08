@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  Azure DevOps pipeline to deploy Kibana
+title:  Azure DevOps pipeline to deploy Elasticsearch
 date:   2025-06-08
-categories: [Azure, Elastic]
+categories: [Azure, ELK]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
