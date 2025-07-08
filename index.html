@@ -1,6 +1,48 @@
 ---
 layout: default
 ---
+
+<style>
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.pagination a, .pagination span {
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.pagination a {
+  background-color: #007bff;
+  color: white;
+  border: 2px solid #007bff;
+}
+.pagination a:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px);
+}
+.pagination .page_number {
+  background-color: white;
+  color: #495057;
+  border: 2px solid #dee2e6;
+  font-weight: 600;
+}
+.pagination span:not(.page_number) {
+  color: #adb5bd;
+  border: 2px solid #e9ecef;
+  background-color: #f8f9fa;
+}
+</style>
 <!-- <div style="background-color: #e7f3fe; border-left: 6px solid #2196F3;"> 
   This is my tech workbook. Please visit <a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a> for my official Tech blog.</div> -->
   <p style="background-color:#fff6e4; padding:15px; border-width:3px; border-color:#f5ecda; border-style:solid; border-radius:6px"> 📝 <b>Research :<code><a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a></code></b> for my lengthy articles.</p>
@@ -23,17 +65,16 @@ layout: default
 
 <!-- Pagination links -->
 
-<div class="pagination" style="text-align: center;">
-  <div style="color:#eee;padding-bottom: .6em;">~</div>
+<div class="pagination">
   {% if paginator.previous_page %}
-    <a href="{{ paginator.previous_page_path }}" class="previous">⇦</a>
+    <a href="{{ paginator.previous_page_path }}" class="previous">⇦ Previous</a>
   {% else %}
-    <span class="previous" style="color:#eee">⇦</span>
+    <span class="previous">⇦ Previous</span>
   {% endif %}
-  <span class="page_number ">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+  <span class="page_number">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
   {% if paginator.next_page %}
-    <a href="{{ paginator.next_page_path }}" class="next">⇨</a>
+    <a href="{{ paginator.next_page_path }}" class="next">Next ⇨</a>
   {% else %}
-    <span class="next" style="color:#eee">⇨</span>
+    <span class="next">Next ⇨</span>
   {% endif %}
 </div>
