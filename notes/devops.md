@@ -15,7 +15,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 ---
 
-Here the important commands and information collected while programming. Test
+Here the important commands and information collected while programming. 
 
 ## AWS DevOps
 
