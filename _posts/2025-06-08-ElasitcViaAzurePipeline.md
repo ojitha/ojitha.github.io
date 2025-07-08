@@ -1,13 +1,68 @@
 ---
 layout: post
 title:  Azure DevOps pipeline to deploy Kibana
-date:   2025-05-10
+date:   2025-06-08
 categories: [Azure, Elastic]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-This guide provides a comprehensive walkthrough for deploying an Elasticsearch application on an Azure Virtual Machine using an automated Azure DevOps pipeline. The process is broken down into four main parts: Azure VM Setup, Azure DevOps Pipeline Setup, Troubleshooting and Optimisation, and Security Recommendations.
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
+
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+/* Ensure image is responsive and centered within its column */
+.image-column img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Removes extra space below image */
+    margin: 0 auto; /* Centers the image if it's smaller than its column */
+}
+
+
+
+/* For smaller screens, stack the columns */
+@media (max-width: 768px) {
+    .image-text-container {
+        flex-direction: column; /* Stacks items vertically */
+    }
+    .image-column, .text-column {
+        max-width: 100%; /* Take full width when stacked */
+        min-width: unset; /* Remove min-width constraint when stacked */
+    }
+}
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2025-06-08-ElasitcViaAzurePipeline/AzureDevOps4Elasticsearch.png" alt="Azure pipeline to deploy Elasticsearch" width="150" height="150">
+    </div>
+    <div class="text-column">
+<p>This guide provides a comprehensive walkthrough for deploying an Elasticsearch application on an Azure Virtual Machine using an automated Azure DevOps pipeline. The process is broken down into four main parts: Azure VM Setup, Azure DevOps Pipeline Setup, Troubleshooting and Optimisation, and Security Recommendations.</p>
+    </div>
+</div>
+
+
+
 
 <!--more-->
 
@@ -475,7 +530,3 @@ For production, consider:
 3. **Custom domain** for better branding
 
 
-
-Contents goes here[^1]...
-
-[^1]: Fluent Python, 2nd Edition, Luciano Ramalho, [Chapter 7](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch07.html#attrgetter_demo)
