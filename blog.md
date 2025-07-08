@@ -17,11 +17,20 @@ permalink: /blog/
   content: "📁";
   margin-right: 8px;
 }
+.tag-navigation {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  padding: 16px;
+  margin: 16px 0;
+}
 </style>
 
-## Quick Navigation
-{% assign sorted = site.categories | sort: name  %}
-{% for category in sorted %}<a href="#{{ category[0] | slugify }}" style="display: inline; padding: 4px 8px; margin: 2px; background-color: #e9ecef; border-radius: 4px; text-decoration: none; color: #495057;">#{{ category[0] }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}
+<div class="tag-navigation">
+  <strong>Click to quick navigate:</strong><br>
+  {% assign sorted = site.categories | sort: name  %}
+  {% for category in sorted %}<a href="#{{ category[0] | slugify }}" style="display: inline; padding: 4px 8px; margin: 2px; background-color: #e9ecef; border-radius: 4px; text-decoration: none; color: #495057;">#{{ category[0] }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}
+</div>
 
 {% assign sorted = site.categories | sort: name  %}
 {% for category in sorted %}
