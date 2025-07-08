@@ -19,11 +19,12 @@ permalink: /blog/
 }
 </style>
 
-å
+
+
 {% assign sorted = site.categories | sort: name  %}
 {% for category in sorted %}
 
-<h3 class="folder-category">{{ category[0] }}</h3>
+<h4 class="folder-category">{{ category[0] }}</h4>
 <ul>
     {% for post in category[1] %}
       <li><a href="{{ post.url }}">{{ post.title }}</a></li>
