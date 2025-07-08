@@ -4,28 +4,56 @@ title: GitHub
 permalink: /projects/
 ---
 
-Here ae some of emy projects in the [GItHub](https://github.com/ojitha).
+Here are my public projects from [GitHub](https://github.com/ojitha):
 
-|Project| Description |
-|--|--|
-| [learning_angularjs](https://github.com/ojitha/learning_angularjs) | Source for the [AngularJs Basics](https://ojitha.blogspot.com/2020/05/angularjs-basics.html) |
-| [JPAEx1](https://github.com/ojitha/JPAEx1) | Source for the [JPA Part 1: Embedded Classes](https://ojitha.blogspot.com/2013/07/jpa-part-1-embedded-classes.html) |
-|  | Source for the [JPA Part 2: Identifier Generation (PK)](https://ojitha.blogspot.com/2013/07/jpa-part2-identifier-generation-pk.html) |
-|  | Source for the [JPA Part 3: Basic Relationships](https://ojitha.blogspot.com/2013/07/jpa-part-3-basic-relationships.html) |
-|  | Source for the [JPA Part 4: Attribute Overrides](https://ojitha.blogspot.com/2013/07/jpa-part-4-attribute-overrides.html) |
-| [eafirst](https://github.com/ojitha/eafirst) | Source for the [JAX-RS access via JSON using jQuery](https://ojitha.blogspot.com/2013/07/jax-rs-access-via-json-using-jquery.html) |
-|  | Source for the [JSF 2.0 Ajax](https://ojitha.blogspot.com/2013/07/jsf-20-ajax.html) |
-|  | Source for the [Java EE 7 enterprise application development tutorial using Eclipse Kepler and GlassFish 4](https://ojitha.blogspot.com/2013/07/java-enterprise-application-development.html) |
-| [JavaLambdaExamples](https://github.com/ojitha/JavaLambdaExamples) | Source for the [Intellij Idea Gradle project](https://ojitha.blogspot.com/2018/08/intellij-idea-gradle-project.html)ub.com/ojitha/Spring |
-| [spring3part10](https://github.com/ojitha/spring3part10) | Source for the [Spring 3 Part 10: Java Web development with AngularJS](https://ojitha.blogspot.com/2016/04/java-web-development-with-angularjs.html) |
-| [spring3part9](https://github.com/ojitha/spring3part9) | Source for the [Spring 3 Part 9: Spring Security LDAP integration](https://ojitha.blogspot.com/2016/05/spring-3-part-9-spring-security-ldap.html) |
-| [spring3part8](https://github.com/ojitha/spring3part8) | Source for the [Spring 3 Part 8: Spring Hibernate open session in view](https://ojitha.blogspot.com/2013/05/spring-3-part-8-spring-hibernate-open.html) |
-| [spring3part7](https://github.com/ojitha/spring3part7) | Source for the [Spring 3 Part 7: Spring with Databases](https://ojitha.blogspot.com/2013/04/spring-3-part-7-spring-with-databases.html) |
-| [spring3-part6](https://github.com/ojitha/spring3-part6) | Source for the [Spring 3 part 6: Spring AOP](https://ojitha.blogspot.com/2013/03/spring-3-part-6-spring-aop.html) |
+<div id="projects-container">
+  <p>Loading projects...</p>
+</div>
 
+<script>
+async function loadGitHubProjects() {
+  try {
+    const response = await fetch('https://api.github.com/users/ojitha/repos?type=public&sort=updated&per_page=100');
+    const repos = await response.json();
+    
+    const excludeList = ['ojitha.github.io', 'blog'];
+    const publicRepos = repos.filter(repo => !repo.fork && !excludeList.includes(repo.name));
+    
+    let tableHTML = `
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <thead>
+          <tr style="background-color: #f8f9fa;">
+            <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Project</th>
+            <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+    
+    publicRepos.forEach(repo => {
+      const description = repo.description || 'No description available';
+      tableHTML += `
+        <tr>
+          <td style="border: 1px solid #dee2e6; padding: 12px;">
+            <a href="${repo.html_url}" target="_blank" style="color: #007bff; text-decoration: none;">${repo.name}</a>
+          </td>
+          <td style="border: 1px solid #dee2e6; padding: 12px;">${description}</td>
+        </tr>
+      `;
+    });
+    
+    tableHTML += `
+        </tbody>
+      </table>
+      <p style="color: #6c757d; font-size: 0.9em;">Total: ${publicRepos.length} public repositories</p>
+    `;
+    
+    document.getElementById('projects-container').innerHTML = tableHTML;
+  } catch (error) {
+    document.getElementById('projects-container').innerHTML = '<p style="color: #dc3545;">Error loading projects. Please try again later.</p>';
+  }
+}
 
-> Written with [StackEdit](https://stackedit.io/).
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwOTI3NTcwODEsLTEwNTYxMjg1MTddfQ
-==
--->
+loadGitHubProjects();
+</script>
+
