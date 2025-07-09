@@ -26,8 +26,14 @@ Processing taks:
 1. Handling missing values
 2. Scaling and normalizing data
 3. Encoding categorical varaibles
+4. Address outliers
+5. Anomalous samples
+6. Feature summary (definition and statistics MSE, MAE, RMSE and median absolute error)
 
 For efficent data formats like Parquet or RecordIO for large dataset has to be used.
+
+- To handle large datasets in S3, use *Pipe Mode*.
+- To preprocess data without exporting it, Data Wrangler supports *in-place* transformation.
 
 > To access S3 from Data Wrangler you need to associate IAM policy with Data Wrangler which allow to access data in the S3 bucket: <span>assume as</span>{:gtxt} IAM role.
 {:.yellow}
@@ -40,4 +46,4 @@ Contents goes here[^1]...
 
 
 
-[^1]: Fluent Python, 2nd Edition, Luciano Ramalho, [Chapter 7](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch07.html#attrgetter_demo)
+[^1]: [Machine Learning with SageMaker](https://learning.oreilly.com/course/machine-learning-with/9780135479452/)
