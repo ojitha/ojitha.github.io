@@ -44,6 +44,7 @@ There are three different operations at the level of Data Frames:
 3. Property: Depending on the context, the property can be either action or transformation.
 
 > Spark keeps a lineage graph (DAG) of all transformations requested of the data.
+{:.green}
 
 ## Spark SQL
 

@@ -201,7 +201,7 @@ Only the words are selected.
 This has been created to simplify the character classes. The syntax is `[[:CLASS:]]`. Use the `^` as the complement `[[:^CLASS:]]`.
 
 > Only Perl regex supports the following classes.
->
+
 > Use `Perl` in the macOS terminal
 
 | Posix   | Characte Class | Description        |

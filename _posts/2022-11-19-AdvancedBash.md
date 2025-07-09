@@ -492,6 +492,7 @@ echo who without default: $who
 
 
 if you want to set the default to the `who` variable (use `:=`).
+
 > Positional parameters and special parameters may not be assigned in this way.
 
 

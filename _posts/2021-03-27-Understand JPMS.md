@@ -16,6 +16,7 @@ As shown in the above diagram, there are three modules, Application, Service and
 <!--more-->
 
 > NOTE: Sorry about the violation of the module naming convention to simplify this example.
+{:.yellow}
 
 ------
 
@@ -120,6 +121,7 @@ This is all about module dependencies such as
 - `version`: version of the module which is required for version control of modules.
 
 > NOTE: Circular module dependencies are not allowed.
+{:.yellow}
 
 ## Dynamic Discovery of implementation
 
@@ -228,5 +230,6 @@ Hello/bin/Hello
 
 Application load is quicker even because the dependencies between modules, missing modules and other errors can be verified before starting the application.
 
-> NOTE: Modules are load from the module-path instead of the class-path. 
+> NOTE: Modules are load from the module-path instead of the class-path.
+{:.yellow} 
 

@@ -191,6 +191,7 @@ Here the inbound of the default ACL:
 As [AWS][aws_doc]{:target="_blank"} stated:
 
 > The default network ACL is configured to allow all traffic to flow in and out of the subnets with which it is associated. Each network ACL also includes a rule whose rule number is an asterisk. This rule ensures that if a packet doesn't match any of the other numbered rules, it's denied. You can't modify or remove this rule.
+{:.green}
 
 Here the custom ACL to create: 
 

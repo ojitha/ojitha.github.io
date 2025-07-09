@@ -336,7 +336,8 @@ PUT fruits/_doc/1
 }
 ```
 
-> Warning: The `_doc` endpoing will overwrite the existing document.
+> ⚠️ The `_doc` endpoing will overwrite the existing document.
+{:.yellow}
 
 Get the added document:
 
@@ -888,6 +889,7 @@ PUT employees
 ```
 
 > However, note that by default every object in Elasticsearch is an `object` type, so this declaration is redundant.
+{:.yellow}
 
 Document samples:
 

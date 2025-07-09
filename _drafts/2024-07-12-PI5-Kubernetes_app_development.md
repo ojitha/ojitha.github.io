@@ -87,6 +87,7 @@ To delete
 ![Delete the deployment](./assets/images/2024-07-12-PI5-Kubernetes_app_development/Delete the deployment.png)
 
 > NOTE: You must specify the namespace if it differs from the `default`.
+{:.yellow}
 
 
 

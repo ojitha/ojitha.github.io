@@ -296,6 +296,7 @@ Enabling `delegation.enabled: true` is important. While the immediate goal is Ki
 A `truststore` or `certificate_authorities` must also be configured within the PKI realm. This explicitly tells Elasticsearch which Certificate Authorities it should trust when validating incoming client certificates for PKI authentication. In this setup, it will point to the `ca.crt` generated earlier, ensuring that Kibana's certificate (signed by this CA) is trusted.
 
 > If the truststore is password-protected, the password must be added to the Elasticsearch keystore.
+{:.yellow}
 
 Furthermore, `xpack.security.authc.token.enabled` must be set to `true` for token-based authentication and PKI delegation to function correctly. 
 

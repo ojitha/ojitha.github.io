@@ -185,8 +185,10 @@ sql("select * from movies").show()
     
 
 
-Show the available datases. You will ge the `default` database as well. 
+Show the available datases. You will ge the `default` database as well.
+
 > NOTE: The `default` database cannot be created or deleted.
+{:.yellow}
 
 
 ```scala

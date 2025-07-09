@@ -234,6 +234,7 @@ aws cloudformation validate-template --template-body file://vpc-example-1.yaml
 If there are no errors, create the stack. 
 
 >  Remember to pass the parameters for the `x.y` shown above.
+{:.yellow}
 
 ```bash
 aws cloudformation create-stack --template-body file://vpc-example-1.yaml --parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0  --stack-name oj-test-stack

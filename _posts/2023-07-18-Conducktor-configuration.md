@@ -211,6 +211,7 @@ pip3 install pyspark==3.0.0
 ```
 
 > If the PySpark version is incompatible with the Spark version, you will get a Py4J error.
+{:.yellow}
 
 You need environment variables `SPARK_HOME` and `PYTHONPATH` to run or debug the Python from the VSCode. Therefore, create a launch configuration. Here is my launch.json file:
 
@@ -242,6 +243,7 @@ You need environment variables `SPARK_HOME` and `PYTHONPATH` to run or debug the
 ```
 
 > You must find the correct `py4j-<version>--src.zip` file name by navigating to the `SPARK_HOME/python/lib`.
+{:.green}
 
 Use the above launch configuration to run the Python script.
 
@@ -261,6 +263,7 @@ spark.jars.packages                org.apache.spark:spark-sql-kafka-0-10_2.12:3.
  
 
 > If the configuration is not found, the error is `Failed to find data source: kafka.` will be generated. Alternatively, You can use `.config('spark.jars.packages','org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0)` in the spark configuration, but note recommended under the best practises.
+{:.yellow}
 
 This package is necessary to connect with Kafka in the runtime.
 

@@ -55,7 +55,7 @@ The FD diagram is
 
 
 > The large set of FDs can reduce the efficiency of database system. Generally an $$\left( FD\right) A\rightarrow B$$ is trivial, if and only if $$B\subseteq A$$. Only **non-trivial dependencies** are considered. 				
-> 									
+ 									
 
 For example, CART{order_number, order_date, item, item_qty, customer, address}.
 

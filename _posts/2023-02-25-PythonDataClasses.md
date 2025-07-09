@@ -213,6 +213,7 @@ dc
 This will generate the same output, but important point is `ClassVar` which hold the class variable, while `sizes` and `colors` are instance variables.
 
 > Both `NamedTuple` and docorator support [PEP 526 – Syntax for Variable Annotations](https://peps.python.org/pep-0526/)
+{:.green}
 
 
 
