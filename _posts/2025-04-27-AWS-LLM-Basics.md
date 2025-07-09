@@ -102,8 +102,8 @@ For example, Claude[^3] is a generative AI model by Anthropic. This is my favour
 - You can create a virtual assistant or a coaching application using Anthropic [*Claude Messages API*](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html){:target="_blank"} inference requests.
 - Text summorisation using the [*text completion API*](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-text-completion.html){:target="_blank"} for single-turn text generation
 
-Claude uses common parameters, such as temperature, Top P, Top K, and stop sequences.
-{:.tip}
+> Claude uses common parameters, such as temperature, Top P, Top K, and stop sequences.
+{:.green}
 
 In addition to that, Claude models use the following unique parameter to further tune the response output:
 
@@ -303,8 +303,8 @@ Apple Inc. is a multinational technology company headquartered in Cupertino, Cal
 - pointing the model toward a 👉*labelled dataset* of examples that you want the model to learn from. 
 - Labelled examples are formatted as prompt and response pairs and phrased as instructions. 
 
-The prompt-based fine-tuning process modifies the weights of the model. It is usually lightweight and involves a few epochs to tune. 
-{:.tip}
+> The prompt-based fine-tuning process modifies the weights of the model. It is usually lightweight and involves a few epochs to tune. 
+{:.green}
 
 Another way is **domain adaptation** fine-tuning. You can use pre-trained FMs and adapt them to multiple tasks using limited domain-specific data. In this case, you can fine-tune the FM with as little or as much of your domain-specific, 👉*unlabeled data* as you like.
 

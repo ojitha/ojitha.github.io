@@ -46,8 +46,7 @@ curl --request GET \
 
 If you are passing JWT, you must use `Authorization: Bearer`.
 
-GitHub recommends using the built-in `GITHUB_TOKEN` instead of creating a token (what I did above is not the recommended way).
-{:.warning}
+> GitHub recommends using the built-in `GITHUB_TOKEN` instead of creating a token (what I did above is not the recommended way).
 
 
 
@@ -897,8 +896,8 @@ if __name__ == "__main__":
 
 [^3]: [Wireshark · Display Filter Reference: Index](https://www.wireshark.org/docs/dfref/)
 
-[^4]: [tcpdump(1) man page | TCPDUMP & LIBPCAP](https://www.tcpdump.org/manpages/tcpdump.1.html)
+[^4]: [tcpdump man page \| TCPDUMP & LIBPCAP](https://www.tcpdump.org/manpages/tcpdump.1.html)
 
-[^5]: [Packet Monitor (Pktmon) | Microsoft Learn](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon)
+[^5]: [Packet Monitor (Pktmon) \| Microsoft Learn](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon)
 
-[^6]: [Pktmon command formatting | Microsoft Learn](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon-syntax)
+[^6]: [Pktmon command formatting \| Microsoft Learn](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon-syntax)

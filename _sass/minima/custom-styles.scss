@@ -19,10 +19,21 @@
 
 .post {
   blockquote {
-    background-color: #f0f2f5;
-    border-color: #1779ba;
-    color: #333;
+    background-color: var(--blockquote-bg-color, #f0f2f5);
+    border-color: var(--blockquote-border-color, #1779ba);
+    color: var(--blockquote-text-color, #333);
+  }
 
+  blockquote.green {
+    --blockquote-bg-color: #95ddb5;
+    --blockquote-border-color: #b12525;
+    --blockquote-text-color: #000000;
+  }
+
+  blockquote.yellow {
+    --blockquote-bg-color: #fff8f0;
+    --blockquote-border-color: #f7c046;
+    --blockquote-text-color: #333;
   }
 
   .comments {
@@ -35,61 +46,6 @@
   }
 
   /* added by Ojitha for Github alerts */
-  .note,
-  .info,
-  .tip,
-  .warning,
-  .danger, blockquote {
-    padding: 1em 1.5em 1em 1.5em;
-    /* Adjusted padding, removed extra left padding for icons */
-    margin-bottom: 1em;
-    border-radius: 3px;
-    border-left: 0.25em solid;
-    position: relative;
-    font-size: 0.95em;
-    line-height: 1.5;
-    font-style: normal;
-  }
-
-  .note {
-    background-color: #f0f2f5;
-    border-color: #1779ba;
-    color: #333;
-  }
-
-  .info {
-    background-color: #f0f2f5;
-    color: #333;
-  }
-
-  .tip {
-    background-color: #f0f9f4;
-    border-color: #3ab777;
-    color: #333;
-  }
-
-  .warning {
-    background-color: #fff8f0;
-    border-color: #f7c046;
-    color: #333;
-  }
-
-  .danger {
-    background-color: #fdeded;
-    border-color: #da2c43;
-    color: #333;
-  }
-
-  /* Optional: Style the bold title within alerts - slightly adjusted margin */
-  .note strong,
-  .tip strong,
-  .warning strong,
-  .danger strong {
-    display: block;
-    margin-bottom: 0.3em;
-    font-weight: bold;
-  }
-
   .hl {
     background: yellow;
   }

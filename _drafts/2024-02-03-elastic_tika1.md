@@ -581,7 +581,12 @@ val text = parser.parse(new ByteArrayInputStream(doc), handler, metadata, contex
 print(handler.toString())
 ```
 
-> NOTE: In the above code, I've commented where the PDF parser can be used if you are using unsearchable PDF files.
+
+
+>NOTE: In the above code, I've commented where the PDF parser can be used if you are using unsearchable PDF files.
+{: .green}
+
+
 
 if necessary, print all the meta data:
 
