@@ -22,11 +22,12 @@
     background-color: var(--blockquote-bg-color, #f0f2f5);
     border-color: var(--blockquote-border-color, #1779ba);
     color: var(--blockquote-text-color, #333);
+    padding: 10px 10px;
   }
 
   blockquote.green {
-    --blockquote-bg-color: #95ddb5;
-    --blockquote-border-color: #b12525;
+    --blockquote-bg-color: #cff2df;
+    --blockquote-border-color: #35f164;
     --blockquote-text-color: #000000;
   }
 
