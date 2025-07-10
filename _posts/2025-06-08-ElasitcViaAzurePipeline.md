@@ -93,11 +93,8 @@ az group create \
   --location "East US"
 ```
 
-
-
 > 💥 It is essential to note that if you don't delete the resource group, it will continue to incur charges. Please check the end of this post.
-> {:.yellow}
-
+{:.yellow}
 
 
 Create a virtuale machine:
