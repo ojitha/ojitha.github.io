@@ -1,0 +1,119 @@
+<!-- Floating Table of Contents -->
+<div id="floating-toc" class="floating-toc">
+  <div class="toc-header">
+    <span class="toc-title">Table of Contents</span>
+    <button id="toc-toggle" class="toc-toggle" aria-label="Toggle TOC">
+      <span class="toc-icon">📋</span>
+    </button>
+  </div>
+  <nav id="toc-content" class="toc-content">
+    <!-- TOC will be generated here by JavaScript -->
+  </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  generateTOC();
+  setupTOCBehavior();
+});
+
+function generateTOC() {
+  const tocContent = document.getElementById('toc-content');
+  const headings = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
+  
+  if (headings.length === 0) {
+    document.getElementById('floating-toc').style.display = 'none';
+    return;
+  }
+
+  const tocList = document.createElement('ul');
+  tocList.className = 'toc-list';
+
+  headings.forEach((heading, index) => {
+    // Create an ID for the heading if it doesn't have one
+    if (!heading.id) {
+      heading.id = 'heading-' + index;
+    }
+
+    const listItem = document.createElement('li');
+    listItem.className = 'toc-item toc-' + heading.tagName.toLowerCase();
+    
+    const link = document.createElement('a');
+    link.href = '#' + heading.id;
+    link.textContent = heading.textContent;
+    link.className = 'toc-link';
+    
+    // Smooth scroll behavior
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.getElementById(heading.id);
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+        
+        // Update active link
+        document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+    
+    listItem.appendChild(link);
+    tocList.appendChild(listItem);
+  });
+
+  tocContent.appendChild(tocList);
+}
+
+function setupTOCBehavior() {
+  const floatingToc = document.getElementById('floating-toc');
+  const tocToggle = document.getElementById('toc-toggle');
+  const tocContent = document.getElementById('toc-content');
+  
+  if (!floatingToc || !tocToggle || !tocContent) return;
+  
+  // Toggle TOC visibility
+  tocToggle.addEventListener('click', function() {
+    tocContent.classList.toggle('collapsed');
+    floatingToc.classList.toggle('collapsed');
+  });
+
+  // Highlight current section while scrolling
+  const headings = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
+  const tocLinks = document.querySelectorAll('.toc-link');
+
+  function updateActiveLink() {
+    let current = '';
+    
+    headings.forEach(heading => {
+      const rect = heading.getBoundingClientRect();
+      if (rect.top <= 100) {
+        current = heading.id;
+      }
+    });
+
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  // Update active link on scroll with throttling
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        updateActiveLink();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // Initial active link
+  setTimeout(updateActiveLink, 100);
+}
+</script>
