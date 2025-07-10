@@ -13,7 +13,6 @@ source "https://rubygems.org"
 
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
 # gem "minima", "~> 2.5.1"
-gem "minima", github: "jekyll/minima", ref: "41b97699af658128fa9983e5312ca5516641f335"
 # gem "minimal-mistakes-jekyll"
 # gem 'jekyll', '~> 4.2'
 
