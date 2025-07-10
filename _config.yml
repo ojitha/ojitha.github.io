@@ -18,7 +18,7 @@ author:
   name: Ojitha Kumanayaka
   email: "ojithak@gmail.com"
 description: >- # this means to ignore newlines until "baseurl:"
-  I am Ojitha Kumanayaka, the certified Java software engineer and AWS certified associate developer from Australia.
+  I am Ojitha Hewa Kumanayaka, AWS certified Solution Architect and Associate Developer from Australia.
 baseurl: / # the subpath of your site, e.g. /blog
 url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 google_analytics: UA-12622200-2
@@ -43,7 +43,7 @@ minima:
     linkedin: ojitha
     stackoverflow: "546792"
 
-copyright: "Copyright © 2020 Ojitha Kumanayaka"
+copyright: "Copyright © 2020 Ojitha Hewa Kumanayaka"
 
 # Build settings
 markdown: kramdown
