@@ -30,24 +30,7 @@ typora-copy-images-to: ../assets/images/${filename}
     box-sizing: border-box;
 }
 
-/* Ensure image is responsive and centered within its column */
-.image-column img {
-    max-width: 100%;
-    height: auto;
-    display: block; /* Removes extra space below image */
-    margin: 0 auto; /* Centers the image if it's smaller than its column */
-}
 
-/* For smaller screens, stack the columns */
-@media (max-width: 768px) {
-    .image-text-container {
-        flex-direction: column; /* Stacks items vertically */
-    }
-    .image-column, .text-column {
-        max-width: 100%; /* Take full width when stacked */
-        min-width: unset; /* Remove min-width constraint when stacked */
-    }
-}
 </style>
 
 <div class="image-text-container">
