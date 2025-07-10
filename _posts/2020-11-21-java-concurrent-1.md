@@ -3,6 +3,7 @@ layout: post
 title:  Java Concurrent CompletableFuture
 date:   2020-11-21
 categories: [Java]
+toc: true
 ---
 
 The `CompletableFuture` has been introduced since JDK 8 (2014). This is a abstraction over the `java.util.concurrent. Learn the basics of [Java 9 Parallelism](https://ojitha.blogspot.com/2020/11/java-9-parallelism.html) before read this post.

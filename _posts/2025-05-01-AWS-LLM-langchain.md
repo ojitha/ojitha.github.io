@@ -3,6 +3,7 @@ layout: post
 title:  LangChain for AWS Bedrock
 date:   2025-05-01
 categories: [AI, AWS, LangChain]
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

@@ -3,6 +3,7 @@ layout: post
 title:  Jenkins in Docker Container
 date:   2021-06-28
 categories: [CI/CD]
+toc: true
 ---
 
 This is the source code to create a Jenkins Docker container.

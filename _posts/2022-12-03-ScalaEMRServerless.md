@@ -250,4 +250,3 @@ client.delete_application(applicationId=app_id)
 
 when you delete the application, it will delete all the jobs created for that application.
 
-

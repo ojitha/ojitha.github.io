@@ -3,6 +3,7 @@ layout: post
 title:  AWS CFN - Create IGW and NAT
 date:   2022-04-08
 categories: [AWS]
+toc: true
 ---
 
 

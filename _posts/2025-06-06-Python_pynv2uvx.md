@@ -3,6 +3,7 @@ layout: post
 title:  UV is better than Pyenv for Python
 date:   2025-06-06
 categories: [Python]
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

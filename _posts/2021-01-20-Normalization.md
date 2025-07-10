@@ -5,6 +5,7 @@ date:   2021-01-20
 categories: [RDBMS]
 mermaid: true
 maths: true
+toc: true
 ---
 
 E. F. Codd proposed three normal forms: 1NF, 2NF and 3NF (1970). A revised definition (1974) was given by F. Boyce and Codd, which is known as the Boyce-Codd Normal Form (BCNF, which is 3.5NF) to distinguish it from the old definition of the third normal form. R. Faign introduced 4NF(1977) and 5NF(1979) and DKNF(1981). All the normal forms depend on functional dependency, but 4NF and 5NF have been proposed based on the concepts of multivalued dependency and joining dependency.
@@ -51,11 +52,11 @@ The FD diagram is
 %%{init: {'theme': 'neutral' } }%%
     graph LR;
     X-->Y;
-```    
+```
 
 
 > The large set of FDs can reduce the efficiency of database system. Generally an $$\left( FD\right) A\rightarrow B$$ is trivial, if and only if $$B\subseteq A$$. Only **non-trivial dependencies** are considered. 				
- 									
+
 
 For example, CART{order_number, order_date, item, item_qty, customer, address}.
 

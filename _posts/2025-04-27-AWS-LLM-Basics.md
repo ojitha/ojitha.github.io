@@ -4,6 +4,7 @@ title:  AWS Bedrock Foundation Models
 date:   2025-04-27
 mermaid: true
 categories: [AI, AWS]
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

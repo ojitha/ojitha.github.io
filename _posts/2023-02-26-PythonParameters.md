@@ -3,6 +3,7 @@ layout: post
 title:  Python Parameter passing
 date:   2023-02-26
 categories: [Python]
+toc: true
 ---
 
 Discuss the most possible ways of passing parameters in the python functions.

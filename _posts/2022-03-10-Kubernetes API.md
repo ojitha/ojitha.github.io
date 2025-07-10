@@ -3,7 +3,7 @@ layout: post
 title:  Kubernetes API
 date:   2022-03-10
 categories: [Kubernetes]
-
+toc: true
 ---
 
 Let's see how to play K8s in MacOs using MniKube. Some of the topics are very basic such as How to create a namespace and pod in it. Shelling to the pod and after delete pod and the namespace. However, this is written to address the concepts such as configMap, secrets, resource sharing and Helm charts.

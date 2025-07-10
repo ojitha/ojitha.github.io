@@ -3,6 +3,7 @@ layout: post
 title:  Understand JPMS
 date:   2021-03-27
 categories: [Java]
+toc: true
 ---
 
 Java Platform Module System (JPMS) has been introduced since Java 9. With Java 9, JDK has been divided into 90 modules. This is a simple example created using IntelliJ IDEA.

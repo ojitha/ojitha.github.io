@@ -3,6 +3,7 @@ layout: post
 title:  Terraform For each iteration
 date:   2023-07-08
 categories: [Terraform]
+toc: true
 ---
 
 This is to explain Terraform for each looping technique. In this example, 3 buckets are created to demonstrate the looping idea.

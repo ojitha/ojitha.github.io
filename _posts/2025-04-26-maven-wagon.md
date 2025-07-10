@@ -3,6 +3,7 @@ layout: post
 title:  Maven Proxy handling
 date:   2025-04-26
 categories: [Maven]
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

@@ -3,6 +3,7 @@ layout: post
 title:  Java Future
 date:   2020-11-21
 categories: [Java]
+toc: true
 ---
 
 Java `Futures` are the way to support asynchronuous operations. Learn the basics of [Java 9 Parallelism](https://ojitha.blogspot.com/2020/11/java-9-parallelism.html) before read this post. 

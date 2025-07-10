@@ -3,6 +3,7 @@ layout: post
 title:  Spark to create a table in AWS Redshift
 date:   2023-06-13
 categories: [AWS, Redshift, Apache Spark]
+toc: true
 ---
 
 In this post, Spark reads the data from a CSV file to a DateFrame and saves that DataFrame as a Redshift table.

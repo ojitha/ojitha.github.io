@@ -4,6 +4,7 @@ title:  Lua filters for Pandoc
 date:   2025-02-28
 categories: [Lua]
 mermaid: true
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

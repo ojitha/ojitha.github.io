@@ -3,6 +3,7 @@ layout: post
 title: "Apache Spark begins with PySpark"
 date:   2020-10-03 20:01:30 +1000
 category: Apache Spark
+toc: true
 ---
 
 PySpark is one of the most popular ways of using Spark. This blog considers the use of the basic of Spark SQL with data frames.

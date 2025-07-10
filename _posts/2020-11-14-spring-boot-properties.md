@@ -3,6 +3,7 @@ layout: post
 title:  Spring boot property and profile management
 date:   2020-11-14
 categories: [Spring Framework]
+toc: true
 ---
 
 Spring property and profile manangement is explained.

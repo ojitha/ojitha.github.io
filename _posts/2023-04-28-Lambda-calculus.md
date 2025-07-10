@@ -4,6 +4,7 @@ title:  Introduction to Lambda Calculus
 date:   2023-04-28
 categories: [Haskell]
 maths: true
+toc: true
 ---
 
 This is a short description of lambda calculus. Lambda calculus is the smallest programming language that is capable of variable substitution and a single function definition scheme. Haskell is the functional programming language based on lambda calculus, which I will explore. I already explained how to use [VSCode for Haskell Development](https://ojitha.blogspot.com/2023/04/vscode-for-haskell-development.html){:target="_blank"} to support the code listed here.

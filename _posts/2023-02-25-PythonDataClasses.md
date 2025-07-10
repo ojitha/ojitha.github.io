@@ -3,6 +3,7 @@ layout: post
 title:  Python Data Classes
 date:   2023-02-25
 categories: [Python]
+toc: true
 ---
 
 Python Data classes using `collections.namedtuple`, `typing.NamedTuple` and latest `@dataclass` decorator.

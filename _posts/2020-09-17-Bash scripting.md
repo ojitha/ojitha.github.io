@@ -3,6 +3,7 @@ layout: post
 title: "Bash Introdcution"
 date:   2020-09-17 13:01:30 +1000
 category: Bash
+toc: true
 ---
 Understand the bash scripting to use in the day-to-day life of the developer.
 

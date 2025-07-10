@@ -3,6 +3,7 @@ layout: post
 title:  Spark to consume Kafka Stream
 date:   2022-03-20
 categories: [Kafka, Apache Spark]
+toc: true
 ---
 
 A simple PySpark example to show how to consume Kafka stream (given [Kafka tutorial][tut]{:target="_blank"}).

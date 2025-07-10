@@ -3,6 +3,7 @@ layout: post
 title:  Elastic Search Introduction
 date:   2023-09-29
 categories: [ELK]
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

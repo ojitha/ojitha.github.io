@@ -3,6 +3,7 @@ layout: post
 title:  Python Sequences
 date:   2022-02-25
 categories: [Python]
+toc: true
 ---
 
 Here python `list`, `tulple` basic operations are discussed. 
@@ -780,7 +781,7 @@ r[:5:-2]
 
 
     [9, 7]
-    
+
 ## dict comprehensions
 First create listcomps 
 

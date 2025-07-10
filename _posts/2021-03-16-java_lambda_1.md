@@ -3,6 +3,7 @@ layout: post
 title:  Use of default and static methods
 date:   2021-03-16
 categories: [Java]
+toc: true
 ---
 
 A default method added to maintain the backward compatibility which allows older classes (without modifications) to access new version of an interface. 

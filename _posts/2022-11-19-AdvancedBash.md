@@ -3,6 +3,7 @@ layout: post
 title:  Notes on Introduction to Advanced Bash Usage
 date:   2022-11-19
 categories: [Bash]
+toc: true
 ---
 
 While I am going through the following, the [youtube talk](https://www.youtube.com/watch?v=BJ0uHhBkzOQ){:target="_blank"} and it's associated [presentation](http://talk.jpnc.info/bash_lfnw_2017.pdf){:target="_blank"}, my hand-ons were recorded here. It is recommended to go through the [basics]({% link _posts/2020-09-17-Bash scripting.md %}) first. You can also refer to the [Bash Ref Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents){:target="_blank"} for more information.

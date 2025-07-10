@@ -3,6 +3,7 @@ layout: post
 title:  Java Nested Classes
 date:   2021-03-15
 categories: [Java]
+toc: true
 ---
 
 
@@ -258,7 +259,6 @@ abstract class Book {
 }
 
 ```
-
 
 
 

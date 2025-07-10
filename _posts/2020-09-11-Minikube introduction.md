@@ -3,6 +3,7 @@ layout: post
 title: "Minikube Introduction"
 date: 2020-09-11
 category: Kubernetes
+toc: true
 ---
 [Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues.
 

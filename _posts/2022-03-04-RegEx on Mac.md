@@ -3,6 +3,7 @@ layout: post
 title:  RegEx on MacOS
 date:   2022-03-04
 categories: [RegEx]
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

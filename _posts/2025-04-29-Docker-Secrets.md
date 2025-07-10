@@ -3,6 +3,7 @@ layout: post
 title:  Encrypting in Dockerfile and Decrypting in Python
 date:   2024-12-30
 categories: [Docker]
+toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---

@@ -3,6 +3,7 @@ layout: post
 title:  MapReduce
 date:   2021-01-03
 categories: [Hadoop]
+toc: true
 ---
 
 Hadoop MapReduce well explains the pain is writing too much code for simple MapReduce in Java. This organic blog explains how to use [MRJob](https://mrjob.readthedocs.io/en/latest/) package in Python to write and execute Movie ratings.
@@ -112,5 +113,4 @@ REF
 
 [^1]: The Ultimate Hands-on Hadoop, Frank Kane, Packt Publishing 2017 
 [^2]: Hadoop and Spark Fundamentals, Douglas Eadline, Addison-Wesley Professional 2018
-
 
