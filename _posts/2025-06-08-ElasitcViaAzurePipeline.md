@@ -93,7 +93,15 @@ az group create \
   --location "East US"
 ```
 
+
+
+> 💥 It is essential to note that if you don't delete the resource group, it will continue to incur charges. Please check the end of this post.
+> {:.yellow}
+
+
+
 Create a virtuale machine:
+
 ```bash
 az vm create \
   --resource-group "rg-elasticsearch-dev" \
@@ -529,4 +537,23 @@ For production, consider:
 2. **Azure Key Vault** for certificate management
 3. **Custom domain** for better branding
 
+## Delete resource group
+
+As a first step list the subscriptions:
+
+```bash
+az account list --query "[?state=='Enabled'].{Name:name, SubscriptionId:id}" --output table
+```
+
+If you have one more active subscription, you have to set.
+
+```bash
+az account set --subscription "<your-subscription-id>"
+```
+
+To delete the resource group:
+
+```bash
+az group delete --name rg-elasticsearch-dev --yes --no-wait
+```
 
