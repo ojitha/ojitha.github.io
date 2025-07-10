@@ -229,7 +229,7 @@ az vm start --resource-group "rg-elasticsearch-dev" --name "vm-elasticsearch-dev
 
 1. Azure VM created (above)
 2. SSH access to the VM is working
-3. Azure DevOps organization: https://dev.azure.com/<your orginaisation>
+3. Azure DevOps organization: `https://dev.azure.com/<your orginaisation>`
 
 ### Step 1: Create SSH Service Connection
 
@@ -374,7 +374,7 @@ https://[YOUR_VM_FQDN]:8443
 
 ### Common Issues
 
-It is important to know that
+It is essential to know that
 
 - **Use `runOptions: 'inline'`** instead of `runOptions: 'commands'` for complex conditionals.
 - **The `inline` option** treats your code as a proper bash script.
@@ -536,7 +536,7 @@ For production, consider:
 
 ## Delete resource group
 
-As a first step list the subscriptions:
+As a first step, list the subscriptions:
 
 ```bash
 az account list --query "[?state=='Enabled'].{Name:name, SubscriptionId:id}" --output table
