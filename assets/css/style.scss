@@ -1,0 +1,25 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@import
+  "minima/skins/{{ site.minima.skin | default: 'classic' }}",
+  "minima/initialize";
+.wrapper {
+  max-width: 90%; /* Or another percentage that suits your design */
+  margin: 0 auto; /* This keeps the content centered */
+}
+
+// /* For tablets and larger screens */
+// @media (min-width: 768px) {
+//   .wrapper {
+//     max-width: 720px;
+//   }
+// }
+
+// /* For desktops */
+// @media (min-width: 992px) {
+//   .wrapper {
+//     max-width: 960px;
+//   }
+// }
