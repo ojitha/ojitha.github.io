@@ -72,9 +72,9 @@ typora-copy-images-to: ../assets/images/${filename}
 {:toc}
 ------
 
-## Setup
+## Setup Azure resource group
 
-### Azure VM
+### Azure VM 
 
 Install Azure CLI if not already installed
 ```bash
