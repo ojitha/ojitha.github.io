@@ -8,18 +8,44 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-Elastic Learned Sparse EncodeR(ELSER) is a retrieval model trained by Elastic that enables you to perform [semantic search](https://www.elastic.co/guide/en/elasticsearch/reference/8.13/semantic-search-elser.html) to retrieve more relevant search results.
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
 
-![Summary of ELSER process](/assets/images/2024-05-11-ELSER_intro/Summary of ELSER process.png)
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
 
-1. install ELSER v2: Only once (DevOPs will do for your)
-2. Create source index where you can insert all your documents
-3. Create target index
-4. Create ingestion pipeline
-5. Reindex process to create embeddings
-6. Ready to do semantic search using text expansion queries
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
 
-I created this blog post on docker to demonstrate Linux-optimised ELSER v2. The Elasticsearch version is 8.11.1.
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2024-05-11-ELSER_intro/Summary of ELSER process.png" alt="Summary of ELSER process" width="200" height="100">
+    </div>
+    <div class="text-column">
+<p>Elastic Learned Sparse EncodeR(ELSER) is a retrieval model trained by Elastic that enables you to perform semantic search to retrieve more relevant search results.
+</p>
+
+    </div>
+</div>
+
+👉 I created this blog post on docker to demonstrate Linux-optimised ELSER v2. The Elasticsearch version is 8.11.1.
+
 
 <!--more-->
 
@@ -30,6 +56,17 @@ I created this blog post on docker to demonstrate Linux-optimised ELSER v2. The 
 ------
 
 ## Introduction
+
+Steps follow in the post:
+
+![ELSER Summary](/assets/images/2024-05-11-ELSER_intro/Summary of ELSER process.png){:width="50%", hight="50%"}
+
+1. install ELSER v2: Only once (DevOPs will do for your)
+2. Create source index where you can insert all your documents
+3. Create target index
+4. Create ingestion pipeline
+5. Reindex process to create embeddings
+6. Ready to do semantic search using text expansion queries
 
 The general way to generate embedding in the Elasticsearch is using the Sentence Transformer framework[^3]. There are pre-trained models in the HuggingFace with the tag [SentenceTransformers](https://huggingface.co/models?library=sentence-transformers&sort=trending) for Sentence Transformer. In Elasticsearch, you need to add a field to the index where an embedding for each document will be stored. Elasticsearch provides full support for storing and retrieving vectors, which makes it an ideal database for working with embeddings. There are two types of embeddings:
 

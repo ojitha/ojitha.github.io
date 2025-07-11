@@ -6,15 +6,42 @@ categories: [Terraform]
 toc: true
 ---
 
-This is to explain Terraform for each looping technique. In this example, 3 buckets are created to demonstrate the looping idea.
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
 
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
 
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
 
-![create 3 S3 buckets](/assets/images/2023-07-08-terraform-for-loop/create 3 S3 buckets.jpg)
+</style>
 
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2023-07-08-terraform-for-loop/create 3 S3 buckets.jpg" alt="arcitecture of the streaming application" width="200" height="30">
+    </div>
+    <div class="text-column">
+<p>This is to explain Terraform for each looping technique. In this example, 3 buckets are created to demonstrate the looping idea.
+</p>
 
+    </div>
+</div>
 
-In the first step, we will create the above 3 buckets starting from 0.
 
 <!--more-->
 
@@ -25,6 +52,11 @@ In the first step, we will create the above 3 buckets starting from 0.
 ------
 
 ## Simple Example
+
+In the first step, we will create the above 3 buckets starting from 0.
+
+![create 3 S3 buckets](/assets/images/2023-07-08-terraform-for-loop/create 3 S3 buckets.jpg)
+
 This is a simple example[^1] where you have only string interpolations in the local variables. In the main.tf file:
 
 ```terraform

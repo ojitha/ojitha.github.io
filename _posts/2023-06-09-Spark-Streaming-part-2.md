@@ -5,15 +5,51 @@ date:   2023-06-09
 categories: [Kafka, Apache Spark]
 ---
 
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
+
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2023-06-09-Spark-Streaming-part-2/Simple-Streaming-Spark-Kafka.jpg" alt="Simple Streaming with Spark and Kafka" width="200" height="100">
+    </div>
+    <div class="text-column">
+<p>This is the continuation of the  [Spark Streaming Basics]({%post_url 2023-06-09-Spark-Streaming-part-1%}). I explained the basic stream example, which runs only on one AWS Glue container. The stream producer was Netcat, and the sink was a text file. In this post, the stream producer is still Netcat, but the sink is Kafka. Both Kafka and Spark running on Docker containers.
+</p>
+
+    </div>
+</div>
 
 
-This is the continuation of the  [Spark Streaming Basics]({%post_url 2023-06-09-Spark-Streaming-part-1%}). I explained the basic stream example, which runs only on one AWS Glue container. The stream producer was Netcat, and the sink was a text file. In this post, the stream producer is still Netcat, but the sink is Kafka. Both Kafka and Spark running on Docker containers.
 
-![Simple Streaming with Spark and Kafka](/assets/images/2023-06-09-Spark-Streaming-part-2/Simple-Streaming-Spark-Kafka.jpg)
+
 
 <!--more-->
 
 It is important to separate the producer, processor and sink from each other. However, in this case, as in the [previous post]({%post_url 2023-06-09-Spark-Streaming-part-1%}), Netcat still run in the Glue container where Spark producer as it is.
+
+![Simple Streaming with Spark and Kafka](/assets/images/2023-06-09-Spark-Streaming-part-2/Simple-Streaming-Spark-Kafka.jpg)
 
 Here is the new Kafka container docker-compose.yml file:
 

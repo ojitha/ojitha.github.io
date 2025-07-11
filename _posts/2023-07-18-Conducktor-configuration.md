@@ -6,11 +6,42 @@ categories: [Kafka, Apache Spark]
 toc: true
 ---
 
-The diagram shows that the Kafka producer reads from Wikimedia and writes to the Kafka topic. Then Kafka Spark consumer pulls the data from the Kafka topic and writes the steam batches to disk.
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
 
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
 
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
 
-![arcitecture of the streaming application](/assets/images/2023-07-18-Conducktor-configuration/image-20230728100732641.png)
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2023-07-18-Conducktor-configuration/image-20230728100732641.png" alt="arcitecture of the streaming application" width="200" height="100">
+    </div>
+    <div class="text-column">
+<p>The diagram shows that the Kafka producer reads from Wikimedia and writes to the Kafka topic. Then Kafka Spark consumer pulls the data from the Kafka topic and writes the steam batches to disk.
+</p>
+
+    </div>
+</div>
+
 
 <!--more-->
 
@@ -24,6 +55,9 @@ I previously explained Spark Streaming Basics[^2] and Spark Kafka Docker Configu
 
 ## Install
 
+Here the architecture of the streaming architecture following in this post:
+
+![Streaming Architecture](/assets/images/2023-07-18-Conducktor-configuration/image-20230728100732641.png){:width="50%", hight="50%"}
 
 How to start Zookeeper
 

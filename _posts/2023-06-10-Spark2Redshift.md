@@ -6,11 +6,43 @@ categories: [AWS, Redshift, Apache Spark]
 toc: true
 ---
 
-In this post, Spark reads the data from a CSV file to a DateFrame and saves that DataFrame as a Redshift table.
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
 
-![Spark to Redshift](/assets/images/2023-06-10-Spark2Redshift/Spark2Redshift.jpg)
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
 
-In addition to that, I've explained how to create a table in Postgres, use Jupyter magics and plot a diagram.
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2023-06-10-Spark2Redshift/Spark2Redshift.jpg" alt="Spark to Redshift" width="200" height="30">
+    </div>
+    <div class="text-column">
+<p>In this post, Spark reads the data from a CSV file to a DateFrame and saves that DataFrame as a Redshift table.
+</p>
+
+    </div>
+</div>
+
+
 
 <!--more-->
 
@@ -20,7 +52,13 @@ In addition to that, I've explained how to create a table in Postgres, use Jupyt
 {:toc}
 ------
 
+## Introduction
+
 This example has run in the Jupyter Notebook. 
+
+![Spark to Redshift](/assets/images/2023-06-10-Spark2Redshift/Spark2Redshift.jpg)
+
+In addition to that, I've explained how to create a table in Postgres, use Jupyter magics and plot a diagram.
 
 ## Redshift
 
