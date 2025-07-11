@@ -79,7 +79,7 @@ First, clone the repository:
 gh repo clone ojitha/learn-bedrock
 ```
 
-![Initialise the project for Python](./assets/images/2025-05-01-AWS-LLM-langchain/gh_repo_clone_ojitha:learn-bedrock.jpg)
+![Initialise the project for Python](/assets/images/2025-05-01-AWS-LLM-langchain/gh_repo_clone_ojitha:learn-bedrock.jpg)
 
 
 
