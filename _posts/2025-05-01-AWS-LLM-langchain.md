@@ -53,9 +53,9 @@ This second part describes how to integrate LangChain with AWS Bedrock to build 
 {:toc}
 ------
 
+📁 [source](https://github.com/ojitha/learn-mcp)
+
 ## LangChain
-
-
 
 LangChain can integrate large language models (LLMS) with other sources of data. LangChain Expression Language, or LCEL[^4], is a declarative way to compose chains together easily. LangChain integrations are:
 
@@ -73,10 +73,23 @@ The **document loaders** component is responsible for loading documents from var
 
 You have to install the following packages[^1] before using LangChain with AWS Bedrock:
 
+First, clone the repository:
+
 ```bash
-pip install langchain-aws
-pip install langchain-community boto3
-pip install langgraph
+gh repo clone ojitha/learn-bedrock
+```
+
+![Initialise the project for Python](./assets/images/2025-05-01-AWS-LLM-langchain/gh_repo_clone_ojitha:learn-bedrock.jpg)
+
+
+
+> To run Jupyter notebooks, install uv and add ipykernel`.
+
+Install LangChain packages:
+
+```bash
+uv add langchain-aws
+uv add langchain-community boto3
 ```
 
 ## Models
@@ -99,6 +112,12 @@ llm = BedrockLLM(
 )
 response = llm.invoke("What is the largest city in Australia?")
 print(response)
+```
+
+response:
+
+```
+The largest city in Australia is Sydney, with a population of 5,300,000. The city is located on the east ....
 ```
 
 I have used the Bedrock user guide[^2] to select the `service_name` above.
