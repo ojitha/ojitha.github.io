@@ -53,9 +53,7 @@ This second part describes how to integrate LangChain with AWS Bedrock to build 
 {:toc}
 ------
 
-📁 [source](https://github.com/ojitha/learn-bedrock){:target="_blank"}
-
-
+:open_file_folder: [source](https://github.com/ojitha/learn-bedrock){:target="_blank"}
 
 ## LangChain
 
