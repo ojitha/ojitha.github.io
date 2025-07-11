@@ -53,7 +53,7 @@ This second part describes how to integrate LangChain with AWS Bedrock to build 
 {:toc}
 ------
 
-📁 [source](https://github.com/ojitha/learn-mcp){:target="_blank"}
+📁 [source](https://github.com/ojitha/learn-bedrock){:target="_blank"}
 
 
 
