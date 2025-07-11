@@ -53,7 +53,9 @@ This second part describes how to integrate LangChain with AWS Bedrock to build 
 {:toc}
 ------
 
-📁 [source](https://github.com/ojitha/learn-mcp)
+📁 [source](https://github.com/ojitha/learn-mcp){:target="_blank"}
+
+
 
 ## LangChain
 
@@ -83,7 +85,7 @@ gh repo clone ojitha/learn-bedrock
 
 
 
-> To run Jupyter notebooks, install uv and add ipykernel`.
+> To run Jupyter notebooks, install uv and add `ipykernel`.
 
 Install LangChain packages:
 
