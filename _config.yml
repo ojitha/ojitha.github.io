@@ -68,13 +68,12 @@ plugins:
   - jekyll-algolia
   - jemoji
   - jekyll-remote-theme
-  - jekyll-figure
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
 exclude:
-  # - Gemfile
+  - Gemfile
   - Gemfile.lock
   - node_modules
   - vendor/bundle/
