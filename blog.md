@@ -14,7 +14,7 @@ permalink: /blog/
   position: relative;
 }
 .folder-category::before {
-  content: "📁";
+  content: "#";
   margin-right: 8px;
 }
 .tag-navigation {
