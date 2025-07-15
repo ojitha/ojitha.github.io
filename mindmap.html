@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Knowledge Mindmap
+title: Mindmap
 permalink: /mindmap/
 ---
 
@@ -9,7 +9,6 @@ permalink: /mindmap/
   <div class="controls">
     <button id="reset-zoom">Reset View</button>
     <button id="toggle-posts">Toggle Posts</button>
-    <button id="toggle-notes">Toggle Notes</button>
     <select id="category-filter">
       <option value="all">All Categories</option>
     </select>
@@ -71,10 +70,6 @@ permalink: /mindmap/
   fill: #45b7d1;
 }
 
-.node.note {
-  fill: #96ceb4;
-}
-
 .node.tag {
   fill: #feca57;
 }
@@ -123,18 +118,6 @@ const mindmapData = {
       excerpt: {{ post.excerpt | strip_html | truncate: 150 | jsonify }}
     }{% unless forloop.last %},{% endunless %}
     {% endfor %}
-  ],
-  notes: [
-    {% for note in site.data.notes_metadata %}
-    {
-      title: {{ note.title | jsonify }},
-      name: "{{ note.name }}",
-      url: "/notes/{{ note.name }}",
-      category: "{{ note.category }}",
-      tags: {{ note.tags | jsonify }},
-      type: "note"
-    }{% unless forloop.last %},{% endunless %}
-    {% endfor %}
   ]
 };
 
@@ -145,7 +128,6 @@ class MindMap {
     this.width = window.innerWidth;
     this.height = window.innerHeight - 60;
     this.showPosts = true;
-    this.showNotes = true;
     this.selectedCategory = 'all';
     
     this.init();
@@ -220,25 +202,6 @@ class MindMap {
       });
     }
     
-    // Process notes
-    if (this.showNotes) {
-      this.data.notes.forEach(note => {
-        const noteNode = {
-          id: `note-${note.name}`,
-          name: note.title,
-          type: 'note',
-          url: note.url,
-          category: note.category,
-          tags: note.tags
-        };
-        nodes.push(noteNode);
-        
-        // Add note categories
-        if (note.category) categories.add(note.category);
-        if (note.tags) note.tags.forEach(tag => tags.add(tag));
-      });
-    }
-    
     // Add category nodes
     categories.forEach(cat => {
       const catNode = {
@@ -288,37 +251,6 @@ class MindMap {
       });
     }
     
-    // Link notes to categories and tags
-    if (this.showNotes) {
-      this.data.notes.forEach(note => {
-        // Link to category
-        if (note.category) {
-          links.push({
-            source: `cat-${note.category}`,
-            target: `note-${note.name}`
-          });
-        } else {
-          // Link directly to root if no category
-          links.push({
-            source: 'root',
-            target: `note-${note.name}`
-          });
-        }
-        
-        // Link to tags (limited)
-        if (note.tags) {
-          note.tags.slice(0, 3).forEach(tag => {
-            if (tagArray.includes(tag)) {
-              links.push({
-                source: `tag-${tag}`,
-                target: `note-${note.name}`
-              });
-            }
-          });
-        }
-      });
-    }
-    
     return { nodes, links };
   }
   
@@ -353,7 +285,6 @@ class MindMap {
           case 'root': return 20;
           case 'category': return 15;
           case 'post': return 12;
-          case 'note': return 12;
           case 'tag': return 8;
           default: return 10;
         }
@@ -447,12 +378,6 @@ class MindMap {
     // Toggle posts
     d3.select('#toggle-posts').on('click', () => {
       this.showPosts = !this.showPosts;
-      this.createMindMap();
-    });
-    
-    // Toggle notes
-    d3.select('#toggle-notes').on('click', () => {
-      this.showNotes = !this.showNotes;
       this.createMindMap();
     });
     
