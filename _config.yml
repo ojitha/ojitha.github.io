@@ -29,6 +29,7 @@ header_pages:
   - index.html
   - blog.md
   - notes.md
+  - mindmap.html
   - projects.md  
   - search.html
   - about.md

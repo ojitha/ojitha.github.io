@@ -1,6 +1,8 @@
 ---
-layout: notes 
-title: Kafka
+layout: note
+title: Apache Kafka
+category: messaging
+tags: [streaming, distributed-systems, apache]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}

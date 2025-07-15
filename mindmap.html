@@ -1,0 +1,499 @@
+---
+layout: default
+title: Knowledge Mindmap
+permalink: /mindmap/
+---
+
+<div class="mindmap-container">
+  <h1>{{ page.title }}</h1>
+  <div class="controls">
+    <button id="reset-zoom">Reset View</button>
+    <button id="toggle-posts">Toggle Posts</button>
+    <button id="toggle-notes">Toggle Notes</button>
+    <select id="category-filter">
+      <option value="all">All Categories</option>
+    </select>
+  </div>
+  <div id="mindmap"></div>
+</div>
+
+<style>
+.mindmap-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.controls {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.controls button, .controls select {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: white;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background: #f0f0f0;
+}
+
+#mindmap {
+  width: 100%;
+  height: calc(100vh - 60px);
+}
+
+.node {
+  cursor: pointer;
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+.node.root {
+  fill: #ff6b6b;
+}
+
+.node.category {
+  fill: #4ecdc4;
+}
+
+.node.post {
+  fill: #45b7d1;
+}
+
+.node.note {
+  fill: #96ceb4;
+}
+
+.node.tag {
+  fill: #feca57;
+}
+
+.link {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.6;
+  stroke-width: 2px;
+}
+
+.node-text {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  text-anchor: middle;
+  pointer-events: none;
+  fill: #333;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: left;
+  padding: 8px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+</style>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// Data structure for the mindmap
+const mindmapData = {
+  posts: [
+    {% for post in site.posts %}
+    {
+      title: {{ post.title | jsonify }},
+      date: "{{ post.date | date: '%Y-%m-%d' }}",
+      url: "{{ post.url }}",
+      categories: {{ post.categories | jsonify }},
+      tags: {{ post.tags | jsonify }},
+      excerpt: {{ post.excerpt | strip_html | truncate: 150 | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ],
+  notes: [
+    {% for note in site.data.notes_metadata %}
+    {
+      title: {{ note.title | jsonify }},
+      name: "{{ note.name }}",
+      url: "/notes/{{ note.name }}",
+      category: "{{ note.category }}",
+      tags: {{ note.tags | jsonify }},
+      type: "note"
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+};
+
+class MindMap {
+  constructor(containerId, data) {
+    this.container = d3.select(containerId);
+    this.data = data;
+    this.width = window.innerWidth;
+    this.height = window.innerHeight - 60;
+    this.showPosts = true;
+    this.showNotes = true;
+    this.selectedCategory = 'all';
+    
+    this.init();
+    this.createMindMap();
+    this.setupControls();
+  }
+  
+  init() {
+    this.svg = this.container
+      .append('svg')
+      .attr('width', this.width)
+      .attr('height', this.height);
+    
+    this.g = this.svg.append('g');
+    
+    // Add zoom behavior
+    this.zoom = d3.zoom()
+      .scaleExtent([0.1, 4])
+      .on('zoom', (event) => {
+        this.g.attr('transform', event.transform);
+      });
+    
+    this.svg.call(this.zoom);
+    
+    // Create tooltip
+    this.tooltip = d3.select('body')
+      .append('div')
+      .attr('class', 'tooltip');
+  }
+  
+  processData() {
+    const nodes = [];
+    const links = [];
+    
+    // Root node
+    const root = {
+      id: 'root',
+      name: 'Knowledge Base',
+      type: 'root',
+      x: this.width / 2,
+      y: this.height / 2
+    };
+    nodes.push(root);
+    
+    // Category nodes
+    const categories = new Set();
+    const tags = new Set();
+    
+    // Process posts
+    if (this.showPosts) {
+      this.data.posts.forEach(post => {
+        if (this.selectedCategory === 'all' || 
+            post.categories.includes(this.selectedCategory)) {
+          
+          // Add post node
+          const postNode = {
+            id: `post-${post.title}`,
+            name: post.title,
+            type: 'post',
+            url: post.url,
+            date: post.date,
+            excerpt: post.excerpt,
+            categories: post.categories,
+            tags: post.tags
+          };
+          nodes.push(postNode);
+          
+          // Add categories
+          post.categories.forEach(cat => categories.add(cat));
+          post.tags.forEach(tag => tags.add(tag));
+        }
+      });
+    }
+    
+    // Process notes
+    if (this.showNotes) {
+      this.data.notes.forEach(note => {
+        const noteNode = {
+          id: `note-${note.name}`,
+          name: note.title,
+          type: 'note',
+          url: note.url,
+          category: note.category,
+          tags: note.tags
+        };
+        nodes.push(noteNode);
+        
+        // Add note categories
+        if (note.category) categories.add(note.category);
+        if (note.tags) note.tags.forEach(tag => tags.add(tag));
+      });
+    }
+    
+    // Add category nodes
+    categories.forEach(cat => {
+      const catNode = {
+        id: `cat-${cat}`,
+        name: cat,
+        type: 'category'
+      };
+      nodes.push(catNode);
+      links.push({ source: 'root', target: `cat-${cat}` });
+    });
+    
+    // Add tag nodes (limited to most common ones)
+    const tagArray = Array.from(tags).slice(0, 20);
+    tagArray.forEach(tag => {
+      const tagNode = {
+        id: `tag-${tag}`,
+        name: tag,
+        type: 'tag'
+      };
+      nodes.push(tagNode);
+    });
+    
+    // Create links
+    if (this.showPosts) {
+      this.data.posts.forEach(post => {
+        if (this.selectedCategory === 'all' || 
+            post.categories.includes(this.selectedCategory)) {
+          
+          // Link posts to categories
+          post.categories.forEach(cat => {
+            links.push({
+              source: `cat-${cat}`,
+              target: `post-${post.title}`
+            });
+          });
+          
+          // Link posts to tags (limited)
+          post.tags.slice(0, 3).forEach(tag => {
+            if (tagArray.includes(tag)) {
+              links.push({
+                source: `tag-${tag}`,
+                target: `post-${post.title}`
+              });
+            }
+          });
+        }
+      });
+    }
+    
+    // Link notes to categories and tags
+    if (this.showNotes) {
+      this.data.notes.forEach(note => {
+        // Link to category
+        if (note.category) {
+          links.push({
+            source: `cat-${note.category}`,
+            target: `note-${note.name}`
+          });
+        } else {
+          // Link directly to root if no category
+          links.push({
+            source: 'root',
+            target: `note-${note.name}`
+          });
+        }
+        
+        // Link to tags (limited)
+        if (note.tags) {
+          note.tags.slice(0, 3).forEach(tag => {
+            if (tagArray.includes(tag)) {
+              links.push({
+                source: `tag-${tag}`,
+                target: `note-${note.name}`
+              });
+            }
+          });
+        }
+      });
+    }
+    
+    return { nodes, links };
+  }
+  
+  createMindMap() {
+    // Clear existing content
+    this.g.selectAll('*').remove();
+    
+    const { nodes, links } = this.processData();
+    
+    // Create force simulation
+    this.simulation = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+      .force('charge', d3.forceManyBody().strength(-300))
+      .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+      .force('collision', d3.forceCollide().radius(30));
+    
+    // Create links
+    const link = this.g.append('g')
+      .selectAll('line')
+      .data(links)
+      .enter().append('line')
+      .attr('class', 'link');
+    
+    // Create nodes
+    const node = this.g.append('g')
+      .selectAll('circle')
+      .data(nodes)
+      .enter().append('circle')
+      .attr('class', d => `node ${d.type}`)
+      .attr('r', d => {
+        switch(d.type) {
+          case 'root': return 20;
+          case 'category': return 15;
+          case 'post': return 12;
+          case 'note': return 12;
+          case 'tag': return 8;
+          default: return 10;
+        }
+      })
+      .call(this.drag())
+      .on('click', (event, d) => {
+        if (d.url) {
+          window.open(d.url, '_blank');
+        }
+      })
+      .on('mouseover', (event, d) => {
+        this.showTooltip(event, d);
+      })
+      .on('mouseout', () => {
+        this.hideTooltip();
+      });
+    
+    // Add labels
+    const labels = this.g.append('g')
+      .selectAll('text')
+      .data(nodes)
+      .enter().append('text')
+      .attr('class', 'node-text')
+      .text(d => d.name.length > 20 ? d.name.substring(0, 20) + '...' : d.name)
+      .attr('dy', d => d.type === 'root' ? 0 : 25);
+    
+    // Update positions on simulation tick
+    this.simulation.on('tick', () => {
+      link
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+      
+      node
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y);
+      
+      labels
+        .attr('x', d => d.x)
+        .attr('y', d => d.y);
+    });
+  }
+  
+  drag() {
+    return d3.drag()
+      .on('start', (event, d) => {
+        if (!event.active) this.simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on('drag', (event, d) => {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on('end', (event, d) => {
+        if (!event.active) this.simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      });
+  }
+  
+  showTooltip(event, d) {
+    let content = `<strong>${d.name}</strong><br/>Type: ${d.type}`;
+    
+    if (d.date) content += `<br/>Date: ${d.date}`;
+    if (d.excerpt) content += `<br/>${d.excerpt}`;
+    if (d.categories && d.categories.length) content += `<br/>Categories: ${d.categories.join(', ')}`;
+    if (d.tags && d.tags.length) content += `<br/>Tags: ${d.tags.slice(0, 5).join(', ')}`;
+    
+    this.tooltip
+      .style('opacity', 1)
+      .html(content)
+      .style('left', (event.pageX + 10) + 'px')
+      .style('top', (event.pageY - 10) + 'px');
+  }
+  
+  hideTooltip() {
+    this.tooltip.style('opacity', 0);
+  }
+  
+  setupControls() {
+    // Reset zoom
+    d3.select('#reset-zoom').on('click', () => {
+      this.svg.transition().duration(750).call(
+        this.zoom.transform,
+        d3.zoomIdentity
+      );
+    });
+    
+    // Toggle posts
+    d3.select('#toggle-posts').on('click', () => {
+      this.showPosts = !this.showPosts;
+      this.createMindMap();
+    });
+    
+    // Toggle notes
+    d3.select('#toggle-notes').on('click', () => {
+      this.showNotes = !this.showNotes;
+      this.createMindMap();
+    });
+    
+    // Category filter
+    const categories = new Set();
+    this.data.posts.forEach(post => {
+      post.categories.forEach(cat => categories.add(cat));
+    });
+    
+    const select = d3.select('#category-filter');
+    categories.forEach(cat => {
+      select.append('option').attr('value', cat).text(cat);
+    });
+    
+    select.on('change', (event) => {
+      this.selectedCategory = event.target.value;
+      this.createMindMap();
+    });
+  }
+  
+  resize() {
+    this.width = window.innerWidth;
+    this.height = window.innerHeight - 60;
+    
+    this.svg
+      .attr('width', this.width)
+      .attr('height', this.height);
+    
+    this.simulation
+      .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+      .restart();
+  }
+}
+
+// Initialize the mindmap when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  const mindmap = new MindMap('#mindmap', mindmapData);
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    mindmap.resize();
+  });
+});
+</script>

@@ -1,0 +1,79 @@
+- name: kafka
+  title: "Apache Kafka"
+  category: "messaging"
+  tags: ["streaming", "distributed-systems"]
+  
+- name: kubernetes
+  title: "Kubernetes"
+  category: "orchestration"
+  tags: ["containers", "devops", "cloud"]
+  
+- name: spark
+  title: "Apache Spark"
+  category: "big-data"
+  tags: ["analytics", "distributed-computing"]
+  
+- name: python
+  title: "Python Programming"
+  category: "programming"
+  tags: ["scripting", "data-science"]
+  
+- name: devops
+  title: "DevOps Practices"
+  category: "operations"
+  tags: ["automation", "ci-cd", "infrastructure"]
+  
+- name: rdbms
+  title: "Relational Databases"
+  category: "databases"
+  tags: ["sql", "data-modeling"]
+  
+- name: mongo
+  title: "MongoDB"
+  category: "databases"
+  tags: ["nosql", "document-db"]
+  
+- name: security
+  title: "Security"
+  category: "security"
+  tags: ["cybersecurity", "best-practices"]
+  
+- name: REST
+  title: "REST APIs"
+  category: "web-development"
+  tags: ["api", "http", "web-services"]
+  
+- name: UnixTools
+  title: "Unix Tools"
+  category: "system-administration"
+  tags: ["command-line", "utilities"]
+  
+- name: productivity
+  title: "Productivity"
+  category: "tools"
+  tags: ["efficiency", "workflow"]
+  
+- name: programming
+  title: "Programming Concepts"
+  category: "programming"
+  tags: ["algorithms", "design-patterns"]
+  
+- name: powershell
+  title: "PowerShell"
+  category: "scripting"
+  tags: ["windows", "automation"]
+  
+- name: scm
+  title: "Source Control Management"
+  category: "development"
+  tags: ["git", "version-control"]
+  
+- name: macos
+  title: "macOS"
+  category: "operating-systems"
+  tags: ["apple", "unix"]
+  
+- name: email
+  title: "Email Systems"
+  category: "communication"
+  tags: ["smtp", "protocols"]

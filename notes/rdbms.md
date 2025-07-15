@@ -194,3 +194,52 @@ select sales
 FROM "retail_sales";
 ```
 because `ROWS CURRENT ROW` generate the same result for the `ROWS BETWEEN CURRENT ROW AND CURRENT ROW`.
+
+### Redshift data sharing
+You can create a view that spans Amazon Redshift and Redshift Spectrum external tables. With late-binding views, table binding will take place at runtime, providing your users and applications with seamless access to query data.
+
+**Late-binding views**:
+
+allows you to drop and make changes to referenced tables without affecting the views. With this feature, you can query frequently accessed data in your Redshift cluster and less-frequently accessed data in S3, using a single view.
+
+A **Datashare** is the unit of sharing data in Amazon Redshift. Use datashares in the same AWS account or different AWS accounts. Datashare objects are objects from specific databases on a cluster that producer cluster administrators can add to share with data consumers. Datashare objects are read-only for data consumers. Examples of datashare objects are tables, views, UDFs and so on.
+
+There are different type of datashare such as 
+- Standard 
+- Data Exchange
+- Lakeformation Managed
+
+
+## Quary Optimisation
+
+### Predicate Pushdown
+
+### Partition Pruining
+
+### Partition Projection
+
+### Materialized views
+For example, Amazon Redshift returns the precomputed results from the materialized view, without accessing the base tables at all where the query results are much faster compared to retrieving the same data from the base tables. You can define a materialized view using other materialized views. A materialized view plays the same role as a base table.
+
+In Redshift, to update the data in the materialized view, users can use the `REFRESH MATERIALIZED VIEW` statement to manually refresh materialized views. Amazon Redshift provides a few ways to keep materialized views up to date for automatic rewriting: 
+
+- Analysts can configure materialized views to refresh materialized views when base tables of materialized views are updated. This autorefresh operation runs when cluster resources are available to minimize disruptions to other workloads.
+- Users can schedule a materialized view refresh job by using Amazon Redshift scheduler API and console integration.
+
+
+
+### SPICE
+
+## CDC
+
+### Types of CDCs
+
+There are two type, interst only and full:
+
+| **Aspect**             | **Insert-only CDC **                                   | **Full CDC (with updates and deletes)**                      |
+| ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------ |
+| **Common use cases**   | Suitable for append-only data, like logging            | Applies to dynamic datasets where records are modified or purged |
+| **Data operations**    | Inserts only                                           | Involves inserts, updates, and deletes, requiring handling of existing records |
+| **Performance impact** | Generally lower, optimized for insertions              | Higher, due to the additional steps required to locate and modify or delete existing records |
+| **Data consistency**   | Straightforward to maintain because data is only added | More challenging to ensure consistency and integrity across transactions |
+| **CDC method**         | Efficient capture of new entries.                      | Might require sophisticated methods to capture and replicate changes accurately, including transaction logs or triggers |
