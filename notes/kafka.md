@@ -1,5 +1,5 @@
 ---
-layout: note
+layout: notes
 title: Apache Kafka
 category: messaging
 tags: [streaming, distributed-systems, apache]
