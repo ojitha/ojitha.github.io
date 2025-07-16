@@ -68,6 +68,11 @@ FMs are models trained on large-scale data gathered from covering
 Therefore, they can perform various general tasks such as text generation, summarisation and so on as shown in the following diagram.
 
 ```mermaid
+---
+config:
+  theme: forest
+  look: handDrawn
+---
 flowchart LR
     A((FM)) --> B[Text generation]
     A --> C[Summarisation]
@@ -126,6 +131,11 @@ LLMs operate on tokens, such as words, letters, or partial word units.
 > 👉 1000 tokens are equivalent to approximately 750 words.
 
 ```mermaid
+---
+config:
+  theme: mc
+  look: handDrawn
+---
 flowchart TB
     A["Generative AI application"] -->|"Prompts + inference parameters"| B["FM API"]
     B -->|"Input tokens"| C["FM"]
@@ -451,6 +461,11 @@ There are many ways to travel from Perth to Sydney in Australia, including:
 Here the vector embedding process:
 
 ```mermaid
+---
+config:
+  theme: mc
+  look: handDrawn
+---
    flowchart TB
        A1[Images] --> B((AI))
        A2[Documents] --> B
@@ -485,6 +500,11 @@ FMS have a limited context window, which cannot handle multi-turn long conversat
 The FM can accept small documents in its small context window. However, large documents must be chunked and passed as multiple small ones. Each chunk creates its summary. These summaries are summed to create a smaller document, which is again chunked to pass. This iteration goes until the final summary, which can fit into the context window.
 
 ```mermaid
+---
+config:
+  theme: mc
+  look: neo
+---
 flowchart TD
     A[Large Document] --> B{Too large for context window?}
     B -->|Yes| C[Split into chunks]
