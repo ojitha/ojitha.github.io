@@ -1,6 +1,8 @@
 docs_list_title: My Notes
 docs:
 
+# - title: AI
+#   url: ai.html
 
 - title: DevOps
   url: devops.html
@@ -12,8 +14,14 @@ docs:
   url: kafka.html
 
 - title: Kubernetes
-  url: kubernetes.html  
+  url: kubernetes.html 
 
+- title: macOS
+  url: macos.html
+
+- title: Mongo DB
+  url: mongo.html  
+   
 - title: Productivity
   url: productivity.html
   
@@ -23,17 +31,8 @@ docs:
 - title: Python
   url: python.html  
 
-- title: Mongo DB
-  url: mongo.html
-
-- title: macOS
-  url: macos.html
-
 - title: Powershell
   url: powershell.html
-
-- title: Spark
-  url: spark.html
 
 - title: REST
   url: REST.html
@@ -46,6 +45,9 @@ docs:
 
 - title: Security
   url: security.html
+
+- title: Spark
+  url: spark.html  
 
 - title: Unix Tools
   url: UnixTools.html 

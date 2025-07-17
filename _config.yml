@@ -48,6 +48,8 @@ copyright: "Copyright © 2020 Ojitha Hewa Kumanayaka"
 
 # Build settings
 markdown: kramdown
+kramdown:
+  auto_ids: true
 
 excerpt_separator: <!--more-->
 paginate: 5

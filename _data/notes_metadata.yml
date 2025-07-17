@@ -1,3 +1,8 @@
+- name: ai
+  title: "Artificial Intelligence"
+  category: "ai"
+  tags: ["aws-bedrock", "langchain", "llm", "generative-ai"]
+
 - name: kafka
   title: "Apache Kafka"
   category: "messaging"
