@@ -703,7 +703,41 @@ logger.warn("This is a warning message")
 logger.error("This is an error message")
 ```
 
+## PyTest
 
+```mermaid
+mindmap
+  ((PyTest))
+    [Fixtures]
+      ["@pytest.mark"]
+        slow
+        skip
+        xfail
+        parameterize
+    ["Mocking"]    
+      ["unittest.mock"]
+        ["@mock.patch"]
+```
+
+
+
+## aysncio
+
+### preemptive multitasking
+
+Concurrency[^3] refers to multiple tasks that can occur independently of one another, potentially at different times (**time slicing**), even within a single core, which is known as **preemptive multitasking**. Preempting is when OS switches between tasks.
+
+> However, **Parallelism** executes two or more tasks simultaneously, which is not possible in a single-core processor.
+
+
+
+### cooperative multitasking 
+
+
+
+```mermaid
+mindmap
+```
 
 
 
@@ -712,3 +746,4 @@ logger.error("This is an error message")
 [^1]: [higher-order function](https://learning.oreilly.com/library/view/fluent-python-2nd/9781492056348/ch07.html#idm46582448567408)
 
 [^2]: [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/#decorators-with-arguments)
+[^3]: [Python Concurrency with asyncio, Video Edition](https://learning.oreilly.com/videos/python-concurrency-with/9781617298660VE/)
