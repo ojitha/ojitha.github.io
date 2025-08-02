@@ -9,6 +9,39 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
+
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2025-07-25-Scala-Collections/Scala_Collections.png" alt="Scala basics" width="200" height="200">
+    </div>
+    <div class="text-column">
+<p>Explores the powerful Scala Collections library, detailing immutable and mutable collection types like Lists, Sets, and Maps, along with their common operations for efficient data manipulation. Understand the benefits of immutability and the flexibility of mutable collections in Scala for building robust applications. This guide highlights essential tools for any Scala developer working with structured data.</p>
+    </div>
+</div>
 
 
 <!--more-->
