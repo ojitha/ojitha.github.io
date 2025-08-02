@@ -8,7 +8,39 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
 
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+        <img src="/assets/images/2025-07-25-Scala-basics/scala_basics.png" alt="Scala basics" width="200" height="200">
+    </div>
+    <div class="text-column">
+<p>Explore fundamental Scala programming concepts including its functional and object-oriented nature, immutable variables , mutable variables, type inference, and basic syntax for defining functions and classes. This guide introduces key Scala features for developers familiar with other programming languages looking to understand its core principles and get started with Scala development. Discover the power and expressiveness of Scala through this concise overview of its building blocks.</p>
+    </div>
+</div>
 
 <!--more-->
 
