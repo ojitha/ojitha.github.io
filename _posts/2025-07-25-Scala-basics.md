@@ -2,7 +2,7 @@
 layout: post
 title:  Scala Notes
 date:   2025-07-24
-categories: [Python]
+categories: [Scala]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
@@ -35,7 +35,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 <div class="image-text-container">
     <div class="image-column">
-        <img src="/assets/images/2025-07-25-Scala-basics/scala_basics.png" alt="Scala basics" width="200" height="200">
+        <img src="/assets/images/2025-07-25-Scala-basics/scala_basics.png" alt="Scala basics" width="150" height="150">
     </div>
     <div class="text-column">
 <p>Explore fundamental Scala programming concepts including its functional and object-oriented nature, immutable variables , mutable variables, type inference, and basic syntax for defining functions and classes. This guide introduces key Scala features for developers familiar with other programming languages looking to understand its core principles and get started with Scala development. Discover the power and expressiveness of Scala through this concise overview of its building blocks.</p>

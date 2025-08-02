@@ -36,7 +36,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 <div class="image-text-container">
     <div class="image-column">
-        <img src="/assets/images/2025-07-25-Scala-Collections/Scala_Collections.png" alt="Scala basics" width="200" height="200">
+        <img src="/assets/images/2025-07-25-Scala-Collections/Scala_Collections.png" alt="Scala basics" width="150" height="150">
     </div>
     <div class="text-column">
 <p>Explores the powerful Scala Collections library, detailing immutable and mutable collection types like Lists, Sets, and Maps, along with their common operations for efficient data manipulation. Understand the benefits of immutability and the flexibility of mutable collections in Scala for building robust applications. This guide highlights essential tools for any Scala developer working with structured data.</p>
