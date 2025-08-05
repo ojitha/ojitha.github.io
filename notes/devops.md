@@ -1380,7 +1380,7 @@ steps:
 ## Docker Compose
 
 ```
-mkdir azagent;cd azagent;curl -fkSL -o vstsagent.tar.gz https://download.agent.dev.azure.com/agent/4.255.0/vsts-agent-linux-x64-4.255.0.tar.gz;tar -zxvf vstsagent.tar.gz; if [ -x "$(command -v systemctl)" ]; then ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token FGUGxbsi3BkFOz1UYFHsNhpdjH4qx3dGGmSsmwnMZeRteBlckVvTJQQJ99BFACAAAAABmc7YAAASAZDO1IEd --runasservice; sudo ./svc.sh install; sudo ./svc.sh start; else ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token FGUGxbsi3BkFOz1UYFHsNhpdjH4qx3dGGmSsmwnMZeRteBlckVvTJQQJ99BFACAAAAABmc7YAAASAZDO1IEd; ./run.sh; fi
+mkdir azagent;cd azagent;curl -fkSL -o vstsagent.tar.gz https://download.agent.dev.azure.com/agent/4.255.0/vsts-agent-linux-x64-4.255.0.tar.gz;tar -zxvf vstsagent.tar.gz; if [ -x "$(command -v systemctl)" ]; then ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token <mytoken> --runasservice; sudo ./svc.sh install; sudo ./svc.sh start; else ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token <mytoken>; ./run.sh; fi
 ```
 
 
