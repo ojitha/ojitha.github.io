@@ -39,6 +39,31 @@ ORDER BY    TableName
 
 ## Athena
 
+Create table from csv file located in a S3:
+
+```sql
+CREATE EXTERNAL TABLE exampletable (
+  price int,
+  address string,
+  local_area string,
+  zipcode int,
+  beds int,
+  baths int,
+  sqft int,
+  url string,
+  state string
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+LOCATION 's3://<bucket path to csv file>/diy/'
+TBLPROPERTIES (
+'classification' = 'csv',
+'write.compression' = 'GZIP');
+```
+
+
+
 ### Dates
 
 Use the function `date_parse` to convert formated string to time stamp:
