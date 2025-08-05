@@ -416,6 +416,85 @@ aws emr create-cluster \
 ```
 
 
+
+```bash
+EMRClusterID=$(aws emr list-clusters | jq '.Clusters[0].Id' | tr -d '"')  && echo $EMRClusterID
+```
+
+review host
+
+```bash
+HOST=$(aws emr describe-cluster --cluster-id $EMRClusterID | jq '.Cluster.MasterPublicDnsName' | tr -d '"') && echo $HOST
+```
+
+To connect to the EMR cluster, run:
+
+```bash
+sudo ssh -i /home/ec2-user/<emr key>.pem hadoop@$HOST
+```
+
+Set the lab data bucket
+
+```bash
+LABDATABUCKET=$(aws s3api list-buckets --query "Buckets[?starts_with(Name, 'lab-data-')].Name"  --output text)
+echo $LABDATABUCKET
+```
+
+submit job
+
+```bash
+aws emr add-steps \
+--cluster-id $EMRClusterID \
+--steps Type=Spark,Name="MySparkApplication",ActionOnFailure=CONTINUE,Args=[s3://$LABDATABUCKET/iris_data.py,--data_source,s3://$LABDATABUCKET/iris_data.csv,--output_uri,s3://$LABDATABUCKET/output]
+```
+
+To check
+
+```
+aws emr describe-step --cluster-id $EMRClusterID --step-id <step id>
+```
+
+sample output of above is
+
+```json
+{
+    "Step": {
+        "Id": "<step id>",
+        "Name": "MySparkApplication",
+        "Config": {
+            "Jar": "command-runner.jar",
+            "Properties": {},
+            "Args": [
+                "spark-submit",
+                "s3://data-bucket-d47a5bd0/iris_data.py",
+                "--data_source",
+                "s3://data-bucket-d47a5bd0/iris_data.csv",
+                "--output_uri",
+                "s3://data-bucket-d47a5bd0/output"
+            ]
+        },
+        "ActionOnFailure": "CONTINUE",
+        "Status": {
+            "State": "COMPLETED",
+            "StateChangeReason": {},
+            "Timeline": {
+                "CreationDateTime": "2025-08-04T12:04:23.646000+00:00",
+                "StartDateTime": "2025-08-04T12:04:39.955000+00:00",
+                "EndDateTime": "2025-08-04T12:05:44.485000+00:00"
+            }
+        }
+    }
+}
+```
+
+To terminate cluster
+
+```bash
+aws emr terminate-clusters --cluster-ids $EMRClusterID
+```
+
+
+
 ### AWS Chalice
 
 Package first :
