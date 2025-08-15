@@ -3,6 +3,11 @@
   category: "ai"
   tags: ["aws-bedrock", "langchain", "llm", "generative-ai"]
 
+- name: Data Eng.
+  title: "Data Engineering"
+  category: "operations"
+  tags: ["Glue", "EMR", "Athena"]  
+
 - name: kafka
   title: "Apache Kafka"
   category: "messaging"

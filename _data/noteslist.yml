@@ -4,6 +4,9 @@ docs:
 # - title: AI
 #   url: ai.html
 
+- title: Data Engineering
+  url: dataengineering.html
+
 - title: DevOps
   url: devops.html
 

@@ -300,6 +300,14 @@ livy-server start
 jupyter lab --no-browser --ip=0.0.0.0 --allow-root --ServerApp.root_dir=/home/glue_user/workspace/jupyter_workspace/ --ServerApp.token='pyspark' --ServerApp.password=''
 ```
 
+**AWS Glue Flex jobs**
+
+AWS Glue Flex jobs is a cost optimisation feature that separates the control plane (metadata operations) from the compute plane (data processing) in ETL workloads. With this separation, you can save costs by running the control plane continuously while only provisioning the compute resources when needed for data processing.
+
+- Reduce Idel time costs
+- Scale compute resources independently
+- Use serverless data processing (Streaming ETL or Lambda)
+
 
 
 ## Spark Applications
@@ -794,4 +802,73 @@ findspark.init()
 from py4j.java_gateway import java_import
 java_import(spark._sc._jvm, "org.apache.spark.sql.api.python.*")
 ```
+
+## Data Partitioning
+
+**Partitioning** organises similar types of data into groups based on a particular column. Partitioning is best for low cardinality columns.
+
+**Bucketing** groups of data within a partition into equal groups or files. Bucketing is best for high cardinality columns.
+
+>  For the purposes of sorting, Apache Hive supports bucketing that can be created from high cardinality key columns, such as user-id.
+
+**AWS Glue partition indexe**s are a performance optimization feature that accelerates queries on partitioned data sources.
+
+### Processing and Transformation
+
+```mermaid
+mindmap
+  (("Processing and
+  Transformation"))
+    ["AWS Glue
+    DataBrew"]
+      Profile
+        ["Analyise Structure
+        and Quality"]
+      Cleanse
+        ["Handle 
+        missing"]
+        ["Deduplicate"]
+        ["Identifiy 
+        inconsistents"]
+    ["AWS SageMaker
+    Data Wrangler"]
+      Enrich
+        ["Add External
+        Context"]
+      Sample
+        ["Extract subsets
+        for testing"]
+```
+
+### File Formats
+
+### Parquet
+
+Why
+
+- Columnar Storage 
+- Predicate Pushdown to avoid unnecessary data
+- Compression (Snappy, GZip and LZO)
+- Schema Evolution
+- Parallel Processing
+
+## Data Cataloge
+
+```mermaid
+mindmap
+  (("Data 
+  Cataloge"))
+    [Schema 
+    Metadata]
+    [Partition
+    Metadata]
+    [Lineage
+    Metadata]
+```
+
+appflow
+
+[Processing Macie findings with Amazon EventBridge - Amazon Macie](https://docs.aws.amazon.com/macie/latest/user/findings-monitor-events-eventbridge.html)
+
+SQS
 
