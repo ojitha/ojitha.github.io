@@ -7,7 +7,44 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-This post delves into AWS S3 Access Points, highlighting how they simplify managing data access at scale by providing dedicated access policies per application. Learn how Access Points streamline S3 permissions, enhance security with granular controls, and support services like AWS PrivateLink for secure connectivity. Discover best practices for implementing and leveraging S3 Access Points for efficient and secure data lake management on AWS, crucial for modern cloud architectures.
+
+<style>
+/* Styles for the two-column layout */
+.image-text-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows columns to stack on small screens */
+    gap: 20px; /* Space between the image and text */
+    align-items: center; /* Vertically centers content in columns */
+    margin-bottom: 20px; /* Space below this section */
+}
+
+.image-column {
+    flex: 1; /* Allows this column to grow */
+    min-width: 250px; /* Minimum width for the image column before stacking */
+    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
+    box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+.text-column {
+    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
+    min-width: 300px; /* Minimum width for the text column before stacking */
+    box-sizing: border-box;
+}
+
+</style>
+
+<div class="image-text-container">
+    <div class="image-column">
+      <a target="_blank" href="/assets/images/about/S3Access_VPCEndPoint.pdf">
+        <img src="/assets/images/about/S3Access_VPCEndPoint.pdf" alt="Scala basics" width="200" height="150">
+        </a>
+    </div>
+    <div class="text-column">
+<p>This post delves into AWS S3 Access Points, highlighting how they simplify managing data access at scale by providing dedicated access policies per application. Learn how Access Points streamline S3 permissions, enhance security with granular controls, and support services like AWS PrivateLink for secure connectivity. Discover best practices for implementing and leveraging S3 Access Points for efficient and secure data lake management on AWS, crucial for modern cloud architectures.</p>
+    </div>
+</div>
+
+
 
 <!--more-->
 
