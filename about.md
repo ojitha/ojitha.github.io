@@ -34,10 +34,11 @@ typora-copy-images-to: /assets/images/${filename}
 
 ## Licenses & certifications
 
-| Name                                                         | Association                  | Credentials                                                  | Issued Date |
+| Verified Cert.                                               | Association                  | Credentials                                                  | Issued Date |
 | ------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------ | ----------- |
-| [AWS Certified Developer – Associate](https://www.credly.com/badges/43e197d0-a515-4cf8-9aca-7788b355613a?source=linked_in_profile) | AWS                          | [pdf](/assets/images/about/AWS_Developer_Associate_2022.pdf){:target="_blank"} | 30/04/2022  |
-| [AWS Certified Solutions Architect – Associate](https://www.credly.com/badges/f4f2e4a3-f826-4aae-8ea5-b4d0e6d39a10?source=linked_in_profile) | AWS                          | [pdf](/assets/images/about/Solutions_Architect_Associate_2021.pdf){:target="_blank"} | 02/08/2021  |
+| [AWS Data Analytics](https://www.credly.com/badges/ca47ca26-f81d-4120-ae69-8a19f54d52ff){:target="_blank"} | AWS                          | [pdf](/assets/images/about/AWS_Data_Analytics.pdf){:target="_blank"} | 14/08/2025  |
+| [AWS Certified Developer – Associate](https://www.credly.com/badges/43e197d0-a515-4cf8-9aca-7788b355613a?source=linked_in_profile){:target="_blank"} | AWS                          | [pdf](/assets/images/about/AWS_Developer_Associate_2022.pdf){:target="_blank"} | 30/04/2022  |
+| [AWS Certified Solutions Architect – Associate](https://www.credly.com/badges/f4f2e4a3-f826-4aae-8ea5-b4d0e6d39a10?source=linked_in_profile){:target="_blank"} | AWS                          | [pdf](/assets/images/about/Solutions_Architect_Associate_2021.pdf){:target="_blank"} | 02/08/2021  |
 | AWS Certified Developer – Associate                          | AWS                          | [pdf](/assets/images/about/Developer_Associate_certificate_2017.pdf){:target="_blank"} | 29/05/2017  |
 | Sun Certified Java Programmer Java 6                         | Sun Microsystems             | [pdf](/assets/images/about/Sun_Certified.pdf){:target="_blank"} | 2009        |
 | Chartered IT Professional                                    | The British Computer Society | [jpg](./assets/images/about/BCS_CITP.jpg){:target="_blank"}  | 01/05/2004  |
