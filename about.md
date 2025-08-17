@@ -43,13 +43,15 @@ typora-copy-images-to: /assets/images/${filename}
 | Sun Certified Java Programmer Java 6                         | Sun Microsystems             | [pdf](/assets/images/about/Sun_Certified.pdf){:target="_blank"} | 2009        |
 | Chartered IT Professional                                    | The British Computer Society | [jpg](./assets/images/about/BCS_CITP.jpg){:target="_blank"}  | 01/05/2004  |
 
+
+
 ## Courses
 
 | Course                                                       | Association             | Credentials                                                  | Issued Date |
 | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------- |
 | [AWS SimuLearn: Secure Data Using Amazon S3 Access Points and VPC Endpoints](https://skillbuilder.aws/learn/34X7U1FY79/aws-simulearn-secure-data-using-amazon-s3-access-points-and-vpc-endpoints/GP9VVUAQEX){:target="_blank"} | AWS                     | [pdf](/assets/images/about/S3Access_VPCEndPoint.pdf){:target="_blank"} | 03/08/2025  |
 | [Lab - Explore Amazon Bedrock Agents integrated with Amazon Bedrock Knowledge Bases and Amazon Bedrock Guardrails](https://skillbuilder.aws/learn/EYJP8ZK9VK/lab--explore-amazon-bedrock-agents-integrated-with-amazon-bedrock-knowledge-bases-and-amazon-bedrock-guardrails/R3GGAEJHGG){:target="_blank"} | AWS                     | [pdf](/assets/images/about/Lab_Explore_Amazon_Bedrock_Agents_integrated_with_Amazon_Bedrock_Knowledge_Bases_and_Amazon_Bedrock_Guardrails.pdf){:target="_blank"} | 23/07/2025  |
-| [Amazon SageMaker JumpStart Foundations](https://skillbuilder.aws/learn/FXFTA818BY/amazon-sagemaker-jumpstart-foundations/JHCWA81C7B) | AWS                     | [pdf](/assets/images/about/Amazon_SageMaker_JumpStart_Foundations.pdf){:target="_blank"} | 22/07/2025  |
+| [Amazon SageMaker JumpStart Foundations](https://skillbuilder.aws/learn/FXFTA818BY/amazon-sagemaker-jumpstart-foundations/JHCWA81C7B){:target="_blank"} | AWS                     | [pdf](/assets/images/about/Amazon_SageMaker_JumpStart_Foundations.pdf){:target="_blank"} | 22/07/2025  |
 | Python Programming                                           | O`REILLY                | [pdf](/assets/images/about/Python_Programming.pdf){:target="_blank"} | 03/08/2025  |
 | [Lab - Build Machine Learning Models with Amazon SageMaker](https://skillbuilder.aws/learn/V4N9X9XV6E/lab--build-machine-learning-models-with-amazon-sagemaker/HTVY1DP1CH){:target="_blank"} | AWS                     | [pdf](/assets/images/about/Lab_-_Build_Machine_Learning_Models_with_Amazon_SageMaker.pdf){:target="_blank"} | 20/06/2025  |
 | [Advanced Python: Functional Programming](https://learning.oreilly.com/live-events/advanced-python-functional-programming/0642572010110/){:target="_blank"} | O`REILLY                | [pdf](/assets/images/about/ORMCertificate20250531-25-epsw1f.pdf){:target="_blank"} | 22/03/2025  |
@@ -86,6 +88,8 @@ typora-copy-images-to: /assets/images/${filename}
 | [Functional Programming Principles in Scala](https://www.coursera.org/account/accomplishments/records/2BMLP7JQGUTW){:target="_blank"} | EPFL                    | [Coursera](/assets/images/about/Coursera_2BMLP7JQGUTW.pdf){:target="_blank"} | 07/2016     |
 | [Introduction to Recommender Systems](https://www.coursera.org/account/accomplishments/records/LU8A57ZX89HG){:target="_blank"} | University of Minnesota | [Coursera](assets/images/about/Coursera_LU8A57ZX89HG.pdf){:target="_blank"} | 10/2015     |
 |                                                              |                         |                                                              |             |
+
+
 
 ## IEEE Research Publications
 

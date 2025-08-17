@@ -2,7 +2,7 @@
 layout: post
 title:  AWS S3 Access Points
 date:   2025-08-03
-categories: [AWS]
+categories: [AWS, AI]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
@@ -120,7 +120,100 @@ There are two main types of VPC endpoints:
     
     - **Cost:** There is no additional charge for using a gateway endpoint.6
     
-      ​    
+      
+
+This is a good example[^1] of accessing AWS BedRock using AWS PrivateLink via VPC access point:
+
+![VPC Point to AWS BedRock](/assets/images/2025-08-03-AWSS3AccessPoints/vpcpoint2bedrock.png)    
+
+You have to configure ENI for the above configuration to Lambda to communicate with the Database:
+
+![ENI Configuration for VPC Endpoint](./assets/images/2025-08-03-AWSS3AccessPoints/ENI_Configuration_for_VPC_Endpoint.jpg)
+
+In addition to update the Subnet to private and the security group (Enable IP4 traffic for all the Ports). Same subent and security group combination will use the same ENI.
+
+> For each subnet, Lambda creates an ENI for unique set of security groups.
+
+You have to configure the Lambda to communicate with ELB, otherwise, connection will fail after the 60 seconds.
+
+### Create Interface Endpoint
+
+You can create endpoint under the VPC -> Endpoints in the AWS console. VPC doesn't need public IP address to communicate with **AWS service** because communication is via AWS PrivateLink.
+
+![Connect to AWS service via VPC Endpoint](/assets/images/2025-08-03-AWSS3AccessPoints/Connect_to_AWS_service_via_VPC_Endpoint.jpg)
+
+You have to specify the private subnet which is in service provider (BedRock).
+
+![Select the Service provider subnet](/assets/images/2025-08-03-AWSS3AccessPoints/Select_the_Service_provider_subnet.jpg)
+
+You have to select the private subnet.
+
+You have to specify the <u>custom resource-based endpoint policy</u>:
+
+```json 
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Action": [
+				"bedrock:InvokeModel"
+			],
+			"Resource": [
+				"arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-micro-v1:0"
+			],
+			"Effect": "Allow",
+			"Principal": "*"
+		}
+	]
+}
+```
+
+In the lambda function you can test the LLM:
+
+```python
+import boto3
+import json
+from datetime import datetime
+import os
+
+model_id = os.environ.get('BEDROCK_MODEL_ID')
+
+def test_bedrock():
+    model_id = os.environ.get('BEDROCK_MODEL_ID')
+    prompt = "What is the LLM?"
+    r = call_bedrock(model_id, prompt)
+    
+    return("""
+    \n 
+    Response:\n
+    %s
+    \n
+    """ % (r['response'])
+    )
+    
+def call_bedrock(model_id, prompt_data):
+    
+    bedrock_runtime = boto3.client("bedrock-runtime")
+    body = json.dumps({
+        "inferenceConfig": {"max_new_tokens": 1000},
+        "messages": [{"role": "user", "content": [{"text": prompt_data}]}],
+    })
+    print("bedrock-input:", body)
+
+    accept = "application/json"
+    content_type = "application/json"
+
+    response = bedrock_runtime.invoke_model(
+        body=body, modelId=model_id, accept=accept, contentType=content_type
+    )
+
+    response_body = json.loads(response.get("body").read())
+    response = response_body.get('output').get('message').get('content')[0].get('text')
+
+    return {"response": response}    
+```
+
+
 
 ## Key Benefits of Using VPC Endpoints
 
@@ -213,3 +306,5 @@ aws s3 cp s3://arn:aws:s3:us-east-1:60...:accesspoint/vpconly-access-point/Polic
 {:gtxt: .message color="green"}
 {:ytxt: .message color="yellow"}
 {:rtxt: .message color="red"}
+
+[^1]: AWS Cloud Quest: Fine-Tuning an LLM on Amazon SageMaker,**Generative AI Architect**
