@@ -21,13 +21,13 @@ This post delves into AWS S3 Access Points, highlighting how they simplify manag
 
 ## S3 Access Point
 
-AWS Access Points are a feature for Amazon S3 (Simple Storage Service) that simplifies managing data access for shared datasets. 
+AWS Access Points are a feature for Amazon S3 that simplifies managing data access for shared datasets. 
 
 They act as network endpoints attached to an S3 bucket, allowing you to create unique access control policies for specific applications, teams, or individuals.
 
 Here's a breakdown of what that means and why it's useful:
 
-- **Simplifying Access Management:** Before Access Points, if you had a large S3 bucket with data used by multiple applications or teams, you would have to manage a single, often complex, bucket policy. Every time you needed to grant or change access for a specific use case, you had to modify this one large policy. Access Points let you *decompose that single policy into separate, discrete policies, one for each access point*. This makes it much easier to manage and audit permissions.5
+- **Simplifying Access Management:** Before Access Points, if you had a large S3 bucket with data used by multiple applications or teams, you would have to manage a single, often complex, bucket policy. Every time you needed to grant or change access for a specific use case, you had to modify this one large policy. Access Points let you *decompose that single policy into separate, discrete policies, one for each access point*. This makes it much easier to manage and audit permissions.
 
 - **Application-Specific Policies:** With Access Points, you can create a *dedicated endpoint with a tailored policy for a specific application*. For example, one application might have read-only access to a particular folder in the bucket. At the same time, another might have read/write permissions to a different part of the same bucket. You can configure each Access Point with its policy to meet those specific needs.
 
@@ -37,15 +37,15 @@ Here's a breakdown of what that means and why it's useful:
 
 In essence, AWS Access Points provide a more scalable and granular way to manage access to S3 buckets, especially for large, shared datasets, by moving permissions closer to the application that is using the data. An *S3 Access Point is a named network endpoint attached to an S3 bucket*. Each access point can have up to 10,000 access points per bucket, with distinct permissions and network controls. 
 
-A VPC endpoint is a feature of Amazon Virtual Private Cloud (VPC) that allows you to privately connect your VPC to supported AWS services, as well as services hosted by other AWS customers (via AWS PrivateLink). The key benefit is that traffic between your VPC and the AWS service does not leave the Amazon network, which offers enhanced security, compliance, and performance.1
+A VPC endpoint is a feature of Amazon Virtual Private Cloud (VPC) that allows you to privately connect your VPC to supported AWS services, as well as services hosted by other AWS customers (via AWS PrivateLink). The key benefit is that traffic between your VPC and the AWS service does not leave the Amazon network, which offers enhanced security, compliance, and performance.
 
-Here's a breakdown of the core concepts and types of VPC endpoints:
+
 
 ## The Problem VPC Endpoints Solve
 
-By default, instances in a private subnet need a route to the internet to access public AWS services like Amazon S3, typically through a NAT Gateway and an Internet Gateway. This means the traffic leaves your private network and travels over the public internet, which can introduce security risks and latency.
+By default, instances in a <u>private subnet</u> need a route to the internet to access public AWS services like Amazon S3, typically through a *NAT Gateway* and an *Internet Gateway*. This means the **traffic leaves your private network and travels over the public internet**{:rtxt}, which can introduce <span>security risks and latency</span>{:rtxt}.
 
-A VPC endpoint provides a direct, private connection, eliminating the need for an Internet Gateway, NAT device, or VPN connection.2
+A <u>VPC endpoint</u> provides a **direct, private connection, eliminating the need for an Internet Gateway, NAT device, or VPN connection**{:gtxt}. 
 
 ## Types of VPC Endpoints
 
@@ -55,21 +55,35 @@ There are two main types of VPC endpoints:
 
     - **How they work:** *Interface endpoints are powered by AWS <u>PrivateLink</u>.* When you create one, it provisions an <u>Elastic Network Interface</u> (ENI) with a private IP address from your VPC's subnet. This ENI acts as a secure, private entry point for traffic to the AWS service.
 
-    - **Supported services:** They are the most common type and support a wide range of AWS services, including Amazon EC2, AWS Lambda, Amazon SNS, Amazon SQS, and many others.
+    - **Supported services:** They are the most common type and support a wide range of AWS services, including 
+
+        - **Amazon EC2**, 
+
+        - **AWS Lambda**, 
+
+        - **Amazon SNS**, 
+
+        - **Amazon SQS**, 
+
+        - and **many others**.
 
     - **Cost:** You are charged for interface endpoints by the hour and for the amount of data processed 
 
-        
+      ​    
 
 2. **Gateway Endpoints:**
 
     - **How they work:** A gateway endpoint is a gateway that you specify as a target for a route in your route table. When traffic from your VPC is destined for a supported AWS service, it gets routed through this gateway endpoint instead of an internet gateway.
 
-    - **Supported services:** This type is currently only supported for two specific AWS services: **Amazon S3** and **Amazon DynamoDB**.
+    - **Supported services:** This type is currently only supported for two specific AWS services: 
 
+        - **Amazon S3** and 
+
+        - **Amazon DynamoDB**.
+    
     - **Cost:** There is no additional charge for using a gateway endpoint.6
-
-        
+    
+      ​    
 
 ## Key Benefits of Using VPC Endpoints
 
@@ -77,7 +91,7 @@ There are two main types of VPC endpoints:
 
 - **Improved Performance:** Bypassing the public internet often leads to lower latency and higher, more consistent bandwidth for your applications.
 
-- **Cost Savings:** By avoiding a NAT Gateway, you can reduce or eliminate the data processing charges associated with it, especially for services like S3 with high data transfer volumes.9
+- **Cost Savings:** By avoiding a NAT Gateway, you can reduce or eliminate the data processing charges associated with it, especially for services like S3 with high data transfer volumes.
 
 - **Simplified Network Architecture:** It removes the need for complex network configurations, such as managing a NAT Gateway or an Internet Gateway, for resources that only need to communicate with AWS services.
 
@@ -159,3 +173,6 @@ For example, to copy a file from an S3,
 aws s3 cp s3://arn:aws:s3:us-east-1:60...:accesspoint/vpconly-access-point/Policies.txt .
 ```
 
+{:gtxt: .message color="green"}
+{:ytxt: .message color="yellow"}
+{:rtxt: .message color="red"}
