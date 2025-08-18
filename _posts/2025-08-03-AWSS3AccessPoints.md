@@ -45,7 +45,6 @@ typora-copy-images-to: ../assets/images/${filename}
 </div>
 
 
-
 <!--more-->
 
 ------
@@ -128,7 +127,7 @@ This is a good example[^1] of accessing AWS BedRock using AWS PrivateLink via VP
 
 You have to configure ENI for the above configuration to Lambda to communicate with the Database:
 
-![ENI Configuration for VPC Endpoint](./assets/images/2025-08-03-AWSS3AccessPoints/ENI_Configuration_for_VPC_Endpoint.jpg)
+![ENI Configuration for VPC Endpoint](/assets/images/2025-08-03-AWSS3AccessPoints/ENI_Configuration_for_VPC_Endpoint.jpg)
 
 In addition to update the Subnet to private and the security group (Enable IP4 traffic for all the Ports). Same subent and security group combination will use the same ENI.
 
