@@ -128,23 +128,23 @@ This is a good example[^1] of accessing AWS BedRock using AWS PrivateLink via VP
 
 ![VPC Point to AWS BedRock](/assets/images/2025-08-03-AWSS3AccessPoints/vpcpoint2bedrock.png)    
 
-You have to configure ENI for the above configuration to Lambda to communicate with the Database:
+You have to configure ENI for the above configuration for Lambda to communicate with the Database:
 
 ![ENI Configuration for VPC Endpoint](/assets/images/2025-08-03-AWSS3AccessPoints/ENI_Configuration_for_VPC_Endpoint.jpg)
 
-In addition to update the Subnet to private and the security group (Enable IP4 traffic for all the Ports). Same subent and security group combination will use the same ENI.
+In addition to updating the Subnet to private and the security group (Enable IP4 traffic for all the Ports). The same subnet and security group combination will use the same ENI.
 
-> For each subnet, Lambda creates an ENI for unique set of security groups.
+> For each subnet, Lambda creates an ENI for a unique set of security groups.
 
-You have to configure the Lambda to communicate with ELB, otherwise, connection will fail after the 60 seconds.
+You have to configure the Lambda to communicate with ELB; otherwise, the connection will fail after 60 seconds.
 
 ### Create Interface Endpoint
 
-You can create endpoint under the VPC -> Endpoints in the AWS console. VPC doesn't need public IP address to communicate with **AWS service** because communication is via AWS PrivateLink.
+You can create an endpoint under the VPC -> Endpoints in the AWS console. VPC doesn't need a public IP address to communicate with AWS services because communication is via AWS PrivateLink.
 
 ![Connect to AWS service via VPC Endpoint](/assets/images/2025-08-03-AWSS3AccessPoints/Connect_to_AWS_service_via_VPC_Endpoint.jpg)
 
-You have to specify the private subnet which is in service provider (BedRock).
+You need to specify the private subnet within the service provider (BedRock).
 
 ![Select the Service provider subnet](/assets/images/2025-08-03-AWSS3AccessPoints/Select_the_Service_provider_subnet.jpg)
 
@@ -170,7 +170,7 @@ You have to specify the <u>custom resource-based endpoint policy</u>:
 }
 ```
 
-In the lambda function you can test the LLM:
+In the lambda function, you can test the LLM:
 
 ```python
 import boto3
@@ -240,6 +240,24 @@ Additionally, the bucket policy associated with each underlying S3 bucket define
 5. A gateway VPC endpoint with a VPC endpoint policy is created to connect the VPC with Amazon S3. This VPC endpoint policy has a statement that allows Amazon S3 access only through the access point.
 6. When applications in an Amazon Elastic Compute Cloud (Amazon EC2) instance try to access datasets in Amazon S3 through the access point, a route table is used to route traffic destined for the access point to the VPC endpoint. 
 
+
+
+![Create VPC Endpoint](/assets/images/2025-08-03-AWSS3AccessPoints/Create_VPC_Endpoint.jpg)
+
+Click (1) to create endpoint in the above diagram..
+
+![Cinfigure VPC Endpoint with S3](/assets/images/2025-08-03-AWSS3AccessPoints/Cinfigure_VPC_Endpoint_with_S3.jpg)
+
+As shown in the above diagram, select the Gateway in the region you are using.
+
+![VPC Endpoint network configuration](/assets/images/2025-08-03-AWSS3AccessPoints/VPC_Endpoint_network_configuration.jpg)
+
+As shown in the above diagram (1) select the VPC and the (2) private route table.
+
+![Just Create VPC Endpoint](./assets/images/2025-08-03-AWSS3AccessPoints/Just_Create_VPC_Endpoint.jpg)
+
+Create the endpoint at the bottom of the page (1).
+
 An endpoint policy is a resource-based policy that you attach to a VPC endpoint to control which AWS principals can use the endpoint to access an AWS service. Example VPC endpoint policy:
 
 ```json
@@ -291,7 +309,7 @@ A bucket policy is a resource-based policy that you can use to grant access perm
             ],
             "Condition": {
                 "StringNotEquals": {
-                    "aws:SourceVpc": "VPC_ID"
+                    "aws:SourceVpc": "<VPC endpoint id>"
                 }
             }
         }
@@ -304,6 +322,43 @@ For example, to copy a file from an S3,
 ```bash
 aws s3 cp s3://arn:aws:s3:us-east-1:60...:accesspoint/vpconly-access-point/Policies.txt .
 ```
+
+## Secure LLMs
+
+First, VPC to establish a private network for secure API calls and restrict internet access which ensure data privacy. Within this private VPC, provision SageMaker notebook instances, which will serve as the development environment. As a secure storage S3 stores model artifacts, with bucket policies restricting access to <u>VPC Endpoints</u>.
+
+Additionally, use KMS to enforce encryption of ML model artifacts, both in transit and rest which is an extra layer of secrurity. IAM roles restrict access to the SageMaker resources and enable granular access control.
+
+To streamline the provisioing and ensure consistent configuration, use AWS Service Catalog to package and preconfigured resources such as VPC, notebook instances, S3 Buckets, and IAM as a predefined product. Then as a service catalog user, browse and launch the preconfigured LLM development product which save the time and effort while reducing the risk of misconfiguration.
+
+### ECR Polcy
+
+Here the example ECR policy:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowPull",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+      ],
+      "Condition": {
+        "StringNotEquals": {
+          "aws:sourceVpce": "<VPC endpoint id>"
+        }
+      }
+    }
+  ]
+}
+```
+
+
 
 {:gtxt: .message color="green"}
 {:ytxt: .message color="yellow"}
