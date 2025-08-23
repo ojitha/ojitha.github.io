@@ -597,6 +597,24 @@ To delete the environment
 conda remove -n myenv --all
 ```
 
+### Create a conda env on Jupyter Lab
+
+Create a new conda environment:
+
+```bash
+conda create -n lab_python310 python=3.10.14 -y
+```
+
+To set the above conda environment to Jupyter kernel:
+
+```bash
+python -m ipykernel install --user --name lab_python310 --display-name 'conda_lab_python310'
+```
+
+When you open the Jupyter notebook, select the `No Kernel` at the beginning. Then again, click the `No Kernel` to select the `conda_lab_python310` env.
+
+
+
 ## Logging
 
 ### Custom JSON Formatter 
