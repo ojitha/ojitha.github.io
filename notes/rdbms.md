@@ -17,7 +17,7 @@ typora-copy-images-to: ../assets/images/${filename}
 ---
 ## H2 Database
 
-For testing use the following to run in the watch expression:
+For testing, use the following to run in the watch expression:
 
 ```bash
 org.h2.tools.Server.startWebServer(this.jdbcTemplate.getDataSource().getConnection())
@@ -27,7 +27,7 @@ if you need to run in the browser(start browser: **java -cp h2-1.4.193.jar org.h
 
 
 ## MS SQL
-Find all the tables where column is exists:
+Find all the tables where a column is exists:
 ```sql
 SELECT      COLUMN_NAME AS 'ColumnName'
             ,TABLE_NAME AS  'TableName'
@@ -37,9 +37,19 @@ ORDER BY    TableName
             ,ColumnName;
 ```
 
+## SQLite
+
+This database is available on macOS. To run the simple Windows function:
+
+```sql
+SELECT value, FIRST_VALUE(value) over w,  LAST_VALUE(value) OVER w  FROM generate_series(1, 10, 1) WINDOW w AS (Range BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING);
+```
+
+
+
 ## Athena
 
-Create table from csv file located in a S3:
+Create a table from a CSV file located in S3:
 
 ```sql
 CREATE EXTERNAL TABLE exampletable (
@@ -66,7 +76,7 @@ TBLPROPERTIES (
 
 ### Dates
 
-Use the function `date_parse` to convert formated string to time stamp:
+Use the function `date_parse` to convert a formatted string to a timestamp:
 
 ```sql
 select * from cte 
@@ -75,7 +85,7 @@ and  "account-no" in (...) order by "account-no";
 ```
 
 NOTE: The column `issue-date` is a string type.
-In the above code use the function `from_iso8601_date` to create timestamp from the string.
+In the above code, use the function from_iso8601_date to create a timestamp from the string.
 
 ### Athena to date example
 
@@ -145,7 +155,7 @@ select * from svv_transactions order by txn_start desc;
 select pg_terminate_backend(1073955175);
 ```
 
-you can find the users grant roles
+You can find the users' grant roles
 
 ```sql
 -- user grants
@@ -162,12 +172,12 @@ select * from svv_attached_masking_policy;
 ```
 
 ### Query optimisation
-Find the latest query by user
+Find the latest query by the user
 
 ```sql
 SELECT * from stl_query q where q.userid=102 order by q.starttime desc;
 ```
-or from the query column you can find the query id: 
+Or from the query column, you can find the query ID: 
 
 ```sql
 select *
@@ -177,7 +187,7 @@ order by query
 desc limit 20;
 ```
 
-After find the query id from the above, find the query summary details
+After finding the query ID from the above, find the query summary details.
 
 ```sql
 select * from SVL_QUERY_SUMMARY s 
@@ -191,7 +201,7 @@ Select segment, step, event, solution from stl_alert_event_log where query in (	
 ```
 
 ### Redshift Windowing functions
-If you run the example with default winodw:
+If you run the example with the default window:
 
 ```sql
 select sales
@@ -199,7 +209,7 @@ select sales
    , SUM(sales) OVER ()
 FROM "retail_sales";
 ```
-Following query generates the same result gnereated by the above result:
+The following query generates the same result as the above result:
 
 ```sql
 select sales
@@ -208,9 +218,9 @@ select sales
 FROM "retail_sales";
 ```
 
-Based on the above result, I realised the default is `(ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)` for redshift. For the Postgres, the default is (RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW). However, `RANGE` is not supported by Redshift version I am using.
+Based on the above result, I realised the default is `(ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)` for Redshift. For Postgres, the default is (RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW). However, `RANGE` is not supported by the Redshift version I am using.
 
-As I found from the following quer, upper bound default is `CURRENT ROW` (same as in Postgres):
+As I found from the following query, the upper bound default is `CURRENT ROW` (same as in Postgres):
 
 ```sql
 select sales
@@ -218,24 +228,24 @@ select sales
    , SUM(sales) OVER (ROWS BETWEEN CURRENT ROW AND CURRENT ROW)
 FROM "retail_sales";
 ```
-because `ROWS CURRENT ROW` generate the same result for the `ROWS BETWEEN CURRENT ROW AND CURRENT ROW`.
+Because `ROWS CURRENT ROW` generate the same result as `ROWS BETWEEN CURRENT ROW AND CURRENT ROW`.
 
 ### Redshift data sharing
-You can create a view that spans Amazon Redshift and Redshift Spectrum external tables. With late-binding views, table binding will take place at runtime, providing your users and applications with seamless access to query data.
+You can create a view that spans Amazon Redshift and Redshift Spectrum external tables. With late-binding views, table binding occurs at runtime, providing your users and applications with seamless access to query data.
 
 **Late-binding views**:
 
-allows you to drop and make changes to referenced tables without affecting the views. With this feature, you can query frequently accessed data in your Redshift cluster and less-frequently accessed data in S3, using a single view.
+Allows you to drop and modify referenced tables without affecting the views. With this feature, you can query frequently accessed data in your Redshift cluster and less-frequently accessed data in S3, using a single view.
 
-A **Datashare** is the unit of sharing data in Amazon Redshift. Use datashares in the same AWS account or different AWS accounts. Datashare objects are objects from specific databases on a cluster that producer cluster administrators can add to share with data consumers. Datashare objects are read-only for data consumers. Examples of datashare objects are tables, views, UDFs and so on.
+A **Datashare** is the unit of sharing data in Amazon Redshift. Use data shares in the same AWS account or in different AWS accounts. Datashare objects are objects from specific databases on a cluster that producer cluster administrators can add to share with data consumers. Datashare objects are read-only for data consumers. Examples of datashare objects are tables, views, UDFs and so on.
 
-There are different type of datashare such as 
+There are different types of datashare such as 
 - Standard 
 - Data Exchange
 - Lakeformation Managed
 
 
-## Quary Optimisation
+## Query Optimisation
 
 ### Predicate Pushdown
 
@@ -244,12 +254,12 @@ There are different type of datashare such as
 ### Partition Projection
 
 ### Materialized views
-For example, Amazon Redshift returns the precomputed results from the materialized view, without accessing the base tables at all where the query results are much faster compared to retrieving the same data from the base tables. You can define a materialized view using other materialized views. A materialized view plays the same role as a base table.
+For example, Amazon Redshift returns the precomputed results from the materialised view, without accessing the base tables at all, resulting in query results that are much faster than retrieving the same data from the base tables. You can define a materialised view using other materialised views. A materialised view plays the same role as a base table.
 
-In Redshift, to update the data in the materialized view, users can use the `REFRESH MATERIALIZED VIEW` statement to manually refresh materialized views. Amazon Redshift provides a few ways to keep materialized views up to date for automatic rewriting: 
+In Redshift, to update the data in the materialised view, users can use the REFRESH MATERIALIZED VIEW statement to refresh materialised views manually. Amazon Redshift provides a few ways to keep materialised views up to date for automatic rewriting: 
 
-- Analysts can configure materialized views to refresh materialized views when base tables of materialized views are updated. This autorefresh operation runs when cluster resources are available to minimize disruptions to other workloads.
-- Users can schedule a materialized view refresh job by using Amazon Redshift scheduler API and console integration.
+- Analysts can configure materialised views to refresh when the base tables of materialised views are updated. This autorefresh operation runs when cluster resources are available to minimise disruptions to other workloads.
+- Users can schedule a materialised view refresh job by using the Amazon Redshift scheduler API and console integration.
 
 
 
