@@ -254,7 +254,7 @@ As shown in the above diagram, select the Gateway in the region you are using.
 
 As shown in the above diagram (1) select the VPC and the (2) private route table.
 
-![Just Create VPC Endpoint](./assets/images/2025-08-03-AWSS3AccessPoints/Just_Create_VPC_Endpoint.jpg)
+![Just Create VPC Endpoint](/assets/images/2025-08-03-AWSS3AccessPoints/Just_Create_VPC_Endpoint.jpg)
 
 Create the endpoint at the bottom of the page (1).
 
