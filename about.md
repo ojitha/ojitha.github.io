@@ -36,14 +36,14 @@ typora-copy-images-to: /assets/images/${filename}
 
 ## Licenses & certifications
 
-| Verified Cert.                                               | Association                  | Credentials                                                  | Issued Date |
+| Credentials Verification Link                                | Association                  | Bage                                                         | Issued Date |
 | ------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------ | ----------- |
-| [AWS Data Analytics](https://www.credly.com/badges/ca47ca26-f81d-4120-ae69-8a19f54d52ff){:target="_blank"} | AWS                          | [pdf](/assets/images/about/AWS_Data_Analytics.pdf){:target="_blank"} | 14/08/2025  |
-| [AWS Certified Developer – Associate](https://www.credly.com/badges/43e197d0-a515-4cf8-9aca-7788b355613a?source=linked_in_profile){:target="_blank"} | AWS                          | [pdf](/assets/images/about/AWS_Developer_Associate_2022.pdf){:target="_blank"} | 30/04/2022  |
-| [AWS Certified Solutions Architect – Associate](https://www.credly.com/badges/f4f2e4a3-f826-4aae-8ea5-b4d0e6d39a10?source=linked_in_profile){:target="_blank"} | AWS                          | [pdf](/assets/images/about/Solutions_Architect_Associate_2021.pdf){:target="_blank"} | 02/08/2021  |
-| AWS Certified Developer – Associate                          | AWS                          | [pdf](/assets/images/about/Developer_Associate_certificate_2017.pdf){:target="_blank"} | 29/05/2017  |
-| Sun Certified Java Programmer Java 6                         | Sun Microsystems             | [pdf](/assets/images/about/Sun_Certified.pdf){:target="_blank"} | 2009        |
-| Chartered IT Professional                                    | The British Computer Society | [jpg](./assets/images/about/BCS_CITP.jpg){:target="_blank"}  | 01/05/2004  |
+| [AWS AI Architect](https://www.credly.com/badges/a6635888-93a2-4a7c-b412-757815c81573/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-cloud-quest-generative-ai-architect.png](/assets/images/about/aws-cloud-quest-generative-ai-architect.png) | 17/08/2025  |
+| [AWS Data Analytics](https://www.credly.com/badges/ca47ca26-f81d-4120-ae69-8a19f54d52ff/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-cloud-quest-data-analytics](/assets/images/about/aws-cloud-quest-data-analytics.png) | 14/08/2025  |
+| [AWS Certified Developer – Associate](https://www.credly.com/badges/01dbe7bb-0b4d-4e9f-8811-95879ec2a1c8/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-certified-developer-associate](/assets/images/about/aws-certified-developer-associate.png) | 30/04/2022  |
+| [AWS Certified Solutions Architect – Associate](https://www.credly.com/badges/18763a84-f2b0-48fc-ac9a-ce156a4e70ce/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-certified-solutions-architect-associate](/assets/images/about/aws-certified-solutions-architect-associate.png) | 02/08/2021  |
+| Sun Certified Java Programmer Java 6                         | Sun Microsystems             | <object data="/assets/images/about/Sun_Certified.pdf" type="application/pdf" width="150" height="100"/> | 2009        |
+| Chartered IT Professional                                    | The British Computer Society | ![BCS CITP](./assets/images/about/BCS_CITP.jpg){: width="12%" height="8% "target="_blank"}  | 01/05/2004  |
 
 
 
