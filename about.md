@@ -51,6 +51,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 | Course                                                       | Association             | Credentials                                                  | Issued Date |
 | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------- |
+| [AI Agents with MCP](https://learning.oreilly.com/live-events/building-ai-agents-with-model-context-protocol-mcp/0642572182441/){:target="_blank"} | O`REILLY                | [pdf](/assets/images/about/AI_Agents_with_MCP.pdf){:target="_blank"} | 29/08/2025  |
 | [Model Context Protocol (MCP) – Simply explained](https://skillbuilder.aws/learn/WSE7F92MPA/model-context-protocol-mcp--simply-explained/YP6AFKZECQ){:target="_blank"} | AWS                     | [pdf](/assets/images/about/MCP_Simply_explained.pdf){:target="_blank"} | 28/08/2025  |
 | [AWS Cloud Quest: Generative AI Architect](https://skillbuilder.aws/learn/PFYH348EK2/aws-cloud-quest-generative-ai-architect/B3Q26P97G8){:target="_blank"} | AWS                     | [pdf](/assets/images/about/Generative_AI_Architect.pdf){:target="_blank"} | 17/08/2025  |
 | [AWS Cloud Quest: Data Analytics](https://skillbuilder.aws/learn/ZZHVPSPF2S/aws-cloud-quest-data-analytics/YZYQPHY2VZ){:target="_blank"} | AWS                     | [pdf](/assets/images/about/AWS_Data_Analytics.pdf){:target="_blank"} | 14/08/2025  |
