@@ -44,6 +44,11 @@ typora-copy-images-to: ../assets/images/${filename}
 
 <!--more-->
 
+📝 [learn-bedrock/2025-08-29-BedrockLangGraph.ipynb at main · ojitha/learn-bedrock](https://github.com/ojitha/learn-bedrock/blob/main/2025-08-29-BedrockLangGraph.ipynb){:target="_blank"}
+
+📂 [learn-bedrock/langchain at main · ojitha/learn-bedrock](https://github.com/ojitha/learn-bedrock/tree/main/langchain){:target="_blank"}
+
+
 ------
 
 * TOC
@@ -1410,8 +1415,8 @@ graph TD
 
 [^4]: [Stanford STORM Research Project](https://storm-project.stanford.edu/research/storm/){:target="_blank"}
 
-[^5]: [How to return structured data from a model \| 🦜️🔗 LangChain](https://python.langchain.com/docs/how_to/structured_output/)
+[^5]: [How to return structured data from a model \| 🦜️🔗 LangChain](https://python.langchain.com/docs/how_to/structured_output/){:target="_blank"}
 
-[^6]: [LangChain Expression Language (LCEL) \| 🦜️🔗 LangChain](https://python.langchain.com/docs/concepts/lcel/)
+[^6]: [LangChain Expression Language (LCEL) \| 🦜️🔗 LangChain](https://python.langchain.com/docs/concepts/lcel/){:target="_blank"}
 
-[^7]: [langchain-community](https://python.langchain.com/api_reference/community/index.html)
+[^7]: [langchain-community](https://python.langchain.com/api_reference/community/index.html){:target="_blank"}
