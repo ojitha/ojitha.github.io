@@ -51,6 +51,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 | Course                                                       | Association             | Credentials                                                  | Issued Date |
 | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------- |
+| [Introduction to Agentic AI: Getting Started with AutoGen Studio](https://www.linkedin.com/learning/introduction-to-agentic-ai-getting-started-with-autogen-studio){:target="_blank"} | LinkedIn                | [pdf](/assets/images/about/CertificateOfCompletion_Introduction_AutoGen_Studio.pdf){:target="_blank"} | 02/09/2025  |
 | [AI Agents with MCP](https://learning.oreilly.com/live-events/building-ai-agents-with-model-context-protocol-mcp/0642572182441/){:target="_blank"} | O`REILLY                | [pdf](/assets/images/about/AI_Agents_with_MCP.pdf){:target="_blank"} | 29/08/2025  |
 | [Model Context Protocol (MCP) – Simply explained](https://skillbuilder.aws/learn/WSE7F92MPA/model-context-protocol-mcp--simply-explained/YP6AFKZECQ){:target="_blank"} | AWS                     | [pdf](/assets/images/about/MCP_Simply_explained.pdf){:target="_blank"} | 28/08/2025  |
 | [AWS Cloud Quest: Generative AI Architect](https://skillbuilder.aws/learn/PFYH348EK2/aws-cloud-quest-generative-ai-architect/B3Q26P97G8){:target="_blank"} | AWS                     | [pdf](/assets/images/about/Generative_AI_Architect.pdf){:target="_blank"} | 17/08/2025  |
