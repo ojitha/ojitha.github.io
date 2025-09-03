@@ -57,7 +57,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 ## Introduction
 
-A framework LangChain[^1] is for building applications powered by Large Language Models (LLM). According to the LangChain, LangGraph to create Multi AI Agent systems who uses an LLM to decide the control flow of an application: but there is no exact difition. Instead LangChain introduce the different levels of autonomy:
+AI Agentic framework[^8] LangChain[^1] is for building applications powered by Large Language Models (LLM). According to the LangChain, LangGraph to create Multi AI Agent systems who uses an LLM to decide the control flow of an application: but there is no exact difition. Instead LangChain introduce the different levels of autonomy:
 
 ![Autonomy of AI Agents](https://blog.langchain.com/content/images/2024/06/Screenshot-2024-06-28-at-7.33.10-PM.png){:width="50%" height="50%"}
 
@@ -247,7 +247,7 @@ What is need to do:
 6. Each dimension represents learned semantic features
 
 ### Chroma for RAG
-Chroma is an open-source AI-native vector database designed specifically for building AI applications with embeddings. It's particularly popular in the RAG (Retrieval Augmented Generation) ecosystem and integrates seamlessly with LangChain, as demonstrated in your notebook. Chroma is a vector database that:
+Chroma is an open-source AI-native vector database designed specifically for building AI applications with embeddings. It's particularly popular in the RAG (Retrieval Augmented Generation) ecosystem and integrates seamlessly with LangChain, as demonstrated in your code. Chroma is a vector database that:
 
 - Stores embeddings (numerical representations of text/data)
 - Performs semantic similarity search using vector mathematics
@@ -299,7 +299,7 @@ print(f"Created {len(doc_splits)} document chunks")
 # Add to vectorDB with Bedrock embeddings
 vectorstore = Chroma.from_documents( # Creates vector store from document chunks
     documents=doc_splits,
-    collection_name="rag-chroma-bedrock",  # With collection name (from your notebook)
+    collection_name="rag-chroma-bedrock",  # With collection name 
     embedding=embeddings,  # Using Bedrock embeddings
 )
 
@@ -343,7 +343,7 @@ for doc in docs:
 
 ## Retrieval Grader Implementation
 
-Grader is a document relevance assessment using structured outputs. For that this code using `ChatPromptTemplate` and `ChatBedrock`. In this case `BaseModel` is from *Pydantic*[^5].
+Grader is a document relevance assessment using structured outputs. This code is using `ChatPromptTemplate` and `ChatBedrock`. In this case `BaseModel` is from *Pydantic*[^5].
 
 
 
@@ -396,7 +396,7 @@ Formats for Structured Output:
 - JSON: Widely used for its readability and compatibility.
 - Pydantic Models: Provides data validation and type enforcement in Python.
 
-The `structured_llm_grader(messages)` function in the notebook represents a custom *workaround implementation* for achieving structured outputs with AWS Bedrock Titan models (Standard approach with supported models e.g., OpenAI), which don't natively support LangChain's standard `with_structured_output()` method.
+The `structured_llm_grader(messages)` function in the code represents a custom *workaround implementation* for achieving structured outputs with AWS Bedrock Titan models (Standard approach with supported models e.g., OpenAI), which don't natively support LangChain's standard `with_structured_output()` method.
 
 Strategy 1: JSON Pattern Extraction
 
@@ -721,7 +721,7 @@ class GraphState(TypedDict):
         generation: LLM generation
         documents: list of documents
         times_transformed: number of times the question has been re-written
-        web_search: if we should be doing a web search (not implemented in this notebook)
+        web_search: if we should be doing a web search
     """
 
     question: str
@@ -1420,3 +1420,5 @@ graph TD
 [^6]: [LangChain Expression Language (LCEL) \| 🦜️🔗 LangChain](https://python.langchain.com/docs/concepts/lcel/){:target="_blank"}
 
 [^7]: [langchain-community](https://python.langchain.com/api_reference/community/index.html){:target="_blank"}
+
+[^8]: [Comparing agentic AI frameworks - AWS Prescriptive Guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/comparing-agentic-ai-frameworks.html)
