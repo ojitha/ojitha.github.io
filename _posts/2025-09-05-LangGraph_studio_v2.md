@@ -38,6 +38,8 @@ typora-copy-images-to: ../assets/images/${filename}
     </div>
     <div class="text-column">
 <p>
+Complete LangGraph Studio setup guide for AI agent development featuring visual debugging, real-time execution monitoring, and hot reloading capabilities. Step-by-step tutorial includes working code examples for building production-ready AI agents with tool integration, state management, conditional routing, and seamless LangSmith tracing for optimized multi-step reasoning processes.
+<br/>
 ✅ Complete UV setup - from installation to project configuration 
 <br/>
 ✅ Working agent example - with tools, state management, and proper routing 
@@ -46,7 +48,6 @@ typora-copy-images-to: ../assets/images/${filename}
 </p>
     </div>
 </div>
-
 
 <!--more-->
 
