@@ -329,7 +329,7 @@ where you can visually interact[^2] with and debug your agent.
 
 You can add a checkpoint before the debugging:
 
-![Set Debug Checkpoint](/assets/images/2025-09-05-LangGraph_studio_v2/debug_checkpoint.jpg)
+![Set Debug Checkpoint](/assets/images/2025-09-05-LangGraph_studio_v2/debug_checkpoint.jpg){:width="50%" height="50%"}
 
 
 
@@ -337,7 +337,7 @@ In this case human will be in the loop before get into the `tools`.
 
 Even you can fork your query as follows.
 
-![Fork the query](/assets/images/2025-09-05-LangGraph_studio_v2/fork_the_query.jpg)
+![Fork the query](/assets/images/2025-09-05-LangGraph_studio_v2/fork_the_query.jpg){:width="50%" height="50%"}
 
 There are more festures in this real-time visual debugging and editing [^3] tool. 
 
