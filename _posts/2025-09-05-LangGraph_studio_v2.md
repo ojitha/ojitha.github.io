@@ -75,8 +75,8 @@ Prerequisites
 - **UV** package manager installed
 - API keys for your chosen LLM provider (e.g., OpenAI) and LangSmith.
 
-> For demonstration purposes, I have used the mock functions with actual APIs (weather API and search API, etc.). And no use of more sophisticated reasoning, memory, or multi-agent interactions for simplicity. And not explain the LangGraph Platform for production deployment.
-> {:.yellow}
+> For demonstration purposes, I have used the mock functions with actual APIs (weather API and search API, etc.). And no use of more sophisticated reasoning, memory, or multi-agent interactions, as this is to maintain simplicity. And not explain the LangGraph Platform for production deployment.
+{:.yellow}
 
 ## Studio setup
 
