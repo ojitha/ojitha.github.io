@@ -1,0 +1,79 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Paper texture background -->
+  <rect width="200" height="200" fill="#FFF8DC"/>
+  <circle cx="30" cy="40" r="1" fill="#F5F5DC" opacity="0.5"/>
+  <circle cx="150" cy="30" r="1" fill="#F5F5DC" opacity="0.5"/>
+  <circle cx="170" cy="180" r="1" fill="#F5F5DC" opacity="0.5"/>
+  
+  <!-- Title sketch at top -->
+  <text x="100" y="15" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="10" fill="#2E5C8A" font-weight="bold">LangGraph + AgenticAI + LLM</text>
+  
+  <!-- LLM Brain (top left) -->
+  <circle cx="50" cy="50" r="20" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.8"/>
+  <path d="M35,45 Q50,35 65,45" fill="none" stroke="#FF6B6B" stroke-width="1.5" opacity="0.7"/>
+  <path d="M35,50 Q50,40 65,50" fill="none" stroke="#FF6B6B" stroke-width="1.5" opacity="0.7"/>
+  <path d="M35,55 Q50,45 65,55" fill="none" stroke="#FF6B6B" stroke-width="1.5" opacity="0.7"/>
+  <text x="50" y="75" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="8" fill="#8B4513">LLM</text>
+  
+  <!-- Agent Character (center) -->
+  <rect x="85" y="80" width="30" height="25" rx="5" fill="#E8F4FD" stroke="#4A90E2" stroke-width="2" opacity="0.8"/>
+  <circle cx="95" cy="90" r="3" fill="#4A90E2"/>
+  <circle cx="105" cy="90" r="3" fill="#4A90E2"/>
+  <rect x="97" y="96" width="6" height="2" rx="1" fill="#2E5C8A"/>
+  <text x="100" y="115" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="7" fill="#4A90E2">Agent</text>
+  
+  <!-- Graph Structure (LangGraph) -->
+  <!-- START node -->
+  <circle cx="40" cy="130" r="8" fill="#50E3C2" stroke="#2E7D72" stroke-width="2" opacity="0.8"/>
+  <text x="40" y="134" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="6" fill="#2E7D72">START</text>
+  
+  <!-- Agent node -->
+  <rect x="85" y="122" width="30" height="16" rx="3" fill="#4A90E2" stroke="#2E5C8A" stroke-width="2" opacity="0.8"/>
+  <text x="100" y="132" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="6" fill="#FFFFFF">AGENT</text>
+  
+  <!-- Tools node -->
+  <rect x="145" y="122" width="25" height="16" rx="3" fill="#FF9900" stroke="#CC7700" stroke-width="2" opacity="0.8"/>
+  <text x="157" y="132" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="6" fill="#FFFFFF">TOOLS</text>
+  
+  <!-- END node -->
+  <circle cx="100" cy="170" r="8" fill="#FF6B6B" stroke="#CC5555" stroke-width="2" opacity="0.8"/>
+  <text x="100" y="174" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="6" fill="#CC5555">END</text>
+  
+  <!-- Hand-drawn style arrows -->
+  <path d="M48,130 Q65,125 85,130" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.7"/>
+  <path d="M115,130 Q130,125 145,130" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.7"/>
+  <path d="M157,138 Q140,155 115,155 Q100,160 100,162" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.7"/>
+  <path d="M100,138 Q100,150 100,162" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.7"/>
+  <path d="M157,122 Q157,110 120,105 Q105,103 100,105" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.7"/>
+  
+  <!-- LLM connection to Agent -->
+  <path d="M50,70 Q75,75 85,85" fill="none" stroke="#FF6B6B" stroke-width="2" opacity="0.6" stroke-dasharray="3,2"/>
+  
+  <!-- Tool icons -->
+  <circle cx="175" cy="95" r="6" fill="#F5A623" stroke="#D4871F" stroke-width="1.5" opacity="0.8"/>
+  <path d="M172,95 L178,95 M175,92 L175,98" stroke="#FFFFFF" stroke-width="1"/>
+  
+  <rect x="172" y="105" width="8" height="6" rx="1" fill="#50E3C2" stroke="#2E7D72" stroke-width="1.5" opacity="0.8"/>
+  <circle cx="174" cy="107" r="0.5" fill="#FFFFFF"/>
+  <circle cx="178" cy="109" r="0.5" fill="#FFFFFF"/>
+  
+  <!-- State bubbles -->
+  <ellipse cx="30" cy="90" rx="12" ry="8" fill="#FFE5B4" stroke="#D4AC0D" stroke-width="1.5" opacity="0.7"/>
+  <text x="30" y="93" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="5" fill="#8B7355">State</text>
+  
+  <!-- Decision diamond -->
+  <path d="M120,150 L130,155 L120,160 L110,155 Z" fill="#E8E8E8" stroke="#8B8B8B" stroke-width="1.5" opacity="0.8"/>
+  <text x="120" y="157" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="4" fill="#666">?</text>
+  
+  <!-- Sketchy decorative elements -->
+  <path d="M20,20 Q25,15 30,20" fill="none" stroke="#D4AC0D" stroke-width="1" opacity="0.5"/>
+  <path d="M170,20 Q175,15 180,25" fill="none" stroke="#50E3C2" stroke-width="1" opacity="0.5"/>
+  <path d="M15,180 Q20,175 25,185" fill="none" stroke="#FF6B6B" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Labels -->
+  <text x="20" y="195" font-family="Comic Sans MS, cursive" font-size="7" fill="#8B4513" opacity="0.8">Visual AI Workflow</text>
+  <text x="160" y="50" font-family="Comic Sans MS, cursive" font-size="6" fill="#8B4513" opacity="0.8" transform="rotate(-15 160 50)">AgenticAI</text>
+  
+  <!-- Pencil texture strokes -->
+  <path d="M10,10 L15,12 M25,35 L30,32 M160,170 L165,175" stroke="#C0C0C0" stroke-width="0.5" opacity="0.3"/>
+</svg>
