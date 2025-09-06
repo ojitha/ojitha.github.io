@@ -60,7 +60,12 @@ The architecture demonstrated in this guide showcases how modern AI agents can b
 > Rather than relying on simple prompt-response patterns, this system implements a sophisticated workflow where the agent can reason about problems, select appropriate tools, execute actions, and synthesize results into coherent responses.
 {:.green}
 
-As explained in the pervious post[^1], LangGraph Studio revolutionizes AI agent testing through visual debugging capabilities that provide real-time execution monitoring and interactive workflow visualization, enabling developers to trace every decision-making step. The visual debugging interface enables rapid identification of reasoning inefficiencies, unexpected behaviors, and optimization opportunities that would be difficult to detect through traditional logging approaches. LangSmith integration provides specialized AI-focused monitoring with detailed tracing of reasoning steps, token usage analysis, and conversation quality metrics for production deployments. 
+As explained in the pervious post[^1], LangGraph Studio revolutionizes AI agent testing through visual debugging capabilities that provide real-time execution monitoring and interactive workflow visualization, enabling developers to trace every decision-making step. The visual debugging interface enables rapid identification of reasoning inefficiencies, unexpected behaviors, and optimization opportunities that would be difficult to detect through traditional logging approaches. 
+
+![png](/assets/images/2025-09-05-LangGrapStudioExample/debugging_tracing.jpg){: width="50%" height="50%" }
+
+
+LangSmith integration provides specialized AI-focused monitoring with detailed tracing of reasoning steps, token usage analysis, and conversation quality metrics for production deployments. 
 
 ### Graph-Based Agent Architecture
 
