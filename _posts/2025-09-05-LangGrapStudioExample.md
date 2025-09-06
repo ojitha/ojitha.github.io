@@ -4,7 +4,7 @@ title:  AI Agent testing with LangGraph
 date:   2025-09-06
 categories: [AI, LangChain, LangGraph]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
-typora-copy-images-to: ./assets/images/${filename}
+typora-copy-images-to: ../assets/images/${filename}
 ---
 
 <style>
