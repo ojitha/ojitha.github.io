@@ -45,7 +45,7 @@ typora-copy-images-to: ./assets/images/${filename}
 
 <!--more-->
 
-
+📝 [Jupyter Notebook](https://github.com/ojitha/learn-langgraph/blob/main/aiagents/2025-09-05-LangGrapStudioExample.ipynb)
 
 ------
 
@@ -279,7 +279,7 @@ The compilation process performs comprehensive validation of the graph structure
 
 
 
-    
+
 ![png](/assets/images/2025-09-05-LangGrapStudioExample/fig_0.png)
     
 
