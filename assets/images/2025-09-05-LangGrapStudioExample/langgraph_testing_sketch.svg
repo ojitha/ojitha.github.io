@@ -1,0 +1,77 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient backgrounds for pastel effect -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fff4f8;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Filter for sketch effect -->
+    <filter id="roughPaper">
+      <feTurbulence baseFrequency="0.8" numOctaves="3" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="discrete" tableValues="0.1 0.15 0.2 0.05"/>
+      </feComponentTransfer>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="200" height="200" fill="url(#bgGradient)" filter="url(#roughPaper)"/>
+  
+  <!-- Title text -->
+  <text x="100" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#7c3aed" opacity="0.8">LangGraph AI</text>
+  
+  <!-- Central Agent Node -->
+  <circle cx="100" cy="70" r="18" fill="#fde68a" stroke="#f59e0b" stroke-width="2" opacity="0.9"/>
+  <text x="100" y="74" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#92400e">Agent</text>
+  
+  <!-- Tool Nodes -->
+  <circle cx="50" cy="50" r="12" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5" opacity="0.8"/>
+  <text x="50" y="54" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#1d4ed8">Tool</text>
+  
+  <circle cx="150" cy="50" r="12" fill="#c7f9c7" stroke="#22c55e" stroke-width="1.5" opacity="0.8"/>
+  <text x="150" y="54" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#15803d">API</text>
+  
+  <circle cx="70" cy="110" r="12" fill="#fecaca" stroke="#ef4444" stroke-width="1.5" opacity="0.8"/>
+  <text x="70" y="114" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#dc2626">Math</text>
+  
+  <circle cx="130" cy="110" r="12" fill="#e9d5ff" stroke="#8b5cf6" stroke-width="1.5" opacity="0.8"/>
+  <text x="130" y="114" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#7c3aed">Web</text>
+  
+  <!-- State Node -->
+  <rect x="85" y="125" width="30" height="20" rx="5" fill="#fed7aa" stroke="#f97316" stroke-width="1.5" opacity="0.8"/>
+  <text x="100" y="137" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ea580c">State</text>
+  
+  <!-- Connections (sketch-like curved lines) -->
+  <path d="M62 55 Q80 45 88 62" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M138 55 Q120 45 112 62" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M88 82 Q75 95 75 98" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M112 82 Q125 95 125 98" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M100 88 Q100 105 100 125" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  
+  <!-- Testing Elements -->
+  <rect x="10" y="160" width="180" height="25" rx="5" fill="#f0fdf4" stroke="#22c55e" stroke-width="1" opacity="0.7"/>
+  <text x="20" y="175" font-family="Arial, sans-serif" font-size="9" fill="#15803d">✓ Test: Weather ✓ Math ✓ Search ✓ State</text>
+  
+  <!-- Flow arrows -->
+  <polygon points="25,140 35,135 35,145" fill="#10b981" opacity="0.6"/>
+  <polygon points="175,140 165,135 165,145" fill="#10b981" opacity="0.6"/>
+  
+  <!-- Debug symbols -->
+  <circle cx="20" cy="30" r="3" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="180" cy="30" r="3" fill="#f87171" opacity="0.7"/>
+  <circle cx="20" cy="120" r="3" fill="#60a5fa" opacity="0.7"/>
+  <circle cx="180" cy="120" r="3" fill="#a78bfa" opacity="0.7"/>
+  
+  <!-- Studio visualization -->
+  <rect x="15" y="190" width="6" height="3" fill="#8b5cf6" opacity="0.5"/>
+  <rect x="25" y="187" width="6" height="6" fill="#3b82f6" opacity="0.5"/>
+  <rect x="35" y="189" width="6" height="4" fill="#10b981" opacity="0.5"/>
+  <text x="50" y="194" font-family="Arial, sans-serif" font-size="7" fill="#6b7280">Studio Debug</text>
+  
+  <!-- Workflow indicators -->
+  <path d="M160 170 Q170 165 175 175" stroke="#f59e0b" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <circle cx="175" cy="175" r="2" fill="#f59e0b" opacity="0.8"/>
+</svg>
