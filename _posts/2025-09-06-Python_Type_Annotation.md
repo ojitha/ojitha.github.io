@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Structured Model for AI
-date:   2025-09-06
+date:   2025-09-07
 categories: [Python, AI, LangGraph, LangChain, ChatGPT]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
@@ -573,9 +573,9 @@ user_request = UserRequest(
 
 
     ---------------------------------------------------------------------------
-    
+
     ValidationError                           Traceback (most recent call last)
-    
+
     Cell In[35], line 1
     ----> 1 user_request = UserRequest(
           2     name="John Doe",
@@ -943,7 +943,7 @@ except ValidationError as e:
     1. Creating valid users:
     ✅ Valid user created: id=1 name='John Doe' salary=75000.0 email='john.doe@example.com'
        JSON: {"id":1,"name":"John Doe","salary":75000.0,"email":"john.doe@example.com"}
-
+    
 
 
 ## Parameterized Generics and TypeVar
@@ -1325,7 +1325,7 @@ graph = workflow.compile()
 
 
 
-
+    
 ![png](/assets/images/2025-09-06-Python_Type_Annotation/fig_0.png)
     
 
