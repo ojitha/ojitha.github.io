@@ -1,0 +1,133 @@
+<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradients and Effects -->
+  <defs>
+    <!-- Canvas background gradient -->
+    <linearGradient id="canvasGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE4B5"/>
+      <stop offset="50%" style="stop-color:#F0E68C"/>
+      <stop offset="100%" style="stop-color:#DDA0DD"/>
+    </linearGradient>
+    
+    <!-- PyDantic gradient -->
+    <radialGradient id="pydanticGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF6B6B"/>
+      <stop offset="100%" style="stop-color:#FF4757"/>
+    </radialGradient>
+    
+    <!-- TypedDict gradient -->
+    <linearGradient id="typedDictGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3742fa"/>
+      <stop offset="100%" style="stop-color:#5352ed"/>
+    </linearGradient>
+    
+    <!-- ChatGPT gradient -->
+    <linearGradient id="chatGptGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d2ff"/>
+      <stop offset="50%" style="stop-color:#3a7bd5"/>
+      <stop offset="100%" style="stop-color:#00d2ff"/>
+    </linearGradient>
+    
+    <!-- LangGraph gradient -->
+    <linearGradient id="langGraphGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2ed573"/>
+      <stop offset="100%" style="stop-color:#1e90ff"/>
+    </linearGradient>
+    
+    <!-- Center node gradient -->
+    <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="100%" style="stop-color:#ffb347"/>
+    </radialGradient>
+    
+    <!-- Brush stroke pattern -->
+    <pattern id="brushStroke" patternUnits="userSpaceOnUse" width="50" height="50">
+      <ellipse cx="10" cy="15" rx="8" ry="4" fill="rgba(255,255,255,0.1)"/>
+      <ellipse cx="40" cy="35" rx="6" ry="3" fill="rgba(0,0,0,0.05)"/>
+    </pattern>
+    
+    <!-- Inner shadow effect -->
+    <filter id="innerShadow">
+      <feOffset dx="0" dy="2"/>
+      <feGaussianBlur stdDeviation="2"/>
+      <feComposite operator="out" in2="SourceGraphic"/>
+      <feComponentTransfer>
+        <feFuncA type="discrete" tableValues="0 .5"/>
+      </feComponentTransfer>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Drop shadow -->
+    <filter id="dropShadow">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Main canvas background -->
+  <rect x="15" y="15" width="120" height="120" fill="url(#canvasGradient)" rx="6"/>
+  
+  <!-- Brush stroke overlay -->
+  <rect x="15" y="15" width="120" height="120" fill="url(#brushStroke)" rx="6" opacity="0.5"/>
+  
+  <!-- Connecting lines with pulse animation -->
+  <line x1="45" y1="50" x2="70" y2="75" stroke="rgba(255,255,255,0.6)" stroke-width="2" opacity="0.5">
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/>
+  </line>
+  <line x1="70" y1="50" x2="45" y2="75" stroke="rgba(255,255,255,0.6)" stroke-width="2" opacity="0.5">
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+  </line>
+  
+  <!-- PyDantic section (top-left circle) -->
+  <circle cx="45" cy="45" r="22.5" fill="url(#pydanticGradient)" filter="url(#innerShadow)"/>
+  <ellipse cx="45" cy="40" rx="15" ry="3" fill="rgba(255,255,255,0.3)"/>
+  <text x="45" y="42" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="6" font-weight="bold">PyDantic</text>
+  <text x="45" y="52" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="8">⚡</text>
+  
+  <!-- TypedDict section (top-right diamond) -->
+  <g transform="translate(105,45) rotate(45)">
+    <rect x="-22.5" y="-22.5" width="45" height="45" fill="url(#typedDictGradient)" filter="url(#dropShadow)"/>
+  </g>
+  <ellipse cx="105" cy="40" rx="12" ry="2" fill="rgba(255,255,255,0.3)"/>
+  <text x="105" y="42" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="5" font-weight="bold">TypedDict</text>
+  <text x="105" y="52" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="7">📋</text>
+  
+  <!-- ChatGPT section (bottom-left organic shape) -->
+  <path d="M 23,95 Q 30,80 50,85 Q 60,90 55,110 Q 50,120 35,115 Q 20,105 23,95 Z" 
+        fill="url(#chatGptGradient)" filter="url(#glow)">
+    <animate attributeName="filter" values="url(#glow);url(#dropShadow);url(#glow)" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <ellipse cx="40" cy="95" rx="12" ry="2" fill="rgba(255,255,255,0.3)"/>
+  <text x="40" y="92" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="5" font-weight="bold">ChatGPT</text>
+  <text x="40" y="102" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="7">🤖</text>
+  
+  <!-- LangGraph section (bottom-right diamond) -->
+  <polygon points="105,75 127.5,97.5 105,120 82.5,97.5" fill="url(#langGraphGradient)" filter="url(#dropShadow)"/>
+  <ellipse cx="105" cy="92" rx="12" ry="2" fill="rgba(255,255,255,0.3)"/>
+  <text x="105" y="95" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="5" font-weight="bold">LangGraph</text>
+  <text x="105" y="105" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="7">🔗</text>
+  
+  <!-- Central AI node -->
+  <circle cx="75" cy="75" r="15" fill="url(#centerGradient)" filter="url(#glow)">
+    <animateTransform attributeName="transform" type="rotate" values="0 75 75;360 75 75" dur="10s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="75" cy="70" r="8" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <ellipse cx="75" cy="68" rx="6" ry="1.5" fill="rgba(255,255,255,0.6)"/>
+  <text x="75" y="80" text-anchor="middle" fill="#8B4513" font-family="Arial, sans-serif" font-size="9" font-weight="bold">AI</text>
+  
+  <!-- Additional brush stroke details -->
+  <ellipse cx="25" cy="25" rx="3" ry="1" fill="rgba(255,255,255,0.2)" transform="rotate(30 25 25)"/>
+  <ellipse cx="125" cy="30" rx="2" ry="1" fill="rgba(0,0,0,0.1)" transform="rotate(-20 125 30)"/>
+  <ellipse cx="130" cy="120" rx="2.5" ry="1" fill="rgba(255,255,255,0.15)" transform="rotate(45 130 120)"/>
+  <ellipse cx="20" cy="125" rx="2" ry="0.8" fill="rgba(0,0,0,0.08)" transform="rotate(-30 20 125)"/>
+  
+  <!-- Canvas edge highlight -->
+  <rect x="15" y="15" width="120" height="120" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" rx="6"/>
+</svg>
