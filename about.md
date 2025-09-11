@@ -36,14 +36,14 @@ typora-copy-images-to: /assets/images/${filename}
 
 ## Licenses & certifications
 
-| Credentials Verification Link                                | Association                  | Bage                                                         | Issued Date |
+| Credentials Verification Link                                | Association                  | Badge                                                        | Issued Date |
 | ------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------ | ----------- |
 | [AWS AI Architect](https://www.credly.com/badges/a6635888-93a2-4a7c-b412-757815c81573/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-cloud-quest-generative-ai-architect.png](/assets/images/about/aws-cloud-quest-generative-ai-architect.png) | 17/08/2025  |
 | [AWS Data Analytics](https://www.credly.com/badges/ca47ca26-f81d-4120-ae69-8a19f54d52ff/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-cloud-quest-data-analytics](/assets/images/about/aws-cloud-quest-data-analytics.png) | 14/08/2025  |
 | [AWS Certified Developer – Associate](https://www.credly.com/badges/01dbe7bb-0b4d-4e9f-8811-95879ec2a1c8/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-certified-developer-associate](/assets/images/about/aws-certified-developer-associate.png) | 30/04/2022  |
 | [AWS Certified Solutions Architect – Associate](https://www.credly.com/badges/18763a84-f2b0-48fc-ac9a-ce156a4e70ce/public_url){:target="_blank"} | AWS                          | ![Fig.: aws-certified-solutions-architect-associate](/assets/images/about/aws-certified-solutions-architect-associate.png) | 02/08/2021  |
 | Sun Certified Java Programmer Java 6                         | Sun Microsystems             | <object data="/assets/images/about/Sun_Certified.pdf" type="application/pdf" width="150" height="100"/> | 2009        |
-| Chartered IT Professional                                    | The British Computer Society | ![BCS CITP](./assets/images/about/BCS_CITP.jpg){: width="12%" height="8% "target="_blank"}  | 01/05/2004  |
+| Chartered IT Professional                                    | The British Computer Society | ![BCS CITP](./assets/images/about/BCS_CITP.jpg){: width="12%" height="8% "target="_blank"} | 01/05/2004  |
 
 
 
@@ -54,8 +54,8 @@ typora-copy-images-to: /assets/images/${filename}
 | Course                                                       | Verified Cert.                                               | Issued Date |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------- |
 | [AI Agents with CrewAI](https://www.credly.com/badges/6a7f9ead-5c40-48bd-ba9e-b21fb45faf74/public_url){:target="_blank"} | [O`REILLY](/assets/images/about/ORMCertificate20250910-30-9xqyy0.pdf){:target="_blank"} | 10/09/2025  |
+| [Azure AI for Developers: Building AI Agents](https://www.linkedin.com/learning/certificates/64eeed47948ce5968c835b8acac7874c158bb17d905fd53f085f424a7bf9271c){:target="_blank"} | [LinkedIn](/assets/images/about/CertificateOfCompletion_Azure_AI_for_Developers_Building_AI_Agents.pdf){:target="_blank"} | 10/09/2025  |
 | [AI Agents with LangGraph](https://www.credly.com/badges/c7ad7b58-77a0-48ca-bded-0c3b1f2ace55/public_url){:target="_blank"} | [O`REILLY](/assets/images/about/AI_Agents_with_LangGraph.pdf){:target="_blank"} | 09/09/2025  |
-| [Azure AI for Developers: Building AI Agents](https://www.linkedin.com/learning/certificates/64eeed47948ce5968c835b8acac7874c158bb17d905fd53f085f424a7bf9271c){:target="_blank"} | [LinkedIn](/assets/images/about/CertificateOfCompletion_Azure_AI_for_Developers_Building_AI_Agents.pdf){:target="_blank"} | 09/09/2025  |
 | [Building AI Agents with AutoGen](https://www.linkedin.com/learning/certificates/29dad3d4593e229bdfc09c0b3ad6eeefc4230d733ff172c4053903e18a0e58f0?trk=share_certificate){:target="_blank"} | [LinkedIn](/assets/images/about/Building_AI_Agents_with_AutoGen.pdf){:target="_blank"} | 09/09/2025  |
 | [Introduction to Agentic AI: Getting Started with AutoGen Studio](https://www.linkedin.com/learning/introduction-to-agentic-ai-getting-started-with-autogen-studio){:target="_blank"} | [LinkedIn](/assets/images/about/CertificateOfCompletion_Introduction_AutoGen_Studio.pdf){:target="_blank"} | 02/09/2025  |
 | [AI Agents with MCP](https://learning.oreilly.com/live-events/building-ai-agents-with-model-context-protocol-mcp/0642572182441/){:target="_blank"} | [O`REILLY](/assets/images/about/AI_Agents_with_MCP.pdf){:target="_blank"} | 29/08/2025  |
@@ -77,6 +77,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 | Course                                                       | Verified Cert.                                               | Issued Date |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------- |
+| [Microservices with Containers](https://www.credly.com/badges/72c3165b-bcb7-4cba-8462-f4a1b6c7d63c/public_url){:target="_blank"} | [O`REILLY](/assets/images/about/ORMCertificate20250911-30-nj6sst.pdf){:target="_blank"} | 11/09/2025  |
 | [AWS Cloud Quest: Data Analytics](https://skillbuilder.aws/learn/ZZHVPSPF2S/aws-cloud-quest-data-analytics/YZYQPHY2VZ){:target="_blank"} | [AWS](/assets/images/about/AWS_Data_Analytics.pdf){:target="_blank"} | 14/08/2025  |
 | [AWS SimuLearn: Secure Data Using Amazon S3 Access Points and VPC Endpoints](https://skillbuilder.aws/learn/34X7U1FY79/aws-simulearn-secure-data-using-amazon-s3-access-points-and-vpc-endpoints/GP9VVUAQEX){:target="_blank"} | [AWS](/assets/images/about/S3Access_VPCEndPoint.pdf){:target="_blank"} | 03/08/2025  |
 | Python Programming                                           | [O`REILLY](/assets/images/about/Python_Programming.pdf){:target="_blank"} | 03/08/2025  |
