@@ -46,7 +46,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 <!--more-->
 
-📝 source: [Jupyter Notebook](https://github.com/ojitha/learn-langgraph/blob/main/aiagents/2025-09-05-LangGrapStudioExample.ipynb){:target="_blank"}
+📝 source: [Jupyter Notebook](https://github.com/ojitha/rag_llamaindex/blob/main/Science_Community/2025-09-12-LlamaIndexScienceCommunityChat.ipynb){:target="_blank"}
 
 ------
 
