@@ -50,6 +50,14 @@ copyright: "Copyright © 2020 Ojitha Hewa Kumanayaka"
 markdown: kramdown
 kramdown:
   auto_ids: true
+  math_engine: mathjax
+  hard_wrap: false
+  syntax_highlighter: rouge
+
+# MathJax settings (optional custom settings)
+mathjax:
+  source: https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js
+  config: 'MathJax.typesetPromise'
 
 excerpt_separator: <!--more-->
 paginate: 5

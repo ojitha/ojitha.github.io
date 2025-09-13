@@ -1,13 +1,27 @@
-<script type="text/javascript" id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-</script>
-<script type="text/javascript">
+<!-- MathJax Configuration -->
+<script>
 window.MathJax = {
   tex: {
-    packages: ['base', 'ams']
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    tags: 'ams',  // This enables equation numbering
+    tagSide: 'right',  // Position numbers on the right
+    tagIndent: '.8em',  // Indentation of equation numbers
+    autoload: {
+      color: [],
+      colorV2: ['color']
+    },
+    packages: {'[+]': ['noerrors']}
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
   },
   loader: {
-    load: ['ui/menu', '[tex]/ams']
+    load: ['[tex]/noerrors']
   }
 };
 </script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" id="MathJax-script"></script>
