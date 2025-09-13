@@ -2,7 +2,7 @@
 layout: post
 title:  Semantic search with ELSER in Elasticsearch
 date:   2024-05-11
-categories: [ELK]
+categories: [ELK, Elastic, RAG, AI, ML]
 toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
@@ -17,7 +17,6 @@ typora-copy-images-to: ../assets/images/${filename}
     align-items: center; /* Vertically centers content in columns */
     margin-bottom: 20px; /* Space below this section */
 }
-
 .image-column {
     flex: 1; /* Allows this column to grow */
     min-width: 250px; /* Minimum width for the image column before stacking */
