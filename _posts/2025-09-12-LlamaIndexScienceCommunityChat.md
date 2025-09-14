@@ -48,6 +48,8 @@ typora-copy-images-to: ../assets/images/${filename}
 
 📝 source: [Jupyter Notebook](https://github.com/ojitha/rag_llamaindex/blob/main/Science_Community/2025-09-12-LlamaIndexScienceCommunityChat.ipynb){:target="_blank"}
 
+📂 App source: [AI ChatBot](https://github.com/ojitha/rag_llamaindex/tree/main/sc_app){:target="_blank"}
+
 ------
 
 * TOC
@@ -55,7 +57,20 @@ typora-copy-images-to: ../assets/images/${filename}
 ------
 
 ## Introduction
-LlamaIndex is a data framework designed to help developers build applications that connect large language models (LLMs) with their own private or custom data sources. It serves as a bridge between LLMs and external data, enabling you to create AI applications that can reason over your specific information.
+LlamaIndex is a data framework designed to help developers build applications that connect large language models (LLMs) with their own private or custom data sources. It serves as a bridge between LLMs and external data, enabling you to create AI applications that can reason over your specific information. For example, I'v created the AI Chatbot which can retrieve the information from my data and inference to answer the user response:
+
+![AI Chatbot for Science Community](/assets/images/2025-09-12-LlamaIndexScienceCommunityChat/AI_Chat_Bot.jpg)
+
+1. User prompt to ask Questions?
+2. Previous question
+3. Answer of the previous question
+4. Files in the RAG store
+5. Specific setting such as Context/System prompt for Context
+6. Select the Chat Engine
+7. Common setting for all the prompts
+
+
+
 
 ### What is LlamaIndex?
 The main challenge LlamaIndex addresses is that while LLMs like GPT-4 or Claude are trained on vast amounts of general knowledge, they don't have access to your specific data - whether that's company documents, personal files, databases, or real-time information. LlamaIndex provides the infrastructure to make your data "queryable" by LLMs.
@@ -1400,6 +1415,12 @@ from llama_index.core import (SimpleDirectoryReader
 
 
 ```
+
+Some important evaluators:
+
+- The `CorrectnessEvaluator` to assess the relevance and correctness of generated answers by comparing them to reference ground-truth answers.
+
+- The `EmbeddingSimilarityEvaluator` is designed to assess the semantic similarity between generated responses and reference answers by comparing their embeddings using cosine similarity.
 
 
 ```python
