@@ -32,7 +32,7 @@ typora-copy-images-to: /assets/images/${filename}
 </style>
 <a class="libutton" href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=ojitha" target="_blank">Follow on LinkedIn</a>
 
-[Credly Badges & Skills](https://www.credly.com/users/ojitha-kumanayaka){:target="_blank"}
+[Credly Badges & Skills](https://www.credly.com/users/ojitha){:target="_blank"}
 
 ## Licenses & certifications
 
