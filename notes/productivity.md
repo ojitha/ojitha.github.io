@@ -17,8 +17,6 @@ typora-copy-images-to: ../assets/images/${filename}
 
 ---
 
-* TOC
-{:toc}
 
 ## Blog tools
 I was very enthustic to know markdown level diagraming.
@@ -82,7 +80,7 @@ Then run the following, if above is not working.
 python -m ipykernel install --user --name=env
 ```
 
-You can open in Atom editor and do the inline debugging, if you install [hydrogen](https://atom.io/packages/hydrogen) in the editor.
+You can open it in the Atom editor and do the inline debugging if you install [Hydrogen](https://atom.io/packages/hydrogen) in the editor.
 
 If you want to use PySpark, first install
 
@@ -98,15 +96,16 @@ pip show pyspark
 
 If you want, install the following packages to Atom editor:
 
-- Script (to execute python from IDE, CMD+i)
+- Script (to execute Python from IDE, CMD+i)
 - autocomplete-python
 - flake 8 (to enable `pip install flake8`)
 - python-autopep8
 
 ### Diff
 
-Here the way to semantically diff the XML files:
-First create your project in Python virtual enviroment:
+Here is the way to semantically diff the XML files:
+First, create your project in a Python virtual environment:
+
 ```bash
 python3 -m venv xmltest
 cd xmltest
@@ -225,9 +224,9 @@ bundle exec jekyll serve
 
 ## Quarto
 
-[Quarto](https://quarto.org) is based on the [pandoc](https://pandoc.org/MANUAL.html#option--reference-doc). Here the workflow to include Jupyter notebook in [Jekyll](https://jekyllrb.com/docs/posts/) site.
+[Quarto](https://quarto.org) is based on [pandoc](https://pandoc.org/MANUAL.html#option--reference-doc). Here is the workflow to include a Jupyter notebook in a [Jekyll](https://jekyllrb.com/docs/posts/) site.
 
-1. Frirst create Jupyter notebook in the vscode and include the yaml in the raw form.
+1. First, create a Jupyter notebook in VS Code and include the YAML in the raw form.
 
     ```yaml
     ---

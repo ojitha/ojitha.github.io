@@ -412,6 +412,83 @@ defaults write ~/Library/Preferences/com.apple.coreservices.useractivityd.plist 
 
 ### File sharing to Ubuntu
 
-First enable the sharing in the Mac as explained in the [Set up file sharing on Mac](https://support.apple.com/en-au/guide/mac-help/mh17131/mac).
+To share only one specific folder from your MacBook instead of the entire user directory, you need to set up a specific folder share on macOS first, then mount just that folder on Ubuntu.
 
-In the Ubuntu you can access this as follows
+#### Step 1: Share the specific folder on your MacBook
+
+1. **Open System Preferences/Settings** on your MacBook
+2. Go to **Sharing**
+3. Select **File Sharing** from the list
+4. Click the **+** button under "Shared Folders"
+5. Navigate to and select your specific folder (e.g., `~/.../myfolder`)
+6. Set permissions as needed (Read & Write for your user)
+7. Note the share name that appears (it might be something like `myfolder`)
+
+#### Step 2: Mount only that specific folder on Ubuntu
+
+1. Create a mount point for the specific folder:
+  ```bash
+  sudo mkdir /mnt/myfolder
+  ```
+
+2. Mount the specific shared folder:
+  ```bash
+  sudo mount -t cifs //...-macbook-pro.local/myfolder /mnt/myfolder -o username=your_macbook_username,uid=1000,gid=1000,iocharset=utf8
+  ```
+
+3. Update your docker-compose.yml (optional): 
+  ```yaml
+  volumes:
+    - /mnt/myfolder:/app:rw
+  ```
+	Here the way to create a persistent mapping:
+
+### To make it persistent:
+
+You need the **optional step** I mentioned at the end - adding an entry to `/etc/fstab`. Here's how:
+
+#### Make the mount persistent across reboots:
+
+1. **First, unmount if currently mounted:**
+  ```bash
+  sudo umount /mnt/myfolder
+  ```
+
+2. **Edit the fstab file:**
+  ```bash
+  sudo nano /etc/fstab
+  ```
+
+3. **Add this line to the end of the file:**
+  ```
+  //...-macbook-pro.local/myfolder /mnt/myfolder cifs username=your_username,password=your_password,uid=1000,gid=1000,iocharset=utf8,noauto,user 0 0
+  ```
+
+4. **For security, create a credentials file instead of putting password in fstab:**
+  ```bash
+  sudo nano /etc/cifs-credentials
+  ```
+  Add:
+  ```
+  username=your_macbook_username
+  password=your_macbook_password
+  ```
+
+5. **Secure the credentials file:**
+  ```bash
+  sudo chmod 600 /etc/cifs-credentials
+  ```
+
+6. **Update fstab to use credentials file:**
+  ```
+  //...-macbook-pro.local/myfolder /mnt/myfolder cifs credentials=/etc/cifs-credentials,uid=1000,gid=1000,iocharset=utf8,noauto,user 0 0
+  ```
+
+7. **Test the mount:**
+  ```bash
+  mount /mnt/myfolder
+  ```
+
+>  Now the mount will be available after reboots, but won't auto-mount (due to `noauto` option). You can manually mount it when needed, or remove `noauto` if you want it to mount automatically at boot.
+{:.yellow}
+
