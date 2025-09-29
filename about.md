@@ -34,6 +34,8 @@ typora-copy-images-to: /assets/images/${filename}
 
 [Credly Badges & Skills](https://www.credly.com/users/ojitha){:target="_blank"}
 
+[AWS SkillBuilder Profile](https://skillsprofile.skillbuilder.aws/user/ojitha){:target="_blank"}
+
 ## Licenses & certifications
 
 | Credentials Verification Link                                | Association                  | Badge                                                        | Issued Date |
@@ -52,6 +54,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 | Verified Certificate                                         | Authority                                                    | Issued Date |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------- |
+| [Build intelligent agents with Agent Development Kit (ADK)](https://www.cloudskillsboost.google/public_profiles/2f9afd5c-feb5-4c93-bc07-9ff27a453225/badges/18673407){:target="_blank"} | Google                                                       | 28/09/2025  |
 | [AWS Machine Learning](https://www.credly.com/badges/97587daa-6f0a-465f-8dfc-583e5f8d6e7b/public_url){:target="_blank"} | [AWS](/assets/images/about/AWS_ML_CoudQuest.pdf){:target="_blank"} | 22/09/2025  |
 | [AI Agents with CrewAI](https://www.credly.com/badges/6a7f9ead-5c40-48bd-ba9e-b21fb45faf74/public_url){:target="_blank"} | [O`REILLY](/assets/images/about/ORMCertificate20250910-30-9xqyy0.pdf){:target="_blank"} | 10/09/2025  |
 | [Azure AI for Developers: Building AI Agents](https://www.linkedin.com/learning/certificates/64eeed47948ce5968c835b8acac7874c158bb17d905fd53f085f424a7bf9271c){:target="_blank"} | [LinkedIn](/assets/images/about/CertificateOfCompletion_Azure_AI_for_Developers_Building_AI_Agents.pdf){:target="_blank"} | 10/09/2025  |

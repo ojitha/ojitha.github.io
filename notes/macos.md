@@ -436,12 +436,13 @@ To share only one specific folder from your MacBook instead of the entire user d
   sudo mount -t cifs //...-macbook-pro.local/myfolder /mnt/myfolder -o username=your_macbook_username,uid=1000,gid=1000,iocharset=utf8
   ```
 
-3. Update your docker-compose.yml (optional): 
+3. Update your docker-compose.yml (optional):
+
   ```yaml
   volumes:
     - /mnt/myfolder:/app:rw
   ```
-	Here the way to create a persistent mapping:
+
 
 ### To make it persistent:
 
