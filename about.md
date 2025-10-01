@@ -110,7 +110,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 
 
-## IEEE Research Publications
+## AI Research Publications
 
 - Conference: [IEEE ICIIS 2007](https://ieeexplore.ieee.org/servlet/opac?punumber=4569827)
     Ojitha Kumanayaka and Nalin Ranasinghe. [Formalism for ontology validation](https://ieeexplore.ieee.org/abstract/document/4579189). In IEEE Second International Conference on Industrial and Information Systems. Faculty of Engineering, University of Peradeniya, August 2007.
@@ -120,4 +120,11 @@ typora-copy-images-to: /assets/images/${filename}
 
 - Conference: [IEEE ICIIS 2006](https://ieeexplore.ieee.org/servlet/opac?punumber=4216542)
     Ojitha Kumanayaka and Nalin Ranasinghe. [Personalised web services creation via dynamic composition](https://ieeexplore.ieee.org/document/4216623). In the IEEE First International Conference on Industrial and Information Systems. Faculty of Engineering, University of Peradeniya, August 2006.
+
+## AI Documents
+
+| Document                                                     | Description                     | Published Date |
+| ------------------------------------------------------------ | ------------------------------- | -------------- |
+| [Ontology Based Web Services Personalisation](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/about/Thesis.pdf){:target="_blank"} | Thesis - Universiety of Colombo | 12/2007        |
+| [Missing Manual Protege Ontology Tutorial](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/about/tutorial.pdf){:target="_blank"} | Conslutation - Sintelix         | 08/2010        |
 
