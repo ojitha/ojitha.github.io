@@ -123,8 +123,8 @@ typora-copy-images-to: /assets/images/${filename}
 
 ## AI Documents
 
-| Document                                                     | Description                     | Published Date |
-| ------------------------------------------------------------ | ------------------------------- | -------------- |
-| [Ontology Based Web Services Personalisation](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/about/Thesis.pdf){:target="_blank"} | Thesis - Universiety of Colombo | 12/2007        |
-| [Missing Manual Protege Ontology Tutorial](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/about/tutorial.pdf){:target="_blank"} | Conslutation - Sintelix         | 08/2010        |
+| Document                                                     | Institute                                                    | Published Date |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- |
+| [Ontology Based Web Services Personalisation](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/about/Thesis.pdf){:target="_blank"} | Thesis - [UCSC](https://cmb.ac.lk/category/ucsc){:target="_blank"} | 12/2007        |
+| [Missing Manual Protege Ontology Tutorial](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/about/tutorial.pdf){:target="_blank"} | Conslutation - [Sintelix](https://sintelix.com){:target="_blank"} | 08/2010        |
 
