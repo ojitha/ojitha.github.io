@@ -5,7 +5,7 @@ date:   2025-09-12
 maths: true
 categories: [AI, LlamaIndex, OpenAI, RAG]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
-typora-copy-images-to: ../assets/images/${filename}
+typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
 <style>
@@ -39,7 +39,7 @@ typora-copy-images-to: ../assets/images/${filename}
     </div>
     <div class="text-column">
 <p>
- LlamaIndex is a comprehensive data framework designed to connect large language models with private data sources through Retrieval-Augmented Generation (RAG) architecture. The framework operates through two main stages: indexing, where vector embeddings are created from documents, and querying, where relevant information is retrieved and synthesized. LlamaIndex supports multiple chat engines including condense question, context, and condense-plus-context modes for enhanced conversational AI applications. Quality evaluation is crucial for RAG performance, utilizing metrics like Mean Reciprocal Rank (MRR) and Hit Rate to assess retrieval accuracy. The framework includes faithfulness and relevance evaluators to measure response quality, making it essential for building reliable AI applications that require domain-specific knowledge integration with seamless LLM integration capabilities.
+ LlamaIndex is a comprehensive data orchestration framework designed to connect large language models with private data sources through Retrieval-Augmented Generation (RAG) architecture. The framework operates through two main stages: indexing, where vector embeddings are created from documents, and querying, where relevant information is retrieved and synthesized. LlamaIndex supports multiple chat engines including condense question, context, and condense-plus-context modes for enhanced conversational AI applications. Quality evaluation is crucial for RAG performance, utilizing metrics like Mean Reciprocal Rank (MRR) and Hit Rate to assess retrieval accuracy. The framework includes faithfulness and relevance evaluators to measure response quality, making it essential for building reliable AI applications that require domain-specific knowledge integration with seamless LLM integration capabilities.
 </p>
     </div>
 </div>
@@ -57,19 +57,28 @@ typora-copy-images-to: ../assets/images/${filename}
 ------
 
 ## Introduction
-LlamaIndex is a data framework designed to help developers build applications that connect large language models (LLMs) with their own private or custom data sources. It serves as a bridge between LLMs and external data, enabling you to create AI applications that can reason over your specific information. For example, I'v created the AI Chatbot which can retrieve the information from my data and inference to answer the user response:
+There are three very common AI engineering techniques that you can use to adapt a model to your needs:
+
+- Prompt engineering, 
+- RAG, and 
+- Finetuning
+
+RAG is following The **retrieve-then-generate pattern**: technique that enhances a model’s generation by retrieving the relevant information from external memory sources such as internal database, a user’s previous chat sessions, or the internet.
+
+> With RAG, only the information most relevant to the query, as determined by the **retriever**, is retrieved and input into the model. And RAG is a technique to enhance the query context individually.
+{:.green}
+
+LlamaIndex is an open source data orchestration framework designed to help developers build applications that connect large language models (LLMs) with their own private or custom data sources. It serves as a bridge between LLMs and external data, enabling you to create AI applications that can reason over your specific information. For example, I'v created the AI Chatbot which can retrieve the information from my data and inference to answer the user response:
 
 ![AI Chatbot for Science Community](/assets/images/2025-09-12-LlamaIndexScienceCommunityChat/AI_Chat_Bot.jpg)
 
 1. User prompt to ask Questions?
 2. Previous question
 3. Answer of the previous question
-4. Files in the RAG store
+4. Files in the RAG store (text Docs from the user directory in this example)
 5. Specific setting such as Context/System prompt for Context
 6. Select the Chat Engine
 7. Common setting for all the prompts
-
-
 
 
 ### What is LlamaIndex?
@@ -110,21 +119,72 @@ The framework then implements these stages through three main components:
 
 At the foundational level, LlamaIndex works with Documents and Nodes as its basic building blocks.Documents represent raw data sources, while Nodes are coherent, indexable chunks of information parsed from Documents[^4].
 
+![Application Architecture](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-09-12-LlamaIndexScienceCommunityChat/Application_Architecture.png)
+
+The above diagram illustrates the application architecture of the rest of the system.
+
+ Embedding-based retrievers aim to rank documents based on how closely their meanings align with the query. This approach is also known as **semantic retrieval**. We retrieve documents based on the extent of their **n-gram overlap** where approach works best when the query and the documents are of similar lengths. 
+
+
 ### Integration
-LlamaIndex integrates with popular LLM providers (OpenAI, Anthropic, local models) and vector databases (Pinecone, Chroma, Weaviate), making it quite flexible for different technical stacks. The framework essentially democratizes the ability to create "ChatGPT for your data" applications without needing to build all the retrieval and indexing infrastructure from scratch.
+LlamaIndex integrates with popular LLM providers (OpenAI, Anthropic, local models) and vector databases (Pinecone, Chroma, Weaviate), making it quite flexible for different technical stacks. *The default vector store for the LlamaInde is in memory 
+`SimpleVectorStore` use in this article*. 
 
-> You have to setup the environmen (eg: ChatGPT API Key) and the other housekeeping functions:
-
+For example, you can use Pinecone as your vector database instead:
 
 ```python
-%load_ext dotenv
-%dotenv ../../../.env
+from llama_index.vector_stores import PineconeVectorStore
+import pinecone
 
-from IPython.display import Markdown, display
-def in_md(md_txt):
-    md_formated_txt = f"--- Response -------<br/>{md_txt}<br/>-------------------"
-    display(Markdown(md_formated_txt))
+# Initialize Pinecone
+pinecone.init(api_key="your-key")
+pinecone_index = pinecone.Index("your-index")
+
+# Use Pinecone as the vector store
+vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
+index = VectorStoreIndex.from_documents(
+    documents,
+    vector_store=vector_store
+)
 ```
+
+For the Elasticsearch:
+
+```python
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext
+from llama_index.vector_stores.elasticsearch import ElasticsearchStore
+
+# Initialize Elasticsearch vector store
+vector_store = ElasticsearchStore(
+    es_url="http://localhost:9200",  # Your Elasticsearch URL
+    index_name="my_documents",        # Name of the index to create
+    es_user="elastic",                # Optional: username
+    es_password="your_password"       # Optional: password
+)
+
+# Create storage context with Elasticsearch
+storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
+# Load documents
+documents = SimpleDirectoryReader('data').load_data()
+
+# Create VectorStoreIndex with Elasticsearch
+index = VectorStoreIndex.from_documents(
+    documents,
+    storage_context=storage_context,
+    show_progress=True
+)
+
+# Query the index
+query_engine = index.as_query_engine()
+response = query_engine.query("What is machine learning?")
+print(response)
+```
+
+The framework essentially democratizes the ability to create "ChatGPT for your data" applications without needing to build all the retrieval and indexing infrastructure from scratch.
+
+> NOTE: You have to setup the environmen (eg: ChatGPT API Key, Pinecone Keys) and the other housekeeping functions.
+
 
 In RAG systems, data ingestion is the first critical step where LlamaIndex connects to various data sources through its data connectors. The "data" directory in this example contains raw documents that will be processed through LlamaIndex's `SimpleDirectoryReader`, which serves as a <span>universal data loader capable of handling multiple file formats</span>{:gtxt} including 
 
@@ -1137,7 +1197,12 @@ in_md(condenseContext_response.response)
 Overall, the work and legacy of these scientists have had a lasting impact on both the scientific community and society at large, continuing to influence research, technology, and policy decisions well into the 21st century.<br/>-------------------
 
 
-## Retrivers
+## Retrievers
+
+The success of a RAG system depends on the quality of its retriever. A retriever has two main functions: 
+
+- indexing 
+- querying. 
 
 Retrievers are fundamental components in RAG systems responsible for finding and ranking the most relevant chunks or nodes based on query similarity. LlamaIndex's `VectorIndexRetriever` performs semantic search using vector embeddings, where the `similarity_top_k` parameter determines how many of the most relevant nodes are retrieved for context generation.
 
