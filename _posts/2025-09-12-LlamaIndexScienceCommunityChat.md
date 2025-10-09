@@ -1335,7 +1335,7 @@ for text_node in retrieved_nodes:
     debates about quantum mechanics "The Most Intelligent Photo Ever
     Taken": The 1927 So...
     Score:  0.829
-    
+
 
 
 The `similarity_top_k` parameter directly controls the context window size for RAG responses by determining how many semantically similar nodes are retrieved. This parameter represents a crucial trade-off in RAG systems:
@@ -2062,17 +2062,17 @@ qa_dataset = generate_question_context_pairs(
 ```
 
       0%|          | 0/3 [00:00<?, ?it/s]
-
+    
     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 
 
      33%|███▎      | 1/3 [00:01<00:03,  1.98s/it]
-
+    
     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 
 
      67%|██████▋   | 2/3 [00:06<00:03,  3.32s/it]
-
+    
     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 
 
@@ -2120,7 +2120,7 @@ print(eval_result)
     HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
     Query: "Discuss the impact of Einstein's General Theory of Relativity on modern physics and provide examples of its practical applications as mentioned in the text."
     Metrics: {'mrr': 1.0, 'hit_rate': 1.0}
-    
+
 
 
 Evaluate for entire dataset
@@ -2173,7 +2173,7 @@ metric_df
     .dataframe tbody tr th {
         vertical-align: top;
     }
-
+    
     .dataframe thead th {
         text-align: right;
     }
@@ -2206,9 +2206,9 @@ As shown in the above, results are pretty good may be because I am using only th
 
 [^3]: [30 Agents Every AI Engineer Must Build](https://learning.oreilly.com/library/view/30-agents-every/9781806109012/){:target="_blank"}
 
-[^4]: [Building Data-Driven Applications with LlamaIndex](https://learning.oreilly.com/library/view/building-data-driven-applications/9781835089507/)
+[^4]: [Building Data-Driven Applications with LlamaIndex](https://learning.oreilly.com/library/view/building-data-driven-applications/9781835089507/)](https://learning.oreilly.com/library/view/30-agents-every/9781806109012/){:target="_blank"}
 
-[^5]: [Effective Conversational AI](https://learning.oreilly.com/library/view/effective-conversational-ai/9781633436404/)
+[^5]: [Effective Conversational AI](https://learning.oreilly.com/library/view/effective-conversational-ai/9781633436404/)](https://learning.oreilly.com/library/view/30-agents-every/9781806109012/){:target="_blank"}
 
 {:gtxt: .message color="green"}
 
