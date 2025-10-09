@@ -27,6 +27,9 @@ Ontologies—formal, explicit specifications of conceptualisations—offer a pro
 
 that integrates ontology parsing, semantic extraction, reasoning, and metric computation. The Pizza ontology, a canonical OWL ontology modelling pizza types and ingredients, serves as an illustrative example to concretise the approach.
 
+> LLMs generate text based on learned statistical patterns but may produce outputs that are semantically inconsistent or factually incorrect relative to domain knowledge. Standard evaluation metrics (e.g., BLEU, ROUGE) focus on surface similarity rather than semantic validity. Domain-specific evaluation requires grounding outputs in formal knowledge representations.
+{:.yellow}
+
 
 
 ## 2. Background and Literature Review
@@ -54,13 +57,23 @@ Ontology-driven evaluation involves mapping LLM-generated text to ontology-align
 
 ## 3. Methodology: Framework for Ontology-Based LLM Evaluation
 
-We propose a multi-stage framework to operationalise RDF/OWL ontologies as Eval frameworks for LLM-generated outputs:
+In this article, I propose a multi-stage framework to operationalise RDF/OWL ontologies as Eval frameworks for LLM-generated outputs.
 
 ### 3.1 Ontology Parsing and Representation
 
 - **Objective:** Extract domain classes, properties, and axioms from the ontology file (e.g., pizza.owl).
 - **Tools:** OWL API, Apache Jena, or RDFLib can parse OWL/RDF files and expose ontology elements programmatically.
 - **Output:** Machine-readable ontology schema including class hierarchies, object/data properties, and logical constraints.
+
+The proposed framework consists of the following components:
+
+Convert LLM-generated pizza recipe replies from natural language into structured data identifying pizza types, toppings, ingredients, and quantities.
+
+- Use natural language processing (NLP) techniques such as named entity recognition (NER), dependency parsing, and semantic role labelling to identify pizza-related entities and relations in the LLM reply.
+- Map recognised entities to ontology classes (e.g., `MargheritaPizza`, `MozzarellaTopping`) using controlled vocabularies or lexical matching.
+- Extract relations such as `hasTopping` and `hasBase` from recipe instructions
+
+
 
 ### 3.2 Semantic Extraction from LLM Outputs
 
@@ -71,6 +84,12 @@ We propose a multi-stage framework to operationalise RDF/OWL ontologies as Eval 
   - Semantic parsing to RDF triples referencing ontology classes and properties.
 - **Output:** Instance data representing entities and relations extracted from text, formatted as RDF triples or OWL individuals.
 
+**Ontology Instance Mapping:** Represent extracted entities as RDF/OWL individuals conforming to the Pizza ontology classes and properties.
+
+- Instantiate RDF individuals representing the pizza and its components.
+- Assign properties according to the ontology schema, e.g., linking a pizza individual to topping individuals via `hasTopping`.
+- Encode quantities or preparation steps as datatype properties if modelled.
+
 ### 3.3 Reasoning and Consistency Checking
 
 - **Objective:** Verify that extracted instance data conforms to ontology axioms and constraints.
@@ -80,6 +99,12 @@ We propose a multi-stage framework to operationalise RDF/OWL ontologies as Eval 
   - Property constraint verification (e.g., `toppings` linked via the `hasTopping` property).
   - Logical consistency and completeness (e.g., all required components present).
 - **Output:** Reasoning results indicating consistency, inferred classifications, and detected violations.
+
+**Reasoning and Constraint Validation:** Apply OWL reasoners and SHACL constraints to check semantic consistency, class membership, and adherence to domain restrictions.
+
+- Use OWL reasoners (e.g., HermiT, Pellet) to infer class membership and check logical consistency of the instance data.
+- Apply SHACL shapes derived from ontology restrictions to enforce closed-world constraints such as exact cardinalities and disallowed toppings.
+- Execute SPARQL queries to detect specific violations, such as the presence of meat toppings on a vegetarian pizza.
 
 ### 3.4 Eval Metric Formulation
 
@@ -95,6 +120,12 @@ We propose a multi-stage framework to operationalise RDF/OWL ontologies as Eval 
 
 - **Objective:** Use Eval results to improve LLM outputs via fine-tuning or prompt adjustment iteratively.
 - **Approach:** Incorporate ontology-driven feedback loops as in OntoTune [^7] to align LLM knowledge with domain ontology.
+
+**Eval Scoring and Reporting:** Generate validation reports indicating compliance or violations, supporting automated scoring of LLM outputs.
+
+- Define Eval criteria as a set of SPARQL ASK or SELECT queries and SHACL[^15] validation reports.
+- Automate the pipeline to process multiple LLM replies, producing pass/fail or graded scores based on compliance.
+- Incorporate soft constraints or probabilistic scoring to handle partial matches or uncertain entity extraction.
 
 ---
 
@@ -148,15 +179,54 @@ The Pizza ontology[^9] models pizza types, ingredients, toppings, and preparatio
 
 ### 5.1 Implications for LLM Evaluation
 
-Ontology-driven evaluation frameworks enable a rigorous and interpretable assessment of LLM outputs, grounded in **formal domain knowledge**. This approach can enhance trustworthiness and domain alignment, particularly in specialised fields (e.g., medicine, law, insurance, banking, culinary arts, and others).
+Ontology-driven evaluation frameworks enable a rigorous and interpretable assessment of LLM outputs, grounded in **formal domain knowledge**. This approach can enhance trustworthiness and domain alignment, particularly in specialised fields (e.g., medicine, law, insurance, banking, culinary arts, and others). For example:
 
-### 5.2 Limitations
+### 5.1 Ontology Constructs as Validation Targets
+
+From the Stanford Pizza ontology, key constructs include:
+
+- **Classes:** `Pizza`, `VegetarianPizza`, `MargheritaPizza`, `Topping`, `MeatTopping`, `VegetableTopping`.
+- **Object Properties:** `hasTopping`, `hasBase`, `hasIngredient`.
+- **Restrictions:**
+    - `MargheritaPizza` has exactly one topping: `Mozzarella`.
+    - `VegetarianPizza` excludes any `MeatTopping`.
+    - Certain toppings only allowed on specific pizza types.
+
+These constructs form the basis for validation rules.
+
+### 5.2 Example Validation Rules
+
+- **Rule 1:** Check that a `MargheritaPizza` instance has exactly one `Mozzarella` topping.
+
+```sparql
+ASK WHERE {
+  ?pizza a :MargheritaPizza .
+  ?pizza :hasTopping ?topping .
+  FILTER NOT EXISTS {
+    ?topping a :MozzarellaTopping .
+  }
+}
+```
+
+- **Rule 2:** Verify that a `VegetarianPizza` has no `MeatTopping`.
+
+```sparql
+ASK WHERE {
+  ?pizza a :VegetarianPizza .
+  ?pizza :hasTopping ?topping .
+  ?topping a :MeatTopping .
+}
+```
+
+- **Rule 3:** Cardinality constraint on toppings for a given pizza type, enforced via SHACL.
+
+### 5.3 Limitations
 
 - Lack of off-the-shelf tools to automate the entire pipeline from OWL ontology to Eval scripts.
 - Semantic extraction from natural language remains a bottleneck requiring domain-specific tuning.
 - Ontology completeness and correctness directly impact Eval reliability.
 
-### 5.3 Connections to Broader Research
+### 5.4 Connections to Broader Research
 
 The framework aligns with ongoing research in ontology-LLM integration, knowledge graph construction, and semantic evaluation. It complements efforts in explainable AI by providing transparent, logic-based Eval criteria.
 
@@ -199,4 +269,6 @@ Future research should focus on developing integrated toolkits that automate ont
 [^13]: [Missing Manual: Protégé OWL Tutorial](https://ojitha.blogspot.com/2010/09/missing-manual-protege-owl-tutorial.html){:target="_blank"}
 
 [^14]: [Apache Jena to learn RDF and SPARQL](https://ojitha.blogspot.com/2020/08/apache-jena-to-learn-rdf-and-sparql_64.html){:target="_blank"}
+
+[^15]: [SHACL-DS: A SHACL extension to validate RDF dataset](https://arxiv.org/abs/2505.09198v1){:target="_blank"}
 
