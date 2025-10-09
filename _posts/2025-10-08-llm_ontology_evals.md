@@ -3,7 +3,7 @@ layout: post
 title:  Ontology Evals for LLMs
 date:   2025-10-08
 maths: true
-categories: [AI, AWS]
+categories: [AI, Ontology]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
