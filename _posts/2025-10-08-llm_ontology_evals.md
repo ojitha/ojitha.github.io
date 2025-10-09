@@ -172,16 +172,26 @@ Future research should focus on developing integrated toolkits that automate ont
 
 ## References
 
-[^1]: Ontology (information science), Wikipedia, https://<a href="https://en.wikipedia.org/wiki/Ontology_(information_science)" target="_blank">https://en.wikipedia.org/wiki/Ontology_(information_science)</a>
-[^2]: Resource Description Framework, Wikipedia, https://<a href="https://en.wikipedia.org/wiki/Resource_Description_Framework" target="_blank">https://en.wikipedia.org/wiki/Resource_Description_Framework</a>
-[^3]: Web Ontology Language, Wikipedia, https://<a href="https://en.wikipedia.org/wiki/Web_Ontology_Language" target="_blank">https://en.wikipedia.org/wiki/Web_Ontology_Language</a>
-[^4]: "Integrating Ontologies with Large Language Models for Decision Making," Plain English AI, https://<a href="https://ai.plainenglish.io/integrating-ontologies-with-large-language-models-for-decision-making-bb1c600ce5a3" target="_blank">ai.plainenglish.io/integrating-ontologies-with-large-language-models-for-decision-making-bb1c600ce5a3</a>
-[^5]: Nachi Keta, "Ontologies, LLMs and Knowledge Graphs: A Discussion," Medium, https://<a href="https://nachi-keta.medium.com/ontologies-llms-and-knowledge-graphs-a-discussion-cadeeabe1cc7" target="_blank">nachi-keta.medium.com/ontologies-llms-and-knowledge-graphs-a-discussion-cadeeabe1cc7</a>
-[^6]: DocDigitizer, "A Comprehensive Guide to Ontologies and Large Language Models," https://<a href="https://www.docdigitizer.com/blog/ontologies-large-language-models-guide/" target="_blank">www.docdigitizer.com/blog/ontologies-large-language-models-guide/</a>
-[^7]: Liu, Zhiqiang et al., "OntoTune: Ontology-Driven Self-training for Aligning Large Language Models," arXiv:2502.05478 (2025-02-08), http://arxiv.org/abs/2502.05478
-[^8]: Tomaszuk, Dominik, "Inference rules for RDF(S) and OWL in N3Logic," arXiv:1601.02650 (2016-01-11), http://arxiv.org/abs/1601.02650
-[^9]: Pizza Ontology, Stanford Protégé, https://<a href="https://protege.stanford.edu/ontologies/pizza/pizza.owl" target="_blank">protege.stanford.edu/ontologies/pizza/pizza.owl</a>
+[^1]: [Ontology (information science) - Wikipedia](https://en.wikipedia.org/wiki/Ontology_(information_science)){:target="_blank"}
+
+[^2]: [Resource Description Framework - Wikipedia](https://en.wikipedia.org/wiki/Resource_Description_Framework){:target="_blank"}
+
+[^3]: [Web Ontology Language - Wikipedia](https://en.wikipedia.org/wiki/Web_Ontology_Language){:target="_blank"}
+
+[^4]: [Integrating Ontologies with Large Language Models for Decision-Making \| by Anthony Alcaraz \| Artificial Intelligence in Plain English](https://ai.plainenglish.io/integrating-ontologies-with-large-language-models-for-decision-making-bb1c600ce5a3){:target="_blank"}
+
+[^5]: [Ontologies, LLMs and Knowledge Graphs : A Discussion \| by Rahul Sharma \| Medium](https://nachi-keta.medium.com/ontologies-llms-and-knowledge-graphs-a-discussion-cadeeabe1cc7){:target="_blank"}
+
+[^6]: [A Comprehensive Guide to Ontologies and Large Language Models](https://www.docdigitizer.com/blog/ontologies-large-language-models-guide/){:target="_blank"}
+
+[^7]: [[2502.05478] OntoTune: Ontology-Driven Self-training for Aligning Large Language Models](https://arxiv.org/abs/2502.05478){:target="_blank"}
+
+[^8]: [[1601.02650] Inference rules for RDF(S) and OWL in N3Logic](https://arxiv.org/abs/1601.02650){:target="_blank"}
+
+[^9]:[ Pizza Ontology, Stanford Protégé](https://protege.stanford.edu/ontologies/pizza/pizza.owl){:target="_blank"}
+
 [^10]: Wisnesky, Ryan & Filonik, Daniel, "Relational to RDF Data Migration by Query Co-Evaluation," arXiv:2403.01630 (2024-03-03), http://arxiv.org/abs/2403.01630
+
 [^11]: Lippolis, Anna Sofia et al., "Ontology Generation using Large Language Models," arXiv:2503.05388 (2025-03-07), http://arxiv.org/abs/2503.05388
 
 [^12]: [Structured data meaning](https://ojitha.blogspot.com/2020/08/structured-data-meaning_69.html){:target="_blank"}
