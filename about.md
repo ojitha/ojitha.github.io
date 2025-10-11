@@ -54,6 +54,7 @@ typora-copy-images-to: /assets/images/${filename}
 
 | Verified Certificate                                         | Authority                                                    | Issued Date |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------- |
+| [Accelerating generative AI development with fully managed MLflow 3.0 on Amazon SageMaker AI](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/about/721cfbc2-4fc5-43fa-b659-efb209a8a88b.pdf){:target="_blank"} | AWS                                                          | 07/10/2025  |
 | [Build intelligent agents with Agent Development Kit (ADK)](https://www.cloudskillsboost.google/public_profiles/2f9afd5c-feb5-4c93-bc07-9ff27a453225/badges/18673407){:target="_blank"} | Google                                                       | 28/09/2025  |
 | [AWS Machine Learning](https://www.credly.com/badges/97587daa-6f0a-465f-8dfc-583e5f8d6e7b/public_url){:target="_blank"} | [AWS](/assets/images/about/AWS_ML_CoudQuest.pdf){:target="_blank"} | 22/09/2025  |
 | [AI Agents with CrewAI](https://www.credly.com/badges/6a7f9ead-5c40-48bd-ba9e-b21fb45faf74/public_url){:target="_blank"} | [O`REILLY](/assets/images/about/ORMCertificate20250910-30-9xqyy0.pdf){:target="_blank"} | 10/09/2025  |

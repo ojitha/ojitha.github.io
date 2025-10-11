@@ -27,6 +27,93 @@ echo $(aws sts get-caller-identity --query='Account' --output=text)
 
 Command to get the token.
 
+### Cleaning resources
+
+Only once you have to run the following:
+
+```bash
+aws resource-explorer-2 create-index --region us-east-1
+```
+
+To get all the resources:
+
+```bash
+aws resource-explorer-2 search --query-string "*"
+```
+
+To list the resources by `Service`:
+
+```bash
+aws resource-explorer-2 search --query-string "*" | jq '.Resources[] | select(.Service == "sagemaker") | {Region, OwningAccountId, ResourceType, Arn}'
+```
+
+For example, to delete the MLFlow resource
+
+```bash
+aws sagemaker delete-mlflow-tracking-server --tracking-server-name ojtrackingserver
+```
+
+To delete associations:
+
+1. first list the association:
+
+    ```bash
+    aws sagemaker list-associations \
+      --destination-arn "arn:aws:sagemaker:REGION:ACCOUNT:artifact/ARTIFACT_NAME"
+    ```
+
+2. To delete the association:
+
+    ```bash
+    # Delete association by ARN
+    aws sagemaker delete-association \
+      --source-arn "arn:aws:sagemaker:region:account:artifact/artifact-name" \
+      --destination-arn "arn:aws:sagemaker:region:account:trial-component/component-name"
+    ```
+
+3. Delete the artifact now:
+
+    ```bash
+    aws sagemaker delete-artifact   --artifact-arn \ "arn:aws:sagemaker:REGION:ACCOUNT:artifact/ARTIFACT_NAME"
+    ```
+
+
+
+
+Important commands
+
+1. List all unique services:
+
+```bash 
+aws resource-explorer-2 search --query-string "*" | jq -r '.Resources[].Service' | sort -u
+```
+
+
+2. Get a count of resources per service:
+```bash
+ aws resource-explorer-2 search --query-string "*" | jq -r '.Resources[].Service' | sort | uniq -c | sort -rn
+```
+
+
+3. List services with sample resource types:
+```bash
+ aws resource-explorer-2 search --query-string "*" | jq -r '.Resources[] | "\(.Service):\(.ResourceType)"' | sort -u
+```
+
+
+4. Get a structured summary by service:
+```bash
+ aws resource-explorer-2 search --query-string "*" | jq 'group_by(.Resources[].Service) | map({service: .[0].Service, count: length})'
+```
+
+
+5. List all resources grouped by service:
+```bash
+ aws resource-explorer-2 search --query-string "*" | jq '.Resources | group_by(.Service) | map({Service: .[0].Service, Count: length, ResourceTypes: 
+
+ [.[].ResourceType] | unique})'
+```
+
 ### EC2
 #### Dev environment Tools to install
 Here the tool to install when you need EC2 instance as Dev

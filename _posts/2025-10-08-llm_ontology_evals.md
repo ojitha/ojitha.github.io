@@ -25,7 +25,7 @@ Large language models (LLMs) have demonstrated remarkable capabilities in genera
 
 Ontologies—formal, explicit specifications of conceptualisations—offer a promising avenue to address this challenge. Defined in languages such as the Resource Description Framework (RDF) and the Web Ontology Language (OWL), ontologies encode domain knowledge as classes, properties, and relations with formal semantics. By leveraging ontologies as structured evaluation frameworks (Evals), it becomes possible to systematically assess whether LLM-generated content aligns with domain-specific knowledge and constraints.
 
-that integrates ontology parsing, semantic extraction, reasoning, and metric computation. The Pizza ontology, a canonical OWL ontology modelling pizza types and ingredients, serves as an illustrative example to concretise the approach.
+That integrates ontology parsing, semantic extraction, reasoning, and metric computation. The Pizza ontology, a canonical OWL ontology modelling pizza types and ingredients, serves as an illustrative example to concretise the approach.
 
 > LLMs generate text based on learned statistical patterns but may produce outputs that are semantically inconsistent or factually incorrect relative to domain knowledge. Standard evaluation metrics (e.g., BLEU, ROUGE) focus on surface similarity rather than semantic validity. Domain-specific evaluation requires grounding outputs in formal knowledge representations.
 {:.yellow}
@@ -179,7 +179,9 @@ The Pizza ontology[^9] models pizza types, ingredients, toppings, and preparatio
 
 ### 5.1 Implications for LLM Evaluation
 
-Ontology-driven evaluation frameworks enable a rigorous and interpretable assessment of LLM outputs, grounded in **formal domain knowledge**. This approach can enhance trustworthiness and domain alignment, particularly in specialised fields (e.g., medicine, law, insurance, banking, culinary arts, and others). For example:
+Ontology-driven evaluation frameworks enable a rigorous and interpretable assessment of LLM outputs, grounded in **formal domain knowledge**. For example, AWS Neptune efficiently stores and navigates relationships in data, supporting both the **Property Graph** and **Resource Description Framework** (RDF) graph models. This approach can enhance trustworthiness and domain alignment, particularly in specialised fields (e.g., medicine, law, insurance, banking, culinary arts, and others).
+
+
 
 ### 5.1 Ontology Constructs as Validation Targets
 
@@ -195,6 +197,11 @@ From the Stanford Pizza ontology, key constructs include:
 These constructs form the basis for validation rules.
 
 ### 5.2 Example Validation Rules
+
+Neptune supports both the 
+
+- The Property Graph model with Apache TinkerPop Gremlin is a labelled, directed structure where both relationships (edges) and nodes (vertices) can have properties. 
+- RDF model with SPARQL excels at semantic web applications and knowledge graphs, where standardised data interchange is essential.
 
 - **Rule 1:** Check that a `MargheritaPizza` instance has exactly one `Mozzarella` topping.
 
