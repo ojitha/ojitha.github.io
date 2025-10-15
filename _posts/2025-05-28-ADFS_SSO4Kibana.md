@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ADFS Single Sign-On for Kibana with Nginx & Elasticsearch
-date: 2024-11-24
+date: 2025-05-24
 categories: [ELK, Elastic, Docker]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
