@@ -7,7 +7,7 @@ Scala2BlogsSources := 2025-07-25-Scala-basics \
 
 # Create target file lists
 md_targets := $(foreach wrd,$(Scala2BlogsSources),$(DRAFTS_DIR)/$(wrd).md)
-asset_targets := $(foreach wrd,$(Scala2BlogsSources),$(ASSETS_DIR)/$(wrd)/.done)
+asset_targets := $(foreach wrd,$(Scala2BlogsSources),$(ASSETS_DIR)/$(wrd))
 
 all: $(md_targets) $(asset_targets)
 
@@ -27,18 +27,16 @@ endef
 
 # Assets copy rule
 define assets-copy
-$(ASSETS_DIR)/$1/.done:
+$(ASSETS_DIR)/$1:
 	@echo "Checking for assets folder $1..."
 	@if [ -d "$2/assets/images/$1" ]; then \
 		echo "Assets folder exists, copying..."; \
 		mkdir -p $(ASSETS_DIR)/$1; \
 		cp -r $2/assets/images/$1/* $(ASSETS_DIR)/$1/; \
-		touch $(ASSETS_DIR)/$1/.done; \
 		echo "Assets copied to $(ASSETS_DIR)/$1"; \
 	else \
-		echo "No assets folder found for $1, skipping..."; \
-		mkdir -p $(ASSETS_DIR); \
-		touch $(ASSETS_DIR)/$1/.done; \
+		echo "No assets folder found for $1, creating empty directory..."; \
+		mkdir -p $(ASSETS_DIR)/$1; \
 	fi
 endef
 

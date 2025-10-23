@@ -53,6 +53,11 @@ typora-copy-images-to: ../assets/images/${filename}
 ## Introduction
 
 ```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
 mindmap
     ((Scala))
       ["Regular 
@@ -95,6 +100,11 @@ In Scala, you can everything will be an object:
 Scala Primitives: Byte, Short, Int, Long, Float, Double, Char, Boolean have correlation to Java's primitives and *wrapped to give extra functionality* as above last statement.  
 
 ```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
 classDiagram
     class scala.Any
     class scala.AnyVal
@@ -177,11 +187,21 @@ val a = 99
 s"${a+1}"
 ```
 
+Another example where you need 2 of `%` to show a percentage:
+
+
+```scala
+val perInc = 10
+val price = 10.24
+f"The show ticket price is $price%2.2f increased by $perInc%%" 
+```
 
 
 
-    a: Int = 99
-    res6_1: String = "100"
+
+    perInc: Int = 10
+    price: Double = 10.24
+    res10_2: String = "The show ticket price is 10.24 increased by 10%"
 
 
 
@@ -269,7 +289,7 @@ for (i <- (1 to 5)) yield i
 
 
 
-    res9: IndexedSeq[Int] = Vector(1, 2, 3, 4, 5)
+    res25: IndexedSeq[Int] = Vector(1, 2, 3, 4, 5)
 
 
 
@@ -297,6 +317,149 @@ val name = "Scala" // Compiler infers name: String
     name: String = "Scala"
 
 
+
+In the following example, *type inferance will be failed*:
+
+
+```scala
+def add(x:Int, y:Int) = x + y
+def substract(x:Double, y:Double) = x - y
+```
+
+
+
+
+    defined function add
+    defined function substract
+
+
+
+
+```scala
+add(substract(2.4,1.4), substract(4.0,3.1))
+```
+
+    cmd4.sc:1: type mismatch;
+     found   : Double
+     required: Int
+    val res4 = add(substract(2.4,1.4), substract(4.0,3.1))
+                            ^cmd4.sc:1: type mismatch;
+     found   : Double
+     required: Int
+    val res4 = add(substract(2.4,1.4), substract(4.0,3.1))
+                                                ^Compilation Failed
+
+
+    Compilation Failed
+
+
+Possible solution is casting Double to Int which will truncate as well.
+
+
+```scala
+add(substract(2.4,1.4).toInt, substract(4.0,3.1).toInt) // ✅
+```
+
+
+
+
+    res4: Int = 1
+
+
+
+You must be carefull with turncation because you may get unexpected overflows as follows 
+
+
+```scala
+val myDoubleVal = 2039495678458693969.2356
+```
+
+
+
+
+    myDoubleVal: Double = 2.03949567845869389E18
+
+
+
+turncate the above
+
+
+```scala
+val myLongVal= myDoubleVal.round
+```
+
+
+
+
+    myLongVal: Long = 2039495678458693888L
+
+
+
+If you cast this to Int, you get an <span>overflow problem as follows, which is entirely unexpected</span>{:rtxt}.
+
+
+```scala
+myLongVal.toInt // ❌
+```
+
+
+
+
+    res7: Int = -1954969344
+
+
+
+Let's find the method signature of the follwowing `add` function:
+
+
+```scala
+def add(x:Int, y:Int) = {
+    if (x > 10) f"$x + $y"
+    else x+y
+}
+println(typeOf(add _))
+```
+
+    (Int, Int) => Any
+
+
+
+
+
+    defined function add
+
+
+
+> As shown above, the return type is `Any`. Funny example of the following function missing the `=` sign, which always returns `Unit`. This function call is considered to be a procedural call in Scala. 
+{:.yellow}
+
+
+```scala
+def add(x:Int, y:Int) {
+    if (x > 10) print(x + y) // side effect 👎
+    else x+y
+}
+println(typeOf(add _))
+```
+
+    (Int, Int) => Unit
+
+
+
+
+
+    defined function add
+
+
+
+The above code has *side effects*{:rtxt}, which is not a good approach in functional programming. For example
+
+
+```scala
+add(11,2)
+```
+
+    13
 
 ## What is `lazy val` in Scala?
 The  **forward referencing** refers to the ability to reference definitions (variables, methods, classes, etc.) that are declared later in the source code, before they are actually defined. You can reference methods and fields that are defined later in the same class or trait. 
@@ -341,6 +504,207 @@ println(expensiveComputation) // Uses cached value
 </div>
 
 
+## Scala methods and functions
+A method belongs to a context, but a function is not.
+Here is the basic method
+
+
+
+```scala
+def add (x:Int, y:Int) =  x + y
+```
+
+
+
+
+    defined function add
+
+
+
+You can use this function to add two values as follows:
+
+
+```scala
+add(1,2)
+```
+
+
+
+
+    res6: Int = 3
+
+
+
+### Operator overload
+Operators are used as methods in operator overloading. For example, for the `3 + 4`:
+
+
+```scala
+3.+(4)
+3.0f.+(4f)
+```
+
+
+
+
+    res7_0: Int = 7
+    res7_1: Float = 7.3F
+
+
+
+### Method overload
+Method name is reused in different types of parameters. For example `num(n:Int)` method is different from the `num(n:Double)`.
+
+
+```scala
+def num(n:Int):String = f"Int numb is $n"
+def num(n:Double):String = f"Double numb is $n"
+num(2)
+num(2.2)
+```
+
+
+
+
+    defined function num
+    defined function num
+    res16_2: String = "Int numb is 2"
+    res16_3: String = "Double numb is 2.2"
+
+
+
+Method overload is part of the method signature and does not include the return type.
+
+
+```scala
+def num(n:Int):String = f"Int numb is $n"
+def num(n:Int):Int = n + 1
+```
+
+    cmd17.sc:2: method num is defined twice;
+      the conflicting method num was defined at line 181:5 of 'cmd17.sc'
+    def num(n:Int):Int = n + 1
+        ^Compilation Failed
+
+
+    Compilation Failed
+
+
+However, in the following method, you can pass Int instead of BigInt because
+
+
+
+```scala
+def num(n:CharSequence) = f"value is $n"
+val a:CharSequence = "2"
+num(a)
+val b:String = "3"
+num(b)
+```
+
+
+
+
+    defined function num
+    a: CharSequence = "2"
+    res32_2: String = "value is 2"
+    b: String = "3"
+    res32_4: String = "value is 3"
+
+
+
+```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
+classDiagram
+    class scala.Any
+    class scala.AnyVal
+    class scala.AnyRef
+    class java.lang.Object
+
+    scala.Any <|-- scala.AnyVal
+    scala.Any <|-- scala.AnyRef
+    java.lang.Object --> scala.AnyRef
+
+    scala.AnyRef <|-- java.lang.CharSequence
+    java.lang.CharSequence <|-- java.lang.String
+
+```
+
+You can substitute `String` with `CharSequence` as shown in the above diagram `String` is a subclass of `CharSequence`.
+
+
+```scala
+"3".isInstanceOf[String]
+"3".isInstanceOf[CharSequence]
+```
+
+
+
+
+    res29_0: Boolean = true
+    res29_1: Boolean = true
+
+
+
+But you cannot do other way around:
+
+
+```scala
+def num(n:String) = f"value is $n"
+val a:CharSequence = "2"
+num(a)
+val b:String = "3"
+num(b)
+```
+
+    cmd33.sc:3: type mismatch;
+     found   : CharSequence
+     required: String
+    val res33_2 = num(a)
+                      ^Compilation Failed
+
+
+    Compilation Failed
+
+
+Otherwise, you have to do explicit casting to the `CharSequence` to the `String` using `asInstanceOf`:
+
+
+```scala
+num(a.asInstanceOf[String])
+```
+
+
+
+
+    res33: String = "value is 2"
+
+
+
+You can use parameterised types on methods to maintain type consistency and avoid explicit casting:
+
+
+```scala
+def num[T](n:T) = f"value is $n"
+num(2)
+num(2:BigInt)
+num("2")
+```
+
+
+
+
+    defined function num
+    res38_1: String = "value is 2"
+    res38_2: String = "value is 2"
+    res38_3: String = "value is 2"
+
+
+
 ## Classes and Case Classes
 
 Classes in Scala are blueprints for creating objects, requiring manual definition of fields and methods like `toString`, `equals`, and `hashCode`. 
@@ -361,11 +725,57 @@ person.age  // Accessing mutable field
 
 
     defined class Person
-    person: Person = ammonite.$sess.cmd5$Helper$Person@5592bc35
-    res5_2: String = "Alice"
-    res5_4: Int = 31
+    person: Person = ammonite.$sess.cmd7$Helper$Person@7e1e69f2
+    res7_2: String = "Alice"
+    res7_4: Int = 31
 
 
+
+In the above class, you can directly access the properties of the class using the same syntax, which is called UAP[^1].
+
+> The Uniform Access Principle (UAP) is a programming language design principle that states: clients of a module should not be affected by whether a feature is implemented as a field or a method.
+{:.info-box}
+
+In the above class, the primary constructor is directly defined in the class signature. **Auxiliary** constructors are additional constructors defined with `def this(...)`:
+
+
+```scala
+class Person(val name: String, var age: Int) {
+  
+  // Auxiliary constructor with just name (age defaults to 0)
+  def this(name: String) = {
+    this(name, 0)  // MUST call primary constructor first
+  }
+  
+  // Another auxiliary constructor with no parameters
+  def this() = {
+    this("Unknown", 0)  // MUST call another constructor
+  }
+}
+
+val p1 = new Person("Alice", 30)     // Primary constructor
+val p2 = new Person("Bob")           // Auxiliary constructor
+val p3 = new Person()                // Another auxiliary constructor
+```
+
+
+
+
+    defined class Person
+    p1: Person = ammonite.$sess.cmd15$Helper$Person@4883fea4
+    p2: Person = ammonite.$sess.cmd15$Helper$Person@413af778
+    p3: Person = ammonite.$sess.cmd15$Helper$Person@4c07283f
+
+
+
+Every auxiliary constructor must call another constructor (primary or auxiliary) as its first action.
+
+| Feature | Primary Constructor | Auxiliary Constructor |
+|---------|-------------------|---------------------|
+| **Definition** | In class signature | With `def this(...)` |
+| **Number** | Exactly one | Zero or more |
+| **First line** | Can do anything | **Must** call another constructor |
+| **Class body** | Executes entire body | Only executes its own code |
 
 ### Standard `toString`
 
@@ -373,27 +783,104 @@ If you want to avoid the random unkown value at line #2 in the above output. You
 
 
 ```scala
-class Person(val name: String, var age: Int){
+class Person(val name: String, var age: Int=0){
+    require(name.nonEmpty, "Name cannot be empty")
+    require(age > 0 && age < 160, "Age cannot be zero or more than 160")
+    
     override def toString: String = s"Person(name=$name, age=$age)"
 }
+try {
+    val person = new Person("Alice", 30)
+} catch {
+    case e: IllegalArgumentException => e.getMessage
+} finally {
+    println("Cont. ...")
+}
+```
 
-val person = new Person("Alice", 30)
+    Cont. ...
+
+
+
+
+
+    defined class Person
+    res27_1: Any = ()
+
+
+
+> All Scala exceptions are runtime exceptions and no checked Exceptions as in Java.
+{:.green}
+
+### equals
+
+How to compare instances of the Person class? Object equality not the reference equality.
+
+For that, you have to override the `equals` method.
+
+> Unfortunately, you can't override the standard `equals` method using an implicit conversion. The compiler won't apply an implicit to provide a method that a class already has, and every class in Scala inherits an `equals` method from `AnyRef`.
+{:.yellow}
+
+The simple version of equal is
+
+
+```scala
+class Person(val name: String, var age: Int){
+    
+    override def toString: String = s"Person(name=$name,age=$age)"
+    
+    override def equals(x: Any): Boolean = {
+        if (!x.isInstanceOf[Person]) false
+        else {
+            val other = x.asInstanceOf[Person]
+            other.name.equals(this.name) && other.age.equals(this.age)
+        }
+    }
+    
+}
 ```
 
 
 
 
     defined class Person
-    person: Person = Person(name=Alice, age=30)
 
 
 
-How to compare instances of Person class?
+Let's test the above:
 
-For that you have to override the `equals` method.
 
-> Unfortunetly, You can't override the standard `equals` method using an implicit conversion. The compiler won't apply an implicit to provide a method that a class already has, and every class in Scala inherits an `equals` method from `AnyRef`.
-{:.yellow} 
+```scala
+val p1 = new Person("Alice", 30)
+val p2 = new Person("Alice", 30)
+val p3 = new Person("Bob", 25)
+
+p1.equals(p2)
+p1.equals(p3)
+```
+
+
+
+
+    p1: Person = Person(name=Alice,age=30)
+    p2: Person = Person(name=Alice,age=30)
+    p3: Person = Person(name=Bob,age=25)
+    res2_3: Boolean = true
+    res2_4: Boolean = false
+
+
+
+Or
+
+
+```scala
+println(s"p1 == p2 ~~> ${p1 == p2}") // Prints: p1 == p2: true
+println(s"p1 == p3 ~~> ${p1 == p3}") // Prints: p1 == p3: false
+```
+
+    p1 == p2 ~~> true
+    p1 == p3 ~~> false
+
 
 
 ```scala
@@ -449,7 +936,7 @@ println(s"p1 == p3 ~~> ${p1 == p3}") // Prints: p1 == p3: false
 
 ### Standard `hashCode`
 
-Another standard method to introduce is `hashCode`:
+Another standard method to introduce is `hashCode`, which can be used to compare the equality of objects from the perspective of a business entity.
 
 
 ```scala
@@ -461,7 +948,7 @@ class Person(val name: String, var age: Int){
     
     override def equals(other: Any): Boolean = other match {
         case that: Person =>
-            (that canEqual this) && //check symmetry
+            (that canEqual this) && //check symmetry using infix operator
             name == that.name &&
             age == that.age
         case _ => false
@@ -480,9 +967,22 @@ class Person(val name: String, var age: Int){
 
 
 
-Above code is the complete code for the `Person` class.
+> In Scala, any method with a single parameter can be called using infix notation (without dots and parentheses).
 
-Let's do the same testing
+In the above code, the infix operator is
+
+```scala
+// Standard method call
+object.method(parameter)
+
+// Infix notation (equivalent)
+object method parameter
+```
+
+> Right-associative if operator ends with `:` otherwise left associativity. The `b.op:(a)` can be written as `a op: b `.
+{:.info-box}
+
+Let's do the same testing for the above `Person` class:
 
 
 ```scala
@@ -510,9 +1010,135 @@ println(s"p1 eq p2 ~~> ${p1 eq p2}") // references are not the same
 
 
 
-### Case Class
+## Subclasses
+Using the keyword `extends`, subclasses can be created from the superclass. As shown in the following example, inheritance has a "is-a" relationship:
 
-If you convert the above class `Person` to case class:
+```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
+classDiagram
+    class scala.Any
+    class scala.AnyVal
+    class scala.AnyRef
+    class java.lang.Object
+
+    scala.Any <|-- scala.AnyVal
+    scala.Any <|-- scala.AnyRef
+    java.lang.Object --> scala.AnyRef
+
+ 
+    scala.AnyRef <|-- Person
+    Person <|-- Employee
+    
+    class Person {
+        +name: String
+        +age: Int
+    }
+    
+    class Employee {
+        +gender: Char
+    }
+```
+
+> All the subclasses are polymorphic in Scala.
+{:.green}
+
+
+
+```scala
+class Employee(name:String, age:Int, val contract:Char) 
+    extends Person(name, age){
+    require(contract == 'F' || contract == 'P'
+            , "Contract can be either F: full-time or P: part-time")
+}
+```
+
+
+
+
+    defined class Employee
+
+
+
+
+```scala
+val e1 = new Employee("Alice", 30,'F')
+e1
+```
+
+
+
+
+    e1: Employee = Person(name=Alice, age=30)
+    res39_1: Employee = Person(name=Alice, age=30)
+
+
+
+As shown in the above `toString` method, it is inherited from the Person parent class which can be overridden in the `Employee` class.
+
+
+```scala
+class Employee(name:String, age:Int, val contract:Char) 
+    extends Person(name, age){
+    require(contract == 'F' || contract == 'P'
+            , "Contract can be either F: full-time or P: part-time")
+    override def toString: String = s"Person(Name=$name, Age=$age, Contract=$contract)"    
+}
+
+val e1 = new Employee("Alice", 30,'F')
+e1
+```
+
+
+
+
+    defined class Employee
+    e1: Employee = Person(Name=Alice, Age=30, Contract=F)
+    res10_2: Employee = Person(Name=Alice, Age=30, Contract=F)
+
+
+
+> The `override` keyword is compulsory in Scala (not like in Java) for overriding parent methods with the same method signature.
+
+The same reference equality operator is `eq` in Scala:
+
+
+```scala
+val e1 = new Employee("Alice", 30, 'F')
+val e2 = e1
+```
+
+
+
+
+    e1: Employee = Person(Name=Alice, Age=30, Contract=F)
+    e2: Employee = Person(Name=Alice, Age=30, Contract=F)
+    res12_2: Boolean = true
+
+
+
+
+```scala
+e1 eq e2
+```
+
+
+
+
+    res13: Boolean = true
+
+
+
+### Case Class
+Case classes are designed for algebraic data types (**ADT**s) representing product types (data with multiple fields). 
+
+> Inheritance represents sum types (choice between alternatives), which should be modelled at the trait/sealed trait level, not at the case class level.
+{:.yellow}
+
+Suppose you convert the above class `Person` to a case class. In this case, there is no need for `val` in front of the parameter because that is the default.
 
 
 ```scala
@@ -546,7 +1172,483 @@ println(s"p1 eq p2 ~~> ${p1 eq p2}") // references are not the same
 
 
 
-> To instanticate regular classes, need to use `new` keyword, but not for the case class. The **universal apply method** is a feature in Scala 3 that automatically allows you to create an instance of any class using `ClassName(arguments)` syntax, without needing the `new` keyword.
+> To instantiate regular classes, we need to use the `new` keyword, but not for the case class. The **universal apply method** is a feature in Scala 3 that automatically allows you to create an instance of any class using `ClassName(arguments)` syntax, without needing the `new` keyword.
+
+However, you can override the methods, for example `toString`:
+
+
+```scala
+case class CPerson(name: String, age: Int){
+    override def toString = s"Name: $name and Age: $age"
+}
+```
+
+
+
+
+    defined class CPerson
+
+
+
+
+```scala
+val p1 = CPerson("Alice", 30)
+print(p1)
+```
+
+    Name: Alice and Age: 30
+
+
+
+
+    p1: CPerson = CPerson(name = "Alice", age = 30)
+
+
+
+#### **Extractors and the Unapply Pattern**
+
+Case classes in Scala automatically generate an `unapply` method that acts as an **extractor**. This is the theoretical inverse of the `apply` method (constructor):
+
+-   `apply`: constructs an object from components → `CPerson.apply("Alice", 30)`
+-   `unapply`: deconstructs an object into components → `CPerson.unapply(p1) == Some(("Alice", 30))`
+
+Case Classes are well known for pattern matching. For example, you can extract `name` from the case class instance using **Refutable Pattern**:
+
+
+```scala
+val (name, age) = p1 match {
+    case CPerson(n, a) => (n, a)
+    case _ => "Unknown"
+}
+```
+
+
+
+
+    name: Any = "Alice"
+    age: Any = 30
+
+
+
+using **Irrefutable Pattern**:
+
+
+```scala
+val CPerson(n1,a1) = p1
+n1
+```
+
+
+
+
+    n1: String = "Alice"
+    a1: Int = 30
+    res27_1: String = "Alice"
+
+
+
+1.  **Pattern matching** (`p1 match { ... }`) is **case analysis** - you're saying "let me check what shape this value has"
+2.  **Pattern binding** (`val CPerson(n1, a1) = p1`) is a **destructuring assignment** - you're asserting "I know this value has this shape"
+
+The first form is essentially syntactic sugar that says: "I'm confident enough in the type that I don't need the safety of exhaustive matching." If `p1` weren't actually a `CPerson`, you'd get a runtime `MatchError`.
+
+When to Use Each:
+
+-   Use **pattern binding** when the type is guaranteed (like your case)
+-   Use **pattern matching** when you need to handle multiple cases or the match might fail
+
+This reflects the broader PL theory concept of **pattern matching as both construction and deconstruction**, where the same syntactic form works bidirectionally.
+
+#### Subclassing case classes
+
+This is technically possible, but <span>subclassing is highly discouraged and problematic</span>{:rtxt}.
+
+> Don't subclass case classes. Use sealed traits with case class implementations instead.
+{:.info-box}
+
+For example:
+
+
+```scala
+case class Person(name: String, age: Int)
+case class Employee(name: String, age: Int, salary: Double) extends Person(name, age)
+```
+
+    cmd0.sc:2: case class Employee has case ancestor ammonite.$sess.cmd0.Helper.Person, but case-to-case inheritance is prohibited. To overcome this limitation, use extractors to pattern match on non-leaf nodes.
+    case class Employee(name: String, age: Int, salary: Double) extends Person(name, age)
+               ^Compilation Failed
+
+
+    Compilation Failed
+
+
+The recommended alternative is the use of Sealed Trait Hierarchy:
+
+
+```scala
+sealed trait Person {
+    def name: String
+    def age: Int
+}
+
+case class RegularPerson(name: String, age: Int) extends Person
+case class Employee(name: String, age: Int, salary: Double) extends Person
+case class Student(name: String, age: Int, school: String) extends Person
+```
+
+
+
+
+    defined trait Person
+    defined class RegularPerson
+    defined class Employee
+    defined class Student
+
+
+
+#### Abstract class
+You can use abstract classes with case classes as regular classes:
+
+
+```scala
+abstract class Person(val name: String, val age: Int)
+
+case class Employee(override val name: String, override val age: Int, salary: Double) 
+  extends Person(name, age)
+
+case class Student(override val name: String, override val age: Int, school: String) 
+  extends Person(name, age)
+```
+
+
+
+
+    defined class Person
+    defined class Employee
+    defined class Student
+
+
+
+But the problem is 
+
+
+```scala
+val e = Employee("Alice", 30, 50000)
+val s = Student("Bob", 20, "MIT")
+```
+
+
+
+
+    e: Employee = Employee(name = "Alice", age = 30, salary = 50000.0)
+    s: Student = Student(name = "Bob", age = 20, school = "MIT")
+
+
+
+To pattern match, will define a function:
+
+
+```scala
+def describe(p: Person): String = p match {
+    case Employee(n, a, sal) => s"Employee: $n, salary: $sal"
+    case Student(n, a, sch) => s"Student: $n at $sch"
+}
+```
+
+
+
+
+    defined function describe
+
+
+
+
+```scala
+For the `Employee`:
+```
+
+
+```scala
+describe(e)
+```
+
+
+
+
+    res4: String = "Employee: Alice, salary: 50000.0"
+
+
+
+For the `Student`:
+
+
+```scala
+describe(s)
+```
+
+
+
+
+    res5: String = "Student: Bob at MIT"
+
+
+
+Although you declare an abstract class, you cannot instantiate instances directly; therefore, you have to use a companion object and create instance from the anonymous subclass:
+
+
+```scala
+object Person {
+    def apply(name: String, age: Int): Person =
+        new Person(name, age) {} // anonymous subclass
+}
+
+val p1 = Person("Foo",20)
+```
+
+
+
+
+    defined object Person
+    p1: Person = ammonite.$sess.cmd16$Helper$Person$$anon$1@257876ed
+
+
+
+> This Companion Object approach for the Case class is less intuitive than regular abstract classes. Rarely used in practice.
+{:.yellow}
+ 
+If you use the above `describe` function for pattern matching:
+
+
+```scala
+describe(p1)
+```
+
+
+    scala.MatchError: ammonite.$sess.cmd6$Helper$Person$$anon$1@39768c9a (of class ammonite.$sess.cmd6$Helper$Person$$anon$1)
+      ammonite.$sess.cmd3$Helper.describe(cmd3.sc:1)
+      ammonite.$sess.cmd8$Helper.<init>(cmd8.sc:1)
+      ammonite.$sess.cmd8$.<clinit>(cmd8.sc:7)
+
+
+This is not possible because this is an anonymous subclass.
+
+You can follow the shared implementation/behaviour approach by declaring regular abstract class as well:
+
+
+```scala
+abstract class Vehicle(val wheels: Int) {
+    def describe: String = s"Vehicle with $wheels wheels"
+}
+
+case class Car(make: String, model: String) extends Vehicle(4)
+case class Bike(brand: String) extends Vehicle(2)
+```
+
+
+
+
+    defined class Vehicle
+    defined class Car
+    defined class Bike
+
+
+
+For example:
+
+
+```scala
+abstract class Vehicle(val wheels: Int) {
+    def describe: String = s"Vehicle with $wheels wheels"
+}
+
+case class Car(make: String, model: String) extends Vehicle(4)
+case class Bike(brand: String) extends Vehicle(2)
+
+// Compiler enforces exhaustive matching:
+def park(v: Vehicle): String = v match {
+    case Car(make, model) => s"Parking car: $make $model"
+    case Bike(brand) => s"Parking bike: $brand"
+    // Compiler warns if you forget a case!
+}
+
+val c1 = Car("Toyota","RAVE4")
+park(c1)
+
+```
+
+
+
+
+    defined class Vehicle
+    defined class Car
+    defined class Bike
+    defined function park
+    c1: Car = Car(make = "Toyota", model = "RAVE4")
+    res11_5: String = "Parking car: Toyota RAVE4"
+
+
+
+| Pattern | Exhaustiveness Checking | Shared Implementation | Open/Closed |
+|---------|------------------------|---------------------|-------------|
+| **Sealed Trait + Case Classes** | ✅ Yes | Limited (abstract methods only) | Closed |
+| **Abstract Class + Case Classes** | ❌ No | ✅ Yes (concrete methods/fields) | Open |
+| **Case Class extends Case Class** | ❌ No | ⚠️ Broken | ❌ Don't use |
+
+#### Case class parameterisation
+
+
+
+```scala
+case class Box[T](t:T)
+```
+
+
+
+
+    defined class Box
+
+
+
+
+```scala
+val iBox = Box(1)
+```
+
+
+
+
+    iBox: Box[Int] = Box(t = 1)
+
+
+
+
+```scala
+val sBox = Box("Hello")
+```
+
+
+
+
+    sBox: Box[String] = Box(t = "Hello")
+
+
+
+
+```scala
+val c1Box = Box(c1)
+```
+
+
+
+
+    c1Box: Box[Car] = Box(t = Car(make = "Toyota", model = "RAVE4"))
+
+
+
+For the anonymous subclass of Person abstract class:
+
+
+```scala
+val p1Box = Box(p1)
+p1Box.t.name
+```
+
+
+
+
+    p1Box: Box[Person] = Box(
+      t = ammonite.$sess.cmd16$Helper$Person$$anon$1@257876ed
+    )
+    res20_1: String = "Foo"
+
+
+
+can be complicated as follows:
+
+
+```scala
+case class BoxOfTwo[A, B](a:A, b:B)
+```
+
+
+
+
+    defined class BoxOfTwo
+
+
+
+
+```scala
+val boftwo_SI = BoxOfTwo("Hellow", 2)
+```
+
+
+
+
+    boftwo_SI: BoxOfTwo[String, Int] = BoxOfTwo(a = "Hellow", b = 2)
+
+
+
+
+```scala
+val boftwo_SBoxOfTwo = BoxOfTwo("Hi", boftwo_SI)
+```
+
+
+
+
+    boftwo_SBoxOfTwo: BoxOfTwo[String, BoxOfTwo[String, Int]] = BoxOfTwo(
+      a = "Hi",
+      b = BoxOfTwo(a = "Hellow", b = 2)
+    )
+
+
+
+
+```scala
+BoxOfTwo(boftwo_SBoxOfTwo, boftwo_SI)
+```
+
+
+
+
+    res28: BoxOfTwo[BoxOfTwo[String, BoxOfTwo[String, Int]], BoxOfTwo[String, Int]] = BoxOfTwo(
+      a = BoxOfTwo(a = "Hi", b = BoxOfTwo(a = "Hellow", b = 2)),
+      b = BoxOfTwo(a = "Hellow", b = 2)
+    )
+
+
+
+Parameterised methods can be used in conjunction with Parameterised Classes:
+
+
+```scala
+case class BoxWithMethods[T](t:T) {
+    def boxMethod[U](u:U) = {
+        BoxOfTwo(t, u)
+    }
+}
+```
+
+
+
+
+    defined class BoxWithMethods
+
+
+
+
+```scala
+val boxWithMethod = BoxWithMethods(1)
+boxWithMethod.boxMethod("a")
+```
+
+
+
+
+    boxWithMethod: BoxWithMethods[Int] = BoxWithMethods(t = 1)
+    res38_1: BoxOfTwo[Int, String] = BoxOfTwo(a = 1, b = "a")
+
 
 
 ## Objects
@@ -555,43 +1657,54 @@ Objects in Scala are **singletons**: they combine the definition of a class and 
 
 Objects are commonly used to hold static members, utility methods, or factory methods, similar to the `static` keyword in Java and class methods in Python.
 
-Objects can be paired with a class of the same name to form a **companion object**. Companion objects and classes can access each other's private members, enabling powerful design patterns: <span>A companion class work with the object and vice versa</span>{:gtxt}.
+Objects can be paired with a class of the same name to form a **companion object**. **Companion objects and classes can access each other's private members**{:gtxt}, enabling powerful design patterns: <span>A companion class works with the object and vice versa</span>{:gtxt}.
+
+> Both the class and the companion object should be within the same file with the same name.
 
 Typical uses for objects include:
 - Defining utility or helper methods
-- Implementing pattern matching logic
+- Implementing pattern-matching logic
 - Providing `apply` methods for easier instance creation
 - Storing constants or configuration
 
-**Companion objects** are especially useful for organizing code and encapsulating related functionality.
+**Companion objects** are especially useful for organising code and encapsulating related functionality. In the following example, there is no way to create a direct instance from the Person class due to the `private` primary constructor which is only accessible via comapnion object:
 
 
 ```scala
-object Person { // Companion object for Person class
-    def apply(name: String, age: Int): Person = new Person(name, age)
+class Person private (val fname: String, val lname: String, var age: Int){
+    
+    import Person._
+    val id: Int = nextId()  // Assign unique ID to each instance
+    
+    override def toString: String = s"Person(id=$id, name=$fname, $lname, age=$age)"
 }
 
-val p1 =  Person("Alice", 30)
-val p2 =  Person("Alice", 30)
-val p3 =  Person("Bob", 25)
+// companion object
+object Person { // Companion object for Person class
+    def apply(name: String, age: Int = 0): Person 
+        = new Person(name.split("\\s+")(0),name.split("\\s+")(1), age)
 
-println(s"p1 == p2 ~~> ${p1 == p2}") // Prints: p1 == p2: true
-println(s"p1 == p3 ~~> ${p1 == p3}") // Prints: p1 == p3: false
-println(s"p1 eq p2 ~~> ${p1 eq p2}") // references are not the same
+    private var instanceCount: Int = 0
+    
+    private def nextId(): Int = {
+        instanceCount += 1
+        instanceCount
+    }
+}
+
+val p1 =  Person("Alice Mall")
+val p2 =  Person("Alice Mall")
+val p3 =  Person("Bob Taylor",20)
 ```
 
-    p1 == p2 ~~> true
-    p1 == p3 ~~> false
-    p1 eq p2 ~~> false
 
 
 
-
-
+    defined class Person
     defined object Person
-    p1: Person = Person(name=Alice, age=30)
-    p2: Person = Person(name=Alice, age=30)
-    p3: Person = Person(name=Bob, age=25)
+    p1: Person = Person(id=1, name=Alice, Mall, age=0)
+    p2: Person = Person(id=2, name=Alice, Mall, age=0)
+    p3: Person = Person(id=3, name=Bob, Taylor, age=20)
 
 
 
@@ -619,14 +1732,14 @@ println(s"Singleton s1 eq s2 ~~> ${s1 eq s2}") // references are the same
 
 
     defined object Singleton
-    s1: Singleton.type = ammonite.$sess.cmd13$Helper$Singleton$@42e3b3fe
-    s2: Singleton.type = ammonite.$sess.cmd13$Helper$Singleton$@42e3b3fe
+    s1: Singleton.type = ammonite.$sess.cmd59$Helper$Singleton$@2c3899b8
+    s2: Singleton.type = ammonite.$sess.cmd59$Helper$Singleton$@2c3899b8
 
 
 
 > Notice that, in the above code `s1 eq s2` is true because `s1` and `s2` both are pointing to the same object.
 
-You can access private properites of the Companion Object for its class:
+You can access private properties of the Companion Object from its class also:
 
 
 ```scala
@@ -672,13 +1785,14 @@ In the following senario,
 
 
 ```scala
-class Foo (val x: Int) { // Private constructor
+class Foo (private val x: Int) { // Private constructor
     def add(v:Int): Int = x+v // Public method to access private field
     override def toString: String = s"Foo(x=$x)"
 }
 
 val foo = new Foo(10) // Create an instance of Foo
 println(s"foo.add(5) = ${foo.add(5)}") // Access public method to add 5 to x
+// foo.x ❌
 ```
 
     foo.add(5) = 15
@@ -702,7 +1816,7 @@ When you define an `apply` method, you can invoke instances of the class or obje
 
 
 ```scala
-class Foo (val x: Int) { // Private constructor
+class Foo (private val x: Int) { // Private constructor
     def apply(v:Int): Int = x+v // Public method to access private field
     override def toString: String = s"Foo(x=$x)"
 }
@@ -722,8 +1836,9 @@ println(s"foo(5) = ${foo(5)}") // Access public method to add 5 to x
 
 
 
-You can define an `apply` method that takes two parameters in a class or object. This allows you to use the instance as if it were a function with two arguments.
+Please take a look at the last line in the above code. You can avoid method name because it is `apply(...)`.
 
+You can define an `apply` method that takes two parameters in a class or object. This allows you to use the instance as if it were a function with two arguments.
 
 
 ```scala
@@ -740,12 +1855,64 @@ adder(3, 4) // Output: 17 (10 + 3 + 4)
 
 
     defined class Adder
-    adder: Adder = ammonite.$sess.cmd17$Helper$Adder@1b33a4c3
-    res17_2: Int = 17
+    adder: Adder = ammonite.$sess.cmd65$Helper$Adder@62c9a96b
+    res65_2: Int = 17
 
 
 
 Here, calling `adder(3, 4)` is equivalent to `adder.apply(3, 4)`, thanks to the `apply` method with two parameters.
+
+## Option
+In Scala, `Option[A]` is a sealed abstract trait that elegantly solves the null reference problem by making the presence or absence of a value explicit in the type system. Being sealed means it can only be extended by `Some[A]` (a case class wrapping an actual value) and `None` (a singleton object representing no value), both defined in the same file, which enables exhaustive pattern matching at compile time. This design leverages Scala's powerful features: the trait provides a common interface with higher-order methods like `map`, `flatMap`, and `filter` that compose beautifully in for-comprehensions; the case class gives `Some` automatic implementations of `equals`, `hashCode`, and pattern matching support; and the object makes `None` a singleton that's memory-efficient and referentially transparent. The type parameter `A` makes Option covariant, so `Some[String]` is a subtype of `Option[String]`, and methods like `getOrElse` use call-by-name parameters (`: => A`) for lazy evaluation, avoiding unnecessary computations. This functional approach transforms potentially dangerous null-checking imperative code into safe, composable expressions that the compiler can verify, embodying Scala's philosophy of marrying object-oriented and functional programming paradigms to create more robust, maintainable code.
+
+{% raw %}
+```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
+classDiagram
+    class Option~A~ {
+        &lt;&lt;abstract&gt;&gt;
+        +isEmpty: Boolean
+        +isDefined: Boolean
+        +get: A
+        +getOrElse(default: =&gt; A): A
+        +orElse(alternative: =&gt; Option[A]): Option[A]
+        +map[B](f: A =&gt; B): Option[B]
+        +flatMap[B](f: A =&gt; Option[B]): Option[B]
+        +filter(p: A =&gt; Boolean): Option[A]
+        +foreach(f: A =&gt; Unit): Unit
+        +fold[B](ifEmpty: =&gt; B)(f: A =&gt; B): B
+        +contains(elem: A): Boolean
+        +exists(p: A =&gt; Boolean): Boolean
+        +forall(p: A =&gt; Boolean): Boolean
+    }
+    
+    class Some~A~ {
+        +value: A
+        +isEmpty: Boolean = false
+        +isDefined: Boolean = true
+        +get: A
+    }
+    
+    class None {
+        +isEmpty: Boolean = true
+        +isDefined: Boolean = false
+        +get: Nothing
+    }
+    
+    Option &lt;|-- Some : extends
+    Option &lt;|-- None : extends
+    
+    note for Option "Represents optional values
+    Instances are either Some(value) or None"
+    
+    note for Some "Wraps a definite value"
+    note for None "Singleton object - no value"
+```
+{% endraw %}
 
 ## Functions
 Scala 2 functions are first-class citizens, meaning 
@@ -780,7 +1947,7 @@ factorial(5)
 
 
 
-But you could not <span>optimize `@tailrec`</span> annotated method factorial: it contains a recursive call not in tail position that is where n multuply the return of the recursive call. As a solution, use accumulator:
+But you could not <span> optimise `@tailrec`</span> annotated method factorial: it contains a recursive call not in tail position, that is, where n multiply the return of the recursive call. As a solution, use an **accumulator**:
 
 
 ```scala
@@ -800,6 +1967,47 @@ factorial(5)
     import scala.annotation.tailrec
     defined function factorial
     res13_2: Int = 120
+
+
+
+More functional version is
+
+
+```scala
+import scala.annotation.tailrec
+
+def factorial(n:Int): Int = {
+    @tailrec
+    def fact(n:Int, acc:Int):Int = {
+        if (n == 0 | n ==1 ) acc
+        else fact(n-1, n * acc)
+    }
+    // call the method inside 👏 
+    fact(n, 1)
+}
+```
+
+
+
+
+    import scala.annotation.tailrec
+    
+    
+    defined function factorial
+
+
+
+Let's test the above factorial:
+
+
+```scala
+factorial(5)
+```
+
+
+
+
+    res1: Int = 120
 
 
 
@@ -824,9 +2032,9 @@ addOne(5) // <~~~ (2)
 
 
 
-    addOne: Int => Int = ammonite.$sess.cmd18$Helper$$Lambda$2478/1454780532@2a890e22
-    res18_1: Int = 6
-    res18_2: Int = 6
+    addOne: Int => Int = ammonite.$sess.cmd27$Helper$$Lambda$3008/0x0000000128a39bc8@2b75fc7d
+    res27_1: Int = 6
+    res27_2: Int = 6
 
 
 
@@ -859,8 +2067,8 @@ addTwoNumbers(3, 4)
 
 
 
-    addTwoNumbers: (Int, Int) => Int = ammonite.$sess.cmd19$Helper$$Lambda$2485/522409221@44ef2c17
-    res19_1: Int = 7
+    addTwoNumbers: (Int, Int) => Int = ammonite.$sess.cmd66$Helper$$Lambda$3171/0x000000012f959000@67a3e9da
+    res66_1: Int = 7
 
 
 
@@ -1127,6 +2335,11 @@ Variance describes how subtyping between more complex types relates to subtyping
 A type constructor is **covariant** if, for types `A` and `B`, whenever `A` is a subtype of `B`, then `F[A]` is a subtype of `F[B]`.
 
 ```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
 classDiagram
     Type_B <|-- Type_A : extends
 ```
@@ -1209,6 +2422,11 @@ val aF: F[Type_A] = bF // Allowed: F[Type_B] <: F[Type_A]
 Summary Table
 
 ```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
 classDiagram
     Animal <|-- Dog : extends
 ```
@@ -1251,6 +2469,11 @@ When multiple traits define the same method, Scala uses linearisation to determi
 The linearisation order follows a depth-first, right-to-left traversal.{:gtxt}
 
 ```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
 classDiagram
     class A["A (trait)"] {
 
@@ -1303,6 +2526,11 @@ new D().foo // returns "CBA"
 Traits can declare dependencies on other traits or classes using self-types:
 
 ```mermaid
+---
+config:
+  look: classic
+  theme: default
+---
 classDiagram
     class Logger["Logger
     (trait)"] {
@@ -1497,3 +2725,5 @@ class CalculatorSpec extends AnyFunSpec with Matchers {
 {:gtxt: .message color="green"}
 {:ytxt: .message color="yellow"}
 {:rtxt: .message color="red"}
+
+[^1]: [Uniform Access Principle](https://martinfowler.com/bliki/UniformAccessPrinciple.html){:target="_blank"}
