@@ -47,4 +47,12 @@ EXPOSE 4000 35729
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Default command
-CMD ["bundle", "exec", "jekyll", "serve", "--host", "0.0.0.0", "--livereload", "--force_polling"]
+CMD ["bundle", "exec", "jekyll", "serve", \
+     "--incremental", \
+     "--limit_posts", "1", \
+     "--host", "0.0.0.0", \
+     "--livereload", \
+     "--force_polling", \
+     "--livereload-port", "35729", \
+     "--trace", \
+     "--drafts"]

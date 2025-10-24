@@ -1,19 +1,16 @@
 version: '3.8'
-
 services:
   jekyll:
     build: .
     ports:
       - "4000:4000"
-      - "35729:35729"  # LiveReload port
+      - "35729:35729"
     volumes:
-      - .:/app
-      - bundle_cache:/app/vendor/bundle  # Separate volume for bundle cache
+      # - .:/app:delegated  # delegated improves performance on macOS
+      - .:/app # for Ubuntu
+      - bundle_cache:/usr/local/bundle
     environment:
       - JEKYLL_ENV=development
-      - BUNDLE_PATH=/app/vendor/bundle
-    command: bundle exec jekyll serve --host 0.0.0.0 --livereload --force_polling --incremental --drafts
-
 
 volumes:
   bundle_cache:

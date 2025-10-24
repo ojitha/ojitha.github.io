@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Scala Notes
-date:   2025-07-24
+date:   2025-10-24
 categories: [Scala]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
@@ -55,7 +55,7 @@ typora-copy-images-to: ../assets/images/${filename}
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
 mindmap
@@ -102,7 +102,7 @@ Scala Primitives: Byte, Short, Int, Long, Float, Double, Char, Boolean have corr
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
 classDiagram
@@ -616,7 +616,7 @@ num(b)
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
 classDiagram
@@ -1016,7 +1016,7 @@ Using the keyword `extends`, subclasses can be created from the superclass. As s
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
 classDiagram
@@ -1863,7 +1863,317 @@ adder(3, 4) // Output: 17 (10 + 3 + 4)
 Here, calling `adder(3, 4)` is equivalent to `adder.apply(3, 4)`, thanks to the `apply` method with two parameters.
 
 ## Option
-In Scala, `Option[A]` is a sealed abstract trait that elegantly solves the null reference problem by making the presence or absence of a value explicit in the type system. Being sealed means it can only be extended by `Some[A]` (a case class wrapping an actual value) and `None` (a singleton object representing no value), both defined in the same file, which enables exhaustive pattern matching at compile time. This design leverages Scala's powerful features: the trait provides a common interface with higher-order methods like `map`, `flatMap`, and `filter` that compose beautifully in for-comprehensions; the case class gives `Some` automatic implementations of `equals`, `hashCode`, and pattern matching support; and the object makes `None` a singleton that's memory-efficient and referentially transparent. The type parameter `A` makes Option covariant, so `Some[String]` is a subtype of `Option[String]`, and methods like `getOrElse` use call-by-name parameters (`: => A`) for lazy evaluation, avoiding unnecessary computations. This functional approach transforms potentially dangerous null-checking imperative code into safe, composable expressions that the compiler can verify, embodying Scala's philosophy of marrying object-oriented and functional programming paradigms to create more robust, maintainable code.
+Scala provides a robust type system for handling optional values and edge cases in a type-safe manner. Three important types in this system are `Option`, `Some`, and `Nothing`. These types work together to eliminate common programming errors related to null values while maintaining type safety.
+
+### What is Option?
+
+`Option` is a standard Scala type that represents **optional values**[^2]. An optional value can take two forms:
+
+- **`Some(x)`** - where `x` is the actual value
+- **`None`** - an object representing a missing value
+
+### Why Option Instead of Null?
+
+Scala encourages the use of `Option` to indicate optional values, which has several advantages over Java's approach of using `null`[^2]:
+
+1. **Explicit Type Declaration**: A variable of type `Option[String]` makes it far more obvious to readers that it represents an optional `String`, compared to a variable of type `String` which may sometimes be `null`
+2. **Type Safety**: The most important advantage is that programming errors involving null references become **type errors**{:rtxt} in Scala. If a variable is of type `Option[String]` and you try to use it as a `String`, your program will not compile[^3]
+3. **No NullPointerException**: Since you must explicitly handle the `Some` and `None` cases, you cannot accidentally use a missing value, eliminating the risk of `NullPointerException` at runtime
+
+Type Hierarchy Diagram
+
+{% raw %}
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+classDiagram
+    class Any {
+        &lt;&lt;root&gt;&gt;
+        +equals(that: Any): Boolean
+        +hashCode: Int
+        +toString: String
+    }
+    
+    class AnyRef {
+        &lt;&lt;reference types&gt;&gt;
+    }
+    
+    class AnyVal {
+        &lt;&lt;value types&gt;&gt;
+    }
+    
+    class Option~T~ {
+        &lt;&lt;abstract&gt;&gt;
+        +get: T
+        +isEmpty: Boolean
+        +isDefined: Boolean
+    }
+    
+    class Some~T~ {
+        +x: T
+    }
+    
+    class None {
+        &lt;&lt;object&gt;&gt;
+    }
+    
+    class Nothing {
+        &lt;&lt;bottom type&gt;&gt;
+        No instances exist
+    }
+    
+    class Null {
+        &lt;&lt;null reference&gt;&gt;
+    }
+    
+    Any &lt;|-- AnyRef
+    Any &lt;|-- AnyVal
+    AnyRef &lt;|-- Option
+    Option &lt;|-- Some
+    Option &lt;|-- None
+    AnyRef &lt;|-- Null
+    Nothing &lt;|-- Null
+    Nothing --|&gt; AnyRef
+    Nothing --|&gt; AnyVal
+    
+    note for Nothing "Subtype of every type
+    Signals abnormal termination"
+    note for Option "Container for optional values
+    Always Some(x) or None"
+```
+{% endraw %}
+
+| Aspect             | Option                      | Some                | None                   | Nothing                           |
+| ------------------ | --------------------------- | ------------------- | ---------------------- | --------------------------------- |
+| **Category**       | Abstract type               | Case class          | Object                 | Bottom type                       |
+| **Instances**      | Cannot instantiate directly | Has instances       | Single object instance | No instances                      |
+| **Purpose**        | Represent optional values   | Wrap present values | Represent absence      | Signal abnormal termination       |
+| **Type Hierarchy** | Subtype of AnyRef           | Subtype of Option   | Subtype of Option      | Subtype of all types              |
+| **Usage**          | Type declaration            | Value container     | Missing value marker   | Method return type for exceptions |
+
+
+> The `Null` exists for Java interoperability requirements.
+
+## Some and None
+
+`Some(x)` wraps an actual value `x` of type `T`. When a value is present, it is wrapped in a `Some` instance.
+
+
+
+```scala
+val capitals = Map("Sri Lanka" -> "Colombo", "Australia" -> "Canberra")
+capitals get "Australia"
+capitals get "France"
+```
+
+
+
+
+    capitals: Map[String, String] = Map(
+      "Sri Lanka" -> "Colombo",
+      "Australia" -> "Canberra"
+    )
+    res69_1: Option[String] = Some(value = "Canberra")
+    res69_2: Option[String] = None
+
+
+
+As shown in the last line above, `None` is an object that represents a missing value. It is used when no value is available.
+
+#### Pattern Matching with Option
+
+The most common way to handle optional values is through pattern matching:
+
+
+
+```scala
+def show(x: Option[String]) = x match {
+  case Some(s) => s
+  case None => "?"
+}
+// found
+show(capitals get "Australia")
+// not found
+show(capitals get "France")
+
+```
+
+
+
+
+    defined function show
+    res70_1: String = "Canberra"
+    res70_2: String = "?"
+
+
+
+What is Nothing?
+
+`Nothing` is at the very bottom of Scala's class hierarchy [^4]. 
+
+It has two critical properties:
+1. Universal Subtype: It is a subtype of every other type in Scala
+2. No Instances: There exist no values of this type whatsoever
+
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+graph TD
+    A[Any - Universal Supertype]
+    B[AnyVal - Value Types]
+    C[AnyRef - Reference Types]
+    D[Int]
+    E[Boolean]
+    F[String]
+    G[List]
+    H[Option]
+    I[Null]
+    J[Nothing - Universal Subtype]
+    
+    A --> B
+    A --> C
+    B --> D
+    B --> E
+    C --> F
+    C --> G
+    C --> H
+    C --> I
+    I --> J
+    D -.subtype.-> J
+    E -.subtype.-> J
+    F -.subtype.-> J
+    G -.subtype.-> J
+    H -.subtype.-> J
+    
+    style J fill:#ff6b6b
+    style A fill:#4ecdc4
+```
+
+> Why `Nothing` Exists? While it may seem strange to have a type with no values, `Nothing` serves an important purpose: it signals abnormal termination [^4]
+{:.green}
+
+The error method in Scala's standard library demonstrates Nothing's utility
+
+```scala
+def error(message: String): Nothing =
+  throw new RuntimeException(message)
+```
+
+The return type `Nothing` indicates that the method will not return normally; it throws an exception instead. Because Nothing is a subtype of every other type, methods that return `Nothing` can be used in flexible ways. For example, in the `sys.error(message: String): Nothing`:
+
+
+
+```scala
+def divide(x: Int, y: Int): Int =
+  if (y != 0) x / y
+  else sys.error("can't divide by zero") // throws the runtime exception
+
+```
+
+
+
+
+    defined function divide
+
+
+
+Note that `sys.error(...)` has type `Nothing`. Since `Nothing` is a subtype of `Int`, the entire conditional has type `Int`. Therefore, the code above can be type-safe and compile, although its generate a runtime error:
+
+
+```scala
+divide(1,0)
+```
+
+
+    java.lang.RuntimeException: can't divide by zero
+      scala.sys.package$.error(package.scala:27)
+      ammonite.$sess.cmd73$Helper.divide(cmd73.sc:3)
+      ammonite.$sess.cmd74$Helper.<init>(cmd74.sc:1)
+      ammonite.$sess.cmd74$.<clinit>(cmd74.sc:7)
+
+
+Scala Lists are covariant, and `Nothing` is a subtype of every type. `List[Nothing]` is a subtype of `List[T]` for any type `T`. 
+
+Above `division` is to explain the situation but for safe division in the real application, use the following version:
+
+
+```scala
+def divide(x: Int, y: Int): Option[Int] =
+  if (y != 0) Some(x / y)
+  else None
+divide(1,0)
+```
+
+
+
+
+    defined function divide
+    res78_1: Option[Int] = None
+
+
+
+
+```scala
+print(typeOf(List()))
+```
+
+    List[Nothing]
+
+This allows empty lists to be used wherever any list type is expected:
+
+
+```scala
+val xs: List[String] = List() 
+```
+
+
+
+
+    xs: List[String] = List()
+
+
+
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+flowchart TD
+    A[Operation returns Option T] --> B{Value exists?}
+    B -->|Yes| C[Some x]
+    B -->|No| D[None]
+    
+    C --> E[Pattern Match]
+    D --> E
+    
+    E --> F{case Some x}
+    E --> G{case None}
+    
+    F --> H[Use value x]
+    G --> I[Handle missing value]
+    
+    H --> J[Type-safe result]
+    I --> J
+    
+    style C fill:#51cf66
+    style D fill:#ff6b6b
+    style J fill:#4ecdc4
+```
+
+### Best Practices
+
+1. **Always use `Option` for optional values** instead of `null` to maintain type safety
+2. **Pattern match to extract values** rather than calling `.get` directly, which can throw exceptions
+3. **Understand that `Nothing` signals abnormality** - methods returning `Nothing` will throw exceptions or never return
+4. **Leverage the type system** - let the compiler catch potential null-related errors at compile time
+5. **Use `Option` combinators** like `map`, `flatMap`, `getOrElse` for functional-style value handling
 
 {% raw %}
 ```mermaid
@@ -1913,6 +2223,95 @@ classDiagram
     note for None "Singleton object - no value"
 ```
 {% endraw %}
+
+for example
+
+
+```scala
+case class Person(fName:Option[String], lName:Option[String])
+val lastName = None
+```
+
+
+
+
+    defined class Person
+    lastName: None.type = None
+
+
+
+> Important to notice that the type of `lastName` is `None.type`
+
+
+
+
+```scala
+val p1 = Person(Some("Ojitha"), lastName)
+p1.fName.getOrElse("First Name Not found")
+p1.lName.getOrElse("Last Name Not found")
+```
+
+
+
+
+    p1: Person = Person(fName = Some(value = "Ojitha"), lName = None)
+    res87_1: String = "Ojitha"
+    res87_2: String = "Last Name Not found"
+
+
+
+Because I know that `lName` is `None`, I can directly extract `fName`:
+
+
+```scala
+// Extract and use the values in one go
+p1 match {
+  case Person(fName @ Some(f), lName @ None) =>
+    println(s"First: $f, Full fName: $fName, lName: $lName")
+  case _ =>
+    println("Different pattern")
+}
+```
+
+    First: Ojitha, Full fName: Some(Ojitha), lName: None
+
+
+The @ symbol in pattern matching allows you to bind a variable to a pattern while also destructuring it.
+This creates **three** variables:
+
+| Variable | Holds | Type | Value (for p1) |
+|----------|-------|------|----------------|
+| `f` | The extracted string | `String` | `"Ojitha"` |
+| `fName` | The complete Option | `Option[String]` | `Some("Ojitha")` |
+| `lName` | The None object | `None.type` | `None` |
+
+For example:
+
+
+```scala
+p1 match {
+  case Person(fName @ Some(f), lName @ None) =>
+    println(s"Extracted string: $f")           // Ojitha
+    println(s"Complete Option: $fName")        // Some(Ojitha)
+    println(s"None value: $lName")             // None
+    println(s"fName type: ${fName.getClass}")  // Some
+    println(s"f type: ${f.getClass}")          // String
+}
+```
+
+    Extracted string: Ojitha
+    Complete Option: Some(Ojitha)
+    None value: None
+    fName type: class scala.Some
+    f type: class java.lang.String
+
+
+```
+fName @ Some(f)
+  ↓       ↓
+  |       └─── Extract 'f' from inside Some
+  └─────────── Also bind entire Some(f) to 'fName'
+```  
 
 ## Functions
 Scala 2 functions are first-class citizens, meaning 
@@ -2191,76 +2590,6 @@ println(counter)
 In this example, the closure `increment` captures and modifies the free variable `counter` from its enclosing scope. Each call to `increment()` increases `counter` by 1.
 
 
-## Tuples in Scala 2
-
-A **tuple** in Scala 2 is a simple data structure 
-
-- that can hold a fixed number of items, each potentially of a different type. 
-- Tuples are immutable and are useful for grouping related values without creating a custom class.
-
-
-
-### Creating Tuples
-
-You can create a tuple by enclosing values in parentheses, separated by commas:
-
-
-```scala
-val tuple2 = (1, "Scala") 
-val tuple3 = (1, "Scala", true) 
-```
-
-
-
-
-    tuple2: (Int, String) = (1, "Scala")
-    tuple3: (Int, String, Boolean) = (1, "Scala", true)
-
-
-
-Scala supports tuples of up to 22 elements.
-
-### Accessing Tuple Elements
-
-Tuple elements are accessed using the `_1`, `_2`, ..., `_n` methods:
-
-
-```scala
-val t = (42, "hello", 3.14)
-val first = t._1    
-val second = t._2   
-val third = t._3    
-```
-
-
-
-
-    t: (Int, String, Double) = (42, "hello", 3.14)
-    first: Int = 42
-    second: String = "hello"
-    third: Double = 3.14
-
-
-
-### Pattern Matching with Tuples
-
-You can use pattern matching to extract values from a tuple:
-
-
-```scala
-val person = ("Alice", 30)
-val (name, age) = person
-```
-
-
-
-
-    person: (String, Int) = ("Alice", 30)
-    name: String = "Alice"
-    age: Int = 30
-
-
-
 ### Returning Multiple Values from a Function
 
 Tuples are often used to return multiple values from a function:
@@ -2311,17 +2640,37 @@ val strBox = new Box[String]("hello")
 
 
 
-### Variance in Scala Collections
+## Variance in Scala 2
+Variance in Scala defines the subtyping relationships between parameterised types. When you have a generic type like `Queue[T]`, variance determines whether `Queue[String]` can be considered a subtype of `Queue[AnyRef]` based on the relationship between `String` and `AnyRef`[^5].
 
-Scala collections use *variance annotations* to control subtyping:
+The term <span>**variance** refers to whether a type parameter is covariant, contravariant, or nonvariant (invariant)</span>{:gtxt}. Variance *annotations (`+` and `-`) are the symbols you place next to type parameters to declare their variance*[^6].
 
-- `List[+A]` is **covariant**: `List[String]` is a subtype of `List[AnyRef]`.
-- `Array[A]` is **invariant**: `Array[String]` is not a subtype of `Array[AnyRef]`.
-
-> Parameterized types are essential for working with Scala collections, ensuring type safety and flexibility across your codebase.
+> Parameterised types are essential for working with Scala collections, ensuring type safety and flexibility across your codebase.
 {:.green}
 
-### Variance in Scala: Covariant, Invariant, and Contravariant
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+graph TD
+    A[Type Parameter T] --> B{Variance Annotation}
+    B -->|+T Covariant| C[Can only appear in<br/>covariant positions]
+    B -->|-T Contravariant| D[Can only appear in<br/>contravariant positions]
+    B -->|T Invariant| E[Can appear in<br/>any position]
+    
+    C --> F[✓ Return types<br/>✓ val fields<br/>✗ Parameters]
+    D --> G[✓ Parameters<br/>✗ Return types<br/>✗ val fields]
+    E --> H[✓ All positions]
+    
+    style C fill:#90EE90
+    style D fill:#FFB6C1
+    style E fill:#87CEEB
+```    
+
+
+### Covariant, Invariant, and Contravariant
 
 Variance describes how subtyping between more complex types relates to subtyping between their component types. In Scala, variance is controlled using annotations on type parameters:
 
@@ -2329,115 +2678,424 @@ Variance describes how subtyping between more complex types relates to subtyping
 - `-A` for **contravariance**
 - No annotation for **invariance**
 
+Before the deep dive, it's better to understand that `<:` means "is a subtype of"[^upper_bound] or "must be a subtype of" in Scala.
 
-#### Covariant (`+A`)
+It's called an upper bound constraint on type parameters:
 
-A type constructor is **covariant** if, for types `A` and `B`, whenever `A` is a subtype of `B`, then `F[A]` is a subtype of `F[B]`.
+```scala
+def sort[T <: Ordered[T]](list: List[T]) = ...
+//         ^^^^^^^^^^^^^^
+//         T must be a subtype of Ordered[T]
+```
+
+For example:
+
+```scala
+// T must be a subtype of Animal
+class Cage[T <: Animal](animal: T)
+
+// Valid: Dog is a subtype of Animal
+val dogCage = new Cage[Dog](new Dog)
+```
+
+The above code is valid because
+
+```
+   Animal          <-- Upper bound
+      ↑
+      | <:  (subtype of)
+      |
+     Dog           <-- Can use Dog because Dog <: Animal
+```
+
+The `>:` means "is a supertype of"[^lower_bound] or "must be a supertype of" in Scala.
+
+```scala
+def enqueue[U >: T](x: U): Queue[U] = ...
+//           ^^^^^^
+//           U must be a supertype of T
+```
+For example:
+
+```scala
+// B must be a supertype of Apple
+def ::[B >: Apple](x: B): List[B] = new ::(x, this)
+
+// Example hierarchy
+abstract class Fruit
+class Apple extends Fruit
+class Orange extends Fruit
+
+// Valid: Can add Orange to List[Apple] because they share Fruit supertype
+val apples: List[Apple] = List(new Apple)
+val fruits: List[Fruit] = new Orange :: apples  // Result is List[Fruit]
+```
+
+The above code is valid because
+```
+     Fruit          <-- U must be this or higher (supertype)
+       ↑
+       | >:  (supertype of)
+       |
+     Apple          <-- T (lower bound)
+```
+
+#### 1. Covariance (+)
+
+A type constructor is **covariant** if, for types `A` and `B`, whenever `B` is a subtype of `A`, then `F[B]` is a subtype of `F[A]`[^7].
+
+
+
+```scala
+class A {override def toString = "class A"}
+class B extends A {override def toString = "class B"}
+```
+
+
+
+
+    defined class A
+    defined class B
+
+
 
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
 classDiagram
-    Type_B <|-- Type_A : extends
+    A <|-- B : extends
 ```
 
 
 ```scala
-class Type_B
-class Type_A extends Type_B
+class F[+T](val value: T) {override def toString = s"class F of type ${value.getClass().getName}"}
 
-class F[+A](val value: A)
-val aF: F[Type_A] = new F(new Type_A)
-val bF: F[Type_B] = aF // Allowed: F[Type_A] <: F[Type_B]
+val bF: F[B] = new F(new B)
+val aF: F[A] = bF // Allowed: F[B] <: F[A]
+```
+
+    cmd15.sc:4: type mismatch;
+     found   : Helper.this.F[cmd15.this.cmd2.A]
+     required: Helper.this.F[cmd15.this.cmd2.B]
+    val aF: F[B] = bF // Allowed: F[B] <: F[A]
+                   ^Compilation Failed
+
+
+    Compilation Failed
+
+
+With this definition, `Queue[String]` is considered a subtype of `Queue[AnyRef]` because `String` is a subtype of `AnyRef`[^8].
+
+> In a purely functional world, many types are naturally covariant.
+{:.green}
+
+Immutable collections like `List` are covariant in Scala[^9]:
+
+
+```scala
+val strings: List[String] = List("a", "b", "c")
+val objects: List[AnyRef] = strings  
 ```
 
 
 
 
-    defined class Type_B
-    defined class Type_A
-    defined class F
-    aF: F[Type_A] = ammonite.$sess.cmd1$Helper$F@4d5830df
-    bF: F[Type_B] = ammonite.$sess.cmd1$Helper$F@4d5830df
+    strings: List[String] = List("a", "b", "c")
+    objects: List[AnyRef] = List("a", "b", "c")
 
 
-
-- **Use case:** Collections that only produce values (e.g., `List[+A]`).
-- **Mnemonic:** "Output" position.
 
 #### Invariant (`A`)
+By default, without any variance annotation, generic types have nonvariant or rigid subtyping. Queues with different element types would never be in a subtype relationship: 
 
 A type constructor is **invariant** if there is no subtyping relationship between `F[A]` and `F[B]`, even if `A` and `B` are related.
 
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+graph LR
+    A[Cell String] -.X.- B[Cell AnyRef]
+    C[Cell Int] -.X.- B
+    
+    style A fill:#FFB6C1
+    style B fill:#FFB6C1
+    style C fill:#FFB6C1
+    
+    Note[No subtyping relationship between different Cell types]
+    
+    style Note fill:#FFF9C4
+```    
 
 
 ```scala
-class F[A](val value: A)
-val aF: F[Type_A] = new F(new Type_A)
-val bF: F[Type_B] = aF // Error: F[A] is not a subtype of F[B]
+class Cell[T](init: T) {
+  private[this] var current = init
+  def get = current
+  def set(x: T) = { current = x }
+}
 ```
 
-    cmd2.sc:3: type mismatch;
-     found   : Helper.this.F[cmd2.this.cmd1.Type_A]
-     required: Helper.this.F[cmd2.this.cmd1.Type_B]
-    Note: cmd2.this.cmd1.Type_A <: cmd2.this.cmd1.Type_B, but class F is invariant in type A.
-    You may wish to define A as +A instead. (SLS 4.5)
-    val bF: F[Type_B] = aF // Error: F[A] is not a subtype of F[B]
-                        ^
-    Compilation Failed
 
-- **Use case:** Mutable collections or types that both consume and produce values (e.g., `Array[A]`).
-- **Mnemonic:** "Both input and output" positions.
 
-#### Contravariant (`-A`)
 
-A type constructor is **contravariant** if, for types `A` and `B`, whenever `A` is a subtype of `B`, then `F[B]` is a subtype of `F[A]`.
+    defined class Cell
+
+
+
+#### 3. Contravariance (-)
+
+Contravariance is a type variance annotation in Scala that allows you to define how type parameters behave in inheritance relationships. When a type parameter is marked with a minus sign (-), it becomes contravariant, meaning the inheritance relationship is reversed for that type parameter.
+
+Contravariance follows the Liskov Substitution Principle: Type `B` is a subtype of type `A`, you can substitute a value of type `B` wherever a value of type `A` is required.
+
+For contravariant types, this works in reverse for the type parameter: If B is a subtype of A, then Container[-A] is a subtype of Container[-B]. This seems counterintuitive, but makes sense for input types (parameters)!
+
+A type constructor is **contravariant** if, for types `A` and `B`, whenever `B` is a subtype of `A`, then `F[A]` is a subtype of `F[B]`[^10].
 
 
 ```scala
-class F[-A] {
-    def print(a: A): Unit = println(a)
+// Define a contravariant OutputChannel
+trait OutputChannel[-T] {
+  def write(x: T): Unit
 }
 
-val bF: F[Type_B] = new F[Type_B]
-val aF: F[Type_A] = bF // Allowed: F[Type_B] <: F[Type_A]
+// Concrete implementations
+class ConsoleChannel extends OutputChannel[Any] {
+  def write(x: Any): Unit = println(s"Writing: $x")
+}
+
+class StringChannel extends OutputChannel[String] {
+  def write(x: String): Unit = println(s"String: $x")
+}
+
 ```
 
 
 
 
-    defined class F
-    bF: F[Type_B] = ammonite.$sess.cmd11$Helper$F@32a534e8
-    aF: F[Type_A] = ammonite.$sess.cmd11$Helper$F@32a534e8
+    defined trait OutputChannel
+    defined class ConsoleChannel
+    defined class StringChannel
 
 
 
+Why the following code is safe:
 
-- **Use case:** Types that only consume values (e.g., function argument types).
-- **Mnemonic:** "Input" position.
-
-Summary Table
+1. **OutputChannel[String]** requires you to write a `String`
+2. **OutputChannel[AnyRef]** can accept `AnyRef` (which includes `String`)
+3. Since `String` is a subtype of `AnyRef`, any `String` you write will be valid
+4. Therefore, `OutputChannel[AnyRef]` can substitute for `OutputChannel[String]`
 
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
-classDiagram
-    Animal <|-- Dog : extends
+flowchart LR
+    subgraph "Type Requirements"
+        A[String <: AnyRef]
+    end
+    
+    subgraph "Channel Hierarchy"
+        B["OutputChannel[AnyRef]"]
+        C["OutputChannel[String]"]
+        B -->|"can substitute for<br/>(contravariance)"| C
+    end
+    
+    subgraph "Safety Check"
+        D["write(String)"]
+        E["Can accept AnyRef<br/>(includes String) ✓"]
+    end
+    
+    A -.->|"enables"| B
+    C -.->|"requires"| D
+    B -.->|"provides"| E
+    
+    style A fill:#d4edda
+    style B fill:#d4edda
+    style E fill:#d4edda
 ```
 
-| Annotation | Name         | Example         | Subtyping Direction                | Use Case                |
-|------------|--------------|----------------|------------------------------------|-------------------------|
-| `+A`       | Covariant    | `List[+A]`     | `List[Dog]` <: `List[Animal]`      | Output-only (produce)   |
-| `A`        | Invariant    | `Array[A]`     | No relationship                    | Input & output (mutable)|
-| `-A`       | Contravariant| `Printer[-A]`  | `Printer[Animal]` <: `Printer[Dog]`| Input-only (consume)    |
 
-> Covariance and contravariance help ensure type safety and flexibility when designing generic classes and traits in Scala.
+```scala
+// AnyRef channel can write anything
+val anyChannel: OutputChannel[AnyRef] = new ConsoleChannel
+  
+// This is safe: OutputChannel[AnyRef] can be used as OutputChannel[String]
+// because OutputChannel is contravariant
+val stringChannel: OutputChannel[String] = anyChannel
+  
+// Now we can write strings to it
+stringChannel.write("Hello, Scala!")
+```
+
+    Writing: Hello, Scala!
+
+
+
+
+
+    anyChannel: OutputChannel[AnyRef] = ammonite.$sess.cmd9$Helper$ConsoleChannel@1ec92683
+    stringChannel: OutputChannel[String] = ammonite.$sess.cmd9$Helper$ConsoleChannel@1ec92683
+
+
+
+> The most common use of contravariance in Scala is in function types. The `Function1` trait is defined as:
+> ```scala
+> trait Function1[-S, +T] {
+>  def apply(x: S): T
+> }
+> ```
+>
+> This means:
+> - **Contravariant** in the parameter type `S` (input - consumed)
+> - **Covariant** in the return type `T` (output - produced)
+
+Another example here, Domain model is Publication hierarchy
+
+
+```scala
+class Publication(val title: String) {
+  def getInfo: String = s"Publication: $title"
+}
+
+class Book(title: String, val isbn: String) extends Publication(title) {
+  override def getInfo: String = s"Book: $title (ISBN: $isbn)"
+}
+
+class Magazine(title: String, val issue: Int) extends Publication(title) {
+  override def getInfo: String = s"Magazine: $title (Issue: $issue)"
+}
+```
+
+
+
+
+    defined class Publication
+    defined class Book
+    defined class Magazine
+
+
+
+Library services
+
+
+```scala
+object Library {
+  val books: Set[Book] = Set(
+    new Book("Programming in Scala", "978-0-9815316-9-1"),
+    new Book("Effective Scala", "978-1-4493-6999-8")
+  )
+  
+  // This method expects a function: Book => AnyRef
+  def printBookList(info: Book => AnyRef): Unit = {
+    for (book <- books) {
+      println(info(book))
+    }
+  }
+}
+```
+
+
+
+
+    defined object Library
+
+
+
+Client code
+
+
+```scala
+// Define a function that takes Publication (supertype of Book)
+// and returns String (subtype of AnyRef)
+def getTitle(p: Publication): String = p.title
+
+// This works! Here's why:
+// getTitle has type: Publication => String
+// printBookList expects: Book => AnyRef
+//
+// Publication => String  <:  Book => AnyRef
+//     because:
+//     - Book <: Publication (contravariant parameter)
+//     - String <: AnyRef (covariant return)
+
+Library.printBookList(getTitle)
+
+// We can also use a more general function
+def getInfo(p: Publication): String = p.getInfo
+Library.printBookList(getInfo)
+
+// Or even more general
+def describe(obj: Any): String = obj.toString
+Library.printBookList(describe)
+```
+
+    Programming in Scala
+    Effective Scala
+    Book: Programming in Scala (ISBN: 978-0-9815316-9-1)
+    Book: Effective Scala (ISBN: 978-1-4493-6999-8)
+    ammonite.$sess.cmd12$Helper$Book@68f7df75
+    ammonite.$sess.cmd12$Helper$Book@7fa9bec
+
+
+
+
+
+    defined function getTitle
+    defined function getInfo
+    defined function describe
+
+
+
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+graph TB
+    subgraph "Parameter Types (Contravariant)"
+        P1[Any]
+        P2[Publication]
+        P3[Book]
+        P1 -->|supertype| P2
+        P2 -->|supertype| P3
+    end
+    
+    subgraph "Function Types"
+        F1["Any => String"]
+        F2["Publication => String"]
+        F3["Book => AnyRef"]
+        F1 -.->|"can substitute"| F2
+        F2 -.->|"can substitute"| F3
+    end
+    
+    subgraph "Return Types (Covariant)"
+        R1[String]
+        R2[AnyRef]
+        R2 -->|supertype| R1
+    end
+    
+    P2 -.->|"parameter of"| F2
+    P3 -.->|"parameter of"| F3
+    R1 -.->|"return of"| F2
+    R2 -.->|"return of"| F3
+    
+    style F2 fill:#d1ecf1
+    style F3 fill:#d1ecf1
+    style P2 fill:#fff3cd
+    style P3 fill:#fff3cd
+    style R1 fill:#d4edda
+    style R2 fill:#d4edda
+```
 
 ## Traits
 Traits are a fundamental feature that combines aspects of interfaces and mixins, providing a powerful way to compose behaviour and share code between classes.
@@ -2468,23 +3126,27 @@ When multiple traits define the same method, Scala uses linearisation to determi
 
 The linearisation order follows a depth-first, right-to-left traversal.{:gtxt}
 
+{% raw %}
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
 classDiagram
-    class A["A (trait)"] {
-
+    
+    class A["A"] {
+        &lt;&lt;trait&gt;&gt;
         +foo() String
     }
     
-    class B["B (trait)"] {
+    class B["B"] {
+        &lt;&lt;trait&gt;&gt;  
         +foo() String
     }
     
-    class C["C (trait)"] {
+    class C["C"] {
+        &lt;&lt;trait&gt;&gt;  
         +foo() String
     }
     
@@ -2492,14 +3154,15 @@ classDiagram
         +foo() String
     }
     
-    A <|-- B : extends
-    A <|-- C : extends
-    B <|.. D : with
-    C <|.. D : with
+    A &lt;|-- B : extends
+    A &lt;|-- C : extends
+    B &lt;|.. D : with
+    C &lt;|.. D : with
     
     note for D "Linearization: D → C → B → A
     foo() returns CBA"
 ```
+{% endraw %}
 
 
 ```scala
@@ -2525,21 +3188,22 @@ new D().foo // returns "CBA"
 #### Self-Types traits
 Traits can declare dependencies on other traits or classes using self-types:
 
+{% raw %}
 ```mermaid
 ---
 config:
-  look: classic
+  look: neo
   theme: default
 ---
 classDiagram
-    class Logger["Logger
-    (trait)"] {
+    class Logger["Logger"] {
+        &lt;&lt;trait&gt;&gt;
         +log(message: String) Unit
         +warn(message: String) Unit
     }
     
-    class DatabaseAccess["DatabaseAccess
-    (trait)"]  {
+    class DatabaseAccess["DatabaseAccess"]  {
+        &lt;&lt;trait&gt;&gt;
         +query(sql: String) Unit
     }
     
@@ -2549,14 +3213,16 @@ classDiagram
         +query(sql: String) Unit
     }
     
-    Logger <|.. UserService : with
-    DatabaseAccess <|.. UserService : with
-    Logger <.. DatabaseAccess : self-type dependency
+    Logger &lt;|.. UserService : with
+    DatabaseAccess &lt;|.. UserService : with
+    Logger &lt;.. DatabaseAccess : self-type dependency
     
-    note for DatabaseAccess "self: Logger =>
+    note for DatabaseAccess "self: Logger =&gt;
     Requires Logger to be mixed in"
-    note for UserService "Valid: extends Logger with DatabaseAccess"
+    note for UserService "Valid: extends Logger 
+    with DatabaseAccess"
 ```
+{% endraw %}
 
 
 ```scala
@@ -2727,3 +3393,65 @@ class CalculatorSpec extends AnyFunSpec with Matchers {
 {:rtxt: .message color="red"}
 
 [^1]: [Uniform Access Principle](https://martinfowler.com/bliki/UniformAccessPrinciple.html){:target="_blank"}
+
+[^2]: Programming in Scala, Fourth Edition, Section 15.6 - "The Option type" 
+
+[^3]: Programming in Scala, Fourth Edition, Section 15.6 - "Optional values and type safety" 
+
+[^4]: Programming in Scala, Fourth Edition, Section 11.3 - "Bottom types"
+
+[^5]: Programming in Scala, Fourth Edition - Chapter 19, Section on Type Parameter Variance
+
+[^6]: Programming in Scala, Fourth Edition - Variance Annotations Definition
+
+[^7]: Programming in Scala, Fourth Edition - Covariance Introduction
+
+[^8]: Programming in Scala, Fourth Edition - Queue Covariance Example
+
+[^9]: Programming in Scala, Fourth Edition - Functional Types and Covariance
+
+[^10]: Programming in Scala, Fourth Edition - Contravariance Definition
+
+[^11]: Programming in Scala, Fourth Edition - OutputChannel Example, Section 19.6
+
+[^12]: Programming in Scala, Fourth Edition - Nonvariant Types
+
+[^13]: Programming in Scala, Fourth Edition - Cell Class Example, Listing 19.5
+
+[^14]: Programming in Scala, Fourth Edition - Type Soundness and Variance Violations
+
+[^15]: Programming in Scala, Fourth Edition - Section 19.4 "Checking variance annotations"
+
+[^16]: Programming in Scala, Fourth Edition - Position Classification Rules
+
+[^17]: Programming in Scala, Fourth Edition - Cat Class Example with Position Annotations
+
+[^18]: Programming in Scala, Fourth Edition - Section 19.5 "Lower bounds"
+
+[^19]: Programming in Scala, Fourth Edition - Lower Bound Syntax, Listing 19.6
+
+[^20]: Programming in Scala, Fourth Edition - Type-Driven Design and Lower Bounds
+
+[^21]: Programming in Scala, Fourth Edition - Liskov Substitution Principle Definition
+
+[^22]: Programming in Scala, Fourth Edition - LSP Requirements: "require less and provide more"
+
+[^23]: Programming in Scala, Fourth Edition - Function1 Trait Definition
+
+[^24]: Programming in Scala, Fourth Edition - Function1 Variance, Listing 19.8
+
+[^25]: Programming in Scala, Fourth Edition - Function Variance Rationale
+
+[^26]: Programming in Scala, Fourth Edition - Publication/Book/Library Example, Listing 19.9
+
+[^27]: Programming in Scala, Fourth Edition - Section 19.7 "Object private data"
+
+[^28]: Programming in Scala, Fourth Edition - Object Private Variables and Variance
+
+[^29]: Programming in Scala, Fourth Edition - Arrays in Java: Covariance and ArrayStoreException
+
+[^30]: Programming in Scala, Fourth Edition - Arrays in Scala: Invariance and Casting
+
+[^upper_bound]: Programming in Scala, Fourth Edition, Chapter 19.8 
+
+[^lower_bound]: Programming in Scala, Fourth Edition, Chapter 19.5 
