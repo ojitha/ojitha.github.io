@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Scala Notes
-date:   2025-10-24
+date:   2025-07-24
 categories: [Scala]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
@@ -2640,6 +2640,113 @@ val strBox = new Box[String]("hello")
 
 
 
+## Scala Type Bounds
+Type bounds in Scala allow you to constrain type parameters to ensure type safety while maintaining flexibility. Scala provides two kinds of type bounds:
+
+-   **Upper Bounds** (`<:`): Restricts a type parameter to be a subtype of another type
+-   **Lower Bounds** (`>:`): Restricts a type parameter to be a supertype of another type
+
+### Upper bound
+
+> An **upper bound** specifies that a type parameter must be a **subtype** of a specified type. The syntax `T <: UpperType` means "T must be a subtype of UpperType".
+{:.info-box}
+
+```scala
+def method[T <: UpperBoundType](param: T): ReturnType
+```
+
+How Upper Bounds Work:
+
+The declaration `T <: Ordered[T]` means:
+
+-   The type parameter `T` has an upper bound of `Ordered[T]`
+-   The element type must be a subtype of `Ordered`
+-   You can use comparison operators like `<`, `>`, `<=`, `>=` on elements of type `T`
+
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+graph TD
+    A["Ordered[T]"] -->|"upper bound"| B["T <: Ordered[T]"]
+    B --> C["Person extends Ordered[Person]"]
+    B --> D["Any class mixing in Ordered"]
+    
+    style A fill:#e1f5ff
+    style B fill:#ffe1e1
+    style C fill:#e1ffe1
+    style D fill:#e1ffe1
+```
+### Lower Bounds (`>:`)
+
+> A **lower bound** specifies that a type parameter must be a **supertype** of a specified type. The syntax `U >: T` means "U must be a supertype of T".
+{:.info-box}
+
+```scala
+def method[U >: T](param: U): ReturnType
+```
+How Lower Bounds Work:
+
+The declaration `U >: T` means:
+
+-   The type parameter `U` has a lower bound of `T`
+-   `U` is required to be a supertype of `T`
+-   When you pass a supertype, the resulting type widens accordingly
+
+```mermaid
+---
+config:
+  look: neo
+  theme: default
+---
+graph BT
+    A[Apple] -->|subtype| B[Fruit]
+    C[Orange] -->|subtype| B
+    B -->|subtype| D[AnyRef]
+    
+    E["Queue[Apple]"] -.->|"enqueue orange"| F["Queue[Fruit]"]
+    
+    G["U >: T"] -.->|"U must be<br/>supertype of T"| H[T]
+    
+    style A fill:#ffe1e1
+    style C fill:#ffe1e1
+    style B fill:#e1f5ff
+    style D fill:#e1ffe1
+    style E fill:#fff4e1
+    style F fill:#fff4e1
+    style G fill:#e1e1ff
+    style H fill:#ffe1ff
+```
+
+Lower bounds enable covariance while maintaining type safety. Without the lower bound, you couldn't make Queue covariant because T would appear in a contravariant position (method parameter)[^14]:
+
+```scala
+// This would NOT compile if enqueue was: def enqueue(x: T)
+class Queue[+T] { ... }  // Error: covariant type T occurs 
+                         // in contravariant position
+```
+
+The lower bound `[U >: T]` solves this by:
+
+1.  Making the method polymorphic in `U`
+2.  Allowing `U` to be any supertype of `T`
+3.  Returning a `Queue[U]` which may be a wider type
+
+
+
+| Feature | Upper Bound (`<:`) | Lower Bound (`>:`) |
+|---------|-------------------|-------------------|
+| **Meaning** | T must be a **subtype** of bound | U must be a **supertype** of bound |
+| **Syntax** | `T <: UpperType` | `U >: LowerType` |
+| **Use Case** | Require specific capabilities | Enable covariance, flexible inputs |
+| **Position** | Works with any variance | Often with covariant types (`+T`) |
+| **Example** | `T <: Ordered[T]` | `U >: T` |
+
+
+
+
 ## Variance in Scala 2
 Variance in Scala defines the subtyping relationships between parameterised types. When you have a generic type like `Queue[T]`, variance determines whether `Queue[String]` can be considered a subtype of `Queue[AnyRef]` based on the relationship between `String` and `AnyRef`[^5].
 
@@ -3097,6 +3204,17 @@ graph TB
     style R2 fill:#d4edda
 ```
 
+Comparison Table
+
+| Aspect | Covariance `+T` | Contravariance `-T` |
+|--------|----------------|-------------------|
+| Direction | Same as type parameter | Opposite to type parameter |
+| Use case | Producers (output) | Consumers (input) |
+| Example | `List[+A]` | `Function1[-S, +T]` |
+| Position | Return types | Parameter types |
+| Intuition | Can return more specific | Can accept more general |
+
+
 ## Traits
 Traits are a fundamental feature that combines aspects of interfaces and mixins, providing a powerful way to compose behaviour and share code between classes.
 
@@ -3416,41 +3534,9 @@ class CalculatorSpec extends AnyFunSpec with Matchers {
 
 [^12]: Programming in Scala, Fourth Edition - Nonvariant Types
 
-[^13]: Programming in Scala, Fourth Edition - Cell Class Example, Listing 19.5
+[^13]: Programming in Scala Fourth Edition, Chapter 19, Section 19.4 - "Upper bounds" (limitation example)
 
-[^14]: Programming in Scala, Fourth Edition - Type Soundness and Variance Violations
-
-[^15]: Programming in Scala, Fourth Edition - Section 19.4 "Checking variance annotations"
-
-[^16]: Programming in Scala, Fourth Edition - Position Classification Rules
-
-[^17]: Programming in Scala, Fourth Edition - Cat Class Example with Position Annotations
-
-[^18]: Programming in Scala, Fourth Edition - Section 19.5 "Lower bounds"
-
-[^19]: Programming in Scala, Fourth Edition - Lower Bound Syntax, Listing 19.6
-
-[^20]: Programming in Scala, Fourth Edition - Type-Driven Design and Lower Bounds
-
-[^21]: Programming in Scala, Fourth Edition - Liskov Substitution Principle Definition
-
-[^22]: Programming in Scala, Fourth Edition - LSP Requirements: "require less and provide more"
-
-[^23]: Programming in Scala, Fourth Edition - Function1 Trait Definition
-
-[^24]: Programming in Scala, Fourth Edition - Function1 Variance, Listing 19.8
-
-[^25]: Programming in Scala, Fourth Edition - Function Variance Rationale
-
-[^26]: Programming in Scala, Fourth Edition - Publication/Book/Library Example, Listing 19.9
-
-[^27]: Programming in Scala, Fourth Edition - Section 19.7 "Object private data"
-
-[^28]: Programming in Scala, Fourth Edition - Object Private Variables and Variance
-
-[^29]: Programming in Scala, Fourth Edition - Arrays in Java: Covariance and ArrayStoreException
-
-[^30]: Programming in Scala, Fourth Edition - Arrays in Scala: Invariance and Casting
+[^14]: Programming in Scala Fourth Edition, Chapter 19, Section 19.5 - "Lower bounds" (variance explanation)
 
 [^upper_bound]: Programming in Scala, Fourth Edition, Chapter 19.8 
 
