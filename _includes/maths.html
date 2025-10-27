@@ -15,9 +15,17 @@ window.MathJax = {
     },
     packages: {'[+]': ['noerrors']}
   },
+  chtml: {
+    displayAlign: 'left',        // Left-align display equations
+    displayIndent: '2em'          // Optional: add left indentation
+  },
   options: {
     ignoreHtmlClass: 'tex2jax_ignore',
-    processHtmlClass: 'tex2jax_process'
+    processHtmlClass: 'tex2jax_process',
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+    renderActions: {
+      addMenu: [0, '', '']  // Disable context menu for faster rendering
+    }    
   },
   loader: {
     load: ['[tex]/noerrors']
