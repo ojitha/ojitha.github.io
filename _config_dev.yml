@@ -1,0 +1,59 @@
+# Development-specific Jekyll configuration
+# This file overrides settings from _config.yml for faster local development
+
+# Enable incremental build for faster rebuilds
+incremental: true
+
+# Enable build profiling to identify slow components
+profile: true
+
+# Don't fail on front matter errors during development
+strict_front_matter: false
+
+# Limit pagination for faster builds
+paginate: 2
+
+# Disable heavy plugins that aren't needed during development
+# Only keep essential plugins for local development
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-paginate
+  # Disabled for dev (re-enable for production):
+  # - jekyll-algolia  # Search indexing - only needed for production
+  # - jemoji          # Emoji support - disable if not frequently used
+
+# Disable remote theme fetching in dev if you have it cached
+# Uncomment if experiencing slow remote theme downloads:
+# remote_theme: null
+# theme: minima
+
+# Additional exclusions for development
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - README.md
+  - LICENSE
+  - Makefile
+  - Dockerfile
+  - .git/
+  - .gitignore
+  - .github/
+  - "*.swp"
+  - "*.bak"
+  - "*.orig"
+
+# Disable Google Analytics in development
+google_analytics: null
+
+# Simplified social links (these don't affect build time but keep config clean)
+# You can comment these out if needed

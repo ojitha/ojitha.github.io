@@ -5,7 +5,8 @@ Scala2BlogsDir := ../learn-scala2/blogs
 Scala2BlogsSources := 2025-07-25-Scala-basics \
 	2025-07-25-Scala-Collections \
 	2025-10-24-Scala2Closures \
-	2025-10-26-Scala2-Functors
+	2025-10-26-Scala2-Functors \
+	2025-10027-Scala-2-Collections
 
 # Create target file lists
 md_targets := $(foreach wrd,$(Scala2BlogsSources),$(DRAFTS_DIR)/$(wrd).md)

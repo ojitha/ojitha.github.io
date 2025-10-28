@@ -48,11 +48,10 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Default command
 CMD ["bundle", "exec", "jekyll", "serve", \
-     "--incremental", \
-     "--limit_posts", "1", \
+     "--config", "_config.yml,_config_dev.yml", \
+     "--limit_posts", "5", \
      "--host", "0.0.0.0", \
      "--livereload", \
      "--force_polling", \
      "--livereload-port", "35729", \
-     "--trace", \
      "--drafts"]
