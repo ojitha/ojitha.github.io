@@ -54,7 +54,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 ## Scala 2 Collections Overview
 
-Scala 2 collections are robust, flexible, and unified. They are organised into three main categories:
+Scala 2 collections are powerful, flexible, and unified. They are organized into three main categories:
 
 - **Seq**: Ordered, indexed, or linear sequences (e.g., `List`, `Vector`, `Array`, `Queue`)
 - **Set**: Unordered collections of unique elements (e.g., `Set`, `SortedSet`)
@@ -104,19 +104,19 @@ Big O notation describes the upper bound of an algorithm's running time or space
 
 ![Big O Comparison computational complexity](https://upload.wikimedia.org/wikipedia/commons/7/7e/Comparison_computational_complexity.svg){: width="50%" height="50%"}
 
--   **Constant Time:** $$O(1)$$ — Operation takes the same time regardless of input size. E.g., Array access, hash table lookup.
+-   **Constant Time:** $$O(1)$$ — Operation takes the same time regardless of input size. Eg: Array access, hash table lookup.
 
 ![Constant Time](/assets/images/2025-07-25-Scala-Collections/big_O_constant_Time.png){: width="30%" height="30%"}
 
--   **Logarithmic Time:** $$O(\log n)$$ — Time grows logarithmically with input size. E.g., Binary search, balanced tree operations.
+-   **Logarithmic Time:** $$O(\log n)$$ — Time grows logarithmically with input size. Eg: Binary search, balanced tree operations.
 
 ![Logarithmic_Time](/assets/images/2025-07-25-Scala-Collections/Logarithmic_Time.png){: width="30%" height="30%"}
 
--   **Linear Time:** $$O(n)$$ — Time grows proportionally with input size. E.g., Linear search, array traversal.
+-   **Linear Time:** $$O(n)$$ — Time grows proportionally with input size. Eg: Linear search, array traversal.
 
 ![Linear Time](/assets/images/2025-07-25-Scala-Collections/Linear_Time.png){: width="30%" height="30%"}
 
--   **Linearithmic Time:** $$O(n \log n)$$ — Common in efficient sorting algorithms. E.g., Merge sort, heap sort, quick sort (average).
+-   **Linearithmic Time:** $$O(n \log n)$$ — Common in efficient sorting algorithms. Eg: Merge sort, heap sort, quick sort (average).
 
 ![Linearithmic Time](/assets/images/2025-07-25-Scala-Collections/Linearithmic_Time.png){: width="30%" height="30%"}
 
@@ -889,7 +889,7 @@ List(1, 2, 3, 4, 5).foldRight(0)(_ + _)  // Result: 15
 
 
 
-    res106: Int = 15
+    res1: Int = 15
 
 
 
