@@ -1,6 +1,8 @@
 # Variables
 DRAFTS_DIR = ./_posts
 ASSETS_DIR = ./assets/images
+
+# --- Scala 2 Blogs 
 Scala2BlogsDir := ../learn-scala2/blogs
 Scala2BlogsSources := 2025-07-25-Scala-basics \
 	2025-07-25-Scala-Collections \
@@ -12,6 +14,13 @@ Scala2BlogsSources := 2025-07-25-Scala-basics \
 # Create target file lists
 md_targets := $(foreach wrd,$(Scala2BlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets := $(foreach wrd,$(Scala2BlogsSources),$(ASSETS_DIR)/$(wrd))
+
+# --- Spark Blogs
+SparkBlogsDir := ../spark-algorithms/blogs
+SparkBlogsSources := 2025-11-07-SparkDataset
+
+md_targets += $(foreach wrd,$(SparkBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
+asset_targets += $(foreach wrd,$(SparkBlogsSources),$(ASSETS_DIR)/$(wrd))
 
 all: $(md_targets) $(asset_targets)
 
@@ -47,5 +56,9 @@ endef
 # Generate the rules for Scala 2 posts
 $(foreach element,$(Scala2BlogsSources),$(eval $(call md-copy,$(element),$(Scala2BlogsDir))))
 $(foreach element,$(Scala2BlogsSources),$(eval $(call assets-copy,$(element),$(Scala2BlogsDir))))
+
+# Generate the rules for Scala 2 posts
+$(foreach element,$(SparkBlogsSources),$(eval $(call md-copy,$(element),$(SparkBlogsDir))))
+$(foreach element,$(SparkBlogsSources),$(eval $(call assets-copy,$(element),$(SparkBlogsDir))))
 
 .PHONY: all

@@ -62,25 +62,33 @@ Cut only the chapter headings
 grep -i chapter novel.txt | cut -d' ' -f3-
 ```
 
-Read the line where CHAPTER contains but start with 'the' in the novel.txt.
+Read the line where 'CHAPTER' appears in the novel.txt, but start with 'the'.
 
 ```bash
 grep -E '^CHAPTER (.*)\. The' novel.txt
 ```
 
-Every word more 5 or more characters
+Every word with 5 or more characters
 
 ```bash
 grep -oE '\w{5,}' novel.txt
 ```
 
-In the redhat to start the firewall GUI, type the following command:
+Search, that combine `find` and `grep`:
+
+```bash
+find . -name "Dockerfile" -exec grep -l "glue" {} \;
+```
+
+
+
+In RedHat, to start the firewall GUI, type the following command:
 
 ```bash
 sudo system-config-firewall
 ```
 
-Here the way to validate xml file for schema and generate the report
+Here is the way to validate an XML file for a schema and generate the report
 
 ```bash
 	xmllint  --noout --valid --schema UserCentralClients.xsd sample2.xml > error.txt 2>&1
