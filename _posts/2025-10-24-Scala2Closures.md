@@ -1460,6 +1460,345 @@ val multiplyCurried = multiply.curried
 // Type: Int => Int => Int => Int÷
 ```
 
+## Scala Type Classes
+
+Type classes in Scala are a powerful design pattern that allows you to add new functionality to existing types without modifying their source code. They enable **ad-hoc polymorphism** - the ability to define behaviour for types after they've been created.
+
+Let's use a classic example: creating a "printable" or `Show` behaviour. We want to be able to call `.show()` on any type (`Int`, `String`, our own `User` class) to get a nice, formatted string representation.
+
+1. The Type Class Trait
+
+This is the "contract." It's a generic trait that defines the behaviour you want to add. It takes a type parameter `[A]` representing the type we're adding functionality to.
+
+
+```scala
+trait Show[A] {
+  def show(value: A): String
+}
+```
+
+
+
+
+    defined trait Show
+
+
+
+2. Type Class Instances
+These are the concrete implementations of the trait for specific types. We mark them as `implicit` so the compiler can find them automatically.
+These instances are often placed in the **companion object** of the type class trait. This makes them easy for the compiler to find (this is a common part of *implicit resolution*).
+
+
+```scala
+// Put instances in the companion object
+object Show {
+  // Instance for Int
+  implicit val intShow: Show[Int] = new Show[Int] {
+    def show(value: Int): String = s"Int is: $value"
+  }
+
+  // Instance for String
+  implicit val stringShow: Show[String] = new Show[String] {
+    def show(value: String): String = s"String is: $value"
+  }
+
+  // Instance for a custom class we don't want to modify
+  case class Person(name: String, age: Int)
+
+  implicit val personShow: Show[Person] = new Show[Person] {
+    def show(p: Person): String = s"${p.name} is ${p.age} years old."
+  }
+}
+```
+
+
+
+
+    defined object Show
+
+
+
+Above are known as implicit values.
+
+Type classes in Scala are implemented using implicit values and parameters, and, optionally, implicit classes. Scala language constructs correspond to the components of type classes as follows:
+
+- traits: type classes;
+- implicit values: type class instances;
+- implicit parameters: type class use; and
+- implicit classes: optional utilities that make type classes easier to use.
+
+In the cats:
+- interface objects
+- interface syntax
+
+3. The Interface (Using the Type Class)
+
+This is how you *use* the type class. There are two main ways:
+
+<u>Method 1</u>: The "Interface" Function (Implicit Parameter)
+
+This is a function that *requires* a type class instance, specified via an implicit parameter list.
+
+
+```scala
+// This function "asks" for an implicit Show[A] to be available
+def printThing[A](value: A)(implicit shower: Show[A]): Unit = {
+  println(shower.show(value))
+}
+```
+
+
+
+
+    defined function printThing
+
+
+
+When you call `printThing(123)`, the compiler sees it needs a `Show[Int]`. It looks in the implicit scope, finds `Show.intShow`, and "injects" it as the `shower` parameter.
+
+<u>Method 2</u>: Extension Methods (The "Pretty" Way)
+
+This is the most common and ergonomic way. We use an `implicit class` (part of the "pimp my library" pattern) to make it look like the method is *on* the original type (e.g., `123.show()`).
+
+
+
+```scala
+object ShowSyntax {
+  implicit class ShowOps[A](value: A) {
+    // This method requires an implicit Show[A] to be in scope
+    def show(implicit s: Show[A]): String = {
+      s.show(value) // delegates to the instance
+    }
+  }
+}
+```
+
+
+
+
+    defined object ShowSyntax
+
+
+
+This `implicit class` wraps *any* type `A` and gives it a `.show` method. That method will only compile if the compiler can find an `implicit` instance of `Show[A]` to pass to it.
+
+
+```scala
+// --- How to use it ---
+
+// Import the instances and the syntax to bring them into scope
+import Show._
+import ShowSyntax._
+
+val john = Person("John", 30)
+
+// The compiler finds the correct implicit instance for each type!
+println(123.show)       // Uses intShow
+println("Hello".show)   // Uses stringShow
+println(john.show)      // Uses personShowA
+```
+
+    Int is: 123
+    String is: Hello
+    John is 30 years old.
+
+
+
+
+
+    import Show._
+    import ShowSyntax._
+    john: Person = Person(name = "John", age = 30)
+
+
+
+### Implicit Resolution
+
+When you write `123.show`:
+
+1.  `123` (an `Int`) doesn't have a `.show` method.
+2.  The compiler looks for an `implicit` conversion that *does* have a `.show` method.
+3.  It finds `ShowSyntax.ShowOps[A]` (which we imported). It wraps `123` to become `ShowOps[Int](123)`.
+4.  Now it can call `ShowOps[Int](123).show`.
+5.  This `show` method itself has an `(implicit s: Show[Int])` parameter.
+6.  The compiler searches for an `implicit` value of type `Show[Int]`.
+7.  It finds `Show.intShow` (which we also imported) and secretly passes it to the method.
+8.  The final call is effectively `intShow.show(123)`.
+
+If you tried to call `.show` on a type with no instance (e.g., `List(1,2).show`), you would get a **compile-time error**, which is the power of the type class pattern.
+
+### Example from the Cats book:
+
+The `JsonWriter` is the type class for serialising to JSON (explained in the Cats[^17]):
+
+
+```scala
+object JsonModel {
+  sealed trait MyJson
+  final case class JsObject(get: Map[String, MyJson]) extends MyJson
+  final case class JsString(get: String) extends MyJson
+  final case class JsNumber(get: Double) extends MyJson
+  final case object JsNull extends MyJson
+
+  // Example model to demonstrate
+  final case class Employee(name: String, email: String)
+    
+  //  type class
+  trait JsonWriter[A] {
+    def write(value: A): MyJson
+  }
+}
+
+
+
+import JsonModel._
+
+
+// implicit values: type class instances
+object JsonWriterInstances {
+    implicit val stringWriter: JsonWriter[String] = new JsonWriter[String] {
+        def write(value: String): MyJson = JsString(value)
+    }
+
+    implicit val employeeWriter: JsonWriter[Employee] = new JsonWriter[Employee] {
+        def write(value: Employee): MyJson = JsObject(
+            Map("name" -> JsString(value.name)
+                ,"email" -> JsString(value.email)))
+    }
+
+
+    // ... implement others to return such as JsNumber 
+}
+
+// companion object
+object MyJson {
+    // interface object
+    def toJson[A](value: A)(implicit w: JsonWriter[A]): MyJson = w.write(value) 
+}
+
+import JsonWriterInstances._
+
+MyJson.toJson(Employee("Ojitha", "ojitha@test.com")) //implicit scope applied
+```
+
+
+
+
+    defined object JsonModel
+    import JsonModel._
+    defined object JsonWriterInstances
+    defined object MyJson
+    import JsonWriterInstances._
+    res1_5: MyJson = JsObject(
+      get = Map(
+        "name" -> JsString(get = "Ojitha"),
+        "email" -> JsString(get = "ojitha@test.com")
+      )
+    )
+
+
+
+
+```scala
+// interface syntax
+object JsonSyntax {
+    implicit class JsonWriterOps[A](value: A) {
+        def convert2Json(implicit w: JsonWriter[A]): MyJson = w.write(value)
+    }
+}
+import JsonWriterInstances._
+import JsonSyntax._
+
+Employee("Ojitha", "ojitha@test.com").convert2Json 
+```
+
+
+
+
+    defined object JsonSyntax
+    import JsonWriterInstances._
+    import JsonSyntax._
+    res3_3: MyJson = JsObject(
+      get = Map(
+        "name" -> JsString(get = "Ojitha"),
+        "email" -> JsString(get = "ojitha@test.com")
+      )
+    )
+
+
+
+> Working with type classes in Scala means working with implicit values and implicit parameters. Placing instances in a companion object to the type class has special significance in Scala because it plays into something called **implicit scope**.
+
+### Implicit Scope
+The implicit scope which roughly consists of:
+
+- local or inherited definitions
+- imported definitions
+- definitions in the companion object of the type class or the parameter type (in this case `JsonWriter` or `String`).
+
+Definitions are only included in implicit scope if they are tagged with the `implicit` keyword.
+
+Type class instances can be placed roughly in four ways:
+
+1. In an object (eg:`JasonWriterInstances`): need to import
+2. In a trait: using inheritance
+3. In the companion object of the Type Class
+4. In the companion object of the parameter type
+
+Type class instances can be defined in two ways:
+1. concrete instances as `implicit val`
+2. by defining `implicit` methods to construct instances from other type class instances
+
+
+
+```scala
+implicit def optionWriter[A](implicit writer: JsonWriter[A]): JsonWriter[Option[A]] =
+    new JsonWriter[Option[A]] {
+        def write(option: Option[A]): MyJson = option match {
+            case Some(value) => writer.write(value)
+            case None => JsNull
+        }
+    }
+```
+
+
+
+
+    defined function optionWriter
+
+
+
+
+```scala
+MyJson.toJson(Option("A string"))
+```
+
+
+
+
+    res5: MyJson = JsString(get = "A string")
+
+
+
+![implicit_scope_hierarchy](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10-24-Scala2Closures/implicit_scope_hierarchy.png)
+
+```scala
+MyJson.toJson(Option("A string"))(optonWriter[String]) // apply first
+                                         ⬇️
+MyJson.toJson(Option("A string"))(optonWriter(stringWriter)) // apply then
+```
+
+> `implicit` methods with non‐implicit parameters form a different Scala pattern called an **implicit conversion**, which is an old programming concept.
+
+### Key Benefits
+
+  * **Decoupling:** Your data definitions (like `case class Person`) are separate from their behaviors (like `Show`).
+  * **Extensibility:** You can add `Show` support for `java.util.Date` or any other library class *without* changing its code.
+  * **No Inheritance Tax:** You don't need to make all your classes extend a common `Showable` trait, which avoids brittle inheritance hierarchies.
+  * **Type-Safe:** The compiler guarantees at compile time that the behavior exists for the type you're using.
+
+(Note: Scala 3 heavily refines this pattern, making it a first-class language feature with `given` and `using` clauses, which replace `implicits`.)
+
 [^1]: Functional Programming in Scala, Ch. 1: "What is functional programming?" → "The benefits of FP: a simple example", p. 3-12
 
 [^2]: Bird & Wadler: Introduction to Functional Programming, Ch. 3: "Lists" → "Map and filter", p. 61-65
@@ -1471,6 +1810,8 @@ val multiplyCurried = multiply.curried
 [^5]: Scala in Depth, Ch. 11: "Patterns in functional programming" → "Currying and applicative style", p. 266-268
 
 [^6]: Programming in Scala Fourth Edition, Ch. 8: "Functions and Closures" → "Closures", p. 176-179
+
+[^17]: Scala with Cats, Ch. 1: "Introduction", p. 10 -11
 
 {:gtxt: .message color="green"}
 {:ytxt: .message color="yellow"}
