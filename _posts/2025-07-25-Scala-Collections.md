@@ -54,7 +54,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 ## Scala 2 Collections Overview
 
-Scala 2 collections are powerful, flexible, and unified. They are organized into three main categories:
+Scala 2 collections are powerful, flexible, and unified. They are organized into three main categories[^1]:
 
 - **Seq**: Ordered, indexed, or linear sequences (e.g., `List`, `Vector`, `Array`, `Queue`)
 - **Set**: Unordered collections of unique elements (e.g., `Set`, `SortedSet`)
@@ -321,13 +321,13 @@ A `List` in Scala 2 is an immutable, ordered sequence of elements. It is one of 
 
 
 ```scala
-List(1,2,3,4)
+List(1,2,3,4,5)
 ```
 
 
 
 
-    res1: List[Int] = List(1, 2, 3, 4)
+    res0: List[Int] = List(1, 2, 3, 4, 5)
 
 
 
@@ -341,7 +341,7 @@ Nil
 
 
 
-    res3: Nil.type = List()
+    res1: Nil.type = List()
 
 
 
@@ -349,13 +349,13 @@ Using right asscoative colons to create list with`Nil`:
 
 
 ```scala
-1 :: 2 :: 3 :: 4 :: Nil
+1 :: 2 :: 3 :: 4 :: 5 :: Nil
 ```
 
 
 
 
-    res13: List[Int] = List(1, 2, 3, 4)
+    res2: List[Int] = List(1, 2, 3, 4, 5)
 
 
 
@@ -363,13 +363,299 @@ Using right asscoative colons to create list with`Nil`:
 ```scala
 List(1, 2, 3).head
 List(1, 2, 3).tail
+List(1, 2, 3).isEmpty      //  checks if the list is empty
+List(1, 2, 3).contains(3)  // contains[A1 >: Int](elem: A1): Boolean
+List(1, 2, 3).take(2)      // first n elements
 ```
 
 
 
 
-    res14_0: Int = 1
-    res14_1: List[Int] = List(2, 3)
+    res4_0: Int = 1
+    res4_1: List[Int] = List(2, 3)
+    res4_2: Boolean = false
+    res4_3: Boolean = true
+    res4_4: List[Int] = List(1, 2)
+
+
+
+Other methods
+
+
+```scala
+// filter: creates a new list with elements that satisfy a predicate
+List(1, 2, 3, 4, 5, 6).filter(x => x % 2 == 0)
+```
+
+
+
+
+    res1: List[Int] = List(2, 4, 6)
+
+
+
+
+```scala
+// map: transforms each element of the list
+List(1, 2, 3, 4, 5, 6).map(x => x * x)
+```
+
+
+
+
+    res2: List[Int] = List(1, 4, 9, 16, 25, 36)
+
+
+
+
+```scala
+// foldLeft: applies a binary operator to an initial value and all elements
+List(1, 2, 3, 4, 5, 6).foldLeft(0)((acc, x) => acc - x)
+```
+
+
+
+
+    res8: Int = -21
+
+
+
+The long math calculation for this foldLeft operation unfolds as follows:
+
+ The operation is: foldLeft(initialValue)( (accumulator, currentElement) => accumulator - currentElement )
+
+ Initial accumulator value (acc): 0
+ List of elements (x): [1, 2, 3, 4, 5, 6]
+
+ Iteration 1:
+  - acc = 0 (initialValue)
+  - x = 1 (first element)
+  - result = 0 - 1 = -1
+
+ Iteration 2:
+  - acc = -1 (result from the previous iteration)
+  - x = 2 (second element)
+  - result = -1 - 2 = -3
+
+ Iteration 3:
+  - acc = -3 (result from the previous iteration)
+  - x = 3 (third element)
+  - result = -3 - 3 = -6
+
+ Iteration 4:
+  - acc = -6 (result from the previous iteration)
+  - x = 4 (fourth element)
+  - result = -6 - 4 = -10
+
+ Iteration 5:
+  - acc = -10 (result from the previous iteration)
+  - x = 5 (fifth element)
+  - result = -10 - 5 = -15
+
+ Iteration 6:
+  - acc = -15 (result from the previous iteration)
+  - x = 6 (sixth element)
+  - result = -15 - 6 = -21
+
+ The list is now exhausted, and the final result of the foldLeft operation is -21.
+
+
+
+```scala
+// foldRight: applies a binary operator to an initial value and all elements
+List(1, 2, 3, 4, 5, 6).foldRight(0)((acc, x) => acc - x)
+```
+
+
+
+
+    res9: Int = -3
+
+
+
+ The long math calculation for this foldRight operation unfolds as follows:
+
+ The operation is: foldRight(initialValue)( (currentElement, accumulator) => currentElement - accumulator )
+
+ Initial accumulator value (acc): 0
+ List of elements (x): [1, 2, 3, 4, 5, 6]
+
+ The calculation can be visualized as: 1 - (2 - (3 - (4 - (5 - (6 - 0)))))
+
+ Iteration 1 (starts from the right):
+  - x = 6 (last element)
+  - acc = 0 (initialValue)
+  - result = 6 - 0 = 6
+
+ Iteration 2:
+  - x = 5 (previous element)
+  - acc = 6 (result from the previous iteration)
+  - result = 5 - 6 = -1
+
+ Iteration 3:
+  - x = 4
+  - acc = -1
+  - result = 4 - (-1) = 5
+
+ Iteration 4:
+  - x = 3
+  - acc = 5
+  - result = 3 - 5 = -2
+
+ Iteration 5:
+  - x = 2
+  - acc = -2
+  - result = 2 - (-2) = 4
+
+ Iteration 6:
+  - x = 1 (first element)
+  - acc = 4
+  - result = 1 - 4 = -3
+
+ The list is now exhausted, and the final result of the foldRight operation is -3.
+
+
+```scala
+// reduceLeft: applies a binary operator to all elements (without initial value)
+List(1, 2, 3, 4, 5, 6).reduceLeft((acc, x) => acc - x)
+```
+
+
+
+
+    res11: Int = -19
+
+
+
+The long math calculation for this `reduceLeft` operation unfolds as follows:
+
+ The operation is: `reduceLeft( (accumulator, currentElement) => accumulator - currentElement )`
+
+ Unlike `foldLeft`, `reduceLeft` uses the first element of the list as the initial accumulator. The iteration then begins with the second element.
+
+ Initial accumulator value (acc): 1 (the first element of the list)
+ Remaining elements (x): [2, 3, 4, 5, 6]
+
+ Iteration 1:
+  - acc = 1 (initial accumulator)
+  - x = 2 (second element)
+  - result = 1 - 2 = -1
+
+ Iteration 2:
+  - acc = -1 (result from the previous iteration)
+  - x = 3 (third element)
+  - result = -1 - 3 = -4
+
+ Iteration 3:
+  - acc = -4 (result from the previous iteration)
+  - x = 4 (fourth element)
+  - result = -4 - 4 = -8
+
+ Iteration 4:
+  - acc = -8 (result from the previous iteration)
+  - x = 5 (fifth element)
+  - result = -8 - 5 = -13
+
+ Iteration 5:
+  - acc = -13 (result from the previous iteration)
+  - x = 6 (sixth element)
+  - result = -13 - 6 = -19
+
+ The list is now exhausted, and the final result of the reduceLeft operation is -19.
+
+
+```scala
+// take: returns the first n elements
+List(1, 2, 3, 4, 5, 6).take(2)
+```
+
+
+
+
+    res12: List[Int] = List(1, 2)
+
+
+
+
+```scala
+// takeWhile: returns elements as long as the predicate is true
+List(1, 2, 3, 4, 5, 6).takeWhile(_ < 4)
+```
+
+
+
+
+    res13: List[Int] = List(1, 2, 3)
+
+
+
+
+```scala
+// dropWhile: drops elements as long as the predicate is true
+List(1, 2, 3, 4, 5, 6).dropWhile(_ < 4)
+```
+
+
+
+
+    res14: List[Int] = List(4, 5, 6)
+
+
+
+
+```scala
+// distinct: returns a new list with duplicate elements removed
+val listWithDuplicates = List(1, 2, 2, 3, 1)
+val distinctList = listWithDuplicates.distinct
+```
+
+
+
+
+    listWithDuplicates: List[Int] = List(1, 2, 2, 3, 1)
+    distinctList: List[Int] = List(1, 2, 3)
+
+
+
+
+```scala
+// reverse: returns a new list with elements in reverse order
+List(1, 2, 3, 4, 5, 6).reverse
+```
+
+
+
+
+    res16: List[Int] = List(6, 5, 4, 3, 2, 1)
+
+
+
+
+```scala
+// sortWith: sorts the list based on a custom comparison function
+val sortedList = List(3, 1, 4, 2).sortWith(_ < _)
+```
+
+
+
+
+    sortedList: List[Int] = List(1, 2, 3, 4)
+
+
+
+
+```scala
+// groupBy: groups elements into a map based on a discriminator function
+List(1, 2, 3, 4, 5, 6).groupBy(_ % 2 == 0)
+```
+
+
+
+
+    res18: Map[Boolean, List[Int]] = HashMap(
+      false -> List(1, 3, 5),
+      true -> List(2, 4, 6)
+    )
 
 
 
@@ -1047,6 +1333,12 @@ List(85, 92, 78, 96, 88).reduce((a, b) => if (a > b) a else b)
 
 
 
+References
+
+[^1]: [Scala 2 Collections Explained]({% post_url 2025-10-27-Scala-2-Collections %}){:target="_blank"}
+
 {:gtxt: .message color="green"}
+
 {:ytxt: .message color="yellow"}
+
 {:rtxt: .message color="red"}
