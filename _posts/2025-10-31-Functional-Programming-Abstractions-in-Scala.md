@@ -62,11 +62,13 @@ These five abstractions form the foundation of functional programming. They repr
 
 > These abstractions are discovered, not invented. They emerge naturally from observing common patterns in our code.[^1]
 
----
+I am going to discuss the following:
+
+![Functional Abstractions](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10-31-Functional-Programming-Abstractions-in-Scala/overral_diagram.png)
 
 ## Semigroup
 
-A **Semigroup** is the simplest algebraic structure: a type with an associative binary operation. It captures the essence of "combining" things together where the order of grouping doesn't matter.[^2]
+A **Semigroup** is the simplest algebraic structure: a type with an associative binary operation. It captures the essence of "combining" things together, where the order of grouping doesn't matter.[^2]
 
 ### Intuition
 
@@ -98,7 +100,7 @@ graph LR
     style C fill:#2196F3
 ```
 
-**Diagram Explanation**: Elements combine together using the binary operation, and the grouping order doesn't affect the final result.
+**Diagram Explanation**: Elements combine using the binary operation, and the grouping order doesn't affect the final result.
 
 **Formal Definition**: A semigroup consists of:
 - A set $S$ (in Scala, this is a type `A`)
@@ -106,7 +108,7 @@ graph LR
 
 Type Class Definition[^4]:
 
-![overral_diagram](/../blog/assets/images/2025-10-31-Functional-Programming-Abstractions-in-Scala/overral_diagram.png)
+
 
 
 
