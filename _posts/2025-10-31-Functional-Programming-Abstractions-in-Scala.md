@@ -106,7 +106,7 @@ graph LR
 
 Type Class Definition[^4]:
 
-
+![overral_diagram](/../blog/assets/images/2025-10-31-Functional-Programming-Abstractions-in-Scala/overral_diagram.png)
 
 
 
