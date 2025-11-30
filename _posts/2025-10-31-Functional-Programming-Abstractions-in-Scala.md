@@ -64,7 +64,11 @@ These five abstractions form the foundation of functional programming. They repr
 
 I am going to discuss the following:
 
-![Functional Abstractions](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10-31-Functional-Programming-Abstractions-in-Scala/overral_diagram.png)
+{% include video-summary.html 
+   id="crYhOy18mmQ" 
+   image="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10-31-Functional-Programming-Abstractions-in-Scala/overral_diagram.png"
+   content="This AI-generated conversation explores the functional programming abstractions discussed in this article." 
+%}
 
 ## Semigroup
 
