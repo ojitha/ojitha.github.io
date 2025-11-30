@@ -54,6 +54,12 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 ## Introduction
 Scala's collection library is one of its most powerful features, providing a rich set of data structures and operations for working with sequences, sets, and maps. The collections are designed to be **easy to use**, **concise**, **safe**, **fast**, and **universal**[^3].
 
+{% include video-summary.html 
+   id="nk1PRdssz-w" 
+   image="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10027-Scala-2-Collections/Scala2Collections.jpg"
+   content="This AI-generated conversation explores the Scala 2 collections in this article." 
+%}
+
 ## Collection Hierarchy
 
 The Scala collections are organized into three main packages[^1]:
@@ -1219,9 +1225,8 @@ combine[List](List(1, 2), List(3, 4))   // List(4, 5, 5, 6) ✅
 
 
     import scala.language.higherKinds
-
-
-​    
+    
+    
     defined trait Monad
     optionMonad: Monad[Option] = ammonite.$sess.cmd2$Helper$$anon$1@7c758c02
     listMonad: Monad[List] = ammonite.$sess.cmd2$Helper$$anon$2@650110e5
@@ -1468,7 +1473,7 @@ Source📝[^6]: Demonstrates folding operations that reduce a collection to a si
   
 - `reduceRight(_ - _)` on `[1,2,3,4,5]`:
   - `(1 - (2 - (3 - (4 - 5))))` = `(1 - (2 - (3 - (-1))))` = `(1 - (2 - 4))` = `(1 - (-2))` = `3`
-
+ 
 **Key Differences from fold**:
 
 | Feature | fold | reduce |
@@ -1742,7 +1747,7 @@ For key function $f: A → K$, elements $x, y$ are in same group if $f(x) = f(y)
 Results in partition: 
 $$
 \{G_k | k \in K\}
-$$
+$$ 
 where $G_k = \{x | f(x) = k\}$
 
 Example: `groupBy(_ % 3)` partitions by remainder mod 3
@@ -2186,7 +2191,6 @@ If $A <: B$, then $F[A] <: F[B]$ (same direction)
 - Reading returns Dogs, which are Animals (safe upcast)
 - No operations try to insert Cats into List (immutability prevents this)
   
-
 Type Hierarchy:
 
 ```
@@ -2527,7 +2531,7 @@ Ranges with step:
 `scala.collection.immutable.Range`
 Create a new range with the `start` and `end` values of this range and
  a new `step`.
-
+ 
 Returns: a new range with a different step
 
 
