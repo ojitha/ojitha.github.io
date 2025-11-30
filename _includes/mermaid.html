@@ -4,6 +4,21 @@
     startOnLoad: true,
     securityLevel: 'loose',
     theme: 'base',
+    logLevel: 'error',
+    // Add error callback
+    mermaid: {
+      callback: function(id) {
+        console.log('Diagram rendered:', id);
+      }
+    },
+    // Catch parse errors
+    parseError: function(err, hash) {
+      console.error('Mermaid Parse Error:', err);
+      console.error('Error details:', hash);
+      // Display error on page
+      document.getElementById('error-display').innerHTML = 
+        `<pre style="color:red">${err.message}\n${err.str}</pre>`;
+    }
    });
 
   mermaid.registerIconPacks([
