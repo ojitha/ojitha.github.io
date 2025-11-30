@@ -2,10 +2,10 @@
 layout: post
 title:  AWS Bedrock Multi-Agent RAG with LangGraph
 date:   2025-08-29
-categories: [AI, AWS]
+categories: [AI, AWS, LangChain, LangGrap, RAG]
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
-typora-copy-images-to: ../assets/images/${filename}
+typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
 <style>
@@ -38,7 +38,7 @@ typora-copy-images-to: ../assets/images/${filename}
         <img src="/assets/images/2025-08-29-BedrockLangGraph/agentic_ai_logo.svg" alt="Scala basics" width="150" height="150">
     </div>
     <div class="text-column">
-<p>This implementation demonstrates building Multi-Agent RAG systems using AWS Bedrock's Amazon Large Language Models (LLMs) integrated with LangGraph for intelligent document processing (IDP). The system implements document relevance grading using Titan Express LLM and integrates Chroma vector database with Amazon Titan embeddings for semantic search, processing articles into optimized chunks for RAG performance. LangGraph's workflow orchestration creates adaptive AI agents that automatically retry and transform queries up to 3 times with sophisticated conditional routing logic based on document relevance scores. The multi-agent architecture utilizes specialized Bedrock models for answer generation, document grading, and query rewriting, creating a production-ready system with LangChain Expression Language (LCEL) integration for seamless component chaining.</p>
+<p>This implementation demonstrates building Multi-Agent RAG systems using AWS Bedrock's Amazon Large Language Models (LLMs) integrated with LangGraph for intelligent document processing (IDP). The system implements document relevance grading using the Titan Express LLM and integrates the Chroma vector database with Amazon Titan embeddings for semantic search, and processes articles into optimised chunks for RAG performance. LangGraph's workflow orchestration creates adaptive AI agents that automatically retry and transform queries up to 3 times with sophisticated conditional routing logic based on document relevance scores. The multi-agent architecture utilises specialised Bedrock models for answer generation, document grading, and query rewriting, creating a production-ready system with LangChain Expression Language (LCEL) integration for seamless component chaining.</p>
     </div>
 </div>
 
@@ -57,7 +57,13 @@ typora-copy-images-to: ../assets/images/${filename}
 
 ## Introduction
 
-AI Agentic framework[^8] LangChain[^1] is for building applications powered by Large Language Models (LLM). According to the LangChain, LangGraph to create Multi AI Agent systems who uses an LLM to decide the control flow of an application: but there is no exact difition. Instead LangChain introduce the different levels of autonomy:
+{% include video-summary.html 
+   id="bwhBkSywNpY" 
+   image="https://raw.githubusercontent.com/ojitha/blog/master/assets/images//2025-08-29-BedrockLangGraph/Self-correcting-multi-AI-Agents.jpg"
+   content="This post covers the AI multi-agent system, which is capable of self-correcting." 
+%}
+
+AI Agentic framework[^8] LangChain[^1] is for building applications powered by Large Language Models (LLM). According to the LangChain, LangGraph aims to create multi AI agent systems that use an LLM to decide the control flow of an application, but there is no exact definition. Instead, LangChain introduce the different levels of autonomy:
 
 ![Autonomy of AI Agents](https://blog.langchain.com/content/images/2024/06/Screenshot-2024-06-28-at-7.33.10-PM.png){:width="50%" height="50%"}
 
@@ -68,13 +74,13 @@ AI Agentic framework[^8] LangChain[^1] is for building applications powered by L
 In the above spectrum, typically LangGraph can be used to develop Agents for the levels 4,5 and 6 where:
 
 - Router: LLM routes inputs into specific downstream workflows.
-- State Machine: LLMs determine whether to continue base on the state.
-- Autonomous: System build tools, remembers them and uses them in future steps.
+- State Machine: LLMs determine whether to continue based on the state.
+- Autonomous: System builds tools, remembers them and uses them in future steps.
 
-> Router level is high application reliability but at autonomus level the lowest application reliability.
+> Router level is high application reliability, but at the autonomous level, the lowest application reliability.
 {:.yellow}
 
-I demonstrates how to build sophisticated Multi-Agent RAG (Retrieval Augmented Generation) systems using AWS Bedrock's Amazon Titan and Nova Pro models integrated with LangGraph for IDP (intelligent document processing). The system implements advanced document relevance grading using Amazon Titan Express LLM with structured outputs and Pydantic models, enabling intelligent filtering of retrieved documents based on semantic similarity and contextual relevance to user queries. 
+I demonstrate how to build sophisticated Multi-Agent RAG (Retrieval Augmented Generation) systems using AWS Bedrock's Amazon Titan and Nova Pro models integrated with LangGraph for IDP (intelligent document processing). The system implements advanced document relevance grading using Amazon Titan Express LLM with structured outputs and Pydantic models, enabling intelligent filtering of retrieved documents based on semantic similarity and contextual relevance to user queries. 
 
 AWS CLI command to list Bedrock models:
 
