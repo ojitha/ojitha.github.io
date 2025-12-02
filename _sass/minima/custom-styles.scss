@@ -304,29 +304,63 @@
 /* Reusable Image and Text Column Layout */
 .image-text-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: stretch;
   gap: 20px;
-  align-items: center;
   margin-bottom: 20px;
+  width: 100%;
+  position: relative;
 
-      .image-column {
-        flex: 1;
-        min-width: 250px;
-        display: flex;
-        flex-direction: column;
-        /* Important: allows the flex item to shrink below its content size, 
-           preventing the image from forcing the row height. */
-        min-height: 0; 
-        
-        img {
-          width: 100%;
-          height: 100%; /* Fill the column height (determined by text) */
-          object-fit: cover;
-        }
-      }
+  .image-column {
+    flex: 1; /* Equal width */
+    min-width: 0;
+    position: relative;
+    overflow: hidden; /* Clean edges */
+    
+    img {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain;
+      object-position: center;
+      z-index: 1;
+    }
+  }
+  
   .text-column {
-    flex: 1;
-    min-width: 250px;
+    flex: 1; /* Equal width */
+    min-width: 0;
     box-sizing: border-box;
+  }
+
+  /* Mobile Layout */
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+    
+    .image-column {
+      width: 100%;
+      height: auto;
+      flex: none;
+      position: static;
+      margin-bottom: 10px;
+      overflow: visible;
+      
+      img {
+        position: static;
+        width: 100% !important;
+        height: auto !important;
+        max-height: 400px;
+        object-fit: contain;
+      }
+    }
+    
+    .text-column {
+      width: 100%;
+      flex: none;
+    }
   }
 }

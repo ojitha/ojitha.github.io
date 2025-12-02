@@ -1,8 +1,0 @@
-<div class="image-text-container">
-    <div class="image-column">
-        <img src="{{ include.src }}" alt="{{ include.alt }}" width="{{ include.width | default: '150' }}" height="{{ include.height | default: '150' }}">
-    </div>
-    <div class="text-column">
-        {{ include.text | markdownify }}
-    </div>
-</div>
