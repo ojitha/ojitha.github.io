@@ -309,18 +309,21 @@
   align-items: center;
   margin-bottom: 20px;
 
-  .image-column {
-    flex: 1;
-    min-width: 250px;
-    box-sizing: border-box;
-
-    img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-  }
-
+      .image-column {
+        flex: 1;
+        min-width: 250px;
+        display: flex;
+        flex-direction: column;
+        /* Important: allows the flex item to shrink below its content size, 
+           preventing the image from forcing the row height. */
+        min-height: 0; 
+        
+        img {
+          width: 100%;
+          height: 100%; /* Fill the column height (determined by text) */
+          object-fit: cover;
+        }
+      }
   .text-column {
     flex: 1;
     min-width: 250px;

@@ -9,7 +9,6 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-
 {% capture intro_text %}
 Comprehensive technical guide to the Apache Spark Dataset API, defining it as a distributed collection that provides **type safety** while benefiting from the performance optimisations of the **Catalyst Optimiser**. It explains key internal mechanisms, such as **Encoders**, which manage the serialisation between domain-specific JVM objects and Spark’s internal binary format, using the MovieLens dataset to illustrate conceptual data entities. The text analyses fundamental transformations, including the functional **narrow transformations** like `map` and `flatMap`, and contrasts the standard, untyped `join` with the **type-safe** `joinWith` operation. Furthermore, the guide highlights significant performance considerations for wide transformations, noting that **groupByKey** requires a full data **shuffle** and lacks the map-side combine optimisation available in the standard DataFrame `groupBy`. Finally, the documentation scrutinises a physical query plan to detail how **Adaptive Query Execution (AQE)** dynamically optimises resource usage by adjusting partition sizes based on runtime statistics.
 {% endcapture %}
@@ -1861,16 +1860,16 @@ tagsDS.groupByKey(x => x.movieId).count().explain("formatted")
 
 
 ​    
-    (1) Scan csv 
-    Output [4]: [userId#426, movieId#427, tag#428, timestamp#429]
-    Batched: false
-    Location: InMemoryFileIndex [file:/home/jovyan/work/blogs/ml-latest-small/tags.csv]
-    ReadSchema: struct<userId:int,movieId:int,tag:string,timestamp:int>
-    
-    (2) AppendColumns
-    Input [4]: [userId#426, movieId#427, tag#428, timestamp#429]
-    Arguments: ammonite.$sess.cmd46$Helper$$Lambda$6831/1178710023@68254431, newInstance(class ammonite.$sess.cmd34$Helper$Tag), [input[0, int, false] AS value#550]
-    
+​    (1) Scan csv 
+​    Output [4]: [userId#426, movieId#427, tag#428, timestamp#429]
+​    Batched: false
+​    Location: InMemoryFileIndex [file:/home/jovyan/work/blogs/ml-latest-small/tags.csv]
+​    ReadSchema: struct<userId:int,movieId:int,tag:string,timestamp:int>
+​    
+​    (2) AppendColumns
+​    Input [4]: [userId#426, movieId#427, tag#428, timestamp#429]
+​    Arguments: ammonite.$sess.cmd46$Helper$$Lambda$6831/1178710023@68254431, newInstance(class ammonite.$sess.cmd34$Helper$Tag), [input[0, int, false] AS value#550]
+​    
     (3) Project
     Output [1]: [value#550]
     Input [5]: [userId#426, movieId#427, tag#428, timestamp#429, value#550]
@@ -2247,6 +2246,7 @@ The shuffle dependency is caused by `groupByKey(_.movieId)`.
     - After: All ratings for movieId=1 must be on a single partition
     - This requires moving data across the network between executors
   3. Stage Boundary: Spark creates a new stage to perform the aggregation after the shuffle
+
     completes
 
   The Flow:
@@ -2371,7 +2371,7 @@ val ratingStats = ratingsDS
 
 
 ​    
-    ratingStats: DataFrame = [movieId: int, Count: bigint ... 3 more fields]
+​    ratingStats: DataFrame = [movieId: int, Count: bigint ... 3 more fields]
 
 
 
