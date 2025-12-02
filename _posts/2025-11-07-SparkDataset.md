@@ -10,52 +10,14 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
 
-<style>
-/* --- UPDATED CSS --- */
-/* Styles for the two-column layout */
-.image-text-container {
-    display: flex;        /* Enables flexbox */
-    flex-wrap: wrap;      /* Allows columns to stack on small screens */
-    gap: 5px;            /* Space between the image and text */
-    align-items: center;  /* Vertically centers content in columns */
-    margin-bottom: 5px;  /* Space below this section */
-    border: 0px solid #ddd; /* Optional: adds a border around the whole card */
-    padding: 5px;        /* Optional: adds spacing inside the container */
-    border-radius: 8px;   /* Optional: rounded corners */
-}
-
-.image-column {
-    flex: 1;              /* Allows this column to grow */
-    min-width: 150px;     /* Minimum width for the image column before stacking */
-    max-width: 40%;       /* Maximum width for the image column */
-    box-sizing: border-box; 
-}
-
-/* NEW RULE: This ensures your Spark JPG fits inside the column */
-.image-column img {
-    width: 100%;          /* Forces image to fit the container width */
-    height: auto;         /* Maintains aspect ratio */
-    display: block;       /* Removes extra space below the image */
-    border-radius: 4px;   /* Optional: slight rounding on the image */
-}
-
-.text-column {
-    flex: 2;              /* Allows this column to grow twice as much as image-column */
-    min-width: 300px;     /* Minimum width for the text column before stacking */
-    box-sizing: border-box;
-}
-</style>
-
-<div class="image-text-container">
-    <div class="image-column">
-        <img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/DatasetAPI.jpg" alt="Scala Functors" width="150" height="150">
-    </div>
-    <div class="text-column">
+{% capture intro_text %}
 <p> Comprehensive technical guide to the Apache Spark Dataset API, defining it as a distributed collection that provides <b>type safety</b> while benefiting from the performance optimisations of the <b>Catalyst Optimiser</b>. It explains key internal mechanisms, such as <b>Encoders</b>, which manage the serialisation between domain-specific JVM objects and Spark’s internal binary format, using the MovieLens dataset to illustrate conceptual data entities. The text analyses fundamental transformations, including the functional <b>narrow transformations</b> like `map` and `flatMap`, and contrasts the standard, untyped `join` with the <b>type-safe</b> `joinWith` operation. Furthermore, the guide highlights significant performance considerations for wide transformations, noting that <b>groupByKey</b> requires a full data <b>shuffle</b> and lacks the map-side combine optimisation available in the standard DataFrame `groupBy`. Finally, the documentation scrutinises a physical query plan to detail how <b>Adaptive Query Execution (AQE)</b> dynamically optimises resource usage by adjusting partition sizes based on runtime statistics.</p>
-    </div>
-</div>
+{% endcapture %}
+
+{% include image-text.html src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/DatasetAPI.jpg" alt="Scala Functors" text=intro_text %}
 
 <!--more-->
+
 
 ------
 

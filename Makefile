@@ -22,6 +22,13 @@ SparkBlogsSources := 2025-11-07-SparkDataset
 md_targets += $(foreach wrd,$(SparkBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(SparkBlogsSources),$(ASSETS_DIR)/$(wrd))
 
+# --- Bedrock Blogs
+BedrockBlogsDir := ../learn-bedrock/blogs
+BedrockBlogsSources := 2025-08-29-BedrockLangGraph
+
+md_targets += $(foreach wrd,$(BedrockBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
+asset_targets += $(foreach wrd,$(BedrockBlogsSources),$(ASSETS_DIR)/$(wrd))
+
 all: $(md_targets) $(asset_targets)
 
 # Directory creation rule
@@ -57,8 +64,11 @@ endef
 $(foreach element,$(Scala2BlogsSources),$(eval $(call md-copy,$(element),$(Scala2BlogsDir))))
 $(foreach element,$(Scala2BlogsSources),$(eval $(call assets-copy,$(element),$(Scala2BlogsDir))))
 
-# Generate the rules for Scala 2 posts
+# Generate the rules for Spark posts
 $(foreach element,$(SparkBlogsSources),$(eval $(call md-copy,$(element),$(SparkBlogsDir))))
 $(foreach element,$(SparkBlogsSources),$(eval $(call assets-copy,$(element),$(SparkBlogsDir))))
 
+# Generate the rules for Bedrock posts
+$(foreach element,$(BedrockBlogsSources),$(eval $(call md-copy,$(element),$(BedrockBlogsDir))))
+$(foreach element,$(BedrockBlogsSources),$(eval $(call assets-copy,$(element),$(BedrockBlogsDir))))
 .PHONY: all
