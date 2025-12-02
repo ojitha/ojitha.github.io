@@ -36,7 +36,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 
 <div class="image-text-container">
     <div class="image-column">
-        <img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10027-Scala-2-Collections/scala-collections-illustration.svg" alt="Scala Functors" width="150" height="150">
+        <img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/DatasetAPI.jpg" alt="Scala Functors" width="150" height="150">
     </div>
     <div class="text-column">
 <p> Comprehensive technical guide to the Apache Spark Dataset API, defining it as a distributed collection that provides <b>type safety</b> while benefiting from the performance optimisations of the <b>Catalyst Optimiser</b>. It explains key internal mechanisms, such as <b>Encoders</b>, which manage the serialisation between domain-specific JVM objects and Spark’s internal binary format, using the MovieLens dataset to illustrate conceptual data entities. The text analyses fundamental transformations, including the functional <b>narrow transformations</b> like `map` and `flatMap`, and contrasts the standard, untyped `join` with the <b>type-safe</b> `joinWith` operation. Furthermore, the guide highlights significant performance considerations for wide transformations, noting that <b>groupByKey</b> requires a full data <b>shuffle</b> and lacks the map-side combine optimisation available in the standard DataFrame `groupBy`. Finally, the documentation scrutinises a physical query plan to detail how <b>Adaptive Query Execution (AQE)</b> dynamically optimises resource usage by adjusting partition sizes based on runtime statistics.</p>
