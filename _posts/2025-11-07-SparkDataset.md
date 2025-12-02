@@ -11,7 +11,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 
 
 {% capture intro_text %}
-<p> Comprehensive technical guide to the Apache Spark Dataset API, defining it as a distributed collection that provides <b>type safety</b> while benefiting from the performance optimisations of the <b>Catalyst Optimiser</b>. It explains key internal mechanisms, such as <b>Encoders</b>, which manage the serialisation between domain-specific JVM objects and Spark’s internal binary format, using the MovieLens dataset to illustrate conceptual data entities. The text analyses fundamental transformations, including the functional <b>narrow transformations</b> like `map` and `flatMap`, and contrasts the standard, untyped `join` with the <b>type-safe</b> `joinWith` operation. Furthermore, the guide highlights significant performance considerations for wide transformations, noting that <b>groupByKey</b> requires a full data <b>shuffle</b> and lacks the map-side combine optimisation available in the standard DataFrame `groupBy`. Finally, the documentation scrutinises a physical query plan to detail how <b>Adaptive Query Execution (AQE)</b> dynamically optimises resource usage by adjusting partition sizes based on runtime statistics.</p>
+Comprehensive technical guide to the Apache Spark Dataset API, defining it as a distributed collection that provides **type safety** while benefiting from the performance optimisations of the **Catalyst Optimiser**. It explains key internal mechanisms, such as **Encoders**, which manage the serialisation between domain-specific JVM objects and Spark’s internal binary format, using the MovieLens dataset to illustrate conceptual data entities. The text analyses fundamental transformations, including the functional **narrow transformations** like `map` and `flatMap`, and contrasts the standard, untyped `join` with the **type-safe** `joinWith` operation. Furthermore, the guide highlights significant performance considerations for wide transformations, noting that **groupByKey** requires a full data **shuffle** and lacks the map-side combine optimisation available in the standard DataFrame `groupBy`. Finally, the documentation scrutinises a physical query plan to detail how **Adaptive Query Execution (AQE)** dynamically optimises resource usage by adjusting partition sizes based on runtime statistics.
 {% endcapture %}
 
 {% include image-text.html src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/DatasetAPI.jpg" alt="Scala Functors" text=intro_text %}
@@ -254,7 +254,7 @@ function cancelStage(stageId) {
     |      4|Waiting to Exhale...|Comedy|Drama|Romance|
     +-------+--------------------+--------------------+
     only showing top 4 rows
-    
+
 
 
 
@@ -336,7 +336,7 @@ dogsDS.show()
     |Liela|  3|
     |Tommy|  5|
     +-----+---+
-    
+
 
 
 ## Dataset Transformations
@@ -387,7 +387,7 @@ moviesDS.map(m => m.title).show(3, truncate=false)
     |Grumpier Old Men (1995)|
     +-----------------------+
     only showing top 3 rows
-    
+
 
 
 
@@ -508,7 +508,7 @@ genres.show(3, truncate=false)
     |3  |Comedy|Romance                             |
     +---+-------------------------------------------+
     only showing top 3 rows
-    
+
 
 
 
@@ -546,7 +546,7 @@ genresDS.show(5)
     |  Fantasy|
     +---------+
     only showing top 5 rows
-    
+
 
 
 
@@ -634,7 +634,7 @@ genreOccurencesDS.show(3)
     |  3|   [Comedy, Romance]|         [1, 1]|
     +---+--------------------+---------------+
     only showing top 3 rows
-    
+
 
 
 
@@ -676,7 +676,7 @@ genreOccurencesDS.flatMap { genreOccurence =>
     |  1|  Fantasy|  1|
     +---+---------+---+
     only showing top 5 rows
-    
+
 
 
 Another simple example:
@@ -762,7 +762,7 @@ words.show(truncate=false)
     |[Australia, is, a, large, continent, and, a, island]|
     |[Sri, Lanka, is, not, a, continent, but, a, island] |
     +----------------------------------------------------+
-    
+
 
 
 
@@ -811,7 +811,7 @@ wordsFlat.show(5, truncate=false)
     |continent|
     +---------+
     only showing top 5 rows
-    
+
 
 
 
@@ -985,7 +985,7 @@ movieRatingsDS.show(5, truncate=false)
     |50     |1     |5.0   |964982931|Usual Suspects, The (1995) |Crime|Mystery|Thriller                     |
     +-------+------+------+---------+---------------------------+-------------------------------------------+
     only showing top 5 rows
-    
+
 
 
 
@@ -1042,7 +1042,7 @@ avgRatingsDS.show(5, truncate = false)
     |673    |2.707547169811321 |
     +-------+------------------+
     only showing top 5 rows
-    
+
 
 
 
@@ -1142,7 +1142,7 @@ avgMovieRatingsDS.show(5, truncate=false)
     |135216 |The Star Wars Holiday Special (1978)|0.5        |
     +-------+------------------------------------+-----------+
     only showing top 5 rows
-    
+
 
 
 ### joinWith Transformation
@@ -1256,7 +1256,7 @@ movieRatingsDS.show(5, truncate=false)
     |{122092, Guy X (2005), Comedy|War}                                            |{122092, 5.0}|
     +------------------------------------------------------------------------------+-------------+
     only showing top 5 rows
-    
+
 
 
 
@@ -1272,7 +1272,7 @@ movieRatingsDS.printSchema()
      |-- _2: struct (nullable = false)
      |    |-- movieId: integer (nullable = true)
      |    |-- avg(rating): double (nullable = true)
-    
+
 
 
 > 💁🏻‍♂️ Important to notice that the return type of the `joinWith` operation is `Dataset`.
@@ -1395,7 +1395,7 @@ movieRatingsDS.map{ case (m, r) =>
     |avg ratings for the PK (2014) is 5.0                                                      |
     +------------------------------------------------------------------------------------------+
     only showing top 10 rows
-    
+
 
 
 Let's join the above `movieRatingsDS` with Tags data:
@@ -1503,7 +1503,7 @@ tagsDS.show(3, truncate=false)
     |2     |60756  |will ferrell   |1445714992|
     +------+-------+---------------+----------+
     only showing top 3 rows
-    
+
 
 
 It is better to create an extensible key and join condition first:
@@ -1552,7 +1552,7 @@ tags4RatingsDS.printSchema()
      |    |-- movieId: integer (nullable = true)
      |    |-- tag: string (nullable = true)
      |    |-- timestamp: integer (nullable = true)
-    
+
 
 
 
@@ -1606,7 +1606,7 @@ tags4RatingsDS.show(3)
     |{1, 6, 4.0, 96498...|null|
     +--------------------+----+
     only showing top 3 rows
-    
+
 
 
 Secondly join the `moviesDS` where `movieId` is a FK for the `tags4RatingsDS`:
@@ -1645,7 +1645,7 @@ tags4RatingsWithMoviesDS.printSchema()
      |    |-- movieId: integer (nullable = true)
      |    |-- title: string (nullable = true)
      |    |-- genres: string (nullable = true)
-    
+
 
 
 ```mermaid
@@ -1817,7 +1817,7 @@ userRatingTagDS.filter(u => u.tag != None).show(truncate=false)
     |18    |Fracture (2007)                |4.5   |courtroom drama  |
     +------+-------------------------------+------+-----------------+
     only showing top 20 rows
-    
+
 
 
 Here the execution plan for the userRatingTagDS:
@@ -1858,8 +1858,9 @@ tagsDS.groupByKey(x => x.movieId).count().explain("formatted")
              +- Project (3)
                 +- AppendColumns (2)
                    +- Scan csv  (1)
-    
-    
+
+
+​    
     (1) Scan csv 
     Output [4]: [userId#426, movieId#427, tag#428, timestamp#429]
     Batched: false
@@ -1895,8 +1896,9 @@ tagsDS.groupByKey(x => x.movieId).count().explain("formatted")
     (7) AdaptiveSparkPlan
     Output [2]: [key#554, count(1)#559L]
     Arguments: isFinalPlan=false
-    
-    
+
+
+​    
 
 
 
@@ -2157,7 +2159,7 @@ ratingsDS.printSchema
      |-- movieId: integer (nullable = true)
      |-- rating: double (nullable = true)
      |-- timestamp: integer (nullable = true)
-    
+
 
 
 
@@ -2218,15 +2220,16 @@ ratingsDS.groupByKey(_.movieId).agg(
     |362|   34|           5.0|           1.0|3.5294117647058822|
     +---+-----+--------------+--------------+------------------+
     only showing top 3 rows
-    
+
 
 
 
 
 
     import org.apache.spark.sql.functions._
-    
-    
+
+
+​    
 
 
 
@@ -2237,13 +2240,14 @@ The shuffle dependency is caused by `groupByKey(_.movieId)`.
   `groupByKey` is a **wide transformation** that requires shuffling because:
 
   1. Data Redistribution Required: Records with the same `movieId` need to be co-located on the same partition
-   for aggregation, but they're initially scattered across multiple partitions
+      for aggregation, but they're initially scattered across multiple partitions
   2. Network Transfer:
+
     - Before: Ratings for movieId=1 might exist on partitions 0, 2, 5, 7, etc.
     - After: All ratings for movieId=1 must be on a single partition
     - This requires moving data across the network between executors
   3. Stage Boundary: Spark creates a new stage to perform the aggregation after the shuffle
-  completes
+    completes
 
   The Flow:
 ![Shuffle Dependency](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/Shuffle_Dependency.jpg)
@@ -2339,7 +2343,7 @@ ratingsDS
     |   2716|  120|
     +-------+-----+
     only showing top 20 rows
-    
+
 
 
 - `agg` applies multiple aggregate functions to grouped data
@@ -2364,8 +2368,9 @@ val ratingStats = ratingsDS
 
 
     import org.apache.spark.sql.functions._
-    
-    
+
+
+​    
     ratingStats: DataFrame = [movieId: int, Count: bigint ... 3 more fields]
 
 
@@ -2431,7 +2436,7 @@ ratingStats.show(3)
     |    362|   34|           5.0|           1.0|3.5294117647058822|
     +-------+-----+--------------+--------------+------------------+
     only showing top 3 rows
-    
+
 
 
 
@@ -2445,7 +2450,7 @@ ratingStats.printSchema()
      |-- maximum rating: double (nullable = true)
      |-- minimum rating: double (nullable = true)
      |-- average rating: double (nullable = true)
-    
+
 
 
 ##### flatMapGroups with Custom Logic
@@ -2514,7 +2519,7 @@ tagsDS
     |   1569|    3|
     +-------+-----+
     only showing top 3 rows
-    
+
 
 
 
@@ -2589,7 +2594,7 @@ tagsDS.groupByKey(_.movieId).flatMapGroups(filterFunny).show()
     |   177| 115617|      very funny|1435523876|
     +------+-------+----------------+----------+
     only showing top 20 rows
-    
+
 
 
 
@@ -2661,7 +2666,7 @@ tagsDS.groupByKey(_.movieId).mapGroups(countTags4Movie).show(3)
     |  3|  2|
     +---+---+
     only showing top 3 rows
-    
+
 
 
 
@@ -2725,7 +2730,7 @@ ratingsDS.groupByKey(_.movieId).mapGroups(findNoOfUserRatings).show(2)
     |  2|110|
     +---+---+
     only showing top 2 rows
-    
+
 
 
 
