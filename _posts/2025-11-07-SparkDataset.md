@@ -10,6 +10,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 excerpt: '<div class="image-text-container"><div class="image-column"><img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/DatasetAPI.jpg" alt="Scala Functors" width="150" height="150" /></div><div class="text-column">Comprehensive technical guide to the Apache Spark Dataset API, defining it as a distributed collection that provides <strong>type safety</strong> while benefiting from the performance optimisations of the <strong>Catalyst Optimiser</strong>. It explains key internal mechanisms, such as <strong>Encoders</strong>, which manage the serialisation between domain-specific JVM objects and Spark’s internal binary format, using the MovieLens dataset to illustrate conceptual data entities. The text analyses fundamental transformations, including the functional <strong>narrow transformations</strong> like <code>map</code> and <code>flatMap</code>, and contrasts the standard, untyped <code>join</code> with the <strong>type-safe</strong> <code>joinWith</code> operation. Furthermore, the guide highlights significant performance considerations for wide transformations, noting that <strong>groupByKey</strong> requires a full data <strong>shuffle</strong> and lacks the map-side combine optimisation available in the standard DataFrame <code>groupBy</code>. Finally, the documentation scrutinises a physical query plan to detail how <strong>Adaptive Query Execution (AQE)</strong> dynamically optimises resource usage by adjusting partition sizes based on runtime statistics.</div></div>'
 ---
 
+
 <!--more-->
 
 
@@ -22,6 +23,13 @@ excerpt: '<div class="image-text-container"><div class="image-column"><img src="
 
 
 ## Introduction
+
+
+{% include video-summary.html 
+   id="H45TYxCEXwM" 
+   image="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/Spark_Dataset_API_using_Scala_1.jpg"
+   content="This AI-generated guide discuss about the Spark API operations in this article." 
+%}
 
 ### What are Datasets?
 
@@ -50,19 +58,6 @@ $$
 $$
 
 Translation: An Encoder for type T provides bidirectional conversion between objects of type T and Spark's internal row representation.
-
-### Mathematical Foundations
-
-Datasets embody key functional programming concepts:
-
-1. **Functor Laws** (for `map`):
-    - Identity: `ds.map(x => x) = ds`
-    - Composition: `ds.map(f).map(g) = ds.map(x => g(f(x)))`
-
-2. **Monad Laws** (for `flatMap`):
-    - Left identity: `Dataset(x).flatMap(f) = f(x)`
-    - Right identity: `ds.flatMap(x => Dataset(x)) = ds`
-    - Associativity: `ds.flatMap(f).flatMap(g) = ds.flatMap(x => f(x).flatMap(g))`
 
 ### Dataset Movie Lens
 
@@ -172,7 +167,7 @@ moviesDS.show(4)
 
 
 <script>
-var comm = Jupyter.notebook.kernel.comm_manager.new_comm('cancel-stage-4ebed3b5-ec40-4b84-9a22-95ad2a268f09', {});
+var comm = Jupyter.notebook.kernel.comm_manager.new_comm('cancel-stage-9ef8cb99-55d0-4021-a918-4ac5a3f1d52b', {});
 
 function cancelStage(stageId) {
   console.log('Cancelling stage ' + stageId);
@@ -248,7 +243,7 @@ function cancelStage(stageId) {
     |      4|Waiting to Exhale...|Comedy|Drama|Romance|
     +-------+--------------------+--------------------+
     only showing top 4 rows
-
+    
 
 
 
@@ -330,7 +325,7 @@ dogsDS.show()
     |Liela|  3|
     |Tommy|  5|
     +-----+---+
-
+    
 
 
 ## Dataset Transformations
@@ -381,7 +376,7 @@ moviesDS.map(m => m.title).show(3, truncate=false)
     |Grumpier Old Men (1995)|
     +-----------------------+
     only showing top 3 rows
-
+    
 
 
 
@@ -411,7 +406,7 @@ moviesDS.map(extractMovieInfoAnonymousFun)
 
 
 
-    extractMovieInfoAnonymousFun: Movie => (String, String) = ammonite.$sess.cmd10$Helper$$Lambda$5836/448789155@51e2cac0
+    extractMovieInfoAnonymousFun: Movie => (String, String) = ammonite.$sess.cmd10$Helper$$Lambda$5747/1027215581@37ee5f46
     res10_1: Dataset[(String, String)] = [_1: string, _2: string]
 
 
@@ -502,7 +497,7 @@ genres.show(3, truncate=false)
     |3  |Comedy|Romance                             |
     +---+-------------------------------------------+
     only showing top 3 rows
-
+    
 
 
 
@@ -540,7 +535,7 @@ genresDS.show(5)
     |  Fantasy|
     +---------+
     only showing top 5 rows
-
+    
 
 
 
@@ -598,7 +593,7 @@ val genreOccurencesDS: Dataset[GenreOccurences] = moviesDS.map(GenreOccurences.f
 
 
 ```scala
-genreOccurencesDS.show(3)
+genreOccurencesDS.show(3, truncate=false)
 ```
 
 
@@ -620,15 +615,15 @@ genreOccurencesDS.show(3)
 
 
 
-    +---+--------------------+---------------+
-    | id|               words|    occurrences|
-    +---+--------------------+---------------+
-    |  1|[Adventure, Anima...|[1, 1, 1, 1, 1]|
-    |  2|[Adventure, Child...|      [1, 1, 1]|
-    |  3|   [Comedy, Romance]|         [1, 1]|
-    +---+--------------------+---------------+
+    +---+-------------------------------------------------+---------------+
+    |id |words                                            |occurrences    |
+    +---+-------------------------------------------------+---------------+
+    |1  |[Adventure, Animation, Children, Comedy, Fantasy]|[1, 1, 1, 1, 1]|
+    |2  |[Adventure, Children, Fantasy]                   |[1, 1, 1]      |
+    |3  |[Comedy, Romance]                                |[1, 1]         |
+    +---+-------------------------------------------------+---------------+
     only showing top 3 rows
-
+    
 
 
 
@@ -638,7 +633,7 @@ genreOccurencesDS.flatMap { genreOccurence =>
         (genreOccurence.id, word, numOccured)
         
     }
-}.show(5)
+}.show(10, truncate=false)
 ```
 
 
@@ -661,16 +656,21 @@ genreOccurencesDS.flatMap { genreOccurence =>
 
 
     +---+---------+---+
-    | _1|       _2| _3|
+    |_1 |_2       |_3 |
     +---+---------+---+
-    |  1|Adventure|  1|
-    |  1|Animation|  1|
-    |  1| Children|  1|
-    |  1|   Comedy|  1|
-    |  1|  Fantasy|  1|
+    |1  |Adventure|1  |
+    |1  |Animation|1  |
+    |1  |Children |1  |
+    |1  |Comedy   |1  |
+    |1  |Fantasy  |1  |
+    |2  |Adventure|1  |
+    |2  |Children |1  |
+    |2  |Fantasy  |1  |
+    |3  |Comedy   |1  |
+    |3  |Romance  |1  |
     +---+---------+---+
-    only showing top 5 rows
-
+    only showing top 10 rows
+    
 
 
 Another simple example:
@@ -693,7 +693,7 @@ Create a sample Dataset[^2]:
 ```scala
 val sentences = Seq(
     Sentence(1, "Australia is a large continent and a island"),
-    Sentence(2, "Sri Lanka is not a continent but a island"),
+    Sentence(2, "Sri Lanka is not a continent but an island"),
 ).toDS
 ```
 
@@ -754,9 +754,9 @@ words.show(truncate=false)
     |value                                               |
     +----------------------------------------------------+
     |[Australia, is, a, large, continent, and, a, island]|
-    |[Sri, Lanka, is, not, a, continent, but, a, island] |
+    |[Sri, Lanka, is, not, a, continent, but, an, island]|
     +----------------------------------------------------+
-
+    
 
 
 
@@ -768,18 +768,37 @@ words.show(truncate=false)
 
 As shown above, after splitting, the data is stored as an `Array` of `String`s.
 
-if you use the `flatmap`:
+if you use the `flatmap` instead of `map`:
 
 
 ```scala
 val wordsFlat = sentences.flatMap( s => s.text.split("\\s+"))
-wordsFlat.show(5, truncate=false)
+wordsFlat.show(truncate=false)
 ```
 
 
 <div>
   <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd22.sc:2</span>
   <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(10);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd22.sc:2</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(11);">(kill)</a></span>
 </div>
 <br>
 
@@ -803,9 +822,20 @@ wordsFlat.show(5, truncate=false)
     |a        |
     |large    |
     |continent|
+    |and      |
+    |a        |
+    |island   |
+    |Sri      |
+    |Lanka    |
+    |is       |
+    |not      |
+    |a        |
+    |continent|
+    |but      |
+    |an       |
+    |island   |
     +---------+
-    only showing top 5 rows
-
+    
 
 
 
@@ -813,6 +843,103 @@ wordsFlat.show(5, truncate=false)
 
     wordsFlat: Dataset[String] = [value: string]
 
+
+
+
+```scala
+// When you map a Dataset, the default column name is often just "value".
+// Converting it to a DataFrame with a name makes it easier to work with.
+val wordsDF = words.toDF("word_array")
+```
+
+
+
+
+    wordsDF: DataFrame = [word_array: array<string>]
+
+
+
+
+```scala
+// Explode the column
+import org.apache.spark.sql.functions.{explode}
+val explodedWords = wordsDF.select(explode($"word_array").as("word"))
+```
+
+
+
+
+    import org.apache.spark.sql.functions.{explode}
+    
+    explodedWords: DataFrame = [word: string]
+
+
+
+
+```scala
+explodedWords.show()
+```
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd25.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(12);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd25.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(13);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+    +---------+
+    |     word|
+    +---------+
+    |Australia|
+    |       is|
+    |        a|
+    |    large|
+    |continent|
+    |      and|
+    |        a|
+    |   island|
+    |      Sri|
+    |    Lanka|
+    |       is|
+    |      not|
+    |        a|
+    |continent|
+    |      but|
+    |       an|
+    |   island|
+    +---------+
+    
 
 
 ### join Transformation
@@ -869,8 +996,8 @@ val ratingsDS = spark.read
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd24.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(11);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd27.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(14);">(kill)</a></span>
 </div>
 <br>
 
@@ -888,8 +1015,8 @@ val ratingsDS = spark.read
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd24.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(12);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd27.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(15);">(kill)</a></span>
 </div>
 <br>
 
@@ -934,7 +1061,7 @@ movieRatingsDS.show(5, truncate=false)
 
 <div>
   <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(13);">(kill)</a></span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(16);">(kill)</a></span>
 </div>
 <br>
 
@@ -952,8 +1079,8 @@ movieRatingsDS.show(5, truncate=false)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd26.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(14);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd29.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(17);">(kill)</a></span>
 </div>
 <br>
 
@@ -979,7 +1106,7 @@ movieRatingsDS.show(5, truncate=false)
     |50     |1     |5.0   |964982931|Usual Suspects, The (1995) |Crime|Mystery|Thriller                     |
     +-------+------+------+---------+---------------------------+-------------------------------------------+
     only showing top 5 rows
-
+    
 
 
 
@@ -990,8 +1117,8 @@ avgRatingsDS.show(5, truncate = false)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd27.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(15);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd30.sc:2</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(18);">(kill)</a></span>
 </div>
 <br>
 
@@ -1009,8 +1136,8 @@ avgRatingsDS.show(5, truncate = false)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd27.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(17);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd30.sc:2</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(20);">(kill)</a></span>
 </div>
 <br>
 
@@ -1036,7 +1163,7 @@ avgRatingsDS.show(5, truncate = false)
     |673    |2.707547169811321 |
     +-------+------------------+
     only showing top 5 rows
-
+    
 
 
 
@@ -1072,45 +1199,45 @@ avgMovieRatingsDS.show(5, truncate=false)
 
 <div>
   <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(18);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd29.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(19);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd29.sc:1</span>
   <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(21);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd32.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(22);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd32.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(24);">(kill)</a></span>
 </div>
 <br>
 
@@ -1136,7 +1263,7 @@ avgMovieRatingsDS.show(5, truncate=false)
     |135216 |The Star Wars Holiday Special (1978)|0.5        |
     +-------+------------------------------------+-----------+
     only showing top 5 rows
-
+    
 
 
 ### joinWith Transformation
@@ -1186,45 +1313,45 @@ movieRatingsDS.show(5, truncate=false)
 
 <div>
   <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(22);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd31.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(23);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd31.sc:1</span>
   <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(25);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd34.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(26);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd34.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(28);">(kill)</a></span>
 </div>
 <br>
 
@@ -1250,7 +1377,7 @@ movieRatingsDS.show(5, truncate=false)
     |{122092, Guy X (2005), Comedy|War}                                            |{122092, 5.0}|
     +------------------------------------------------------------------------------+-------------+
     only showing top 5 rows
-
+    
 
 
 
@@ -1266,7 +1393,7 @@ movieRatingsDS.printSchema()
      |-- _2: struct (nullable = false)
      |    |-- movieId: integer (nullable = true)
      |    |-- avg(rating): double (nullable = true)
-
+    
 
 
 > 💁🏻‍♂️ Important to notice that the return type of the `joinWith` operation is `Dataset`.
@@ -1281,45 +1408,7 @@ movieRatingsDS.map{ case (m, r) =>
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(26);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd33.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(27);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd33.sc:2</span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
   <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(29);">(kill)</a></span>
 </div>
 <br>
@@ -1338,8 +1427,8 @@ movieRatingsDS.map{ case (m, r) =>
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd33.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(31);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(30);">(kill)</a></span>
 </div>
 <br>
 
@@ -1357,8 +1446,46 @@ movieRatingsDS.map{ case (m, r) =>
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd33.sc:2</span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(32);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
   <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(34);">(kill)</a></span>
+</div>
+<br>
+
+
+
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+    1 / 1
+  </div>
+  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+
+
+
+<div>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(37);">(kill)</a></span>
 </div>
 <br>
 
@@ -1389,7 +1516,7 @@ movieRatingsDS.map{ case (m, r) =>
     |avg ratings for the PK (2014) is 5.0                                                      |
     +------------------------------------------------------------------------------------------+
     only showing top 10 rows
-
+    
 
 
 Let's join the above `movieRatingsDS` with Tags data:
@@ -1422,8 +1549,8 @@ val tagsDS = spark.read
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd35.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(35);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd38.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(38);">(kill)</a></span>
 </div>
 <br>
 
@@ -1441,8 +1568,8 @@ val tagsDS = spark.read
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd35.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(36);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd38.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(39);">(kill)</a></span>
 </div>
 <br>
 
@@ -1472,8 +1599,8 @@ tagsDS.show(3, truncate=false)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(37);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd39.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(40);">(kill)</a></span>
 </div>
 <br>
 
@@ -1497,7 +1624,7 @@ tagsDS.show(3, truncate=false)
     |2     |60756  |will ferrell   |1445714992|
     +------+-------+---------------+----------+
     only showing top 3 rows
-
+    
 
 
 It is better to create an extensible key and join condition first:
@@ -1546,7 +1673,7 @@ tags4RatingsDS.printSchema()
      |    |-- movieId: integer (nullable = true)
      |    |-- tag: string (nullable = true)
      |    |-- timestamp: integer (nullable = true)
-
+    
 
 
 
@@ -1557,7 +1684,7 @@ tags4RatingsDS.show(3)
 
 <div>
   <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(38);">(kill)</a></span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(41);">(kill)</a></span>
 </div>
 <br>
 
@@ -1575,8 +1702,8 @@ tags4RatingsDS.show(3)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd40.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(39);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd43.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(42);">(kill)</a></span>
 </div>
 <br>
 
@@ -1600,7 +1727,7 @@ tags4RatingsDS.show(3)
     |{1, 6, 4.0, 96498...|null|
     +--------------------+----+
     only showing top 3 rows
-
+    
 
 
 Secondly join the `moviesDS` where `movieId` is a FK for the `tags4RatingsDS`:
@@ -1639,7 +1766,7 @@ tags4RatingsWithMoviesDS.printSchema()
      |    |-- movieId: integer (nullable = true)
      |    |-- title: string (nullable = true)
      |    |-- genres: string (nullable = true)
-
+    
 
 
 ```mermaid
@@ -1732,7 +1859,7 @@ userRatingTagDS.filter(u => u.tag != None).show(truncate=false)
 
 <div>
   <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(40);">(kill)</a></span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(43);">(kill)</a></span>
 </div>
 <br>
 
@@ -1751,7 +1878,7 @@ userRatingTagDS.filter(u => u.tag != None).show(truncate=false)
 
 <div>
   <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(41);">(kill)</a></span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(44);">(kill)</a></span>
 </div>
 <br>
 
@@ -1769,8 +1896,8 @@ userRatingTagDS.filter(u => u.tag != None).show(truncate=false)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd45.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(42);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd48.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(45);">(kill)</a></span>
 </div>
 <br>
 
@@ -1811,7 +1938,7 @@ userRatingTagDS.filter(u => u.tag != None).show(truncate=false)
     |18    |Fracture (2007)                |4.5   |courtroom drama  |
     +------+-------------------------------+------+-----------------+
     only showing top 20 rows
-
+    
 
 
 Here the execution plan for the userRatingTagDS:
@@ -1852,47 +1979,45 @@ tagsDS.groupByKey(x => x.movieId).count().explain("formatted")
              +- Project (3)
                 +- AppendColumns (2)
                    +- Scan csv  (1)
-
-
-​    
+    
+    
     (1) Scan csv 
-    Output [4]: [userId#426, movieId#427, tag#428, timestamp#429]
+    Output [4]: [userId#436, movieId#437, tag#438, timestamp#439]
     Batched: false
     Location: InMemoryFileIndex [file:/home/jovyan/work/blogs/ml-latest-small/tags.csv]
     ReadSchema: struct<userId:int,movieId:int,tag:string,timestamp:int>
     
     (2) AppendColumns
-    Input [4]: [userId#426, movieId#427, tag#428, timestamp#429]
-    Arguments: ammonite.$sess.cmd46$Helper$$Lambda$6831/1178710023@68254431, newInstance(class ammonite.$sess.cmd34$Helper$Tag), [input[0, int, false] AS value#550]
+    Input [4]: [userId#436, movieId#437, tag#438, timestamp#439]
+    Arguments: ammonite.$sess.cmd49$Helper$$Lambda$6797/136197025@26dca8a8, newInstance(class ammonite.$sess.cmd37$Helper$Tag), [input[0, int, false] AS value#560]
     
     (3) Project
-    Output [1]: [value#550]
-    Input [5]: [userId#426, movieId#427, tag#428, timestamp#429, value#550]
+    Output [1]: [value#560]
+    Input [5]: [userId#436, movieId#437, tag#438, timestamp#439, value#560]
     
     (4) HashAggregate
-    Input [1]: [value#550]
-    Keys [1]: [value#550]
+    Input [1]: [value#560]
+    Keys [1]: [value#560]
     Functions [1]: [partial_count(1)]
-    Aggregate Attributes [1]: [count#560L]
-    Results [2]: [value#550, count#561L]
+    Aggregate Attributes [1]: [count#570L]
+    Results [2]: [value#560, count#571L]
     
     (5) Exchange
-    Input [2]: [value#550, count#561L]
-    Arguments: hashpartitioning(value#550, 8), ENSURE_REQUIREMENTS, [plan_id=1198]
+    Input [2]: [value#560, count#571L]
+    Arguments: hashpartitioning(value#560, 8), ENSURE_REQUIREMENTS, [plan_id=1230]
     
     (6) HashAggregate
-    Input [2]: [value#550, count#561L]
-    Keys [1]: [value#550]
+    Input [2]: [value#560, count#571L]
+    Keys [1]: [value#560]
     Functions [1]: [count(1)]
-    Aggregate Attributes [1]: [count(1)#551L]
-    Results [2]: [value#550 AS key#554, count(1)#551L AS count(1)#559L]
+    Aggregate Attributes [1]: [count(1)#561L]
+    Results [2]: [value#560 AS key#564, count(1)#561L AS count(1)#569L]
     
     (7) AdaptiveSparkPlan
-    Output [2]: [key#554, count(1)#559L]
+    Output [2]: [key#564, count(1)#569L]
     Arguments: isFinalPlan=false
-
-
-​    
+    
+    
 
 
 
@@ -1914,8 +2039,8 @@ grouByMoviesDS.collect()
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd48.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(43);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd51.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(46);">(kill)</a></span>
 </div>
 <br>
 
@@ -1933,8 +2058,8 @@ grouByMoviesDS.collect()
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd48.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(45);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd51.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(48);">(kill)</a></span>
 </div>
 <br>
 
@@ -1953,7 +2078,7 @@ grouByMoviesDS.collect()
 
 
 
-    res48: Array[(Int, Long)] = Array(
+    res51: Array[(Int, Long)] = Array(
       (60756, 8L),
       (431, 3L),
       (1569, 3L),
@@ -2153,7 +2278,7 @@ ratingsDS.printSchema
      |-- movieId: integer (nullable = true)
      |-- rating: double (nullable = true)
      |-- timestamp: integer (nullable = true)
-
+    
 
 
 
@@ -2170,8 +2295,8 @@ ratingsDS.groupByKey(_.movieId).agg(
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd50.sc:8</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(46);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd53.sc:8</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(49);">(kill)</a></span>
 </div>
 <br>
 
@@ -2189,8 +2314,8 @@ ratingsDS.groupByKey(_.movieId).agg(
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd50.sc:8</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(48);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd53.sc:8</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(51);">(kill)</a></span>
 </div>
 <br>
 
@@ -2214,16 +2339,15 @@ ratingsDS.groupByKey(_.movieId).agg(
     |362|   34|           5.0|           1.0|3.5294117647058822|
     +---+-----+--------------+--------------+------------------+
     only showing top 3 rows
-
+    
 
 
 
 
 
     import org.apache.spark.sql.functions._
-
-
-​    
+    
+    
 
 
 
@@ -2234,14 +2358,13 @@ The shuffle dependency is caused by `groupByKey(_.movieId)`.
   `groupByKey` is a **wide transformation** that requires shuffling because:
 
   1. Data Redistribution Required: Records with the same `movieId` need to be co-located on the same partition
-      for aggregation, but they're initially scattered across multiple partitions
+   for aggregation, but they're initially scattered across multiple partitions
   2. Network Transfer:
-
     - Before: Ratings for movieId=1 might exist on partitions 0, 2, 5, 7, etc.
     - After: All ratings for movieId=1 must be on a single partition
     - This requires moving data across the network between executors
   3. Stage Boundary: Spark creates a new stage to perform the aggregation after the shuffle
-    completes
+  completes
 
   The Flow:
 ![Shuffle Dependency](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/Shuffle_Dependency.jpg)
@@ -2276,8 +2399,8 @@ ratingsDS
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd51.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(49);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd54.sc:2</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(52);">(kill)</a></span>
 </div>
 <br>
 
@@ -2295,8 +2418,8 @@ ratingsDS
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd51.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(51);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd54.sc:2</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(54);">(kill)</a></span>
 </div>
 <br>
 
@@ -2337,7 +2460,7 @@ ratingsDS
     |   2716|  120|
     +-------+-----+
     only showing top 20 rows
-
+    
 
 
 - `agg` applies multiple aggregate functions to grouped data
@@ -2362,9 +2485,8 @@ val ratingStats = ratingsDS
 
 
     import org.apache.spark.sql.functions._
-
-
-​    
+    
+    
     ratingStats: DataFrame = [movieId: int, Count: bigint ... 3 more fields]
 
 
@@ -2386,8 +2508,8 @@ ratingStats.show(3)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd53.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(52);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd56.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(55);">(kill)</a></span>
 </div>
 <br>
 
@@ -2405,8 +2527,8 @@ ratingStats.show(3)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd53.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(54);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd56.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(57);">(kill)</a></span>
 </div>
 <br>
 
@@ -2430,7 +2552,7 @@ ratingStats.show(3)
     |    362|   34|           5.0|           1.0|3.5294117647058822|
     +-------+-----+--------------+--------------+------------------+
     only showing top 3 rows
-
+    
 
 
 
@@ -2444,7 +2566,7 @@ ratingStats.printSchema()
      |-- maximum rating: double (nullable = true)
      |-- minimum rating: double (nullable = true)
      |-- average rating: double (nullable = true)
-
+    
 
 
 ##### flatMapGroups with Custom Logic
@@ -2469,8 +2591,8 @@ tagsDS
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd55.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(55);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd58.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(58);">(kill)</a></span>
 </div>
 <br>
 
@@ -2488,8 +2610,8 @@ tagsDS
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd55.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(57);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd58.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(60);">(kill)</a></span>
 </div>
 <br>
 
@@ -2513,7 +2635,7 @@ tagsDS
     |   1569|    3|
     +-------+-----+
     only showing top 3 rows
-
+    
 
 
 
@@ -2527,8 +2649,8 @@ tagsDS.groupByKey(_.movieId).flatMapGroups(filterFunny).show()
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd56.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(58);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd59.sc:5</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(61);">(kill)</a></span>
 </div>
 <br>
 
@@ -2546,8 +2668,8 @@ tagsDS.groupByKey(_.movieId).flatMapGroups(filterFunny).show()
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd56.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(60);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd59.sc:5</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(63);">(kill)</a></span>
 </div>
 <br>
 
@@ -2588,7 +2710,7 @@ tagsDS.groupByKey(_.movieId).flatMapGroups(filterFunny).show()
     |   177| 115617|      very funny|1435523876|
     +------+-------+----------------+----------+
     only showing top 20 rows
-
+    
 
 
 
@@ -2616,8 +2738,8 @@ tagsDS.groupByKey(_.movieId).mapGroups(countTags4Movie).show(3)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd57.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(61);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd60.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(64);">(kill)</a></span>
 </div>
 <br>
 
@@ -2635,8 +2757,8 @@ tagsDS.groupByKey(_.movieId).mapGroups(countTags4Movie).show(3)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd57.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(63);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd60.sc:4</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(66);">(kill)</a></span>
 </div>
 <br>
 
@@ -2660,7 +2782,7 @@ tagsDS.groupByKey(_.movieId).mapGroups(countTags4Movie).show(3)
     |  3|  2|
     +---+---+
     only showing top 3 rows
-
+    
 
 
 
@@ -2681,8 +2803,8 @@ ratingsDS.groupByKey(_.movieId).mapGroups(findNoOfUserRatings).show(2)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd58.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(64);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd61.sc:5</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(67);">(kill)</a></span>
 </div>
 <br>
 
@@ -2700,8 +2822,8 @@ ratingsDS.groupByKey(_.movieId).mapGroups(findNoOfUserRatings).show(2)
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd58.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(66);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd61.sc:5</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(69);">(kill)</a></span>
 </div>
 <br>
 
@@ -2724,7 +2846,7 @@ ratingsDS.groupByKey(_.movieId).mapGroups(findNoOfUserRatings).show(2)
     |  2|110|
     +---+---+
     only showing top 2 rows
-
+    
 
 
 
@@ -2787,7 +2909,7 @@ val totalsByProduct: Dataset[(String, Sale)] = sales
 
 
     defined function sumSales
-    totalsByProduct: Dataset[(String, Sale)] = [key: string, ReduceAggregator(ammonite.$sess.cmd59$Helper$Sale): struct<product: string, amount: decimal(38,0)>]
+    totalsByProduct: Dataset[(String, Sale)] = [key: string, ReduceAggregator(ammonite.$sess.cmd62$Helper$Sale): struct<product: string, amount: decimal(38,0)>]
 
 
 
@@ -2800,8 +2922,8 @@ for ((key, sale) <- totalsByProduct.collect()) {
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd61.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(67);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd64.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(70);">(kill)</a></span>
 </div>
 <br>
 
@@ -2819,8 +2941,8 @@ for ((key, sale) <- totalsByProduct.collect()) {
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd61.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(69);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd64.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(72);">(kill)</a></span>
 </div>
 <br>
 
@@ -2849,8 +2971,8 @@ s"total sales of the ${totSales.product} is ${totSales.amount}"
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">first at cmd62.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(70);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">first at cmd65.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(73);">(kill)</a></span>
 </div>
 <br>
 
@@ -2868,8 +2990,8 @@ s"total sales of the ${totSales.product} is ${totSales.amount}"
 
 
 <div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">first at cmd62.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(72);">(kill)</a></span>
+  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">first at cmd65.sc:1</span>
+  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(75);">(kill)</a></span>
 </div>
 <br>
 
@@ -2889,9 +3011,42 @@ s"total sales of the ${totSales.product} is ${totSales.amount}"
 
 
     totSales: Sale = Sale(product = "Car", amount = 30)
-    res62_1: String = "total sales of the Car is 30"
+    res65_1: String = "total sales of the Car is 30"
 
 
+
+Summary:
+
+In this notebook, used
+- Scala
+- Spark 3.3.1
+
+
+```scala
+scala.util.Properties.versionString
+
+```
+
+
+
+
+    res66: String = "version 2.13.10"
+
+
+
+Stop the notebook
+
+
+```scala
+spark.stop()
+```
+
+![Spark Dataset API Summary](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/Spark_Dataset_API_using_Scala.jpg){:target="_blank"}
+
+
+```scala
+
+```
 
 [^1]: Chambers, B., Zaharia, M., 2018. Spark: The Definitive Guide. Ch. 11: "Datasets"
 
@@ -2910,21 +3065,3 @@ s"total sales of the ${totSales.product} is ${totSales.amount}"
 {:gtxt: .message color="green"}
 {:ytxt: .message color="yellow"}
 {:rtxt: .message color="red"}
-
-
-```scala
-scala.util.Properties.versionString
-
-```
-
-
-
-
-    res63: String = "version 2.13.10"
-
-
-
-
-```scala
-spark.stop()
-```
