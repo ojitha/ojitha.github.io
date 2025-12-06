@@ -166,71 +166,14 @@ moviesDS.show(4)
 ```
 
 
-<script>
-var comm = Jupyter.notebook.kernel.comm_manager.new_comm('cancel-stage-9ef8cb99-55d0-4021-a918-4ac5a3f1d52b', {});
-
-function cancelStage(stageId) {
-  console.log('Cancelling stage ' + stageId);
-  comm.send({ 'stageId': stageId });
-}
-</script>
 
 
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd3.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(0);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd3.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(1);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd3.sc:8</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(2);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -279,15 +222,13 @@ val intDS : Dataset[Int] = Seq(1,2,3).toDS()
 
 
     import org.apache.spark.sql.Dataset
-    // for primitive types
-    
     intDS: Dataset[Int] = [value: int]
 
 
 
 
 ```scala
-val tupleDS: Dataset[(String, Int)] = Seq(("a",1), ("b", 2)).toDS
+val tupleDS: Dataset[(String, Int)] = Seq(("a",1), ("b", 2)).toDS()
 ```
 
 
@@ -302,14 +243,23 @@ Using Case classes:
 
 ```scala
 case class Dog(name: String, age: Int)
-
-val dogsDS: Dataset[Dog] = Seq(Dog("Liela",3), Dog("Tommy", 5)).toDS
 ```
 
 
 
 
     defined class Dog
+
+
+
+
+```scala
+val dogsDS: Dataset[Dog] = Seq(Dog("Liela",3), Dog("Tommy", 5)).toDS()
+```
+
+
+
+
     dogsDS: Dataset[Dog] = [name: string, age: int]
 
 
@@ -350,21 +300,6 @@ moviesDS.map(m => m.title).show(3, truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd8.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(3);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -389,7 +324,7 @@ moviesDS.map(extractMovieInfoFun)
 
 
     defined function extractMovieInfoFun
-    res9_1: Dataset[(String, String)] = [_1: string, _2: string]
+    res11_1: Dataset[(String, String)] = [_1: string, _2: string]
 
 
 
@@ -406,8 +341,8 @@ moviesDS.map(extractMovieInfoAnonymousFun)
 
 
 
-    extractMovieInfoAnonymousFun: Movie => (String, String) = ammonite.$sess.cmd10$Helper$$Lambda$5747/1027215581@37ee5f46
-    res10_1: Dataset[(String, String)] = [_1: string, _2: string]
+    extractMovieInfoAnonymousFun: Movie => (String, String) = ammonite.$sess.cmd12$Helper$$Lambda$6705/0x00007f74dd5ef838@1c5f48b8
+    res12_1: Dataset[(String, String)] = [_1: string, _2: string]
 
 
 
@@ -421,7 +356,7 @@ moviesDS.map(movie => (movie.title, movie.genres))
 
 
 
-    res11: Dataset[(String, String)] = [_1: string, _2: string]
+    res13: Dataset[(String, String)] = [_1: string, _2: string]
 
 
 
@@ -452,6 +387,17 @@ Translation: The size of the flatMapped Dataset equals the sum of results from e
 
 ```scala
 case class MovieGenres (id: Int, genres: String)
+```
+
+
+
+
+    defined class MovieGenres
+
+
+
+
+```scala
 val genres = moviesDS.map { movie =>
     MovieGenres(movie.movieId, movie.genres)
 }
@@ -460,7 +406,6 @@ val genres = moviesDS.map { movie =>
 
 
 
-    defined class MovieGenres
     genres: Dataset[MovieGenres] = [id: int, genres: string]
 
 
@@ -471,21 +416,6 @@ genres.show(3, truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd13.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(4);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -507,21 +437,6 @@ genresDS.show(5)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd14.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(5);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -563,7 +478,7 @@ object GenreOccurences {
     val words = text.split("\\|").toSeq
     
     // Count occurrences of each word
-    val wordCounts = words.groupBy(identity).mapValues(_.size).toMap
+    val wordCounts = words.groupBy(identity).view.mapValues(_.size).toMap
     val occurrences = words.map(word => wordCounts(word))
     
     GenreOccurences(id, words, occurrences)
@@ -597,21 +512,6 @@ genreOccurencesDS.show(3, truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd17.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(6);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -637,21 +537,6 @@ genreOccurencesDS.flatMap { genreOccurence =>
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd18.sc:6</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(7);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -694,7 +579,7 @@ Create a sample Dataset[^2]:
 val sentences = Seq(
     Sentence(1, "Australia is a large continent and a island"),
     Sentence(2, "Sri Lanka is not a continent but an island"),
-).toDS
+).toDS()
 ```
 
 
@@ -713,40 +598,10 @@ words.show(truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd21.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(8);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd21.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(9);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -777,40 +632,10 @@ wordsFlat.show(truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd22.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(10);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd22.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(11);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -870,7 +695,6 @@ val explodedWords = wordsDF.select(explode($"word_array").as("word"))
 
 
     import org.apache.spark.sql.functions.{explode}
-    
     explodedWords: DataFrame = [word: string]
 
 
@@ -881,40 +705,10 @@ explodedWords.show()
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd25.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(12);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd25.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(13);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -995,40 +789,10 @@ val ratingsDS = spark.read
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd27.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(14);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd27.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(15);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1059,40 +823,10 @@ movieRatingsDS.show(5, truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(16);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd29.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(17);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1116,40 +850,10 @@ avgRatingsDS.show(5, truncate = false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd30.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(18);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd30.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(20);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1197,59 +901,14 @@ avgMovieRatingsDS.show(5, truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(21);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd32.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(22);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd32.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(24);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1311,59 +970,14 @@ movieRatingsDS.show(5, truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(25);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd34.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(26);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd34.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(28);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1407,97 +1021,22 @@ movieRatingsDS.map{ case (m, r) =>
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(29);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(30);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(32);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(34);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd36.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(37);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1548,40 +1087,10 @@ val tagsDS = spark.read
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd38.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(38);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">csv at cmd38.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(39);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1598,21 +1107,6 @@ tagsDS.show(3, truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd39.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(40);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1682,49 +1176,19 @@ tags4RatingsDS.show(3)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(41);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd43.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(42);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
     +--------------------+----+
     |                  _1|  _2|
     +--------------------+----+
-    |{1, 1, 4.0, 96498...|null|
-    |{1, 3, 4.0, 96498...|null|
-    |{1, 6, 4.0, 96498...|null|
+    |{1, 1, 4.0, 96498...|NULL|
+    |{1, 3, 4.0, 96498...|NULL|
+    |{1, 6, 4.0, 96498...|NULL|
     +--------------------+----+
     only showing top 3 rows
     
@@ -1857,59 +1321,14 @@ userRatingTagDS.filter(u => u.tag != None).show(truncate=false)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(43);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">$anonfun$withThreadLocalCaptured$1 at FutureTask.java:266</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(44);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd48.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(45);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -1989,7 +1408,7 @@ tagsDS.groupByKey(x => x.movieId).count().explain("formatted")
     
     (2) AppendColumns
     Input [4]: [userId#436, movieId#437, tag#438, timestamp#439]
-    Arguments: ammonite.$sess.cmd49$Helper$$Lambda$6797/136197025@26dca8a8, newInstance(class ammonite.$sess.cmd37$Helper$Tag), [input[0, int, false] AS value#560]
+    Arguments: ammonite.$sess.cmd52$Helper$$Lambda$7770/0x00007f74dd7f6208@46aeebbf, newInstance(class ammonite.$sess.cmd40$Helper$Tag), [input[0, int, false] AS value#560]
     
     (3) Project
     Output [1]: [value#560]
@@ -2004,7 +1423,7 @@ tagsDS.groupByKey(x => x.movieId).count().explain("formatted")
     
     (5) Exchange
     Input [2]: [value#560, count#571L]
-    Arguments: hashpartitioning(value#560, 8), ENSURE_REQUIREMENTS, [plan_id=1230]
+    Arguments: hashpartitioning(value#560, 8), ENSURE_REQUIREMENTS, [plan_id=1270]
     
     (6) HashAggregate
     Input [2]: [value#560, count#571L]
@@ -2038,47 +1457,17 @@ grouByMoviesDS.collect()
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd51.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(46);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd51.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(48);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
 
 
 
-    res51: Array[(Int, Long)] = Array(
+
+
+
+
+    res54: Array[(Int, Long)] = Array(
       (60756, 8L),
       (431, 3L),
       (1569, 3L),
@@ -2270,7 +1659,7 @@ The small shuffle size (36.8 KiB) suggests the partial aggregation was highly ef
 
 
 ```scala
-ratingsDS.printSchema
+ratingsDS.printSchema()
 ```
 
     root
@@ -2294,40 +1683,10 @@ ratingsDS.groupByKey(_.movieId).agg(
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd53.sc:8</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(49);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd53.sc:8</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(51);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2346,8 +1705,6 @@ ratingsDS.groupByKey(_.movieId).agg(
 
 
     import org.apache.spark.sql.functions._
-    
-    
 
 
 
@@ -2398,40 +1755,10 @@ ratingsDS
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd54.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(52);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd54.sc:2</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(54);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2485,8 +1812,6 @@ val ratingStats = ratingsDS
 
 
     import org.apache.spark.sql.functions._
-    
-    
     ratingStats: DataFrame = [movieId: int, Count: bigint ... 3 more fields]
 
 
@@ -2507,40 +1832,10 @@ ratingStats.show(3)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd56.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(55);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd56.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(57);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2590,40 +1885,10 @@ tagsDS
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd58.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(58);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd58.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(60);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2648,40 +1913,10 @@ tagsDS.groupByKey(_.movieId).flatMapGroups(filterFunny).show()
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd59.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(61);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd59.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(63);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2737,40 +1972,10 @@ tagsDS.groupByKey(_.movieId).mapGroups(countTags4Movie).show(3)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd60.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(64);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd60.sc:4</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(66);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2802,40 +2007,10 @@ ratingsDS.groupByKey(_.movieId).mapGroups(findNoOfUserRatings).show(2)
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd61.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(67);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">show at cmd61.sc:5</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(69);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2873,7 +2048,17 @@ for example[^2]:
 
 ```scala
 case class Sale(product: String, amount: BigInt)
+```
 
+
+
+
+    defined class Sale
+
+
+
+
+```scala
 val sales = Seq(
   Sale("Car", 10),
   Sale("Car", 20),
@@ -2881,14 +2066,11 @@ val sales = Seq(
   Sale("Bike", 15),
   Sale("Truck", 7)
 ).toDS()
-
-
 ```
 
 
 
 
-    defined class Sale
     sales: Dataset[Sale] = [product: string, amount: decimal(38,0)]
 
 
@@ -2909,7 +2091,7 @@ val totalsByProduct: Dataset[(String, Sale)] = sales
 
 
     defined function sumSales
-    totalsByProduct: Dataset[(String, Sale)] = [key: string, ReduceAggregator(ammonite.$sess.cmd62$Helper$Sale): struct<product: string, amount: decimal(38,0)>]
+    totalsByProduct: Dataset[(String, Sale)] = [key: string, ReduceAggregator(ammonite.$sess.cmd66$Helper$Sale): struct<product: string, amount: decimal(38,0)>]
 
 
 
@@ -2921,40 +2103,10 @@ for ((key, sale) <- totalsByProduct.collect()) {
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd64.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(70);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    5 / 5
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">collect at cmd64.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(72);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -2970,40 +2122,10 @@ s"total sales of the ${totSales.product} is ${totSales.amount}"
 ```
 
 
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">first at cmd65.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(73);">(kill)</a></span>
-</div>
-<br>
 
 
 
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    5 / 5
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-
-
-
-<div>
-  <span style="float: left; word-wrap: normal; white-space: nowrap; text-align: center">first at cmd65.sc:1</span>
-  <span style="float: right; word-wrap: normal; white-space: nowrap; text-align: center"><a href="#" onclick="cancelStage(75);">(kill)</a></span>
-</div>
-<br>
-
-
-
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="background-color: blue; width: 100%; word-wrap: normal; white-space: nowrap; text-align: center; color: white" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-    1 / 1
-  </div>
-  <div class="progress-bar" role="progressbar" style="background-color: red; width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
 
 
 
@@ -3011,7 +2133,7 @@ s"total sales of the ${totSales.product} is ${totSales.amount}"
 
 
     totSales: Sale = Sale(product = "Car", amount = 30)
-    res65_1: String = "total sales of the Car is 30"
+    res70_1: String = "total sales of the Car is 30"
 
 
 
@@ -3023,14 +2145,15 @@ In this notebook, used
 
 
 ```scala
-scala.util.Properties.versionString
-
+scala.util.Properties.javaVersion
+scala.util.Properties.versionMsg
 ```
 
 
 
 
-    res66: String = "version 2.13.10"
+    res73_0: String = "17.0.17"
+    res73_1: String = "Scala library version 2.13.17 -- Copyright 2002-2025, LAMP/EPFL and Lightbend, Inc. dba Akka"
 
 
 
