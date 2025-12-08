@@ -65,7 +65,7 @@ Think of it like this: If you have a gift box (context) with a toy inside, a Fun
 
 ### Category Theory Basics
 
-Before understanding Functors, we need to understand **categories**. Don't worry—I'll explain all the mathematical notation!
+Before understanding Functors, we need to understand **categories**. 
 
 #### What is a Category?
 
@@ -84,6 +84,49 @@ graph LR
     style B fill:#e1f5ff
     style C fill:#e1f5ff
 ```
+In Category Theory, we talk about "Categories," "Objects," and "Morphisms" (arrows). In Scala 2, we translate these concepts directly into programming constructs:
+
+1.  **Objects** become **Types** (e.g., `Int`, `String`, `User`).
+2.  **Morphisms** become **Functions** (e.g., `Int => String`).
+3.  **Composition** is the ability to glue functions together.
+
+#### 1. The Category of Scala Types (Composition)
+
+In a category, if you have an arrow from A to B, and an arrow from B to C, you must be able to compose them to get an arrow from A to C.
+
+![Functional Composition](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10-26-Scala2-Functors/FunctionalComposition.jpg){: width="40%" height="40%"}
+
+If $f: A \rightarrow B$ and $g: B \rightarrow C$, then $g \circ f: A \rightarrow C$.
+
+
+
+
+
+```scala
+// Morphism 1: A -> B (Int to Double)
+val intToDouble: Int => Double = i => i.toDouble
+
+// Morphism 2: B -> C (Double to String)
+val doubleToString: Double => String = d => s"Value is $d"
+
+// Composition: A -> C (Int to String)
+// Scala uses 'andThen' or 'compose' to glue these arrows together
+val intToString: Int => String = intToDouble.andThen(doubleToString)
+
+intToString(5)
+// Output: Value is 5.0
+
+```
+
+
+
+
+    intToDouble: Int => Double = ammonite.$sess.cmd0$Helper$$Lambda$1975/0x0000000800ab4040@2d5eeb02
+    doubleToString: Double => String = ammonite.$sess.cmd0$Helper$$Lambda$1976/0x0000000800ab5040@2409f782
+    intToString: Int => String = scala.Function1$$Lambda$740/0x0000000800673040@3b91088
+    res0_3: String = "Value is 5.0"
+
+
 
 **Mathematical Definition**: A category $\mathcal{C}$ consists of:[^1]
 
@@ -115,7 +158,11 @@ graph LR
 
 ## Functor in Category Theory
 
-Now we can define a Functor mathematically!
+A **Functor** is a mapping between categories that preserves structure. Think of a Functor as a **Container** (or Context) that holds a value, where you can apply a function to the value _inside_ without taking it out of the container.
+
+> The tell-tale sign of a Functor in Scala is the `.map` method. `List`, `Option`, and `Future` are all Functors.
+{:.green}
+
 
 ### Formal Definition
 
@@ -165,14 +212,13 @@ For example:
 - `List` is a functor: it maps type `A` to type `List[A]`
 - `Option` is a functor: it maps type `A` to type `Option[A]`
 
----
+
 
 ## Functors in Scala 2
 
 ### The Functor Trait
 
 Here's the Scala 2 definition of a Functor:[^2]
-
 
 
 ```scala

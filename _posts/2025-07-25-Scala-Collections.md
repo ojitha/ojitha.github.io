@@ -688,8 +688,44 @@ s.contains(2)
 
 
 
-> Default set is `HashSet`, but if you need to order, you have to use `TreeSet`.
+Scala's `Set` is a collection that contains no duplicate elements. Like other collections, it comes with a rich set of methods for transformations, querying, and various operations. By default, when you create a `Set` in Scala, you get an immutable `Set`.
 
+Here is an explanation of some of the other useful methods available on `Set`, categorized for clarity.
+
+### 1. Set Operations
+
+These methods perform standard mathematical set operations. They each come in two forms: a symbolic version (like `|`) and an alphabetic version (like `union`).
+
+*   **`union` (or `|`)**: Creates a new set containing all elements from both the original set and the given set.
+*   **`intersect` (or `&`)**: Creates a new set containing only the elements that are present in *both* sets.
+*   **`diff` (or `&~`)**: Creates a new set containing elements from the original set that are *not* in the given set.
+
+
+
+```scala
+val setA = Set(1, 2, 3, 4)
+val setB = Set(3, 4, 5, 6)
+
+// Union: (1, 2, 3, 4, 5, 6)
+val unionSet = setA.union(setB)
+// or using the symbol:
+val unionSetSymbol = setA | setB
+
+// Intersection: (3, 4)
+val intersectSet = setA.intersect(setB)
+// or using the symbol:
+val intersectSetSymbol = setA & setB
+
+// Difference: (1, 2)
+val diffSet = setA.diff(setB)
+// or using the symbol:
+val diffSetSymbol = setA &~ setB
+
+println(s"Union: $unionSet")
+println(s"Intersection: ")
+println(s"Difference: ")
+
+```
 
 ## Map
 

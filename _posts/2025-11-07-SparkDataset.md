@@ -736,6 +736,237 @@ explodedWords.show()
     
 
 
+Another example. If you have two dataframes with the same column, like `address`
+
+
+```scala
+val df1 = Seq(
+  (1, "123 Main St"),
+  (2, "456 Oak Ave"),
+  (3, "789 Pine Rd")
+).toDF("id", "address")
+
+val df2 = Seq(
+  (1, "Unit 4"),
+  (2, "PO Box 99"),
+  (4, "101 Maple Ln")
+).toDF("id", "address")
+```
+
+
+
+
+    df1: DataFrame = [id: int, address: string]
+    df2: DataFrame = [id: int, address: string]
+
+
+
+
+```scala
+df1.show()
+```
+
+    +---+-----------+
+    | id|    address|
+    +---+-----------+
+    |  1|123 Main St|
+    |  2|456 Oak Ave|
+    |  3|789 Pine Rd|
+    +---+-----------+
+    
+
+
+
+```scala
+df2.show()
+```
+
+    +---+------------+
+    | id|     address|
+    +---+------------+
+    |  1|      Unit 4|
+    |  2|   PO Box 99|
+    |  4|101 Maple Ln|
+    +---+------------+
+    
+
+
+Use aliases rather than renaming columns.
+
+
+```scala
+val d1 = df1.alias("d1")
+val d2 = df2.alias("d2")
+```
+
+
+
+
+    d1: Dataset[Row] = [id: int, address: string]
+    d2: Dataset[Row] = [id: int, address: string]
+
+
+
+Carry out the Join and Transformation
+
+
+```scala
+import org.apache.spark.sql.functions.{col, array}
+val resultDF = df1.alias("df1")
+  .join(df2.alias("df2"), Seq("id"), "left")
+  .select(
+    col("id"),
+    array(col("df1.address"), col("df2.address")).as("addresses")
+  )
+```
+
+
+
+
+    import org.apache.spark.sql.functions.{col, array, array_remove, coalesce}
+    resultDF: DataFrame = [id: int, addresses: array<string>]
+
+
+
+
+```scala
+resultDF.show(false)
+```
+
+
+
+
+
+
+
+
+
+    +---+------------------------+
+    |id |addresses               |
+    +---+------------------------+
+    |1  |[123 Main St, Unit 4]   |
+    |2  |[456 Oak Ave, PO Box 99]|
+    |3  |[789 Pine Rd, NULL]     |
+    +---+------------------------+
+    
+
+
+
+```scala
+import org.apache.spark.sql.functions.explode
+resultDF.select(explode($"addresses")).show()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+    +-----------+
+    |        col|
+    +-----------+
+    |123 Main St|
+    |     Unit 4|
+    |456 Oak Ave|
+    |  PO Box 99|
+    |789 Pine Rd|
+    |       NULL|
+    +-----------+
+    
+
+
+
+
+
+    import org.apache.spark.sql.functions.explode
+
+
+
+
+```scala
+resultDF.withColumn("address", explode($"addresses")).drop("addresses").show(false)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+    +---+-----------+
+    |id |address    |
+    +---+-----------+
+    |1  |123 Main St|
+    |1  |Unit 4     |
+    |2  |456 Oak Ave|
+    |2  |PO Box 99  |
+    |3  |789 Pine Rd|
+    +---+-----------+
+    
+
+
+If you want to filter out null values from the array:
+
+
+```scala
+import org.apache.spark.sql.functions.{filter, coalesce}
+
+val resultDF = df1.alias("df1")
+  .join(df2.alias("df2"), Seq("id"), "left")
+  .select(
+    // $"df1.id".as("id"),
+    coalesce($"df1.id", $"df2.id").as("id"),  
+    filter( // filter ---
+        array($"df1.address", $"df2.address"), // array
+        x => x.isNotNull // ---
+    ).as("addresses")
+  )
+```
+
+
+
+
+    import org.apache.spark.sql.functions.{filter, coalesce}
+    resultDF: DataFrame = [id: int, addresses: array<string>]
+
+
+
+
+```scala
+resultDF.show(false)
+```
+
+
+
+
+
+
+
+
+
+    +---+------------------------+
+    |id |addresses               |
+    +---+------------------------+
+    |1  |[123 Main St, Unit 4]   |
+    |2  |[456 Oak Ave, PO Box 99]|
+    |3  |[789 Pine Rd]           |
+    +---+------------------------+
+    
+
+
 ### join Transformation
 
 The `join` transformation combines two Datasets based on a join condition (typically equality on one or more columns). This is a **wide transformation** requiring a shuffle to co-locate matching keys. The result is a **DataFrame** (untyped), losing type information.

@@ -17,7 +17,10 @@ asset_targets := $(foreach wrd,$(Scala2BlogsSources),$(ASSETS_DIR)/$(wrd))
 
 # --- Spark Blogs
 SparkBlogsDir := ../spark-algorithms/blogs
-SparkBlogsSources := 2025-11-07-SparkDataset
+SparkBlogsSources := 2025-11-07-SparkDataset \
+	2025-12-06-ICIJ-Fraud-Analysis
+
+# Create target file lists
 
 md_targets += $(foreach wrd,$(SparkBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(SparkBlogsSources),$(ASSETS_DIR)/$(wrd))

@@ -7,41 +7,13 @@ mermaid: true
 maths: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
+excerpt: '<div class="image-text-container"><div class="image-column"><img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10-31-Functional-Programming-Abstractions-in-Scala/scala-functional-fundementals.png" alt="Scala functional fundementals" width="150" height="150"></div><div class="text-column"><p>Master the foundation of modern Scala development by exploring five essential functional programming abstractions. This guide takes a deep dive into algebraic structures, starting with <b>Semigroup</b> and <b>Monoid</b> for combining values. It progresses to type constructors, explaining how <b>Functors</b> transform wrapped data, <b>Applicatives</b> combine independent contexts, and <b>Monads</b> sequence dependent computations. By understanding these core patterns, developers can write more polymorphic, composable, and algebraically sound Scala code that works across diverse data types.</p></div></div>'
 ---
 
-<style>
-/* Styles for the two-column layout */
-.image-text-container {
-    display: flex; /* Enables flexbox */
-    flex-wrap: wrap; /* Allows columns to stack on small screens */
-    gap: 20px; /* Space between the image and text */
-    align-items: center; /* Vertically centers content in columns */
-    margin-bottom: 20px; /* Space below this section */
-}
 
-.image-column {
-    flex: 1; /* Allows this column to grow */
-    min-width: 250px; /* Minimum width for the image column before stacking */
-    max-width: 40%; /* Maximum width for the image column to not take up too much space initially */
-    box-sizing: border-box; /* Include padding/border in element's total width/height */
-}
 
-.text-column {
-    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
-    min-width: 300px; /* Minimum width for the text column before stacking */
-    box-sizing: border-box;
-}
 
-</style>
 
-<div class="image-text-container">
-    <div class="image-column">
-        <img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-10-31-Functional-Programming-Abstractions-in-Scala/scala-functional-fundementals.png" alt="Scala functional fundementals" width="150" height="150">
-    </div>
-    <div class="text-column">
-<p>Master the foundation of modern Scala development by exploring five essential functional programming abstractions. This guide takes a deep dive into algebraic structures, starting with <b>Semigroup</b> and <b>Monoid</b> for combining values. It progresses to type constructors, explaining how <b>Functors</b> transform wrapped data, <b>Applicatives</b> combine independent contexts, and <b>Monads</b> sequence dependent computations. By understanding these core patterns, developers can write more polymorphic, composable, and algebraically sound Scala code that works across diverse data types.</p>
-    </div>
-</div>
 
 <!--more-->
 
