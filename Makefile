@@ -32,6 +32,15 @@ BedrockBlogsSources := 2025-08-29-BedrockLangGraph
 md_targets += $(foreach wrd,$(BedrockBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(BedrockBlogsSources),$(ASSETS_DIR)/$(wrd))
 
+# -- K8s Blogs
+K8sBlogsDir := ../learn-k8s/blogs
+K8sBlogsSources := 2026-01-03-K8sIntro
+
+md_targets += $(foreach wrd,$(K8sBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
+asset_targets += $(foreach wrd,$(K8sBlogsSources),$(ASSETS_DIR)/$(wrd))
+
+# All target
+
 all: $(md_targets) $(asset_targets)
 
 # Directory creation rule
@@ -74,4 +83,9 @@ $(foreach element,$(SparkBlogsSources),$(eval $(call assets-copy,$(element),$(Sp
 # Generate the rules for Bedrock posts
 $(foreach element,$(BedrockBlogsSources),$(eval $(call md-copy,$(element),$(BedrockBlogsDir))))
 $(foreach element,$(BedrockBlogsSources),$(eval $(call assets-copy,$(element),$(BedrockBlogsDir))))
+
+# Generate the rules for K8
+$(foreach element,$(K8sBlogsSources),$(eval $(call md-copy,$(element),$(K8sBlogsDir))))
+$(foreach element,$(K8sBlogsSources),$(eval $(call assets-copy,$(element),$(K8sBlogsDir))))
+
 .PHONY: all

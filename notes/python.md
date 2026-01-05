@@ -6,9 +6,6 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-# Notes on Python
-{:.no_toc}
-
 ---
 
 * TOC
@@ -755,6 +752,19 @@ Concurrency[^3] refers to multiple tasks that can occur independently of one ano
 
 ```mermaid
 mindmap
+```
+
+## Diagrams
+
+Generate Class diagrams:
+
+```python
+cName=$1
+echo "creating ${cName}  class diagram..."
+# pyreverse  -ALSmy -b --source-roots cpython/Lib/collections -c ${cName}  ./cpython/Lib/collections/__init__.py
+./.venv/bin/pyreverse -ALSmy -b --source-roots cpython/Lib/collections -c ${cName}  ./cpython/Lib/_collections_abc.py
+# pyreverse   -ALSmy -b  --source-roots cpython/Lib/collections -c ${cName}  ./cpython/Lib/dataclasses.py
+dot -T jpg ${cName}.dot -o  mytest.jpg
 ```
 
 

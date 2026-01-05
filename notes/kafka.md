@@ -8,9 +8,6 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-Kafka Notes
-{:.no_toc}
-
 ---
 
 * TOC

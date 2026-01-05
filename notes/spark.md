@@ -6,9 +6,6 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-# Apache Spark notest
-{:.no_toc}
-
 ---
 
 * TOC
