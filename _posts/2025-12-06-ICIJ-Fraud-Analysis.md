@@ -7,12 +7,10 @@ mermaid: true
 maths: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
-excerpt: '<div class="image-text-container"><div class="image-column"><img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-11-07-SparkDataset/DatasetAPI.jpg" alt="Scala Functors" width="150" height="150" /></div><div class="text-column">To be filled</div></div>'
+excerpt: '<div class="image-text-container"><div class="image-column"><img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-12-06-ICIJ-Fraud-Analysis/icij.png" alt="Scala Functors" width="150" height="150" /></div><div class="text-column">Uncover the hidden wealth of nations by analysing the ICIJ Offshore Leaks Database using Apache Spark and Scala. This technical guide demonstrates how to process more than 810,000 offshore entities identified in the Panama and Pandora Papers to detect financial fraud. We walk through the process of defining Schema Case Classes for nodes and relationships, loading CSV data into Spark Datasets, and executing complex multi-hop graph joins. Learn to reconstruct fragmented data into complete entity profiles, map beneficial ownership networks, and identify suspicious shell companies sharing registered addresses. Master graph database analysis techniques to expose global corruption and money laundering structures effectively.</div></div>'
 ---
 
-
 <!--more-->
-
 
 ------
 
@@ -22,119 +20,38 @@ excerpt: '<div class="image-text-container"><div class="image-column"><img src="
 
 ## Introduction
 
-The ICIJ Offshore Leaks Database is structured as a Graph Database flattened into CSV files.
-Here is the breakdown of the data structure as shown in the notebook:
+ICIJ stands for the International Consortium of Investigative Journalists. It is a non-profit news organisation based in Washington, D.C., that operates as a global network of reporters and media organisations. They are best known for coordinating massive, cross-border investigations into corruption, money laundering, and tax abuse.
 
--   **Nodes:** `EntityNode`, `OfficerNode`, `Intermediary`, `AddressNode`, `OtherNode`.
--   **Edges:** `Relationship` (connects the nodes).
+### What is in the database?
 
+It is not just one leak; it is a "master list" combined from five different massive investigations. It contains data on more than **810,000 offshore companies**, trusts, and foundations from:
 
+-   **Pandora Papers (2021):** The most recent major addition, exposing 35 world leaders.
+-   **Paradise Papers (2017):** Focused heavily on multinational corporations (like Apple and Nike) and the ultra-wealthy.
+-   **Bahamas Leaks (2016):** A leak from the corporate registry of the Bahamas.
+-   **Panama Papers (2016):** The famous leak from the law firm Mossack Fonseca.
+-   **Offshore Leaks (2013):** The original investigation that started the project.
 
-```scala
-// Enable compiler to use Java classpath (REMOVED the invalid doc.value line)
-interp.configureCompiler(c => {
-c.settings.usejavacp.value = true
-})
+### What does it actually show?
 
-// Configure Coursier to fetch doc JARs
-// Import Spark
-import $ivy.`org.apache.spark:spark-sql_2.13:3.5.7`
-// import Almond Spark plugin
-// import $ivy.`sh.almond::almond-spark:0.14.0-RC8`
+The database does **not** show bank balances, emails, or money transfers. It shows **relationships**.
 
-import org.apache.logging.log4j.{LogManager, Level}
-import org.apache.logging.log4j.core.config.Configurator
-// Set log levels BEFORE creating SparkSession
-Configurator.setRootLevel(Level.WARN)
-Configurator.setLevel("org.apache.spark", Level.WARN)
-Configurator.setLevel("org.apache.spark.executor.Executor", Level.WARN)
-```
+-   **Beneficial Owners:** The actual human beings who own the companies (often hidden behind nominees).
+-   **Intermediaries:** The lawyers, banks, and accountants who helped set up the structures.
+-   **Addresses:** Physical locations linked to the owners. (You can literally search your own city to see who in your neighbourhood has an offshore account.)
 
+The ICIJ Offshore Leaks Database is a free, publicly accessible search engine that tracks the ownership of anonymous shell companies. The ICIJ Offshore Leaks Database is not just a spreadsheet; it is a Graph Database exported into CSV format. To understand the hidden wealth of nations, you must understand how to reconstruct these fragments. The data is split into two primary concepts: Nodes (actors) and Relationships (actions).
 
+-   **Nodes:** Every row represents a distinct object. These are not all companies; they are categorised into four different roles. Understanding this distribution is critical for filtering your analysis.
+    -   `EntityNode`: The offshore companies, trusts, or foundations created in tax havens.
+    -   `OfficerNode`: The people or companies playing a role (Director, Shareholder, Beneficiary).
+    -   `Intermediary`: The lawyers, banks, or accountants (middle-men) who facilitate the setup.
+    -   `AddressNode`: Physical locations linked to the other nodes.
+    -   `OtherNode`
+-   **Edges:** `Relationship`: The relationships.csv file is the bridge. It contains no names, only IDs. It connects a Start Node to an End Node via a specific Relationship Type. Without this file, the nodes are isolated islands of data.
 
+![Nodes Relationships](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2025-12-06-ICIJ-Fraud-Analysis/nodes-relationships.png)
 
-    import $ivy.$
-    import org.apache.logging.log4j.{LogManager, Level}
-    import org.apache.logging.log4j.core.config.Configurator
-
-
-
-
-```scala
-import org.apache.spark.sql._
-import org.apache.log4j.{Level, Logger}
-
-// Silence logs
-Logger.getLogger("org").setLevel(Level.ERROR)
-Logger.getLogger("akka").setLevel(Level.ERROR)
-
-val spark = {
-  NotebookSparkSession.builder()
-    .appName("2025-11-07-SparkDataset")
-    .master("local[*]")
-    .config("spark.driver.host", "localhost")
-    .config("spark.driver.bindAddress", "0.0.0.0")
-    .config("spark.driver.memory", "6g")
-    .config("spark.ui.showConsoleProgress", "false")
-    .config("spark.sql.repl.eagerEval.enabled", "true")
-    .getOrCreate()
-}
-
-// ⭐ CRITICAL: This line forces the UI widget to persist after the cell is done
-spark
-
-spark.sparkContext.setLogLevel("ERROR")
-import spark.implicits._
-
-println(s"✅ Spark ${spark.version} ready")
-println(s"🌐 Spark UI: http://localhost:4040")
-```
-
-
-Loading <code>spark-stubs</code>
-
-
-
-Getting spark JARs
-
-
-
-
-Creating SparkSession
-
-
-
-    08:49:55.012 [scala-kernel-interpreter-1] WARN  org.apache.hadoop.util.NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-
-
-
-<a target="_blank" href="http://localhost:4040">Spark UI</a>
-
-
-    ✅ Spark 3.5.7 ready
-    🌐 Spark UI: http://localhost:4040
-
-
-
-
-
-    import org.apache.spark.sql._
-    import org.apache.log4j.{Level, Logger}
-    spark: SparkSession = org.apache.spark.sql.SparkSession@2e4e113
-    res2_5: SparkSession = org.apache.spark.sql.SparkSession@2e4e113
-    import spark.implicits._
-
-
-
-
-```scala
-val filePath=""
-```
-
-
-
-
-    filePath: String = ""
 
 
 
@@ -701,6 +618,44 @@ relationshipNodeDS.show(false)
 
     relationshipNodeDS: Dataset[Relationship] = [node_id_start: string, node_id_end: string ... 6 more fields]
 
+
+
+Find the available `rel_type`:
+
+
+```scala
+relationshipNodeDS.groupBy("rel_type").count().show(false)
+```
+
+
+
+
+
+
+
+
+
+    +------------------------+-------+
+    |rel_type                |count  |
+    +------------------------+-------+
+    |registered_address      |832721 |
+    |NULL                    |2      |
+    |same_name_as            |104170 |
+    |intermediary_of         |598546 |
+    |officer_of              |1720357|
+    |underlying              |1308   |
+    |similar                 |46761  |
+    |same_as                 |4272   |
+    |connected_to            |12145  |
+    |01-AUG-2011             |1      |
+    |same_id_as              |3120   |
+    |same_intermediary_as    |4      |
+    |same_company_as         |15523  |
+    |probably_same_officer_as|132    |
+    |similar_company_as      |203    |
+    |same_address_as         |5      |
+    +------------------------+-------+
+    
 
 
 ## 1. BASIC RELATIONSHIP JOINS - UNDERSTANDING THE GRAPH
@@ -1447,9 +1402,4 @@ scala.util.Properties.versionNumberString
 
 ```scala
 spark.stop()
-```
-
-
-```scala
-
 ```
