@@ -120,6 +120,32 @@ for example,
 
 
 ```scala
+import pprint._
+
+// Update the REPL's printer configuration
+repl.pprinter.update(
+  repl.pprinter().copy(
+    additionalHandlers = {
+      // Check if the object is a function/lambda by looking at its class name
+      case x: AnyRef if x.getClass.getName.contains("$$Lambda") =>
+        Tree.Literal("<function>")
+    }
+  )
+)
+```
+
+
+
+
+    import pprint._
+    
+    // Update the REPL's printer configuration
+    
+
+
+
+
+```scala
 // Pure Function - Always returns the same output for the same input
 def square(x: Int): Int = x * x
 
@@ -1263,8 +1289,8 @@ g(5)  // double(addOne(5))
 | Filter Composition | $\text{filter}(p) \circ \text{filter}(q) = \text{filter}(q) \circ \text{filter}(p)$ | `xs.filter(p).filter(q) == xs.filter(q).filter(p)` |
 | Fold Fusion | $\text{map}(f) \circ \text{fold}(g)(z) = \text{fold}(g \circ f)(z)$ | Optimization technique |
 
-### For-Comprehensions and HOFs[^3]
-The *for* comprehension is syntactic sugar for HOF chains
+### For-Comprehensions and HOFs
+The *for* comprehension[^3] is syntactic sugar for HOF chains
 
 
 ```scala
@@ -1310,7 +1336,85 @@ List(1,2,3).flatMap(x => List(10,20).filter( y => x * y > 10).map( y => x * y))
 | `forall` | `[A](p: A => Boolean): List[A] => Boolean` | Check if all elements match |
 
 
-## Currying
+## Core building blocks of FP
+There are 4 building blocks: 
+
+1. **Partial Application**: Partial application is the process of taking a function that accepts multiple arguments, providing values for some of them, and producing a new function that expects the rest of the arguments. Think of it as "pre-filling" data.
+
+   ```scala
+   def partial[A, B, C](a:A, f:(A, B) => C): B = 
+       b => f(a, b)
+   ```
+2. **Currying**: Currying transforms a function that takes multiple arguments at once (like (A, B)) into a chain of functions that each take exactly one argument. It changes the function's shape, not its values.
+
+   ```scala
+   def partial[A, B, C] (a:A, f: (A, B) => C): B => C =
+       b => f(a, b)
+   ```
+3. **Uncurrying**: Uncurrying is the reverse of currying. It takes a chain of functions (a function that returns a function) and collapses them into a single function that takes multiple arguments simultaneously.
+
+   ```scala
+   def uncurry[A, B, C](f: A => B => C): (A, B) => C =
+       (a, b) => f(a)(b)
+   ```
+4. **Composition**: Function composition allows you to pipe the output of one function directly into the input of another. It glues two functions together to create a pipeline.
+
+   ```scala
+   def compose[A, B, C](f: B => C, g: A => B): A => C =
+       a => f(g(a))
+   ```
+ 
+
+
+## 1. Partial Application
+**Partial Application** is the process of fixing a specific number of arguments to a function, producing a _new_ function of smaller arity (taking fewer arguments).
+
+
+
+```scala
+def partial[A, B, C] (a:A, f: (A, B) => C): B => C =
+    b => f(a, b)
+```
+
+
+
+
+    defined function partial
+
+
+
+For example:
+
+
+```scala
+val add = (x: Int, y: Int) => x + y
+val add5 = partial(5, add)
+add5(10)
+```
+
+
+
+
+    add: (Int, Int) => Int = <function>
+    add5: Int => Int = <function>
+    res6_2: Int = 15
+
+
+
+When we have a function that appears to take multiple arguments, such as `f(x, y)`, we can think of it in two ways. Based onthe Lambda Calculus:
+
+**The Product Type View:** The function takes a tuple (a pair) of arguments.
+
+$$f:\left( A\times B\right) \rightarrow C$$
+
+**The Partial Application View:** If we fix the first argument $a_{0}$ (where $a_{0}\in A$), we effectively create a new function $g$ that only relies on $b$.
+
+$$g\left( b\right) =f\left( a_{0},b\right) $$
+
+Here, $g$ is the **partially applied** version of $f$. It maps $B\rightarrow C$.
+
+
+## 2. Currying
 
 Mathematically:
 
@@ -1331,27 +1435,41 @@ $$\text{Hom}(A \times B, C) \cong \text{Hom}(A, C^B)$$
 
 Where $C^B$ denotes the exponential object (function type $B \rightarrow C$).
 
-### Lambda Calculus Foundation
+for examples
 
-In lambda calculus, currying is a natural consequence of functions only taking one argument:
 
-$$
-\begin{align}
-\lambda xy.\ x + y &\equiv \lambda x.(\lambda y.\ x + y) \\
-\text{apply to 3: } &(\lambda x.(\lambda y.\ x + y))\ 3 \\
-&= \lambda y.\ 3 + y
-\end{align}
-$$
+```scala
+def curry[A, B, C](f: (A, B) => C): A => (B => C) = 
+    a => b => f(a, b)
+```
 
-### Uncurrying
 
-The inverse transformation:
 
-$$\text{uncurry}: (A \rightarrow (B \rightarrow C)) \rightarrow ((A \times B) \rightarrow C)$$
 
-### Code Examples
+    defined function curry
 
-#### Example 1: Manual Currying[^5]
+
+
+
+```scala
+val multiply = (x: Int, y: Int) => x * y
+val curriedMultiply = curry(multiply)
+curriedMultiply(10)(2)
+```
+
+
+
+
+    multiply: (Int, Int) => Int = <function>
+    curriedMultiply: Int => Int => Int = <function>
+    res9_2: Int = 20
+
+
+
+
+```scala
+Manual Currying[^5]
+```
 
 
 ```scala
@@ -1388,14 +1506,14 @@ addCurried(5)(7)(3)  // 15
 
     defined function add
     defined function addCurried
-    addFive: Int => Int => Int = ammonite.$sess.cmd62$Helper$$Lambda$3713/0x000000012cb02650@6f83cc5f
-    addFiveSeven: Int => Int = ammonite.$sess.cmd62$Helper$$Lambda$3714/0x000000012cb02a18@21cb32c7
+    addFive: Int => Int => Int = <function>
+    addFiveSeven: Int => Int = <function>
     result: Int = 15
-    res62_5: Int = 15
+    res7_5: Int = 15
 
 
 
-#### Example 2: Scala's Built-in Currying[^5]
+Scala's Built-in Currying[^5]
 
 
 ```scala
@@ -1421,29 +1539,58 @@ multiply(10)(5)(2)  // 100
 
 
     defined function multiply
-    timesTen: Int => Int => Int = ammonite.$sess.cmd63$Helper$$Lambda$3719/0x000000012cb03f68@48891e11
-    timesTenFive: Int => Int = ammonite.$sess.cmd63$Helper$$Lambda$3720/0x000000012cb04338@23033b53
+    timesTen: Int => Int => Int = <function>
+    timesTenFive: Int => Int = <function>
     result: Int = 100
-    res63_4: Int = 100
+    res8_4: Int = 100
 
 
 
-#### Example 3: Converting Between Curried and Uncurried[^1]
+## 3. Uncurrying
+
+The inverse transformation:
+
+$$\text{uncurry}: (A \rightarrow (B \rightarrow C)) \rightarrow ((A \times B) \rightarrow C)$$
 
 
 ```scala
-// Generic curry and uncurry functions
+def uncurry[A, B, C](f: A => B => C): (A, B) => C =
+    (a,b) => f(a)(b)
+```
 
-// Curry: Convert (A, B) => C to A => B => C
-def curry[A, B, C](f: (A, B) => C): A => B => C = {
-  (a: A) => (b: B) => f(a, b)
-}
 
-// Uncurry: Convert A => B => C to (A, B) => C
-def uncurry[A, B, C](f: A => B => C): (A, B) => C = {
-  (a: A, b: B) => f(a)(b)
-}
 
+
+    defined function uncurry
+
+
+
+For example:
+
+
+```scala
+// A function that is already curried
+val curriedSubtract = (x: Int) => (y: Int) => x - y
+
+// Convert it back to a standard (Int, Int) => Int function
+val subtract = uncurry(curriedSubtract)
+
+subtract(10, 3)
+```
+
+
+
+
+    curriedSubtract: Int => Int => Int = <function>
+    subtract: (Int, Int) => Int = <function>
+    res11_2: Int = 7
+
+
+
+Converting Between Curried and Uncurried[^1]
+
+
+```scala
 // Example usage
 val add: (Int, Int) => Int = (x, y) => x + y
 val addCurried: Int => Int => Int = curry(add)
@@ -1453,12 +1600,73 @@ val addUncurried: (Int, Int) => Int = uncurry(addCurried)
 add(3, 4)              // 7
 addCurried(3)(4)       // 7
 addUncurried(3, 4)     // 7
+```
 
+
+
+
+    add: (Int, Int) => Int = <function>
+    addCurried: Int => Int => Int = <function>
+    addUncurried: (Int, Int) => Int = <function>
+    res14_3: Int = 7
+    res14_4: Int = 7
+    res14_5: Int = 7
+
+
+
+built-in curry functions:
+
+
+```scala
 // Function1 has built-in curried method
 val multiply = (x: Int, y: Int, z: Int) => x * y * z
 val multiplyCurried = multiply.curried
 // Type: Int => Int => Int => Int÷
 ```
+
+
+
+
+    multiply: (Int, Int, Int) => Int = <function>
+    multiplyCurried: Int => Int => Int => Int = <function>
+
+
+
+## 4. Composition
+Glue 2 functions to create a pipeline. In `compose(f, g)`, `g` runs first, then `f`. This is standard mathematical notation ($f \circ g$).
+
+
+```scala
+def compose[A, B, C](f: B => C, g: A => B): A => C =
+    a => f(g(a))
+```
+
+
+
+
+    defined function compose
+
+
+
+Examples: 
+
+
+```scala
+val double = (i:Int) => i * 2
+val num2str = (i: Int) => s"result is $i"
+val pipeline = compose(num2str, double)
+pipeline(2)
+```
+
+
+
+
+    double: Int => Int = <function>
+    num2str: Int => String = <function>
+    pipeline: Int => String = <function>
+    res17_3: String = "result is 4"
+
+
 
 ## Scala Type Classes
 
