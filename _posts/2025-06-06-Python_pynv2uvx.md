@@ -439,7 +439,7 @@ uv run jupyter lab
 uv run jupyter notebook
 ```
 
-In the notebook, you can select the `bash` kernel.
+In the notebook, you can select the `bash` kernel[^2].
 
 To remove the kernel:
 
@@ -465,4 +465,11 @@ rm -rf .venv/share/jupyter/kernels/bash
 
 
 
-[^1]: [UV](https://docs.astral.sh/uv/)
+[^1]: [UV](https://docs.astral.sh/uv/){:target="_blank"}
+
+[^2]: [Jupyter kernels · jupyter/jupyter Wiki](https://github.com/jupyter/jupyter/wiki/Jupyter-kernels){:target="_blank"}
+
+
+{:gtxt: .message color="green"}
+{:ytxt: .message color="yellow"}
+{:rtxt: .message color="red"}
