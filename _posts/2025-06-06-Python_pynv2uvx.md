@@ -373,6 +373,96 @@ uv add --requirements requirements.txt
 uv sync
 ```
 
+## Install system wide tools
+Install Jupyter once globally, but register each project's venv as a kernel. For example JupyterLab:
+
+```bash
+# Uninstall first
+uv tool uninstall jupyterlab
+
+# Reinstall with extensions
+uv tool  install "jupyterlab>=4.0" \
+  --with jupyterlab-git \
+  --with jupyterlab_execute_time \
+  --with jupyter_contrib_nbextensions \
+  --with jupyter_nbextensions_configurator  
+```
+
+List the available tools
+
+```bash
+uv tool update-shell
+source ~/.bashrc
+uv tool list
+```
+
+## Install kernel
+Here the example how to intall bash kernal to uv project:
+
+```bash
+# Create a new project
+uv init my-notebooks
+cd my-notebooks
+
+# Or just create a venv in current directory
+uv venv
+source .venv/bin/activate
+```
+
+> The project will created with the existing python version. In this case Python **3.12.3**.
+
+Install Jupyter + Bash Kernel
+
+```bash
+# Install jupyter and bash_kernel
+uv add jupyter bash_kernel
+
+# Register the bash kernel
+uv run python -m bash_kernel.install --sys-prefix
+```
+
+> Without `--sys-prefix`, `bash_kernel.install` tries to write to your **system** Jupyter paths instead of the venv, so Jupyter running inside the venv won't see it. Always pair kernel installs with `--sys-prefix` when using isolated environments like `uv venv`.
+
+Verify kernels are available:
+
+```bash
+uv run jupyter kernelspec list
+```
+
+Launch Jupyter:
+
+```bash
+# JupyterLab
+uv run jupyter lab
+
+# Classic Notebook
+uv run jupyter notebook
+```
+
+In the notebook, you can select the `bash` kernel.
+
+To remove the kernel:
+
+```bash
+uv run jupyter kernelspec remove bash
+```
+
+To mannually remove:
+
+```bash
+# Delete it manually (path from the list output)
+rm -rf .venv/share/jupyter/kernels/bash
+```
+
+| Scenario | Command |
+| --- | --- |
+| Add to existing project | `uv add jupyter bash_kernel` |
+| One-off run without install | `uvx jupyter lab` |
+| Run in specific venv | `uv run --python 3.11 jupyter lab` |
+| Sync dependencies from `pyproject.toml` | `uv sync` then `source .venv/bin/activate` |
+
+
+
 
 
 [^1]: [UV](https://docs.astral.sh/uv/)
