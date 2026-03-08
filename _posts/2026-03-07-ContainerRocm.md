@@ -829,6 +829,67 @@ docker compose run --rm rocm-onnx \
     [ MIGraphX Version: 2.15.0.20250912-17-195-g1afd1b89c ] Complete(0.666102s): /opt/rocm-7.2.0/bin/migraphx-driver perf --test
 
 
+## vLLM
+Run the following Docker command to set up vLLM:
+
+```bash
+# 1. Stop and remove the existing container
+docker stop vllm_rocm_container
+docker rm vllm_rocm_container
+
+# 2. (Optional) Pull latest base image
+docker pull rocm/vllm-dev:rocm7.2_navi_ubuntu24.04_py3.12_pytorch_2.9_vllm_0.14.0rc0
+
+# 3. Run fresh
+docker run -it \
+  --network=host \
+  --group-add=video \
+  --group-add=992 \
+  --ipc=host \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  --device /dev/kfd \
+  --device /dev/dri \
+  --shm-size 8g \
+  -e HSA_OVERRIDE_GFX_VERSION=11.5.0 \
+  -w /app/vllm/ \
+  --name vllm_rocm_container \
+  rocm/vllm-dev:rocm7.2_navi_ubuntu24.04_py3.12_pytorch_2.9_vllm_0.14.0rc0 \
+  /bin/bash
+```
+
+In the Docker bash prompt, check the vLLM availability:
+
+```bash
+python -c "import vllm; print(vllm.__file__)"
+```
+
+Clone the Hugging Face GitHub repository within the Docker container.
+
+```bash
+apt update
+apt install git-lfs
+git lfs clone https://huggingface.co/TechxGenus/Meta-Llama-3-8B-Instruct-GPTQ
+```
+Run the benchmarks:
+
+```bash
+vllm bench latency --model /app/vllm/Meta-Llama-3-8B-Instruct-GPTQ -q gptq --batch-size 1 --input-len 1024 --output-len 1024 --max-model-len 8192
+```
+
+**One iteration (134 seconds)** — each warmup cycle has two distinct phases: a very short prefill burst (~2s) followed by a long decode phase (~132s). The bar at the bottom shows how lopsided the split is.
+
+![sketch1_iteration_flow](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/sketch1_iteration_flow.jpg)
+
+**KV Cache sawtooth** — the GPU memory grows steadily during decode as the model accumulates attention data, then snaps back to 3.3% at the start of each new prefill. This is healthy behaviour — it means memory is being freed correctly.
+
+![sketch2_kv_cache](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/sketch2_kv_cache.jpg)
+
+**Prefill vs Decode per iteration** — iteration 0 is noticeably slower on prefill (67 vs ~78 tok/s) because the GPU's Triton/ROCm kernels haven't been compiled yet (cold start). From iteration 1 onward it's stable.
+
+![sketch3_prefill_vs_decode](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/sketch3_prefill_vs_decode.jpg)
+
+
 [^1]: [Install Ryzen Software for Linux with ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installryz/native_linux/install-ryzen.html){:target="_blank"}
 
 [^2]: [amd](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installryz/native_linux/install-ryzen.html){:target="_blank"}
@@ -843,7 +904,3 @@ docker compose run --rm rocm-onnx \
 {:gtxt: .message color="green"}
 {:ytxt: .message color="yellow"}
 {:rtxt: .message color="red"}
-
-```bash
-
-```
