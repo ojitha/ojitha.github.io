@@ -2,58 +2,8 @@
 DRAFTS_DIR = ./_posts
 ASSETS_DIR = ./assets/images
 
-# --- Scala 2 Blogs 
-Scala2BlogsDir := ../learn-scala2/blogs
-Scala2BlogsSources := 2025-07-25-Scala-basics \
-	2025-07-25-Scala-Collections \
-	2025-10-24-Scala2Closures \
-	2025-10-26-Scala2-Functors \
-	2025-10-27-Scala-2-Collections \
-	2025-10-31-Functional-Programming-Abstractions-in-Scala
-
-# Create target file lists
-md_targets := $(foreach wrd,$(Scala2BlogsSources),$(DRAFTS_DIR)/$(wrd).md)
-asset_targets := $(foreach wrd,$(Scala2BlogsSources),$(ASSETS_DIR)/$(wrd))
-
-# --- Spark Blogs
-SparkBlogsDir := ../spark-algorithms/blogs
-SparkBlogsSources := 2025-11-07-SparkDataset \
-	2025-12-06-ICIJ-Fraud-Analysis
-
-# Create target file lists
-
-md_targets += $(foreach wrd,$(SparkBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
-asset_targets += $(foreach wrd,$(SparkBlogsSources),$(ASSETS_DIR)/$(wrd))
-
-# --- Bedrock Blogs
-BedrockBlogsDir := ../learn-bedrock/blogs
-BedrockBlogsSources := 2025-08-29-BedrockLangGraph
-
-md_targets += $(foreach wrd,$(BedrockBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
-asset_targets += $(foreach wrd,$(BedrockBlogsSources),$(ASSETS_DIR)/$(wrd))
-
-# -- K8s Blogs
-K8sBlogsDir := ../learn-k8s/blogs
-K8sBlogsSources := 2026-01-03-K8sIntro
-
-md_targets += $(foreach wrd,$(K8sBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
-asset_targets += $(foreach wrd,$(K8sBlogsSources),$(ASSETS_DIR)/$(wrd))
-
-# -- LLMTUNING Blogs
-LLMTUNINGBlogsDir := ../LLMTUNING/blogs
-LLMTUNINGBlogsSources := 2026-02-14-SMMLDev
-
-md_targets += $(foreach wrd,$(LLMTUNINGBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
-asset_targets += $(foreach wrd,$(LLMTUNINGBlogsSources),$(ASSETS_DIR)/$(wrd))
-
-# All target
-
-all: $(md_targets) $(asset_targets)
-
-# Directory creation rule
-$(DRAFTS_DIR):
-	@echo "Creating drafts directory..."
-	mkdir -p $(DRAFTS_DIR)
+md_targets :=
+asset_targets :=
 
 # Markdown copy rule
 define md-copy
@@ -79,25 +29,19 @@ $(ASSETS_DIR)/$1:
 	fi
 endef
 
-# Generate the rules for Scala 2 posts
-$(foreach element,$(Scala2BlogsSources),$(eval $(call md-copy,$(element),$(Scala2BlogsDir))))
-$(foreach element,$(Scala2BlogsSources),$(eval $(call assets-copy,$(element),$(Scala2BlogsDir))))
+# Include per-section blog definitions
+# include makefiles/scala2.mk
+# include makefiles/spark.mk
+# include makefiles/bedrock.mk
+# include makefiles/k8s.mk
+include makefiles/llmtuning.mk
 
-# Generate the rules for Spark posts
-$(foreach element,$(SparkBlogsSources),$(eval $(call md-copy,$(element),$(SparkBlogsDir))))
-$(foreach element,$(SparkBlogsSources),$(eval $(call assets-copy,$(element),$(SparkBlogsDir))))
+# All target
+all: $(md_targets) $(asset_targets)
 
-# Generate the rules for Bedrock posts
-$(foreach element,$(BedrockBlogsSources),$(eval $(call md-copy,$(element),$(BedrockBlogsDir))))
-$(foreach element,$(BedrockBlogsSources),$(eval $(call assets-copy,$(element),$(BedrockBlogsDir))))
-
-# Generate the rules for K8
-$(foreach element,$(K8sBlogsSources),$(eval $(call md-copy,$(element),$(K8sBlogsDir))))
-$(foreach element,$(K8sBlogsSources),$(eval $(call assets-copy,$(element),$(K8sBlogsDir))))
-
-# Generate the rules for LLMTUNING
-$(foreach element,$(LLMTUNINGBlogsSources),$(eval $(call md-copy,$(element),$(LLMTUNINGBlogsDir))))
-$(foreach element,$(LLMTUNINGBlogsSources),$(eval $(call assets-copy,$(element),$(LLMTUNINGBlogsDir))))
-
+# Directory creation rule
+$(DRAFTS_DIR):
+	@echo "Creating drafts directory..."
+	mkdir -p $(DRAFTS_DIR)
 
 .PHONY: all
