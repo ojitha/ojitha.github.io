@@ -39,6 +39,13 @@ K8sBlogsSources := 2026-01-03-K8sIntro
 md_targets += $(foreach wrd,$(K8sBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(K8sBlogsSources),$(ASSETS_DIR)/$(wrd))
 
+# -- LLMTUNING Blogs
+LLMTUNINGBlogsDir := ../LLMTUNING/blogs
+LLMTUNINGBlogsSources := 2026-02-14-SMMLDev
+
+md_targets += $(foreach wrd,$(LLMTUNINGBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
+asset_targets += $(foreach wrd,$(LLMTUNINGBlogsSources),$(ASSETS_DIR)/$(wrd))
+
 # All target
 
 all: $(md_targets) $(asset_targets)
@@ -87,5 +94,10 @@ $(foreach element,$(BedrockBlogsSources),$(eval $(call assets-copy,$(element),$(
 # Generate the rules for K8
 $(foreach element,$(K8sBlogsSources),$(eval $(call md-copy,$(element),$(K8sBlogsDir))))
 $(foreach element,$(K8sBlogsSources),$(eval $(call assets-copy,$(element),$(K8sBlogsDir))))
+
+# Generate the rules for LLMTUNING
+$(foreach element,$(LLMTUNINGBlogsSources),$(eval $(call md-copy,$(element),$(LLMTUNINGBlogsDir))))
+$(foreach element,$(LLMTUNINGBlogsSources),$(eval $(call assets-copy,$(element),$(LLMTUNINGBlogsDir))))
+
 
 .PHONY: all
