@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Running AMD ROCm AI Workloads in Docker
+title:  Running AMD ROCm AI Workloads locally
 date:   2026-03-07
 maths: true
 categories: [AI]
@@ -19,8 +19,12 @@ Brief introduction
 {:toc}
 ------
 
-## Introduction
 **AI X1 Pro-470 form factor**[^5] is the **Zen5 12-core architecture**, the **86 TOPS NPU**, and the **Radeon 890M iGPU** — all of which directly contextualise why the OEM kernel requirement and ROCm APU-specific setup described in the post are necessary.
+
+
+| ROCm 7.2                                                     | AI X1 Pro-470                                                |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| AMD ROCm 7.2 was announced at CES 2026, delivering seamless support for Ryzen AI 400 Series processors [AMD](https://www.amd.com/en/newsroom/press-releases/2026-1-5-amd-expands-ai-leadership-across-client-graphics-.html) — including the Ryzen AI 9 HX 470. ROCm 7.2 introduces initial PyTorch support for Ryzen APUs as a preview, enabling cost-effective local ML development and inference, with up to 128GB of shared memory available to laptop users. [AMD ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/) Ryzen users are recommended to use the inbox graphics drivers of Ubuntu 24.04.3 alongside ROCm 7.2. [AMD](https://www.amd.com/en/resources/support-articles/release-notes/RN-AMDGPU-LINUX-ROCM-7-2.html) On Windows, PyTorch is updated with ROCm 7.2 components for Ryzen AI processors, though the full ROCm stack is not yet supported on Windows. [AMD ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityryz/windows/windows_compatibility.html) This makes the HX 470 a capable entry point for local AI workflows. | <img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/device_nobg.png" alt="device_nobg" style="zoom:50%;" /> |
 
 I have installed the rocm as explained in the documentation[^1]. 
 

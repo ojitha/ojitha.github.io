@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := all
+
 # Variables
 DRAFTS_DIR = ./_posts
 ASSETS_DIR = ./assets/images
