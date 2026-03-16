@@ -410,3 +410,67 @@ To get element on index:
 echo "${a[0]}"
 ```
 
+## Ubuntu
+
+I am currently using 
+
+```bash
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="Ubuntu 24.04.4 LTS"
+```
+
+on [MINISFORUM AI X1 Pro Mini PC | AMD Ryzen AI 9 HX 470 | Copilot-Powered AI Computer](https://au.minisforum.com/products/minisforum-ai-x1-pro-470){:target="_blank"}. The [AMD Ryzen™ AI 9 HX 470](https://www.amd.com/en/products/processors/laptop/ryzen/ai-400-series/amd-ryzen-ai-9-hx-470.html){:target="_blank"} iGPU is `gfx1150`. 
+
+### Sleep and wake up
+
+After set the following, when wake up the computer via Logitech universal USB (keyboard), reset back to the `disabled` value.
+
+```bash
+ echo enabled | sudo tee /sys/bus/usb/devices/3-1.1.3/power/wakeup
+ echo enabled | sudo tee /sys/bus/usb/devices/usb3/power/wakeup 
+```
+
+1. step
+
+   created the following file
+
+   ```bash
+   # Create the system-sleep hook
+   sudo tee /etc/systemd/system-sleep/usb-wakeup.sh > /dev/null << 'EOF'
+   #!/bin/bash
+   if [ "$1" = "post" ]; then
+       echo enabled > /sys/bus/usb/devices/3-1.1.3/power/wakeup
+       echo enabled > /sys/bus/usb/devices/usb3/power/wakeup
+   fi
+   EOF
+   ```
+
+   > Although file is created under the `/etc/...`, following permissions are granted to `/lib/...`
+
+2. make it executable
+
+   ```bash
+   sudo chmod +x /lib/systemd/system-sleep/usb-wakeup.sh
+   ```
+
+3. Created wake up rule `sudo nano /etc/udev/rules.d/99-usb-wakeup.rules `
+
+   ```bash
+   ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="046d", ATTR{idProduct}=="c52b", ATTR{power/wakeup}="enabled"                   
+   ```
+
+4. load the rule
+
+   ```bash
+    sudo udevadm control --reload-rules
+   ```
+
+5. To test without rebooting, unplug and replug the receiver, then:
+
+   ```bash
+   cat /sys/bus/usb/devices/3-1.1.3/power/wakeup
+   ```
+
+   Output should be `enabled`.
