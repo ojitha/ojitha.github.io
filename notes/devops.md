@@ -1541,7 +1541,9 @@ steps:
 
 
 
-## Docker Compose
+## Docker
+
+### Docker Compose
 
 ```
 mkdir azagent;cd azagent;curl -fkSL -o vstsagent.tar.gz https://download.agent.dev.azure.com/agent/4.255.0/vsts-agent-linux-x64-4.255.0.tar.gz;tar -zxvf vstsagent.tar.gz; if [ -x "$(command -v systemctl)" ]; then ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token <mytoken> --runasservice; sudo ./svc.sh install; sudo ./svc.sh start; else ./config.sh --environment --environmentname "elasticsearch-production" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/ojitha/ --work _work --projectname 'KibanaDockerCompose' --auth PAT --token <mytoken>; ./run.sh; fi
@@ -1551,11 +1553,11 @@ mkdir azagent;cd azagent;curl -fkSL -o vstsagent.tar.gz https://download.agent.d
 
 
 
-## How to Download and Import Docker Images in WSL2
+### How to Download and Import Docker Images in WSL2
 
-### Step 1: Download Artifacts from Azure DevOps
+#### Step 1: Download Artifacts from Azure DevOps
 
-#### Method A: Using Azure DevOps Web Interface
+##### Method A: Using Azure DevOps Web Interface
 
 1. Navigate to your Azure DevOps project
 2. Go to **Pipelines** → **Runs**
@@ -1565,7 +1567,7 @@ mkdir azagent;cd azagent;curl -fkSL -o vstsagent.tar.gz https://download.agent.d
 6. Click on **Artifacts** → **docker-images**
 7. Click **Download** to download the zip file
 
-#### Method B: Using Azure CLI
+##### Method B: Using Azure CLI
 
 ```bash
 # Install Azure CLI if not already installed
@@ -1584,7 +1586,7 @@ az pipelines runs artifact download \
   --run-id "BUILD_ID"
 ```
 
-#### Method C: Using REST API
+##### Method C: Using REST API
 
 ```bash
 # Get the artifact download URL
@@ -1595,9 +1597,9 @@ curl -u "username:PAT_TOKEN" \
 wget -O docker-images.zip "DOWNLOAD_URL_FROM_ABOVE"
 ```
 
-### Step 2: Prepare WSL2 Environment
+#### Step 2: Prepare WSL2 Environment
 
-#### Ensure Docker is Installed in WSL2
+##### Ensure Docker is Installed in WSL2
 
 ```bash
 # Update Ubuntu
@@ -1620,13 +1622,13 @@ docker --version
 docker info
 ```
 
-#### Alternative: Install Docker Desktop for Windows
+##### Alternative: Install Docker Desktop for Windows
 - Docker Desktop automatically integrates with WSL2
 - Provides better performance and resource management
 
-### Step 3: Extract and Import Docker Images
+#### Step 3: Extract and Import Docker Images
 
-#### Extract Downloaded Artifacts
+##### Extract Downloaded Artifacts
 
 ```bash
 # Navigate to downloads directory
@@ -1642,7 +1644,7 @@ cd docker-artifacts
 ls -la
 ```
 
-#### Import Docker Images
+##### Import Docker Images
 
 ```bash
 # Method 1: Import regular tar file
@@ -1658,7 +1660,7 @@ docker load --input myapp-123.tar
 docker images | grep myapp
 ```
 
-#### Example Import Script
+##### Example Import Script
 
 ```bash
 #!/bin/bash
@@ -1703,9 +1705,9 @@ docker images | tee -a $LOG_FILE
 echo "Import process completed!" | tee -a $LOG_FILE
 ```
 
-### Step 4: Verify and Test Imported Images
+#### Step 4: Verify and Test Imported Images
 
-#### List All Images
+##### List All Images
 
 ```bash
 # List all Docker images
@@ -1718,7 +1720,7 @@ docker images myapp
 docker inspect myapp:latest
 ```
 
-#### Test the Imported Image
+##### Test the Imported Image
 
 ```bash
 # Run the container
@@ -1735,7 +1737,7 @@ docker stop myapp-test
 docker rm myapp-test
 ```
 
-#### Run with Custom Configuration
+##### Run with Custom Configuration
 
 ```bash
 # Run with environment variables
@@ -1755,9 +1757,9 @@ docker run --rm \
 docker run --rm -it myapp:latest /bin/sh
 ```
 
-### Step 5: Automate the Process
+#### Step 5: Automate the Process
 
-#### PowerShell Script for Windows
+##### PowerShell Script for Windows
 
 ```powershell
 # PowerShell script to download and import Docker images
@@ -1803,7 +1805,7 @@ wsl -d Ubuntu -e bash -c "cd /mnt/c/Users/$env:USERNAME/AppData/Local/Temp/docke
 Write-Host "Import completed!"
 ```
 
-#### Bash Script for Automated Download and Import
+##### Bash Script for Automated Download and Import
 
 ```bash
 #!/bin/bash
@@ -1846,16 +1848,17 @@ echo "Docker images imported successfully!"
 docker images
 ```
 
-### Troubleshooting
+#### Troubleshooting
 
-#### Common Issues and Solutions
+##### Common Issues and Solutions
 
 1. **Docker not running in WSL2**
+   
    ```bash
    sudo service docker start
    # Or enable systemd in WSL2
    ```
-
+   
 2. **Permission denied errors**
    ```bash
    sudo usermod -aG docker $USER
@@ -1886,9 +1889,9 @@ docker images
    docker load -i image.tar --quiet=false
    ```
 
-### Performance Optimization
+#### Performance Optimization
 
-#### Reduce Image Size
+##### Reduce Image Size
 
 1. Use compressed artifacts (tar.gz)
 2. Use multi-stage builds in Dockerfile
@@ -1912,7 +1915,41 @@ wsl --shutdown
 
 This guide provides a complete workflow for downloading Docker images from Azure Pipeline artifacts and importing them into WSL2 without using any Docker registries.
 
+### Delete Docker Image
 
+To completely remove and re-download the Docker image:                                                                                               
+
+1. Remove all containers using the image first:          
+
+   ```bash
+   docker ps -a --filter ancestor=rocm/pytorch:rocm7.2_ubuntu24.04_py3.12_pytorch_release_2.9.1 -q | xargs -r docker rm -f
+   ```
+
+   
+
+2. Remove the image
+
+   ```bash
+   docker rmi --force rocm/pytorch:rocm7.2_ubuntu24.04_py3.12_pytorch_release_2.9.1
+   ```
+
+   
+
+3. verify 
+
+   ```bash
+   docker ps -a --filter ancestor=rocm/vllm-dev:rocm7.2_navi_ubuntu24.04_py3.12_pytorch_2.9_vllm_0.14.0rc0  -q | xargs -r docker rm -f
+   ```
+
+   
+
+4. If you clean everything
+
+   ```bash
+   docker system prune -a 
+   ```
+
+   
 
 ## Maven
 

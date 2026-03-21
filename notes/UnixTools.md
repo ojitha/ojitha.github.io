@@ -421,7 +421,7 @@ DISTRIB_CODENAME=noble
 DISTRIB_DESCRIPTION="Ubuntu 24.04.4 LTS"
 ```
 
-on [MINISFORUM AI X1 Pro Mini PC | AMD Ryzen AI 9 HX 470 | Copilot-Powered AI Computer](https://au.minisforum.com/products/minisforum-ai-x1-pro-470){:target="_blank"}. The [AMD Ryzen™ AI 9 HX 470](https://www.amd.com/en/products/processors/laptop/ryzen/ai-400-series/amd-ryzen-ai-9-hx-470.html){:target="_blank"} iGPU is `gfx1150`. 
+on [MINISFORUM AI X1 Pro Mini PC | AMD Ryzen AI 9 HX 470](https://au.minisforum.com/products/minisforum-ai-x1-pro-470){:target="_blank"}. The [AMD Ryzen™ AI 9 HX 470](https://www.amd.com/en/products/processors/laptop/ryzen/ai-400-series/amd-ryzen-ai-9-hx-470.html){:target="_blank"} iGPU is `gfx1150`. 
 
 ### Sleep and wake up
 
@@ -474,3 +474,63 @@ After set the following, when wake up the computer via Logitech universal USB (k
    ```
 
    Output should be `enabled`.
+
+### Install USB
+
+Install the necessary SMB packages:
+
+```bash
+sudo apt install samba-client cifs-utils
+```
+
+
+
+List the USBs:
+
+```bash
+smbclient -L //network-usb -N --option='client min protocol=NT1' --option='client max protocol=NT1'
+```
+
+
+
+Map the driver
+
+```usb
+sudo mount -t cifs //192.168.1.1/sda1 /mnt/usb \
+  -o guest,vers=1.0,uid=$(id -u),gid=$(id -g),noperm
+```
+
+Add a bookmark for quick access
+
+1. Navigate to /mnt/usb in Files (using Ctrl+L as above)
+2. Press Ctrl+D (or drag the folder to the left sidebar) to bookmark it
+3. It will now appear permanently in the left sidebar of Files
+
+Create a Desktop shortcut
+
+```bash
+ln -s /mnt/usb ~/Desktop/USB-Share
+```
+
+A shortcut called USB-Share will appear on your desktop that opens the mounted folder.
+
+Auto-mount on login so it's always available
+
+Add the mount to `/etc/fstab` so it mounts automatically at boot and is always accessible:
+
+````bash
+sudo nano /etc/fstab
+```
+Add this line at the bottom:
+```
+//192.168.0.1/sda1  /mnt/usb  cifs  guest,vers=1.0,uid=1000,gid=1000,noperm,_netdev,0  0
+````
+
+Then run:
+
+```bash
+sudo mount -a
+```
+
+> The `_netdev` option ensures it waits for the network before mounting, which is important for network shares.
+

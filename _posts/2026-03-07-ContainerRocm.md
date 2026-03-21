@@ -6,12 +6,14 @@ maths: true
 categories: [AI]
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
-excerpt: '<div class="image-text-container"><div class="image-column"><img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/rocm-container-ai.svg" alt="Scala Functors" width="150" height="150" /></div><div class="text-column">This guide demonstrates how to run AMD ROCm AI workloads on the MINISFORUM AI X1 Pro-470 mini PC powered by the AMD Ryzen AI 9 HX 470 (12-core Zen5, up to 5.2GHz), featuring the integrated Radeon 890M (gfx1150) GPU and an 86 TOPS NPU. Running Ubuntu with the OEM kernel, the setup covers installing ROCm 7.2, verifying HSA agents via <b>rocminfo</b>, and deploying PyTorch inside Docker containers. It also details configuring <b>MIGraphX</b> and <b>ONNX</b> Runtime with the MIGraphX Execution Provider via Docker Compose, enabling high-performance on-device ML inference — fully local, no discrete GPU required..</div></div>'
+excerpt: '<div class="image-text-container"><div class="image-column"><img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/rocm-container-ai.svg" alt="Scala Functors" width="150" height="150" /></div><div class="text-column">This guide demonstrates how to run AMD ROCm AI workloads on the MINISFORUM AI X1 Pro-470 mini PC powered by the AMD Ryzen AI 9 HX 470 (12-core Zen5, up to 5.2GHz), featuring the integrated Radeon 890M (gfx1150) GPU and an 86 TOPS NPU. Running Ubuntu with the OEM kernel, the setup includes installing ROCm 7.2, verifying HSA agents with <b>rocminfo</b>, and deploying PyTorch in Docker containers. It also details configuring <b>MIGraphX</b> and <b>ONNX</b> Runtime with the MIGraphX Execution Provider via Docker Compose, enabling high-performance on-device ML inference — fully local, no discrete GPU required..</div></div>'
 ---
 
-Brief introduction
-
 <!--more-->
+
+| ROCm 7.2                                                     | AI X1 Pro-470                                                |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| AMD ROCm 7.2 was announced at CES 2026, delivering seamless support for Ryzen AI 400 Series processors [AMD](https://www.amd.com/en/newsroom/press-releases/2026-1-5-amd-expands-ai-leadership-across-client-graphics-.html){:target="_blank"} — including the Ryzen AI 9 HX 470. ROCm 7.2 introduces initial PyTorch support for Ryzen APUs as a preview, enabling cost-effective local ML development and inference, with up to 128GB of shared memory available to laptop users. [AMD ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/){:target="_blank"} Ryzen users are recommended to use the inbox graphics drivers of Ubuntu 24.04.3 alongside ROCm 7.2. [AMD](https://www.amd.com/en/resources/support-articles/release-notes/RN-AMDGPU-LINUX-ROCM-7-2.html){:target="_blank"} On Windows, PyTorch is updated with ROCm 7.2 components for Ryzen AI processors, though the full ROCm stack is not yet supported on Windows. [AMD ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityryz/windows/windows_compatibility.html){:target="_blank"} This makes the HX 470 a capable entry point for local AI workflows. | <img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/device_nobg.png" alt="device_nobg" style="zoom:50%;" /> |
 
 ------
 
@@ -22,9 +24,7 @@ Brief introduction
 **AI X1 Pro-470 form factor**[^5] is the **Zen5 12-core architecture**, the **86 TOPS NPU**, and the **Radeon 890M iGPU** — all of which directly contextualise why the OEM kernel requirement and ROCm APU-specific setup described in the post are necessary.
 
 
-| ROCm 7.2                                                     | AI X1 Pro-470                                                |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| AMD ROCm 7.2 was announced at CES 2026, delivering seamless support for Ryzen AI 400 Series processors [AMD](https://www.amd.com/en/newsroom/press-releases/2026-1-5-amd-expands-ai-leadership-across-client-graphics-.html) — including the Ryzen AI 9 HX 470. ROCm 7.2 introduces initial PyTorch support for Ryzen APUs as a preview, enabling cost-effective local ML development and inference, with up to 128GB of shared memory available to laptop users. [AMD ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/) Ryzen users are recommended to use the inbox graphics drivers of Ubuntu 24.04.3 alongside ROCm 7.2. [AMD](https://www.amd.com/en/resources/support-articles/release-notes/RN-AMDGPU-LINUX-ROCM-7-2.html) On Windows, PyTorch is updated with ROCm 7.2 components for Ryzen AI processors, though the full ROCm stack is not yet supported on Windows. [AMD ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityryz/windows/windows_compatibility.html) This makes the HX 470 a capable entry point for local AI workflows. | <img src="https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/device_nobg.png" alt="device_nobg" style="zoom:50%;" /> |
+
 
 I have installed the rocm as explained in the documentation[^1]. 
 
@@ -317,7 +317,7 @@ Your system has **3 HSA Agents** detected — a CPU, a GPU, and an NPU. Here's a
 
 * * *
 
-### System-Level Attributes
+## System-Level Attributes
 
 | Attribute | Value | Meaning |
 | --- | --- | --- |
@@ -890,6 +890,509 @@ vllm bench latency --model /app/vllm/Meta-Llama-3-8B-Instruct-GPTQ -q gptq --bat
 ![sketch3_prefill_vs_decode](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-03-07-ContainerRocm/sketch3_prefill_vs_decode.jpg)
 
 
+## System Management Interface (SMI) for GPU 
+Performance optimisation and efficient resource monitoring are paramount. The AMD System Management Interface command-line tool, `amd-smi`[^6], addresses these needs with a primary focus on GPUs.Device information: Quickly retrieve detailed information about AMD GPUs. This tool supports real-time monitoring of GPU utilisation, memory, temperature, and power consumption. In addition, identify which processes are using GPUs and even adjust GPU settings such as clock speeds and power limits. Most importantly, monitor and report GPU errors for proactive maintenance. I am using the following version of `amd-smi` (latest to date):
+
+
+```bash
+amd-smi version
+```
+
+    AMDSMI Tool: 26.2.1+fc0010cf6a | AMDSMI Library version: 26.2.1 | ROCm version: 7.2.0 | amdgpu version: Linuxversion6.17.0-1012-oem(buildd@lcy02-amd64-114)(x86_64-linux-gnu-gcc-13(Ubuntu13.3.0-6ubuntu2~24.04)13.3.0,GNUld(GNUBinutilsforUbuntu)2.42)#12-UbuntuSMPPREEMPT_DYNAMICTueFeb1004:51:46UTC2026 | hsmp version: N/A
+
+
+> To install `sudo apt install amd-smi-lib` on Ubuntu.
+
+To list all the GPUs
+
+
+```bash
+amd-smi list
+```
+
+    GPU: 0
+        BDF: 0000:c5:00.0
+        UUID: 00ff150e-0000-1000-8000-000000000000
+        KFD_ID: 57812
+        NODE_ID: 1
+        PARTITION_ID: 0
+    
+
+
+> Use the above information to set the `HIP_VISIBLE_DEVICES=n` where n >= 0. As shown in the above `GPU: 0`, n = 0 for this system.
+
+For more detailed information about your GPU:
+
+
+```bash
+amd-smi static
+```
+
+    GPU: 0
+        ASIC:
+            MARKET_NAME: AMD Radeon Graphics
+            VENDOR_ID: 0x1002
+            VENDOR_NAME: Advanced Micro Devices Inc. [AMD/ATI]
+            SUBVENDOR_ID: 0x1f4c
+            DEVICE_ID: 0x150e
+            SUBSYSTEM_ID: 0xb020
+            REV_ID: 0xe4
+            ASIC_SERIAL: 0x0000000000000000
+            OAM_ID: N/A
+            NUM_COMPUTE_UNITS: 16
+            TARGET_GRAPHICS_VERSION: gfx1150
+        BUS:
+            BDF: 0000:c5:00.0
+            MAX_PCIE_WIDTH: N/A
+            MAX_PCIE_SPEED: N/A
+            PCIE_LEVELS: N/A
+            PCIE_INTERFACE_VERSION: N/A
+            SLOT_TYPE: N/A
+        IFWI:
+            NAME: AMD STRIX_B0_GENERIC
+            BUILD_DATE: 2025/08/14 10:14
+            PART_NUMBER: 113-STRIXEMU-001
+            VERSION: 023.010.002.001.000001
+        LIMIT:
+            PPT0:
+                MAX_POWER_LIMIT: N/A
+                MIN_POWER_LIMIT: N/A
+                SOCKET_POWER_LIMIT: N/A
+            PPT1:
+                MAX_POWER_LIMIT: N/A
+                MIN_POWER_LIMIT: N/A
+                SOCKET_POWER_LIMIT: N/A
+            SLOWDOWN_EDGE_TEMPERATURE: N/A
+            SLOWDOWN_HOTSPOT_TEMPERATURE: N/A
+            SLOWDOWN_VRAM_TEMPERATURE: N/A
+            SHUTDOWN_EDGE_TEMPERATURE: N/A
+            SHUTDOWN_HOTSPOT_TEMPERATURE: N/A
+            SHUTDOWN_VRAM_TEMPERATURE: N/A
+            PTL_STATE: N/A
+            PTL_FORMAT: N/A
+        DRIVER:
+            NAME: amdgpu
+            VERSION: Linuxversion6.17.0-1012-oem(buildd@lcy02-amd64-114)(x86_64-linux-gnu-gcc-13(Ubuntu13.3.0-6ubuntu2~24.04)13.3.0,GNUld(GNUBinutilsforUbuntu)2.42)#12-UbuntuSMPPREEMPT_DYNAMICTueFeb1004:51:46UTC2026
+        BOARD:
+            MODEL_NUMBER: N/A
+            PRODUCT_SERIAL: N/A
+            FRU_ID: N/A
+            PRODUCT_NAME: N/A
+            MANUFACTURER_NAME: Advanced Micro Devices, Inc. [AMD/ATI]
+        RAS:
+            EEPROM_VERSION: N/A
+            BAD_PAGE_THRESHOLD: N/A
+            BAD_PAGE_THRESHOLD_EXCEEDED: N/A
+            PARITY_SCHEMA: N/A
+            SINGLE_BIT_SCHEMA: N/A
+            DOUBLE_BIT_SCHEMA: N/A
+            POISON_SCHEMA: N/A
+            ECC_BLOCK_STATE: N/A
+        SOC_PSTATE: N/A
+        XGMI_PLPD: N/A
+        PROCESS_ISOLATION: Disabled
+        NUMA:
+            NODE: 0
+            AFFINITY: NONE
+            CPU_AFFINITY: N/A
+            SOCKET_AFFINITY: N/A
+        VRAM:
+            TYPE: DDR5
+            VENDOR: UNKNOWN
+            SIZE: 65536 MB
+            BIT_WIDTH: 128
+            MAX_BANDWIDTH: N/A 
+        CACHE_INFO:
+            CACHE_0:
+                CACHE_PROPERTIES: DATA_CACHE, SIMD_CACHE
+                CACHE_SIZE: 32 KB
+                CACHE_LEVEL: 1
+                MAX_NUM_CU_SHARED: 1
+                NUM_CACHE_INSTANCE: 16
+            CACHE_1:
+                CACHE_PROPERTIES: INST_CACHE, SIMD_CACHE
+                CACHE_SIZE: 32 KB
+                CACHE_LEVEL: 1
+                MAX_NUM_CU_SHARED: 2
+                NUM_CACHE_INSTANCE: 8
+            CACHE_2:
+                CACHE_PROPERTIES: DATA_CACHE, SIMD_CACHE
+                CACHE_SIZE: 16 KB
+                CACHE_LEVEL: 1
+                MAX_NUM_CU_SHARED: 2
+                NUM_CACHE_INSTANCE: 8
+            CACHE_3:
+                CACHE_PROPERTIES: DATA_CACHE, SIMD_CACHE
+                CACHE_SIZE: 256 KB
+                CACHE_LEVEL: 1
+                MAX_NUM_CU_SHARED: 8
+                NUM_CACHE_INSTANCE: 2
+            CACHE_4:
+                CACHE_PROPERTIES: DATA_CACHE, SIMD_CACHE
+                CACHE_SIZE: 2048 KB
+                CACHE_LEVEL: 2
+                MAX_NUM_CU_SHARED: 16
+                NUM_CACHE_INSTANCE: 1
+        CLOCK:
+            SYS:
+                CURRENT_LEVEL: 1
+                CURRENT_FREQUENCY: 688MHz
+                FREQUENCY_LEVELS:
+                    LEVEL 0: 600 MHz
+                    LEVEL 1: 688 MHz
+                    LEVEL 2: 3100 MHz
+            MEM: N/A
+            DF: N/A
+            SOC: N/A
+            DCEF: N/A
+            VCLK0: N/A
+            VCLK1: N/A
+            DCLK0: N/A
+            DCLK1: N/A
+    
+
+
+### ASIC — The Silicon Identity
+
+```
+VENDOR_ID: 0x1002          ← AMD's PCI vendor ID (universal across all AMD GPUs)
+DEVICE_ID: 0x150e          ← Unique ID for gfx1150 (Radeon 890M die)
+REV_ID: 0xe4               ← Silicon stepping/revision
+TARGET_GRAPHICS_VERSION: gfx1150
+NUM_COMPUTE_UNITS: 16      ← Matches rocminfo Agent 2 exactly
+```
+
+`ASIC_SERIAL: 0x000...000` is all zeros — typical for APUs since there is no discrete GPU die with a burned-in serial. The `SUBVENDOR_ID: 0x1f4c` is **MINISFORUM's** PCI subvendor registration.
+
+---
+
+### BUS — Why Everything Shows `N/A`
+
+```
+BDF: 0000:c5:00.0
+MAX_PCIE_WIDTH: N/A
+MAX_PCIE_SPEED: N/A
+```
+
+This is the most telling APU signature in the output. Your Radeon 890M is **not on a PCIe bus** — it's on the same die as the CPU, connected via AMD's internal fabric. `amd-smi` is designed primarily for discrete GPUs and reports `N/A` for all PCIe fields because there is **no PCIe link to measure**. The `BDF` (`c5:00.0`) is a virtual PCI address assigned by the kernel to make the iGPU addressable, not a real slot.
+
+---
+
+### IFWI — Integrated Firmware Image
+
+```
+NAME: AMD STRIX_B0_GENERIC
+BUILD_DATE: 2025/08/14 10:14
+VERSION: 023.010.002.001.000001
+```
+
+`STRIX` is AMD's internal codename for the Ryzen AI 300/HX series (your HX 470 belongs to this family). `B0` is the **silicon stepping** of your specific die. This is the GPU's microcode/firmware version — separate from your kernel driver and BIOS. The August 2025 build date indicates this is a relatively recent firmware shipped with your OEM kernel.
+
+---
+
+### LIMIT — All `N/A` by Design
+
+```
+MAX_POWER_LIMIT: N/A
+SLOWDOWN_HOTSPOT_TEMPERATURE: N/A
+SHUTDOWN_EDGE_TEMPERATURE: N/A
+```
+
+All power and thermal limits report `N/A` because on an APU, **power and thermal management is owned by the CPU/SoC subsystem**, not the GPU driver independently. The entire chip's TDP is managed together. There is no separate GPU power rail for `amd-smi` to read or cap.
+
+---
+
+### DRIVER
+
+```
+NAME: amdgpu
+VERSION: Linuxversion6.17.0-1012-oem...
+```
+
+This is your OEM kernel's `amdgpu` driver — the reason the blog post specifically required the `6.17.0-1012-oem` kernel. Stock Ubuntu kernels at the time of writing did not yet have `gfx1150` support merged. The driver version string is dense because it embeds the full compiler and linker metadata.
+
+---
+
+### VRAM — The Unified Memory Truth
+
+```
+TYPE: DDR5
+SIZE: 65536 MB      ← 64 GB
+BIT_WIDTH: 128
+VENDOR: UNKNOWN
+MAX_BANDWIDTH: N/A
+```
+
+This is the most important section for AI workloads. Key points:
+
+| Field | Meaning |
+|---|---|
+| `SIZE: 65536 MB` | The full 64GB system RAM is visible as "VRAM" — classic APU unified memory |
+| `TYPE: DDR5` | Your system RAM type, not GDDR |
+| `BIT_WIDTH: 128` | DDR5 runs in dual-channel on this platform (2×64-bit = 128-bit bus) |
+| `VENDOR: UNKNOWN` | APU doesn't have a discrete VRAM chip with an identifiable vendor |
+| `MAX_BANDWIDTH: N/A` | Not reported, but DDR5-5600 dual-channel gives roughly **~89 GB/s** theoretical |
+
+This contrasts sharply with a discrete GPU like an RX 7900 XTX which would show `TYPE: HBM3`, `SIZE: 24576 MB`, `MAX_BANDWIDTH: 960 GB/s`. Your bottleneck for large model inference is this DDR5 bandwidth ceiling.
+
+---
+
+### CACHE — The GPU Cache Hierarchy
+
+```
+CACHE_0: 32 KB L1, DATA+SIMD, shared by 1 CU,  ×16 instances  ← per-CU L1 data cache
+CACHE_1: 32 KB L1, INST+SIMD, shared by 2 CUs, ×8  instances  ← instruction cache
+CACHE_2: 16 KB L1, DATA+SIMD, shared by 2 CUs, ×8  instances  ← scalar data cache
+CACHE_3: 256 KB L1, DATA+SIMD, shared by 8 CUs, ×2 instances  ← shader array L1
+CACHE_4: 2048 KB L2, DATA+SIMD, shared by 16 CUs,×1 instance  ← unified L2 (whole GPU)
+```
+
+The structure reveals your GPU's internal layout:
+- 16 CUs total, arranged in **2 shader arrays of 8 CUs each** (matches `Shader Arrs. per Eng.: 2` in rocminfo)
+- A single **2MB L2** shared across all 16 CUs is the last cache level before hitting DDR5
+- For inference, tensors that don't fit in L2 go straight to system RAM across the 128-bit DDR5 bus
+
+---
+
+### CLOCK — Idle Power State
+
+```
+SYS CURRENT_LEVEL: 1       ← sitting at idle level
+CURRENT_FREQUENCY: 688 MHz ← idle/low-power clock
+LEVEL 2: 3100 MHz          ← max boost (matches rocminfo Max Clock Freq.)
+MEM: N/A                   ← memory clock not separately controllable on APU
+```
+
+The GPU is **not under load** at time of capture (nothing running, as confirmed by `amd-smi` showing no processes). Under vLLM inference you'd expect it to boost to or near **3100 MHz**. All memory-related clocks (`MEM`, `DF`, `SOC`) report `N/A` because on an APU the memory subsystem is governed by the CPU/SoC fabric controller, not the GPU independently.
+
+---
+
+### NUMA, RAS, SOC_PSTATE — All `N/A`
+
+```
+NUMA NODE: 0
+NUMA AFFINITY: NONE
+RAS: all N/A
+SOC_PSTATE: N/A
+```
+
+**NUMA** shows node 0 with no CPU affinity — the APU and CPU share one NUMA domain (unified memory, single socket). **RAS** (Reliability, Availability, Serviceability — ECC error tracking) is `N/A` because ECC on consumer DDR5 APUs is not enabled. **SOC_PSTATE** controls the SoC's performance state profile but is not exposed for this APU configuration through `amd-smi`.
+
+Use `amd-smi metric` to view real-time metrics such as GPU utilisation, temperature, power consumption, and memory usage.
+
+
+
+```bash
+amd-smi metric
+```
+
+    GPU: 0
+        USAGE: N/A
+        POWER:
+            SOCKET_POWER: N/A
+            GFX_VOLTAGE: N/A
+            SOC_VOLTAGE: N/A
+            MEM_VOLTAGE: N/A
+            THROTTLE_STATUS: N/A
+            POWER_MANAGEMENT: N/A
+        CLOCK: N/A
+        TEMPERATURE:
+            EDGE: 28 °C
+            HOTSPOT: N/A
+            MEM: N/A
+        PCIE:
+            WIDTH: N/A
+            SPEED: N/A
+            BANDWIDTH: N/A
+            REPLAY_COUNT: N/A
+            L0_TO_RECOVERY_COUNT: N/A
+            REPLAY_ROLL_OVER_COUNT: N/A
+            NAK_SENT_COUNT: N/A
+            NAK_RECEIVED_COUNT: N/A
+            CURRENT_BANDWIDTH_SENT: N/A
+            CURRENT_BANDWIDTH_RECEIVED: N/A
+            MAX_PACKET_SIZE: N/A
+            LC_PERF_OTHER_END_RECOVERY: N/A
+        ECC:
+            TOTAL_CORRECTABLE_COUNT: 0
+            TOTAL_UNCORRECTABLE_COUNT: 0
+            TOTAL_DEFERRED_COUNT: 0
+            CACHE_CORRECTABLE_COUNT: N/A
+            CACHE_UNCORRECTABLE_COUNT: N/A
+        ECC_BLOCKS: N/A
+        FAN:
+            SPEED: N/A
+            MAX: N/A
+            RPM: N/A
+            USAGE: N/A
+        VOLTAGE_CURVE:
+            POINT_0_FREQUENCY: N/A
+            POINT_0_VOLTAGE: N/A
+            POINT_1_FREQUENCY: N/A
+            POINT_1_VOLTAGE: N/A
+            POINT_2_FREQUENCY: N/A
+            POINT_2_VOLTAGE: N/A
+        OVERDRIVE: N/A
+        MEM_OVERDRIVE: N/A
+        PERF_LEVEL: AMDSMI_DEV_PERF_LEVEL_AUTO
+        XGMI_ERR: N/A
+        VOLTAGE:
+            VDDBOARD: N/A
+        ENERGY: N/A
+        MEM_USAGE:
+            TOTAL_VRAM: 65536 MB
+            USED_VRAM: 1512 MB
+            FREE_VRAM: 64024 MB
+            TOTAL_VISIBLE_VRAM: 65536 MB
+            USED_VISIBLE_VRAM: 1512 MB
+            FREE_VISIBLE_VRAM: 64024 MB
+            TOTAL_GTT: 12288 MB
+            USED_GTT: 129 MB
+            FREE_GTT: 12159 MB
+        THROTTLE:
+            ACCUMULATION_COUNTER: N/A
+            PROCHOT_ACCUMULATED: N/A
+            PPT_ACCUMULATED: N/A
+            SOCKET_THERMAL_ACCUMULATED: N/A
+            VR_THERMAL_ACCUMULATED: N/A
+            HBM_THERMAL_ACCUMULATED: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_ACCUMULATED: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_POWER_ACCUMULATED: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_THERMAL_ACCUMULATED: N/A
+            TOTAL_GFX_CLK_BELOW_HOST_LIMIT_ACCUMULATED: N/A
+            LOW_UTILIZATION_ACCUMULATED: N/A
+            PROCHOT_VIOLATION_STATUS: N/A
+            PPT_VIOLATION_STATUS: N/A
+            SOCKET_THERMAL_VIOLATION_STATUS: N/A
+            VR_THERMAL_VIOLATION_STATUS: N/A
+            HBM_THERMAL_VIOLATION_STATUS: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_VIOLATION_STATUS: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_POWER_VIOLATION_STATUS: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_THERMAL_VIOLATION_STATUS: N/A
+            TOTAL_GFX_CLK_BELOW_HOST_LIMIT_VIOLATION_STATUS: N/A
+            LOW_UTILIZATION_VIOLATION_STATUS: N/A
+            PROCHOT_VIOLATION_ACTIVITY: N/A
+            PPT_VIOLATION_ACTIVITY: N/A
+            SOCKET_THERMAL_VIOLATION_ACTIVITY: N/A
+            VR_THERMAL_VIOLATION_ACTIVITY: N/A
+            HBM_THERMAL_VIOLATION_ACTIVITY: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_VIOLATION_ACTIVITY: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_POWER_VIOLATION_ACTIVITY: N/A
+            GFX_CLK_BELOW_HOST_LIMIT_THERMAL_VIOLATION_ACTIVITY: N/A
+            TOTAL_GFX_CLK_BELOW_HOST_LIMIT_VIOLATION_ACTIVITY: N/A
+            LOW_UTILIZATION_VIOLATION_ACTIVITY: N/A
+    
+
+
+The pattern here is identical to `amd-smi statistics` — the tool is designed for **discrete GPUs**, and this APU silently returns `N/A` for every metric that belongs to the SoC power/thermal subsystem rather than an isolated GPU chip. `EDGE: 28°C` is this iGPU's die edge temperature at idle — perfectly cool. This is the only sensor `amd-smi` that can be reached on the APU. 
+
+Two memory pools are reported. `VRAM` here is the full unified system RAM pool visible to the GPU — confirming ~62.5 GB is free and available before you launch vLLM. The `GTT` (Graphics Translation Table) pool is a **separate kernel-managed aperture** — a region of system RAM that the GPU driver pins for DMA-accessible, GPU-coherent use. It sits at 12 GB (roughly 1/5 of total RAM, which is the typical Linux kernel default). GTT is used for command buffers, shader binaries, and small kernel objects rather than model weights. For vLLM, the model weights go into `VRAM`; GTT handles the plumbing.
+
+```
+TOTAL_VRAM:         65536 MB   (64 GB system RAM)
+USED_VRAM:           1512 MB   ← OS + desktop compositor overhead
+FREE_VRAM:          64024 MB   ← available for model loading
+
+TOTAL_GTT:          12288 MB   (12 GB)
+USED_GTT:             129 MB
+FREE_GTT:           12159 MB
+```
+
+**Practical baseline:** Before launching any model, your memory state is:
+
+-   1,512 MB consumed (desktop + driver)
+-   64,024 MB free for inference
+
+> A BF16 Llama 3.1 8B load will consume roughly 16 GB, bringing `USED_VRAM` to ~17.5 GB — well within budget.
+
+### PERF\_LEVEL
+
+```
+PERF_LEVEL: AMDSMI_DEV_PERF_LEVEL_AUTO
+```
+
+The GPU is in automatic performance scaling mode — the driver will boost from 688 MHz (the current idle clock, as seen in `statistics`) up to 3100 MHz as compute demand increases. You would not want to change this for inference workloads.
+
+
+## Performance monitoring[#](https://rocm.blogs.amd.com/software-tools-optimization/amd-smi-overview/README.html#performance-monitoring "Link to this heading"){:target="_blank"}
+
+The `amd-smi monitor` command displays utilisation metrics for GPUs, memory, power, PCIe bandwidth, and more. By default, `amd-smi monitor` outputs 18 metrics for every GPU. Passing in specific arguments limits the types of metrics displayed.
+
+```
+\-p, --power-usage            Monitor power usage in Watts
+-t, --temperature            Monitor temperature in Celsius
+-u, --gfx                    Monitor graphics utilization (%) and clock (MHz)
+-m, --mem                    Monitor memory utilization (%) and clock (MHz)
+-n, --encoder                Monitor encoder utilization (%) and clock (MHz)
+-d, --decoder                Monitor decoder utilization (%) and clock (MHz)
+-s, --throttle-status        Monitor thermal throttle status
+-e, --ecc                    Monitor ECC single bit, ECC double bit, and PCIe replay error counts
+-v, --vram-usage             Monitor memory usage in MB
+-r, --pcie                   Monitor PCIe bandwidth in Mb/s
+```
+
+
+For example, to monitor power usage, GPU utilisation, temperature, and memory utilisation:
+
+
+
+
+```bash
+amd-smi monitor -putm
+```
+
+    GPU  XCP  POWER  PWR_CAP   GPU_T   MEM_T   GFX_CLK   GFX%   MEM%  MEM_CLOCK
+      0    0    N/A      N/A     N/A     N/A       N/A    N/A    N/A        N/A
+
+
+The `amd-smi process` command shows details about processes running on the GPU, including their PIDs, memory usage, and GPU utilization.
+
+
+```bash
+amd-smi process
+```
+
+    GPU: 0
+        PROCESS_INFO: No running processes detected
+    
+
+
+To find the firmware information about your GPU:
+
+
+```bash
+amd-smi firmware
+```
+
+    GPU: 0
+        FW_LIST:
+            FW 0:
+                FW_ID: CP_PFP
+                FW_VERSION: 44
+            FW 1:
+                FW_ID: CP_ME
+                FW_VERSION: 31
+            FW 2:
+                FW_ID: CP_MEC1
+                FW_VERSION: 31
+            FW 3:
+                FW_ID: RLC
+                FW_VERSION: 290522434
+            FW 4:
+                FW_ID: SDMA0
+                FW_VERSION: 14
+            FW 5:
+                FW_ID: VCN
+                FW_VERSION: 09.11.80.0D
+            FW 6:
+                FW_ID: ASD
+                FW_VERSION: 553648378
+            FW 7:
+                FW_ID: PM
+                FW_VERSION: 12.93.02.00
+    
+
+
 [^1]: [Install Ryzen Software for Linux with ROCm](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installryz/native_linux/install-ryzen.html){:target="_blank"}
 
 [^2]: [amd](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installryz/native_linux/install-ryzen.html){:target="_blank"}
@@ -900,6 +1403,7 @@ vllm bench latency --model /app/vllm/Meta-Llama-3-8B-Instruct-GPTQ -q gptq --bat
 
 [^5]: [MINISFORUM AI X1 Pro Mini PC](https://au.minisforum.com/products/minisforum-ai-x1-pro-470){:target="_blank"}
 
+[^6]: [Getting to Know Your GPU: A Deep Dive into AMD SMI — ROCm Blogs](https://rocm.blogs.amd.com/software-tools-optimization/amd-smi-overview/README.html){:target="_blank"}
 
 {:gtxt: .message color="green"}
 {:ytxt: .message color="yellow"}
