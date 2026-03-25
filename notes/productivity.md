@@ -288,3 +288,23 @@ SELECT * FROM test.public.data
 where "invoice_no" in (....)
 order by "invoice_no";
 ```
+
+## Kiro
+
+You have to select [Ubuntu](https://kiro.dev/docs/cli/installation/#ubuntu){:target="_blank"} in the [Installation - CLI - Docs - Kiro](https://kiro.dev/docs/cli/installation/){:target="_blank"} for the instructions. Briefly
+
+to install:
+
+```bash
+wget https://desktop-release.q.us-east-1.amazonaws.com/latest/kiro-cli.deb
+sudo dpkg -i kiro-cli.deb
+sudo apt-get install -f
+```
+
+To [uninstall](https://kiro.dev/docs/cli/installation/#uninstalling-kiro-cli){:target="_blank"} (may be for new version)
+
+```bash
+sudo apt-get remove kiro-cli
+sudo apt-get purge kiro-cli #Remove any remaining configuration files
+```
+
