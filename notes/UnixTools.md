@@ -534,3 +534,38 @@ sudo mount -a
 
 > The `_netdev` option ensures it waits for the network before mounting, which is important for network shares.
 
+### Pandoc
+
+To install, first install the `nvm`:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+```
+
+Then install the NODE LTS, NPM and mermaid-filter:
+
+```bash
+nvm install --lts
+npm install -g mermaid-filter
+```
+
+### mermaid-filter
+
+Create the following file:
+
+```bash
+echo '{"launch": {"args": ["--no-sandbox"]}}' > ~/.puppeteerrc.json
+```
+
+To run the mermaid-filter, first set the following
+
+```bash
+sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+```
+
+Or make it permenant:
+
+```bash
+echo 'kernel.apparmor_restrict_unprivileged_userns=0' | sudo tee /etc/sysctl.d/99-userns.conf
+```
+
