@@ -569,3 +569,20 @@ Or make it permenant:
 echo 'kernel.apparmor_restrict_unprivileged_userns=0' | sudo tee /etc/sysctl.d/99-userns.conf
 ```
 
+### pandoc-crossref
+
+To install 
+
+```bash
+# Remove the old binary
+sudo rm /usr/local/bin/pandoc-crossref
+
+# Download the correct version (built with Pandoc v3.9)
+wget https://github.com/lierdakil/pandoc-crossref/releases/download/v0.3.23a/pandoc-crossref-Linux-X64.tar.xz
+
+tar -xf pandoc-crossref-Linux-X64.tar.xz
+sudo mv pandoc-crossref /usr/local/bin/
+
+# Verify
+pandoc-crossref --version
+```
