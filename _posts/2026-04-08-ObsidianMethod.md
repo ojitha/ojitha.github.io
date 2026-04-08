@@ -21,10 +21,6 @@ excerpt: '<div class="image-text-container"><div class="image-column"><img src="
 
 ## Introduction
 
-
-
-![llm_wiki_obsidian_illustration](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-04-08-ObsidianMethod/llm_wiki_obsidian_illustration.svg
-
 The main problem with OneNote or Apple Notes is <span>too much cognitive bloat</span>{:rtxt}. To avoid cognitive bloat, Andrej Karpathy[^1] introduced "LLM Wiki" or "LLM Knowledge Bases," which went viral in early April 2026 and represents the culmination of a years-long evolution in his note-taking philosophy — from a single Apple Notes file to a full AI-maintained research wiki containing 400,000+ words he never typed himself. His core metaphor: 
 
 > Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase.
