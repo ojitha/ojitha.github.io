@@ -551,6 +551,8 @@ npm install -g mermaid-filter
 
 ### mermaid-filter
 
+#### Ubuntu Steup
+
 Create the following file:
 
 ```bash
@@ -563,11 +565,80 @@ To run the mermaid-filter, first set the following
 sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 ```
 
-Or make it permenant:
+Or make it permanent:
 
 ```bash
 echo 'kernel.apparmor_restrict_unprivileged_userns=0' | sudo tee /etc/sysctl.d/99-userns.conf
 ```
+
+#### macOS Setup
+
+> **Note:** AppArmor/kernel namespace commands are Linux-specific and are **not needed** on macOS.
+
+##### 1. Install Puppeteer Chrome Headless Shell
+
+```bash
+npx puppeteer browsers install chrome-headless-shell
+```
+
+##### 2. Create Puppeteer Config (optional on macOS)
+
+```bash
+echo '{"launch": {"args": ["--no-sandbox"]}}' > ~/.puppeteerrc.json
+```
+
+##### 3. Fix Font Rendering (fixes garbled/question-mark text in diagrams)
+
+```bash
+brew install --cask font-noto-sans
+# or
+brew install --cask font-dejavu
+```
+
+##### 4. Set the Puppeteer Executable Path
+
+Check installed browser path:
+
+```bash
+npx puppeteer browsers list
+```
+
+Example output:
+```
+chrome-headless-shell@146.0.7680.153 (mac) /Users/<user>/.cache/puppeteer/chrome-headless-shell/mac-146.0.7680.153/chrome-headless-shell-mac-x64/chrome-headless-shell
+```
+
+Set the environment variable (the path is the 3rd field):
+
+```bash
+export PUPPETEER_EXECUTABLE_PATH=$(npx puppeteer browsers list 2>/dev/null | grep chrome-headless-shell | awk '{print $3}')
+echo $PUPPETEER_EXECUTABLE_PATH
+```
+
+Or set it directly using the exact path:
+
+```bash
+export PUPPETEER_EXECUTABLE_PATH="/Users/<user>/.cache/puppeteer/chrome-headless-shell/mac-146.0.7680.153/chrome-headless-shell-mac-x64/chrome-headless-shell"
+```
+
+##### 5. Make It Permanent
+
+```bash
+echo 'export PUPPETEER_EXECUTABLE_PATH="/Users/<user>/.cache/puppeteer/chrome-headless-shell/mac-146.0.7680.153/chrome-headless-shell-mac-x64/chrome-headless-shell"' >> ~/.bashrc
+source ~/.zshrc
+```
+
+---
+
+#### Platform Comparison
+
+| Step | Ubuntu | macOS |
+|------|--------|-------|
+| Install chrome-headless-shell | ✅ Required | ✅ Required |
+| `~/.puppeteerrc.json` | ✅ Required | ⚪ Optional |
+| AppArmor kernel fix | ✅ Required | ❌ Not applicable |
+| Font installation | Sometimes needed | ✅ Often the fix for garbled text |
+| `PUPPETEER_EXECUTABLE_PATH` | May be needed | ✅ Recommended |
 
 ### pandoc-crossref
 
