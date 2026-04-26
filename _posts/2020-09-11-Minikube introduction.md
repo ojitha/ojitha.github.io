@@ -5,11 +5,11 @@ date: 2020-09-11
 category: Kubernetes
 toc: true
 ---
-[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a high available cluster for education and prototyping purpose only but not for the production use because of security, performance and stability issues.
+[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) is a highly available cluster for educational and prototyping purposes only, not for production use, due to security, performance, and stability issues.
 
 <img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" alt="Minikube" width="20%;" />
 
-Lean the basics here.
+Learn the basics here.
 
 <!--more-->
 
@@ -20,13 +20,13 @@ If you want to run Minikube locally, follow the instructions for [Mac](https://o
 
 ## Install Minikube
 
-Check the version of Minikube available with you
+Check the version of Minikube available to you
 
 ```shell
 minikube version
 ```
 
-check the latest
+Check the latest
 
 ```shell
 minikube update-check
@@ -38,7 +38,7 @@ To display current configuration settings
 minikube update-check
 ```
 
-You can metrics-server and dashboard is available.
+You can use metrics-server, and the dashboard is available.
 
 to start the cluster
 
@@ -334,3 +334,52 @@ kubectl describe svc ojwebapp-svc
 Now you can run curl command `curl <host>:30000` to get the page.
 
 You can change the number of `replicas` into 4 and apply the changes. If you run the `kubectl get deployment`.
+
+To get the details about small cluster:
+
+```bash
+{ clear && \
+  echo -e "\n=== Kubernetes Status ===\n" && \
+  kubectl get --raw '/healthz?verbose' && \
+  kubectl version --short && \
+  kubectl get nodes && \
+  kubectl cluster-info; 
+} | grep -z 'Ready\| ok\|passed\|running'
+```
+
+To view the configuration:
+```bash
+kubectl config view
+kubectl config get-contexts
+```
+
+More details can be revealed about any object. Let's inspect details about the single node. Get the name of the single minikube node:
+
+```bash
+node_name=$(kubectl get nodes -o=jsonpath='{.items[0].metadata.name}')
+kubectl describe node $node_name
+```
+
+Kubernetes currently has about 56 standard resources
+
+```bash
+kubectl api-resources
+```
+
+Events is just one type of resources that can be listed:
+
+```bash
+kubectl get events
+```
+
+minikube has a helpful command to list and inspect the Kubernetes services. List the minikube services:
+
+```bash
+minikube service list
+kubectl get services --all-namespaces
+```
+
+ create two namespaces
+
+
+
