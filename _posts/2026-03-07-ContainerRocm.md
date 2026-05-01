@@ -21,6 +21,8 @@ excerpt: '<div class="image-text-container"><div class="image-column"><img src="
 {:toc}
 ------
 
+## Introduction
+
 **AI X1 Pro-470 form factor**[^5] is the **Zen5 12-core architecture**, the **86 TOPS NPU**, and the **Radeon 890M iGPU** — all of which directly contextualise why the OEM kernel requirement and ROCm APU-specific setup described in the post are necessary.
 
 
