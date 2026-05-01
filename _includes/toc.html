@@ -165,9 +165,39 @@ function setupTOCBehavior() {
   const headings = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
   const tocLinks = document.querySelectorAll('.toc-link');
 
+  const tocContentEl = document.getElementById('toc-content');
+  let lastActiveHref = '';
+  let userIsInteractingWithToc = false;
+  let userInteractionTimer = null;
+  if (tocContentEl) {
+    // If the user manually scrolls / interacts with the TOC, pause auto-follow briefly
+    const markInteracting = function() {
+      userIsInteractingWithToc = true;
+      clearTimeout(userInteractionTimer);
+      userInteractionTimer = setTimeout(function() {
+        userIsInteractingWithToc = false;
+      }, 1500);
+    };
+    tocContentEl.addEventListener('wheel', markInteracting, { passive: true });
+    tocContentEl.addEventListener('touchstart', markInteracting, { passive: true });
+    tocContentEl.addEventListener('mousedown', markInteracting);
+  }
+
+  function scrollActiveIntoView(activeLink) {
+    if (!tocContentEl || !activeLink || userIsInteractingWithToc) return;
+    const containerRect = tocContentEl.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    const margin = 24;
+    if (linkRect.top < containerRect.top + margin) {
+      tocContentEl.scrollTop += (linkRect.top - containerRect.top) - margin;
+    } else if (linkRect.bottom > containerRect.bottom - margin) {
+      tocContentEl.scrollTop += (linkRect.bottom - containerRect.bottom) + margin;
+    }
+  }
+
   function updateActiveLink() {
     let current = '';
-    
+
     headings.forEach(heading => {
       const rect = heading.getBoundingClientRect();
       if (rect.top <= 100) {
@@ -175,12 +205,20 @@ function setupTOCBehavior() {
       }
     });
 
+    let activeLink = null;
     tocLinks.forEach(link => {
       link.classList.remove('active');
       if (link.getAttribute('href') === '#' + current) {
         link.classList.add('active');
+        activeLink = link;
       }
     });
+
+    const href = activeLink ? activeLink.getAttribute('href') : '';
+    if (href !== lastActiveHref) {
+      lastActiveHref = href;
+      scrollActiveIntoView(activeLink);
+    }
   }
 
   // Update active link on scroll with throttling
