@@ -409,7 +409,7 @@ I used the Docker approach[^3] in his case,
 
 
 ```bash
-cat > docker-compose.yaml << 'EOF'
+cat > docker-compose.yaml << 'EOF' 
 services:
   rocm-pytorch:
     image: rocm/pytorch:rocm7.2_ubuntu24.04_py3.12_pytorch_release_2.9.1

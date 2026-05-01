@@ -1,9 +1,9 @@
 <!-- Floating Table of Contents -->
 <div id="floating-toc" class="floating-toc">
   <div class="toc-header">
-    <span class="toc-title">Table of Contents <i>hide</i> ►</span>
+    <span class="toc-title">Table of Contents <i>hide</i></span>
     <button id="toc-toggle" class="toc-toggle" aria-label="Toggle TOC">
-      <span class="toc-icon">📋</span>
+      <span class="toc-icon">−</span>
     </button>
   </div>
   <nav id="toc-content" class="toc-content">
@@ -74,9 +74,13 @@ function setupTOCBehavior() {
   if (!floatingToc || !tocToggle || !tocContent) return;
   
   // Toggle TOC visibility
+  const tocIcon = tocToggle.querySelector('.toc-icon');
   tocToggle.addEventListener('click', function() {
     tocContent.classList.toggle('collapsed');
     floatingToc.classList.toggle('collapsed');
+    if (tocIcon) {
+      tocIcon.textContent = floatingToc.classList.contains('collapsed') ? '+' : '−';
+    }
   });
 
   // Highlight current section while scrolling

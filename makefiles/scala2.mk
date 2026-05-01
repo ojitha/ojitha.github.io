@@ -9,5 +9,6 @@ Scala2BlogsSources := 2025-07-25-Scala-basics \
 md_targets += $(foreach wrd,$(Scala2BlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(Scala2BlogsSources),$(ASSETS_DIR)/$(wrd))
 
-$(foreach element,$(Scala2BlogsSources),$(eval $(call md-copy,$(element),$(Scala2BlogsDir))))
-$(foreach element,$(Scala2BlogsSources),$(eval $(call assets-copy,$(element),$(Scala2BlogsDir))))
+# $(foreach element,$(Scala2BlogsSources),$(eval $(call md-copy,$(element),$(Scala2BlogsDir))))
+# $(foreach element,$(Scala2BlogsSources),$(eval $(call assets-copy,$(element),$(Scala2BlogsDir))))
+$(eval $(call register-section,$(Scala2BlogsDir),$(Scala2BlogsSources)))
