@@ -3,7 +3,7 @@ layout: notes
 title: Productivity Tools
 mermaid: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
-typora-copy-images-to: ../assets/images/${filename}
+typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
 ---
@@ -15,23 +15,132 @@ typora-copy-images-to: ../assets/images/${filename}
 
 
 ## Blog tools
-I was very enthustic to know markdown level diagraming.
+### Makefile for Jekyll
 
-### Mermaid
-One of the best so far found is [mermaid](https://mermaid-js.github.io/mermaid/#/) which I have used with the my blog tool stackedit.io. For example:
+The pattern lets you onboard a new external blog source by writing a tiny include file — set its `…BlogsDir`, list its stems, and reuse the same `md-copy` / `assets-copy` templates.
 
-<div class="mermaid">
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-</div>
-such a great diagraming.
+The build is split between a top-level `Makefile` (which defines reusable rule *templates*) and per-section include files, such as `makefiles/llmtuning.mk` (which list *which* posts to pull and *where* to pull them from). The variable `LLMTUNINGBlogsDir := ../LLMTuning/blogs` is the "where"—it tells the templates the source directory for the LLMTuning Jupyter-notebook-derived markdown files, which sit one level above the Jekyll site.
+
+#### Step 1 — Templates defined in the top-level Makefile
+
+```makefile
+# Markdown copy rule
+define md-copy
+$(DRAFTS_DIR)/$1.md : $2/$1.md | $(DRAFTS_DIR)
+	@echo "-------------------------"
+	@echo "copy $$< -> $$@"
+	cp $$< $$@
+	@echo "-------------------------"
+endef
+
+# Assets copy rule
+define assets-copy
+$(ASSETS_DIR)/$1:
+	@echo "Checking for assets folder $1..."
+	@if [ -d "$2/assets/images/$1" ]; then \
+		echo "Assets folder exists, copying..."; \
+		mkdir -p $(ASSETS_DIR)/$1; \
+		cp -r $2/assets/images/$1/* $(ASSETS_DIR)/$1/; \
+		echo "Assets copied to $(ASSETS_DIR)/$1"; \
+	else \
+		echo "No assets folder found for $1, creating empty directory..."; \
+		mkdir -p $(ASSETS_DIR)/$1; \
+	fi
+endef
+```
+
+
+
+The above two `define` blocks act as parameterised rule generators:
+
+- `md-copy` takes two arguments: `$1` is the post stem (e.g. `2026-02-14-SMMLDev`) and `$2` is the source directory. It produces a rule of the form:
+
+```makefile
+./_posts/2026-02-14-SMMLDev.md : ../LLMTuning/blogs/2026-02-14-SMMLDev.md | ./_posts
+    cp ../LLMTuning/blogs/2026-02-14-SMMLDev.md ./_posts/2026-02-14-SMMLDev.md
+```
+
+- `assets-copy` similarly generates a rule that creates `./assets/images/<stem>/`, and if `<source>/assets/images/<stem>/` exists, copies its contents over; otherwise it just makes the empty directory.
+
+> The double-dollar `$$<` and `$$@` inside `define` are essential — they survive one level of `$(call ...)` expansion so that `$<` and `$@` end up in the final rule for `make` to interpret as the prerequisite and target.
+
+
+
+#### Step 2 — `llmtuning.mk` plugs values into those templates
+
+
+
+```makefile
+LLMTUNINGBlogsDir := ../LLMTuning/blogs
+LLMTUNINGBlogsSources := 2026-02-14-SMMLDev \
+							2026-03-07-ContainerRocm
+
+md_targets += $(foreach wrd,$(LLMTUNINGBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
+asset_targets += $(foreach wrd,$(LLMTUNINGBlogsSources),$(ASSETS_DIR)/$(wrd))
+
+$(foreach element,$(LLMTUNINGBlogsSources),$(eval $(call md-copy,$(element),$(LLMTUNINGBlogsDir))))
+$(foreach element,$(LLMTUNINGBlogsSources),$(eval $(call assets-copy,$(element),$(LLMTUNINGBlogsDir))))
+```
+
+
+
+The above include file does four things, in order:
+
+`LLMTUNINGBlogsDir := ../LLMTuning/blogs` sets the source path. The path is relative to the repo root (`/Users/...same.../ojitha.github.io`), so it resolves to `/Users/...same.../LLMTuning/blogs` — the sibling repo you mentioned attaching.
+
+`LLMTUNINGBlogsSources := 2026-02-14-SMMLDev 2026-03-07-ContainerRocm` is the list of post stems to import.
+
+The two `md_targets += …` and `asset_targets += …` lines extend the global target lists that the top-level `all:` target depends on. After expansion, they become:
+
+```
+md_targets    += ./_posts/2026-02-14-SMMLDev.md ./_posts/2026-03-07-ContainerRocm.md
+asset_targets += ./assets/images/2026-02-14-SMMLDev ./assets/images/2026-03-07-ContainerRocm
+```
+
+The two `$(foreach … $(eval $(call …)))` lines are where `LLMTUNINGBlogsDir` is actually consumed. For each stem in `LLMTUNINGBlogsSources`, `$(call md-copy,<stem>,../LLMTuning/blogs)` expands the template with `$1=<stem>` and `$2=../LLMTuning/blogs`, and `$(eval …)` injects the resulting rule text into the Makefile as if it had been written by hand. The same happens for `assets-copy`.
+
+#### Step 3 — What `make all` actually does
+
+After all the eval'ing, the effective Makefile contains, for each stem, two concrete rules:
+
+```
+./_posts/2026-02-14-SMMLDev.md : ../LLMTuning/blogs/2026-02-14-SMMLDev.md | ./_posts
+    cp ../LLMTuning/blogs/2026-02-14-SMMLDev.md ./_posts/2026-02-14-SMMLDev.md
+
+./assets/images/2026-02-14-SMMLDev:
+    # if ../LLMTuning/blogs/assets/images/2026-02-14-SMMLDev exists, copy it
+    # otherwise create an empty directory
+```
+
+`all` depends on `$(md_targets) $(asset_targets)`, so `make` walks each target. Markdown files are rebuilt only dependency). The asset rule has no prerequisites, so it runs once and is then considered up to date.
+
+#### Why this design
+
+The one caveat worth noting: the markdown rule has the source as a real prerequisite (so edits in `../LLMTuning/blogs` trigger a re-copy), but the assets rule does not — once `./assets/images/<stem>` exists, `make` will not refresh it even if images change upstream. If that matters, deleting the target directory before `make all` (or adding the source folder as an order-only prerequisite) forces the recopy.
+
+![makefile_llmtuning_flow](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/productivity/makefile_llmtuning_flow.svg)
+
+**Step 1 — Declare what to import.** When `make` reads `Makefile` and hits the `include makefiles/llmtuning.mk` line, the variables `LLMTUNINGBlogsDir` and `LLMTUNINGBlogsSources` are set. The first one points one directory up at the sibling `LLMTuning` repo's `blogs/` folder; the second one is the explicit list of post stems you want to pull in. Nothing has been copied yet — these are just strings sitting in `make`'s memory.
+
+**Step 2 — Templates wait to be filled in.** Earlier in the top-level Makefile, two `define` blocks (`md-copy` and `assets-copy`) declared *parameterised* rule fragments. They contain `$1` and `$2` placeholders — `$1` for the post stem, `$2` for the source directory. They are not rules yet; they are recipes for making rules. The doubled `$$<` and `$$@` inside them are intentional — they survive one round of `$(call)` substitution and arrive at `make` as the normal automatic variables ` $<` and `$@`.
+
+**Step 3 — `foreach` + `eval` + `call` turns templates into real rules.** This is the line that does the actual wiring:
+
+```
+$(foreach element,$(LLMTUNINGBlogsSources),$(eval $(call md-copy,$(element),$(LLMTUNINGBlogsDir))))
+```
+
+`$(foreach)` walks each stem (`2026-02-14-SMMLDev`, then `2026-03-07-ContainerRocm`). For each one, `$(call md-copy,<stem>,../LLMTuning/blogs)` substitutes `$1` with the stem and `$2` with `../LLMTuning/blogs`, producing rule text. `$(eval ...)` then injects that text into the Makefile as if you'd typed it by hand. The same pattern runs again for `assets-copy`. After this step, `make` has two new concrete rules per stem — four rules total for LLMTuning. The `md_targets += ...` and `asset_targets += ...` lines just above it append those generated targets to the global lists that `all` depends on.
+
+**Step 4 — `make all` resolves the dependency graph.** When you run `make all`, `make` walks `$(md_targets) $(asset_targets)`. For `./_posts/2026-02-14-SMMLDev.md`, it sees the prerequisite `../LLMTuning/blogs/2026-02-14-SMMLDev.md` and the order-only `| ./_posts`. It compares mtimes: if the source in `LLMTuning/blogs/` is newer than (or the destination is missing) the file in `./_posts/`, the recipe runs. Otherwise the target is "up to date" and skipped — which is why subsequent `make all` runs are nearly instant if nothing upstream has changed.
+
+**Step 5 — The recipe copies the file.** When the rule fires, `cp ../LLMTuning/blogs/<stem>.md ./_posts/<stem>.md` runs in the shell, importing the markdown that was originally exported from your Jupyter notebook. The asset rule, in parallel, checks whether `../LLMTuning/blogs/assets/images/<stem>/` exists — if so, it `mkdir -p`s the matching folder under `./assets/images/<stem>/` and copies the contents in; if not, it creates an empty placeholder so Jekyll doesn't choke on a missing path. Once all targets have been visited, `all` is satisfied and the Jekyll site has the freshly imported posts and images ready for the next `bundle exec jekyll build`.
+
+The key mental model: `LLMTUNINGBlogsDir := ../LLMTuning/blogs` is a *parameter* threaded through generic templates living in the top-level Makefile, and the foreach/eval/call sandwich is what actually instantiates those templates against that parameter to produce the rules `make` ultimately executes.
 
 ### asciinema
 
-The tool [asciinema](https://asciinema.org) record your terminal and upload to cloud. You can [install](https://asciinema.org/docs/installation) this tool using `brew` in the MacOS.
+The tool [asciinema](https://asciinema.org) records your terminal and uploads it to the cloud. You can [install](https://asciinema.org/docs/installation) this tool using `brew` in the MacOS.
 
 ## XML
 Tools for XML
@@ -107,11 +216,11 @@ python3 -m venv xmltest
 cd xmltest
 source bin/activate
 ```
-You project is `xmltest`. Now install the graphtage packate
+Your project is `xmltest`. Now install the GraphTag package
 ```bash
 pip install graphtage
 ```
-now you are ready to compare m1.xml and p1.xml files:
+Now you are ready to compare m1.xml and p1.xml files:
 ```bash
 graphtage p1.xml m1.xml
 ```
@@ -123,8 +232,8 @@ Some of the extensions tested for Python:
 - Use tools like flake8 and [blue](https://fpy.li/8-10). [flake8](https://fpy.li/8-9) reports on code styling, among many other issues, and blue rewrites source code according to (most) rules embedded in the [black](https://fpy.li/8-11) code formatting tool.
 - isort: organise imports
 - JSON Path Status Bar: Show JSON path of the element
-- Output Colorizer: VSCode output in color
-- Open Folder Context Menu for VS Code: This will open a new instance of VSCode for the selected folder in the Explorer.
+- Output Colourizer: VSCode output in colour
+- Open Folder Context Menu for VS Code: This will open a new instance of VS Code for the selected folder in the Explorer.
 - Pylint: Lint from Microsoft
 - 
 

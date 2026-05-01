@@ -11,7 +11,7 @@ typora-copy-images-to: ../assets/images/${filename}
 
 Lua filter used in Pandoc 3.6.3. This blog has solutions for:
 
-- Creating Glossary for ePub ver 3 book
+- Creating a glossary for ePub ver 3 book
 - GitHub style alerts
 
 <!--more-->
@@ -601,7 +601,9 @@ autoSectionLabels: True
 ---
 ```
 
-Reference:
+## Usage
+
+
 
 ****
 
