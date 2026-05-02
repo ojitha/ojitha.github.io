@@ -38,11 +38,14 @@ header_pages:
 remote_theme: jekyll/minima@4de322363fca5927e6f4012cb94f6dad69ab5e6c
 minima:
   skin: classic
+  # v3 format: array of {icon, url, title} entries (FA icon name, full URL,
+  # link title). The v2 hash form (twitter: ojitha) renders blank icons in v3
+  # because the new social.html iterates entry.icon / entry.url / entry.title.
   social_links:
-    twitter: ojitha
-    github: ojitha
-    linkedin: ojitha
-    stackoverflow: "546792"
+    - { icon: github,         url: "https://github.com/ojitha",               title: "GitHub" }
+    - { icon: x-twitter,      url: "https://twitter.com/ojitha",              title: "Twitter / X" }
+    - { icon: linkedin,       url: "https://www.linkedin.com/in/ojitha",      title: "LinkedIn" }
+    - { icon: stack-overflow, url: "https://stackoverflow.com/users/546792",  title: "Stack Overflow" }
 
 copyright: "Copyright © 2020 Ojitha Hewa Kumanayaka"
 
