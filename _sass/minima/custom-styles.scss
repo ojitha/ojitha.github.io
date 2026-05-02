@@ -7,34 +7,6 @@
   right: 5px;
 }
 
-/* Restore spacing between header nav items.
-   The local _includes/header.html uses the minima 2.x markup
-   (`<nav class="site-nav"> <div class="trigger"> <a class="page-link">`),
-   but minima v3's CSS styles a different markup, so without this rule
-   the page-links render with no whitespace between them. */
-.site-nav .page-link + .page-link {
-  margin-left: 20px;
-}
-
-/* Mobile nav: minima v3 reveals the hamburger label on narrow viewports
-   but only knows how to collapse a `.nav-items` container — our header
-   still uses the v2 `.trigger` div, so the page-links stay visible
-   alongside the hamburger. Re-add the v2 collapse behaviour. */
-@media screen and (max-width: 600px) {
-  .site-nav .trigger {
-    clear: both;
-    display: none;
-  }
-  .site-nav #nav-trigger:checked ~ .trigger {
-    display: block;
-    padding-bottom: 5px;
-  }
-  .site-nav .trigger .page-link {
-    display: block;
-    margin-left: 0;
-    padding: 5px 10px;
-  }
-}
 
 .posts>.post {
   padding-bottom: 2em;

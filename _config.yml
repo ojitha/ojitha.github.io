@@ -25,18 +25,20 @@ google_analytics: UA-12622200-2
 timezone: Australia/Sydney
 show_excerpts: true
 
-header_pages:
-  - index.html
-  - blog.md
-  - notes.md
-  - mindmap.html
-  - projects.md  
-  - search.html
-  - about.md
-
 # theme: minima
 remote_theme: jekyll/minima@4de322363fca5927e6f4012cb94f6dad69ab5e6c
 minima:
+  # v3 reads the nav page list from minima.nav_pages (was site.header_pages in v2).
+  nav_pages:
+    - index.html
+    - blog.md
+    - notes.md
+    - mindmap.html
+    - projects.md
+    - search.html
+    - about.md
+  # `auto` switches between light and dark via prefers-color-scheme.
+  # Use `classic` to force light, `dark` to force dark.
   skin: classic
   # v3 format: array of {icon, url, title} entries (FA icon name, full URL,
   # link title). The v2 hash form (twitter: ojitha) renders blank icons in v3
