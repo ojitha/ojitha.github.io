@@ -20,6 +20,10 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-remote-theme  # REQUIRED — without it, remote_theme: in _config.yml
+                         # is silently ignored and the theme's layouts/includes
+                         # (base.html, head.html, footer.html, etc.) are missing,
+                         # leaving every page without <html>/<head>/CSS.
   # Disabled for dev (re-enable for production):
   # - jekyll-algolia  # Search indexing - only needed for production
   # - jemoji          # Emoji support - disable if not frequently used
