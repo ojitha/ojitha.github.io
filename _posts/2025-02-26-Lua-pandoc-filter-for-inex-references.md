@@ -3,7 +3,6 @@ layout: post
 title:  Lua filters for Pandoc
 date:   2025-02-28
 categories: [Lua]
-mermaid: true
 toc: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
@@ -561,19 +560,6 @@ Much more simplier icon[^1] with markdown may be the best:
 :sleeping: This text is all part of a single *admonition* block.
 ```
 
-Output:
-
-:boom: DANGER, Will Robinson, DANGER
-
-> :memo: **This is a Note**: a pen in front of a paper
-
-> :warning: **This is a Note**: an exclamation mark in front of a triangle
-
-> :bulb: **This is a Note**: a light bulb
-
-> :heavy_check_mark: **This is a Note**: a check mark
-
-:sleeping: This text is all part of a single *admonition* block.
 
 ## pandoc-crossref
 Here is simple configuration as in the crossref[^2]
@@ -601,11 +587,391 @@ autoSectionLabels: True
 ---
 ```
 
-## Usage
 
 
+## Post skeleton
 
-****
+Drop this into `_posts/YYYY-MM-DD-slug.md` and start writing:
+
+```markdown
+---
+layout: post
+title:  My Post Title
+date:   2026-05-02
+categories: [AI, AWS]
+toc: true                 # floating right-side TOC
+mermaid: true             # only if you use diagrams
+maths: true               # only if you use $...$ or $$...$$
+---
+
+One-paragraph hook that becomes the home-page excerpt.
+
+<!--more-->
+
+------
+
+* TOC
+{:toc}
+------
+
+## First section
+Your content here.
+
+[^1]: Footnote text.
+
+{:gtxt: .message color="green"}
+{:ytxt: .message color="yellow"}
+{:rtxt: .message color="red"}
+```
+
+## Front matter flags
+
+| Key                   | Value example                        | Effect                                    |
+| --------------------- | ------------------------------------ | ----------------------------------------- |
+| `layout`              | `post`                               | Use the post layout (also: `notes`)       |
+| `title`               | `"My Title"`                         | Page title and `<h1>`                     |
+| `date`                | `2026-05-02`                         | Sort order; appears in URL                |
+| `categories`          | `[Python, AI]`                       | URL path + archive pages + Algolia facets |
+| `toc`                 | `true` / `false`                     | Floating sidebar TOC (default `true`)     |
+| `mermaid`             | `true`                               | Load Mermaid 11 from CDN                  |
+| `maths`               | `true`                               | Load MathJax 3 with AMS numbering         |
+| `excerpt`             | `'<div>...</div>'`                   | Override auto-excerpt (HTML allowed)      |
+| `linkedinbagage`      | `true`                               | Show LinkedIn badge                       |
+
+## Text formatting
+
+| Source                                       | Renders                            |
+| -------------------------------------------- | ---------------------------------- |
+| `**bold**`                                   | bold text                          |
+| `*italic*`                                   | italic text on **yellow** marker   |
+| `***bold italic***`                          | violet background, wheat text      |
+| `<u>underlined</u>`                          | underlined text on **green** wash  |
+| `~~strikethrough~~`                          | strikethrough                      |
+| `` `inline code` ``                          | monospace                          |
+| `<span class="hl">marked</span>`             | yellow marker (when `*…*` is wrong context) |
+| `[text](url){:target="_blank"}`              | link that opens in a new tab       |
+| `[text][ref]` … `[ref]: url`                 | reference-style link               |
+| `> blockquote`                               | default blue/grey blockquote       |
+
+## Semantic tones (preferred)
+
+Five intent classes, consistent look across `em`, `<u>`, `span`, `code`, `blockquote`, `div`, `p`, `li`, `td`, `pre`, `table`:
+
+| Class    | Intent          | Inline pill | Blockquote icon |
+| -------- | --------------- | ----------- | --------------- |
+| `.info`  | informational   | blue        | ℹ               |
+| `.ok`    | success / good  | green       | ✓               |
+| `.warn`  | warning         | amber       | ⚠               |
+| `.bad`   | danger / error  | red         | ✕               |
+| `.note`  | neutral aside   | grey        | ✎               |
+
+**Inline:**
+
+```markdown
+The `split()` method takes a *regex pattern*{:.bad}; use *split("\\|")*{:.ok} instead.
+This step is <span>idempotent and safe to retry</span>{:.info}.
+```
+
+**Block (admonition):**
+
+```markdown
+> Increase the timeout *only after* you've ruled out cold-start latency.
+{:.warn}
+
+> Removing either guarantee produces duplicate-write bugs.
+{:.bad}
+
+> The encoder infers the schema from the case-class structure.
+{:.ok}
+
+> Side note: only matters for Spark 3.4+.
+{:.note}
+```
+
+## Coloured inline spans (legacy)
+
+Drop these aliases at the **bottom** of any post that uses them, then reference them inline:
+
+```markdown
+{:gtxt: .message color="green"}
+{:ytxt: .message color="yellow"}
+{:rtxt: .message color="red"}
+```
+
+```markdown
+The constraint *must hold for all rows*{:rtxt}; the optimiser <span>can drop redundant filters</span>{:gtxt}.
+```
+
+For new posts, prefer the tone classes above (`{:.bad}`, `{:.ok}`, `{:.warn}`) — they're consistent across element types.
+
+## Legacy blockquote callouts
+
+Still supported for backward compatibility; new posts should use `.ok` / `.warn` instead:
+
+```markdown
+> Approved approach.
+{:.green}
+
+> Watch out for the regex gotcha.
+{:.yellow}
+```
+
+## Code blocks
+
+### Plain fenced block
+
+````markdown
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+```
+````
+
+Common languages: `python`, `scala`, `java`, `kotlin`, `sql`, `bash`, `console`, `dockerfile`, `yaml`, `toml`, `json`, `hcl`, `go`, `rust`, `typescript`, `tsx`, `r`, `haskell`, `clojure`, `graphql`, `protobuf`, `make`. Use `console` for shell sessions with `$` prompts; `bash` for raw scripts.
+
+### With line numbers
+
+{% raw %}
+```liquid
+{% highlight python linenos %}
+def quicksort(xs):
+    if len(xs) <= 1:
+        return xs
+    pivot = xs[0]
+    return (quicksort([x for x in xs[1:] if x <  pivot])
+            + [pivot]
+            + quicksort([x for x in xs[1:] if x >= pivot]))
+{% endhighlight %}
+```
+{% endraw %}
+
+### With highlighted lines
+
+{% raw %}
+```liquid
+{% highlight scala linenos hl_lines="3 4" %}
+val ds   = spark.read.parquet("s3a://bucket/movies").as[Movie]
+val byYr = ds.groupByKey(_.year)
+              .mapValues(_.rating)        // emphasised
+              .reduceGroups(_ + _)        // emphasised
+byYr.show()
+{% endhighlight %}
+```
+{% endraw %}
+
+### Captioned code (anchor + caption)
+
+{% raw %}
+
+````markdown
+```python
+print("hello")
+```
+{:#listing-1 .listing}
+*Listing 1: minimal Python.*
+
+[See Listing 1](#listing-1).
+```
+{% endraw %}
+
+## Math
+
+`maths: true` in front matter is required.
+
+| Form                       | Source                                | Renders                              |
+| -------------------------- | ------------------------------------- | ------------------------------------ |
+| Inline                     | `$O(n \log n)$`                       | $O(n \log n)$                        |
+| Display                    | `$$ a^2 + b^2 = c^2 $$`               | centred display                      |
+| Numbered (auto, AMS)       | `\begin{equation} ... \end{equation}` | numbered on the right                |
+| Aligned, multi-line        | `\begin{align} ... \end{align}`       | aligned at `&`, each line numbered   |
+| Manual tag                 | `... \tag{1}`                         | overrides auto-number                |
+| Cross-reference            | `\eqref{eq:label}`                    | numbered link                        |
+| Common operators           | `\bullet \circ \mapsto \Rightarrow`   | $\bullet \circ \mapsto \Rightarrow$  |
+
+Worked example:
+
+```markdown
+$$
+\mathcal{L}_{\text{CE}}(\mathbf{y}, \hat{\mathbf{y}}) =
+\begin{cases}
+  -\sum_i y_i \log \hat{y}_i  & \text{soft labels} \\
+  -\log \hat{y}_c             & \text{hard label } c
+\end{cases}
+\tag{1}
+$$
+```
+
+**Watch out:** kramdown treats `_` as italic. Inside math, write `x_{i}` (curly-brace the subscript) or escape `\_` to be safe.
+
+## Mermaid diagrams
+
+`mermaid: true` in front matter is required.
+
+### Flowchart
+
+````markdown
+```mermaid
+graph LR
+  C[Client] -->|HTTPS| A[API Gateway]
+  A --> L[Lambda]
+  L -->|PutRecord| K[(Kinesis)]
+  K --> S[Spark Streaming]
+  S --> R[(Redshift)]
+  style L fill:#FFC107
+  style S fill:#4CAF50
+```
+````
+
+### Sequence
+
+````markdown
+```mermaid
+sequenceDiagram
+  autonumber
+  actor User
+  User ->> Web: submit form
+  Web  ->> API: POST /jobs
+  API  ->> DB:  PutItem(jobs)
+  DB   -->> API: 200
+  API  -->> Web: { jobId, status: queued }
+  Web  -->> User: "Submitted ✓"
+```
+````
+
+### Class
+
+````markdown
+```mermaid
+classDiagram
+  direction LR
+  class Functor~F~     { +fmap(f): F[A] => F[B] }
+  class Applicative~F~ { +pure(a); +ap(ff) }
+  class Monad~F~       { +flatMap(f): F[A] => F[B] }
+  Functor      <|-- Applicative
+  Applicative  <|-- Monad
+```
+````
+
+### Mind map (handDrawn look)
+
+````markdown
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: forest
+---
+mindmap
+  (("Type
+  Annotation"))
+    ["Tool / function schema"]
+    ["Inter-agent data flow"]
+    ["LangGraph state"]
+    ["Runtime validation"]
+    ["LLM function calling"]
+```
+````
+
+Other diagram kinds available: `gantt`, `pie`, `journey`, `er`, `gitgraph`, `quadrantChart`, `timeline`, `sankey-beta`, `xychart-beta`, `block-beta`, `architecture-beta`, `stateDiagram-v2`, `c4Context`, `requirementDiagram`.
+
+## Tables
+
+```markdown
+| Aspect        | join                | joinWith                  |
+| ------------- | ------------------- | ------------------------- |
+| Return type   | DataFrame (untyped) | `Dataset[(T, U)]` (typed) |
+| Type safety   | ❌ lost              | ✅ preserved              |
+| Column access | by name (string)    | by object fields          |
+```
+
+| Aspect        | join                | joinWith                  |
+| ------------- | ------------------- | ------------------------- |
+| Return type   | DataFrame (untyped) | `Dataset[(T, U)]` (typed) |
+| Type safety   | ❌ lost              | ✅ preserved              |
+| Column access | by name (string)    | by object fields          |
+
+Right-align a column with `---:`, centre with `:---:`. Add a class to the whole table with `{:.note}` immediately after the table block.
+
+## Footnotes, abbreviations, definition lists
+
+```markdown
+The HPACK protocol is described in [RFC 7541][rfc][^hpack].
+
+[^hpack]: RFC 7541, *HPACK: Header Compression for HTTP/2*, May 2015.
+[rfc]: https://datatracker.ietf.org/doc/html/rfc7541
+
+*[HPACK]: HTTP/2 Header Compression
+
+Term
+: First definition
+: Second definition
+```
+
+## Headings, anchors, TOC
+
+- All headings auto-generate ids (kramdown `auto_ids: true`).
+- Override the id: `## Encoders explained {#encoders}` → `[link](#encoders)`.
+- The `* TOC\n{:toc}` block produces an in-content TOC; the floating sidebar TOC is automatic when `toc: true`.
+
+## Images
+
+```markdown
+![Alt text](/assets/images/2026-05-02-slug/diagram.png)
+
+<!-- with explicit width -->
+<img src="/assets/images/2026-05-02-slug/diagram.png" alt="Alt" width="400">
+```
+
+Save under `assets/images/<post-slug>/`. Typora's `${filename}` token in front matter does this automatically.
+
+### Two-column image + text
+
+```html
+<div class="image-text-container">
+  <div class="image-column">
+    <img src="/assets/images/2026-05-02-slug/diagram.svg" alt="Diagram">
+  </div>
+  <div class="text-column">
+    <p>Description on the right, image on the left, stacks on mobile.</p>
+  </div>
+</div>
+```
+
+## Includes available on this site
+
+{% raw %}
+```liquid
+{% include video-summary.html
+   id="dQw4w9WgXcQ"
+   image="/assets/images/2026-05-02-slug/overview.png"
+   content="One-line TL;DR of the video." %}
+```
+{% endraw %}
+
+| Include             | Trigger             | What it does                       |
+| ------------------- | ------------------- | ---------------------------------- |
+| `toc.html`          | `toc: true`         | Floating, scroll-spy, resizable TOC|
+| `mermaid.html`      | `mermaid: true`     | Mermaid 11 + Iconify logos pack    |
+| `maths.html`        | `maths: true`       | MathJax 3 with AMS numbering       |
+| `video-summary.html`| manual include      | YouTube embed + sidebar diagram    |
+| `linkedinbagage.html`| `linkedinbagage: true` | LinkedIn profile badge          |
+
+## Liquid mini-recipes
+
+{% raw %}
+```liquid
+Built on {{ site.time | date: "%Y-%m-%d" }} at {{ site.url }}.
+
+{% if page.categories contains "Scala" %}
+> Filed under Scala.
+{:.ok}
+{% endif %}
+
+{% for cat in page.categories %}#{{ cat | downcase }} {% endfor %}
+```
+{% endraw %}
+
+
 
 [^1]: [A markdown version emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet/tree/master)
 [^2]: [pandoc-crossref](https://lierdakil.github.io/pandoc-crossref/#customization)
