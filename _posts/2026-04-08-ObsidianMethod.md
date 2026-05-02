@@ -24,7 +24,7 @@ excerpt: '<div class="image-text-container"><div class="image-column"><img src="
 The main problem with OneNote or Apple Notes is <span>too much cognitive bloat</span>{:rtxt}. To avoid cognitive bloat, Andrej Karpathy[^1] introduced "LLM Wiki" or "LLM Knowledge Bases," which went viral in early April 2026 and represents the culmination of a years-long evolution in his note-taking philosophy — from a single Apple Notes file to a full AI-maintained research wiki containing 400,000+ words he never typed himself. His core metaphor: 
 
 > Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase.
-{:.info-box}
+{:.ok}
 
 Karpathy has shared his thinking across three major public disclosures: 
 
@@ -40,13 +40,13 @@ Together, they reveal a consistent philosophy
 
 ## The single-note origin: append, sink, rescue
 
-Before any involvement with wikis or AI, Karpathy used what he called the <u>append-and-review note</u>[^2] for many years. The *system was radically simple*: a single text note in Apple Notes, titled "notes." Every idea, TODO, quote, movie recommendation, draft tweet, shell command, or hyperparameter result got appended to the top as plain text. No dates, no tags, no links, no folders.
+Before any involvement with wikis or AI, Karpathy used what he called the *append-and-review note*{:.info}[^2] for many years. The *system was radically simple*{:.ok}: a single text note in Apple Notes, titled "notes." Every idea, TODO, quote, movie recommendation, draft tweet, shell command, or hyperparameter result got appended to the top as plain text. No dates, no tags, no links, no folders.
 
-The genius was in the review mechanism. Items naturally "sink towards the bottom, almost as if under gravity," Karpathy wrote. During periodic scrolls through the note, items that still mattered got copy-pasted back to the top. Items that didn't earn their descent into obscurity — never deleted, but no longer top-of-mind. He explicitly rejected structural complexity: "Maintaining more than one note and managing and sorting them into folders and recursive substructures costs way too much cognitive bloat." The note grew "quite giant over the last few years," he said, and served as a working-memory offload: "When I note something down, I feel that I can immediately move on, wipe my working memory, and focus fully on something else." The only concessions to structure were occasional prefixes like "watch:", "listen:", or "read:" for quick Ctrl+F filtering. This post later inspired an Obsidian community plugin called Jot[^3], which implemented the append-and-review pattern as a card-style interface.
+The genius was in the review mechanism. Items naturally "sink towards the bottom, almost as if under gravity," Karpathy wrote. During periodic scrolls through the note, items that still mattered got copy-pasted back to the top. Items that didn't earn their descent into obscurity — never deleted, but no longer top-of-mind. He explicitly rejected structural complexity: "Maintaining more than one note and managing and sorting them into folders and recursive substructures costs way too much cognitive bloat." The note grew "quite giant over the last few years," he said, and served as a working-memory offload: "When I note something down, I feel that I can immediately move on, wipe my working memory, and focus fully on something else." The only concessions to structure were occasional prefixes like "watch:", "listen:", or "read:" for quick Ctrl+F filtering. This post later inspired an Obsidian community plugin called *Jot*{:.info}[^3], which implemented the append-and-review pattern as a card-style interface.
 
 ## The Obsidian love letter: file over app
 
-On February 24, 2024, Karpathy posted what he called a "love letter"[^4] to Obsidian on X, announcing he had "very happily switched to" it for personal notes. Notably, he said his interest wasn't even primarily about note-taking — it was about **Obsidian's philosophy of software**. He praised four qualities that aligned with his values:
+On February 24, 2024, Karpathy posted what he called a *love letter*{:.info}[^4] to Obsidian on X, announcing he had "very happily switched to" it for personal notes. Notably, he said his interest wasn't even primarily about note-taking — it was about **Obsidian's philosophy of software**. He praised four qualities that aligned with his values:
 
 1. *Notes are plain-text markdown files stored locally*. Obsidian is described as "just UI/UX sugar of pretty rendering and editing files" — meaning the app is merely a viewer/editor, not a data silo.
 2. *High composability through a plugin ecosystem*. Because everything is just plain-text files on your disk, plugins can interact with your notes in flexible, interoperable ways.
@@ -54,6 +54,7 @@ On February 24, 2024, Karpathy posted what he called a "love letter"[^4] to Obsi
 4. *No lock-in or dark patterns*. Karpathy specifically praised that there are "no attempts to 'lock you in'" and no "user-hostile dark patterns" — a pointed contrast to cloud-based note apps that make your data dependent on their platform.
 
 > The overarching idea is that **the file is the source of truth, not the application**. The app can come and go, change, or be replaced — but your data, stored as universal plain-text markdown, remains permanently yours, portable, and inspectable. As Karpathy put it in the context of his LLM Wiki: "Your data is yours, on your local computer... The memory here is a simple collection of files in universal formats.
+{:.info}
 
 He linked to Obsidian CEO Steph Ango's essay "File over app," a principle that would become foundational to everything that followed. The tweet went viral on Hacker News and drew a reply from Lex Fridman, who confirmed, "Obsidian is great!" This moment marked Karpathy's public transition from Apple Notes (quick personal capture) to Obsidian (structured knowledge work), setting the stage for the LLM integration that would come two years later.
 

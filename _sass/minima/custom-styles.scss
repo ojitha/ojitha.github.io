@@ -90,18 +90,18 @@
     padding: 0 3px; /* Add a little padding for better appearance */
   }
   
-  .u-warn, .u-info, .u-ok, .u-note, .u-bad {
+  .warn, .info, .ok, .note, .bad {
     background-color: lightcyan;
     padding: 0 3px;
     text-decoration-color: var(--u-color, lightgray);
     border-radius: 2px;
   }
 
-  .u-warn { --u-color: #d97706; background-color: #fff7ed; }
-  .u-info { --u-color: #2563eb; background-color: #eff6ff; }
-  .u-ok   { --u-color: #16a34a; background-color: #f0fdf4; }
-  .u-note { --u-color: #6b7280; background-color: #f9fafb; }
-  .u-bad  { --u-color: #dc2626; background-color: #fef2f2; }
+  .warn { --u-color: #d97706; background-color: #fff7ed; }
+  .info { --u-color: #2563eb; background-color: #eff6ff; }
+  .ok   { --u-color: #16a34a; background-color: #f0fdf4; }
+  .note { --u-color: #6b7280; background-color: #f9fafb; }
+  .bad  { --u-color: #dc2626; background-color: #fef2f2; }
         
 }
 
@@ -403,11 +403,11 @@
 /* ------------------------------------------------------------------
    Semantic tone system — pick one class, drop it on any element:
 
-     .u-info   informational   (blue)
-     .u-ok     success / good  (green)
-     .u-warn   warning         (amber)
-     .u-bad    danger / error  (red)
-     .u-note   neutral aside   (grey)
+     .info   informational   (blue)
+     .ok     success / good  (green)
+     .warn   warning         (amber)
+     .bad    danger / error  (red)
+     .note   neutral aside   (grey)
 
    Inline elements get a small pill (em, u, span, code, mark, strong em).
    Block elements get an admonition box (blockquote, div, p, li, td,
@@ -422,29 +422,27 @@
 .post {
 
   /* 1. Palette — each tone sets four CSS custom properties only. */
-  .u-info  { --tone-bg:#e7f1ff; --tone-fg:#0b3d91; --tone-border:#3b82f6; --tone-accent:#1d4ed8; }
-  .u-ok    { --tone-bg:#e6f9ed; --tone-fg:#0f5132; --tone-border:#22c55e; --tone-accent:#15803d; }
-  .u-warn  { --tone-bg:#fff7e6; --tone-fg:#7a4a00; --tone-border:#f59e0b; --tone-accent:#b45309; }
-  .u-bad   { --tone-bg:#fdecea; --tone-fg:#8a1c13; --tone-border:#ef4444; --tone-accent:#b91c1c; }
-  .u-note  { --tone-bg:#f1f3f5; --tone-fg:#1f2937; --tone-border:#9ca3af; --tone-accent:#4b5563; }
+  .info  { --tone-bg:#e7f1ff; --tone-fg:#0b3d91; --tone-border:#3b82f6; --tone-accent:#1d4ed8; }
+  .ok    { --tone-bg:#e6f9ed; --tone-fg:#0f5132; --tone-border:#22c55e; --tone-accent:#15803d; }
+  .warn  { --tone-bg:#fff7e6; --tone-fg:#7a4a00; --tone-border:#f59e0b; --tone-accent:#b45309; }
+  .bad   { --tone-bg:#fdecea; --tone-fg:#8a1c13; --tone-border:#ef4444; --tone-accent:#b91c1c; }
+  .note  { --tone-bg:#f1f3f5; --tone-fg:#1f2937; --tone-border:#9ca3af; --tone-accent:#4b5563; }
 
   /* 2. Inline rendering — pill with bottom-border accent.
         Higher specificity than `.post em`, `.post u`, `.post strong em`,
         so it cleanly overrides their default backgrounds. */
   em, u, span, code, mark, strong em {
-    &.u-info, &.u-ok, &.u-warn, &.u-bad, &.u-note {
+    &.info, &.ok, &.warn, &.bad, &.note {
       background:      var(--tone-bg);
       color:           var(--tone-fg);
-      border-bottom:   2px solid var(--tone-border);
       padding:         0 4px;
       border-radius:   3px;
-      text-decoration: none;        /* override <u>'s underline */
     }
   }
 
   /* 3. Block rendering — admonition box (left border + tint). */
   blockquote, div, p, li, td, pre, table {
-    &.u-info, &.u-ok, &.u-warn, &.u-bad, &.u-note {
+    &.info, &.ok, &.warn, &.bad, &.note {
       background:    var(--tone-bg);
       color:         var(--tone-fg);
       border-left:   4px solid var(--tone-border);
@@ -455,14 +453,14 @@
 
   /* 4. Optional leading icon for blockquote admonitions. */
   blockquote {
-    &.u-info::before  { content: "\2139\00a0"; }   /* ℹ */
-    &.u-ok::before    { content: "\2713\00a0"; }   /* ✓ */
-    &.u-warn::before  { content: "\26A0\00a0"; }   /* ⚠ */
-    &.u-bad::before   { content: "\2715\00a0"; }   /* ✕ */
-    &.u-note::before  { content: "\270E\00a0"; }   /* ✎ */
+    &.info::before  { content: "\2139\00a0"; }   /* ℹ */
+    &.ok::before    { content: "\2713\00a0"; }   /* ✓ */
+    &.warn::before  { content: "\26A0\00a0"; }   /* ⚠ */
+    &.bad::before   { content: "\2715\00a0"; }   /* ✕ */
+    &.note::before  { content: "\270E\00a0"; }   /* ✎ */
 
-    &.u-info::before, &.u-ok::before, &.u-warn::before,
-    &.u-bad::before,  &.u-note::before {
+    &.info::before, &.ok::before, &.warn::before,
+    &.bad::before,  &.note::before {
       color:        var(--tone-accent);
       font-weight:  700;
       margin-right: 4px;
