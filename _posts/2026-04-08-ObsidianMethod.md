@@ -12,16 +12,13 @@ excerpt: '<div class="image-text-container"><div class="image-column"><img src="
 
 <!--more-->
 
-
-------
-
 * TOC
 {:toc}
 ------
 
 ## Introduction
 
-The main problem with OneNote or Apple Notes is <span>too much cognitive bloat</span>{:rtxt}. To avoid cognitive bloat, Andrej Karpathy[^1] introduced "LLM Wiki" or "LLM Knowledge Bases," which went viral in early April 2026 and represents the culmination of a years-long evolution in his note-taking philosophy — from a single Apple Notes file to a full AI-maintained research wiki containing 400,000+ words he never typed himself. His core metaphor: 
+The main problem with OneNote or Apple Notes is <span>too much cognitive bloat</span>{:rtxt}. To avoid cognitive bloat, <span>Andrej Karpathy</span>{:.info}[^1] introduced "LLM Wiki" or "LLM Knowledge Bases," which went viral in early April 2026 and represents the culmination of a years-long evolution in his note-taking philosophy — from a single Apple Notes file to a full AI-maintained research wiki containing 400,000+ words he never typed himself. His core metaphor: 
 
 > Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase.
 {:.ok}
@@ -60,7 +57,7 @@ He linked to Obsidian CEO Steph Ango's essay "File over app," a principle that w
 
 ## The LLM Wiki: how the full system works
 
-The method most people now call "Karpathy's Obsidian method" emerged on April 2, 2026, when he posted a detailed thread on X titled "LLM Knowledge Bases"[^5] that crossed **16 million views**. He followed up on April 4 with a GitHub Gist — an "idea file"[^6] designed to be copy-pasted directly to an LLM agent — that received over 5,000 stars and 1,483 forks within days.
+The method most people now call "Karpathy's Obsidian method" emerged on April 2, 2026, when he posted a detailed thread on X titled *LLM Knowledge Bases*{:.info}[^5] that crossed **16 million views**{:gtxt}. He followed up on April 4 with a GitHub Gist — an *idea file*{:.info}[^6](see **[Listing 1](#listing-claude)**) designed to be copy-pasted directly to an LLM agent — that received over 5,000 stars and 1,483 forks within days.
 
 The core insight is a shift from traditional RAG (retrieve-and-generate, which "rediscovers knowledge from scratch on every question") to a **persistent, compounding wiki** that an LLM incrementally builds and maintains. "A large fraction of my recent token throughput is going less into manipulating code, and more into manipulating knowledge," Karpathy wrote.
 
@@ -206,6 +203,9 @@ timeline
 
 The schema file (named `CLAUDE.md` for Claude Code or `AGENTS.md` for Codex) is what Karpathy describes as the key configuration file. It turns the LLM from a generic chatbot into a disciplined wiki maintainer. You and the LLM co-evolve this document over time. Below is a general-purpose starting template you can copy-paste and adapt:
 
+{:#listing-claude .listing}
+**Listing 1**: CLAUDE.md for the Obsidian.
+
 ````markdown
 # LLM Wiki Schema — General Purpose
 
@@ -341,6 +341,7 @@ The approach also spawned open-source implementations, including **obsidian-wiki
 
 
 
+
 [^1]: [Andrej Karpathy](https://karpathy.ai/){:target="_blank"}
 [^2]: [The append-and-review note](https://karpathy.bearblog.dev/the-append-and-review-note/){:target="_blank"}
 [^3]: [Introducing Jot – A card‑style note‑taking plugin for Obsidian](https://forum.obsidian.md/t/introducing-jot-a-card-style-note-taking-plugin-for-obsidian-inspired-by-andrej-karpathy-s-append-and-review-note/112912){:target="_blank"}
@@ -349,5 +350,5 @@ The approach also spawned open-source implementations, including **obsidian-wiki
 [^6]: [llm-wiki · GitHub](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f){:target="_blank"}
 
 {:gtxt: .message color="green"}
-
 {:rtxt: .message color="red"}
+{:ltxt: .message color="blue"}
