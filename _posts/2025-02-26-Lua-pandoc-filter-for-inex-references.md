@@ -4,6 +4,7 @@ title:  Lua filters for Pandoc
 date:   2025-02-28
 categories: [Lua]
 toc: true
+maths: true
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
@@ -772,6 +773,7 @@ print("hello")
 
 [See Listing 1](#listing-1).
 ```
+````
 {% endraw %}
 
 ## Math
