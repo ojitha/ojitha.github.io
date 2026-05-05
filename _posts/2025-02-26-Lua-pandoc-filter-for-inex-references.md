@@ -22,6 +22,7 @@ Lua filter used in Pandoc 3.6.3. This blog has solutions for:
 {:toc}
 ------
 
+# Pandoc and Lua
 ## Glossary Filter
 
 This filter creates a glossary for ePub 3 using index term such as `[Important Concept]{.index}`. The links of the glossary item are pointing to this index item in the ePub book.
@@ -590,7 +591,9 @@ autoSectionLabels: True
 
 
 
-## Post skeleton
+# Jekyll
+
+This section dedicated to Jekyll web site development.
 
 Drop this into `_posts/YYYY-MM-DD-slug.md` and start writing:
 
