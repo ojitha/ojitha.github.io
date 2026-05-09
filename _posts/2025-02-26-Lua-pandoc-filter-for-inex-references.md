@@ -612,11 +612,8 @@ One-paragraph hook that becomes the home-page excerpt.
 
 <!--more-->
 
-------
-
 * TOC
 {:toc}
-------
 
 ## First section
 Your content here.
@@ -910,6 +907,29 @@ The HPACK protocol is described in [RFC 7541][rfc][^hpack].
 Term
 : First definition
 : Second definition
+```
+
+### Footnotes for web resources
+
+```markdown
+
+...
+According to the Hugging Face[^hf-blog] blog ...
+...
+
+[^hf-blog]: Hugging Face. *Welcome Gemma 4: Frontier multimodal intelligence on device.* 2 Apr 2026. [https://huggingface.co/blog/gemma4](https://huggingface.co/blog/gemma4){:target="_blank" rel="noopener noreferrer}
+```
+
+### Footnotes for book chapters
+
+```markdown
+
+...
+The Scala collections are organized into three main packages[^scal-book-ch-1]:
+...
+
+[^scal-book-ch-1]: *Scala Cookbook, Second Edition*, Ch. 11: "Collections: Introduction"
+
 ```
 
 ## Headings, anchors, TOC
