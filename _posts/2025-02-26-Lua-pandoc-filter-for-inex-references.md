@@ -911,7 +911,7 @@ Term
 : Second definition
 ```
 
-### Footnotes for web resources
+### Footnotes for the blogs
 
 ```markdown
 
@@ -921,6 +921,20 @@ According to the Hugging Face[^hf-blog] blog ...
 
 [^hf-blog]: Hugging Face. *Welcome Gemma 4: Frontier multimodal intelligence on device.* 2 Apr 2026. [https://huggingface.co/blog/gemma4](https://huggingface.co/blog/gemma4){:target="_blank" rel="noopener noreferrer}
 ```
+
+### Footnotes for the web links
+
+```markdown
+
+...
+According to the Claude Build Skill Guide[^Claude-skill-guide], you have...
+...
+
+
+[^Claude-skill-guide]: [The-Complete-Guide-to-Building-Skill-for-Claude.pdf](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf){:target="_blank" rel="noopener noreferrer}
+```
+
+
 
 ### Footnotes for book chapters
 
