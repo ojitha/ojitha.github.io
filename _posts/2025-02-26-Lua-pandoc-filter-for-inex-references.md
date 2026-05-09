@@ -608,6 +608,7 @@ mermaid: true             # only if you use diagrams
 maths: true               # only if you use $...$ or $$...$$
 typora-root-url: ~/GitHub/ojitha.github.io
 typora-copy-images-to: ~/GitHub/blog/assets/images/${filename}
+excerpt: '<div class="image-text-container"><div class="image-column"><image></div><div class="text-column">TLDR</div></div>'
 ---
 
 One-paragraph hook that becomes the home-page excerpt.

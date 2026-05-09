@@ -55,15 +55,9 @@ Locate the existing `excerpt:` line in the YAML front matter (between the two `-
 excerpt: '<div class="image-text-container"><div class="image-column"><image></div><div class="text-column">TLDR</div></div>'
 ```
 
-```yaml
-excerpt: '<div class="image-text-container"><div class="image-column"><imgage></div><div class="text-column">TLDR</div></div>'
-```
-
-(The typo `<imgage>` appears in some older posts — treat it the same as `<image>`.)
-
 Replace, in this exact line:
 
-- `<image>` *or* `<imgage>` → the full SVG markup from step 3.
+- `<image>`  → the full SVG markup from step 3.
 - `TLDR` → the HTML excerpt from step 4.
 
 If the file has **no** `excerpt:` line, insert a new one immediately before the closing `---` of the front matter, using the full template above and then doing the two replacements.
