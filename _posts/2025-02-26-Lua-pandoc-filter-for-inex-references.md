@@ -606,6 +606,8 @@ categories: [AI, AWS]
 toc: true                 # floating right-side TOC
 mermaid: true             # only if you use diagrams
 maths: true               # only if you use $...$ or $$...$$
+typora-root-url: ~/GitHub/ojitha.github.io
+typora-copy-images-to: ~/GitHub/blog/assets/images/${filename}
 ---
 
 One-paragraph hook that becomes the home-page excerpt.
