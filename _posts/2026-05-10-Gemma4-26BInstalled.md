@@ -7,7 +7,7 @@ toc: true
 mermaid: true
 maths: true
 typora-root-url: ~/GitHub/ojitha.github.io
-typora-copy-images-to: ~/GitHub/blog/assets/images/${filename}
+typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
 Issues, limitations, and resolution guide for `google/gemma-4-26B-A4B-it` on the MINISFORUM AI X1 Pro — an AMD Ryzen AI 9 HX 470 APU with 128 GB unified memory running ROCm 7.2.0 and vLLM 0.20.1.
@@ -902,6 +902,8 @@ sudo sysctl -p /etc/sysctl.d/99-rocm-vllm.conf
 | `docker run requires at least 1 argument` | Inline `#` comments in docker run | Move all comments outside the docker run block |
 | `UserWarning: expandable_segments not supported on this platform` | HIP allocator limitation | Remove `PYTORCH_ALLOC_CONF=expandable_segments:True` |
 | `MoE backend ... does not support the deployment configuration` | Wrong backend forced | Let vLLM auto-select (TRITON) |
+
+![gemma4-26gb-refcard](https://raw.githubusercontent.com/ojitha/blog/master/assets/images/2026-05-10-Gemma4-26BInstalled/gemma4-26gb-refcard.png)
 
 
 [^minisforum-product]: MINISFORUM. *AI X1 Pro Mini PC \| AMD Ryzen AI 9 HX 470 \| Copilot-Powered AI Computer.* [https://store.minisforum.com/products/minisforum-ai-x1-pro-470-mini-pc](https://store.minisforum.com/products/minisforum-ai-x1-pro-470-mini-pc){:target="_blank" rel="noopener noreferrer"}
