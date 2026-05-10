@@ -949,6 +949,20 @@ The Scala collections are organized into three main packages[^scal-book-ch-1]:
 
 ```
 
+### Footnotes for other existing posts
+
+Instead of using `https://ojitha.github.io/....` use the following to make footnotes to other resources in the same Jekyll site:
+
+```markdown
+
+...
+Example[^2]
+...
+**Functor Laws**: The `map` operation makes collections into **functors**[^12]. To be a valid functor, `map` must satisfy two laws:
+...
+[^12]: [Scala 2 Functors Explained]({% link _posts/2025-10-26-Scala2-Functors.md %}){:target="_blank" rel="noopener noreferrer}
+```
+
 ## Headings, anchors, TOC
 
 - All headings auto-generate ids (kramdown `auto_ids: true`).
