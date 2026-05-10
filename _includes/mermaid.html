@@ -100,9 +100,12 @@
     el.parentNode.insertBefore(wrapper, el);
     wrapper.appendChild(el);
 
-    // Capture natural SVG dimensions before any transform
-    const origW = svg.getBoundingClientRect().width;
-    const origH = svg.getBoundingClientRect().height;
+    // Use viewBox for reliable natural dimensions (getBoundingClientRect height
+    // can be 0 or wrong when the SVG hasn't fully laid out yet)
+    const vb   = svg.viewBox.baseVal;
+    const origW = (vb && vb.width  > 0) ? vb.width  : svg.getBoundingClientRect().width;
+    const origH = (vb && vb.height > 0) ? vb.height : svg.getBoundingClientRect().height;
+    const aspect = origH / origW;   // height-to-width ratio, always preserved
 
     let scale = 1;
     let tx = 0, ty = 0;
@@ -113,9 +116,9 @@
 
     function applyTransform() {
       svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-      // Resize the wrapper to match the scaled SVG dimensions
-      wrapper.style.width  = (origW * scale) + 'px';
-      wrapper.style.height = (origH * scale) + 'px';
+      const w = origW * scale;
+      wrapper.style.width  = w + 'px';
+      wrapper.style.height = Math.round(w * aspect) + 'px';  // height always tracks width
     }
 
     function makeBtn(symbol, title, handler) {
