@@ -10,13 +10,18 @@ typora-root-url: ~/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-Issues, limitations, and resolution guide for `google/gemma-4-26B-A4B-it` on the MINISFORUM AI X1 Pro — an AMD Ryzen AI 9 HX 470 APU with 128 GB unified memory running ROCm 7.2.0 and vLLM 0.20.1.
-
-> **Machine:** MINISFORUM AI X1 Pro — AMD Ryzen AI 9 HX 470 (gfx1150 / Radeon 890M)  
-> **Stack:** Ubuntu 24.04.4 · Kernel 6.17.0-1012-oem · ROCm 7.2.0 · vLLM 0.20.1  
-{:.info-box}
+{% include video-summary.html
+   id="jkE05-hQ4eA"
+   content="This technical log documents the installation and optimisation of the&nbsp;<strong>Google Gemma 4 Mixture-of-Experts (MoE)</strong>&nbsp;model on the&nbsp;<strong>MINISFORUM AI X1 Pro</strong>, a mini PC featuring the&nbsp;<strong>AMD Ryzen AI 9 HX 470</strong>&nbsp;processor. The report details the challenges of running a large&nbsp;<strong>26-billion-parameter</strong>&nbsp;model on a consumer-grade&nbsp;<strong>Unified Memory Architecture</strong>, focusing on critical&nbsp;<strong>RAM allocation</strong>&nbsp;and&nbsp;<strong>BIOS UMA</strong>&nbsp;adjustments. It explains how to resolve&nbsp;<strong>memory-mapping failures</strong>&nbsp;and hardware-specific&nbsp;<strong>OOM errors</strong>&nbsp;by bypassing standard Linux kernel overcommit limits and fine-tuning the&nbsp;<strong>vLLM</strong>&nbsp;and&nbsp;<strong>ROCm</strong>&nbsp;software stack. Performance comparisons highlight that while&nbsp;<strong>Ollama</strong>&nbsp;offers higher speeds for individual users, the&nbsp;<strong>vLLM</strong>&nbsp;backend provides superior efficiency for&nbsp;<strong>multi-user API</strong>&nbsp;environments. Ultimately, the guide provides a comprehensive&nbsp;<strong>resolution matrix</strong>&nbsp;and a definitive&nbsp;<strong>Docker configuration</strong>&nbsp;to achieve stable inference on this specific&nbsp;<strong>RDNA 3.5</strong>&nbsp;hardware.</p>" %}
 
 <!--more-->
+
+>Issues, limitations, and resolution guide for `google/gemma-4-26B-A4B-it` on the MINISFORUM AI X1 Pro — an AMD Ryzen AI 9 HX 470 APU with 128 GB unified memory running ROCm 7.2.0 and vLLM 0.20.1.
+>
+> **Machine:** MINISFORUM AI X1 Pro — AMD Ryzen AI 9 HX 470 (gfx1150 / Radeon 890M)  
+> **Stack:** Ubuntu 24.04.4 · Kernel 6.17.0-1012-oem · ROCm 7.2.0 · vLLM 0.20.1  
+
+
 
 * TOC
 {:toc}
