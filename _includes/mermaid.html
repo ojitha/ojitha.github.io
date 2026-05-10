@@ -100,6 +100,10 @@
     el.parentNode.insertBefore(wrapper, el);
     wrapper.appendChild(el);
 
+    // Capture natural SVG dimensions before any transform
+    const origW = svg.getBoundingClientRect().width;
+    const origH = svg.getBoundingClientRect().height;
+
     let scale = 1;
     let tx = 0, ty = 0;
     const ZOOM_STEP = 0.15;
@@ -109,6 +113,9 @@
 
     function applyTransform() {
       svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      // Resize the wrapper to match the scaled SVG dimensions
+      wrapper.style.width  = (origW * scale) + 'px';
+      wrapper.style.height = (origH * scale) + 'px';
     }
 
     function makeBtn(symbol, title, handler) {
