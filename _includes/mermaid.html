@@ -8,18 +8,23 @@
     margin: 1em 0;
     background: #fff;
     min-height: 60px;
+    max-width: 100%;
+    touch-action: none; /* prevent the page from stealing pinch/scroll inside the wrapper */
   }
   .mermaid-zoom-wrapper svg {
     cursor: grab;
     transform-origin: top left;
     display: block;
     max-width: none !important; /* allow zooming past default max */
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .mermaid-zoom-wrapper svg.mz-grabbing {
     cursor: grabbing;
   }
 
-  /* 3×3 control grid — bottom-right corner, fades unless hovered */
+  /* 3×3 control grid — top-left corner, fades unless hovered/focused */
   .mermaid-controls {
     position: absolute;
     top: 8px;
@@ -31,8 +36,10 @@
     z-index: 50;
     opacity: 0.5;
     transition: opacity 0.2s;
+    touch-action: manipulation; /* responsive taps without 300ms delay */
   }
-  .mermaid-zoom-wrapper:hover .mermaid-controls {
+  .mermaid-zoom-wrapper:hover .mermaid-controls,
+  .mermaid-zoom-wrapper:focus-within .mermaid-controls {
     opacity: 1;
   }
   .mermaid-controls button {
@@ -58,6 +65,25 @@
   .mermaid-controls .mz-placeholder {
     width: 28px;
     height: 28px;
+  }
+
+  /* Larger touch targets for phones / coarse pointers (WCAG 2.5.5 ≥ 44px) */
+  @media (max-width: 600px), (pointer: coarse) {
+    .mermaid-controls {
+      grid-template-columns: repeat(3, 44px);
+      grid-template-rows: repeat(3, 44px);
+      gap: 4px;
+      opacity: 0.85;
+    }
+    .mermaid-controls button {
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+    }
+    .mermaid-controls .mz-placeholder {
+      width: 44px;
+      height: 44px;
+    }
   }
 </style>
 
@@ -107,24 +133,58 @@
     const origH = (vb && vb.height > 0) ? vb.height : svg.getBoundingClientRect().height;
     const aspect = origH / origW;   // height-to-width ratio, always preserved
 
+    // Force the SVG to render at its natural origW × origH so transform: scale()
+    // has a predictable basis. Mermaid's default useMaxWidth:true sets the SVG
+    // to width:100% with max-width:<origW>px, which means the SVG already fills
+    // its container and our scale math would shrink an already-fitted diagram
+    // a second time (visible as a tiny diagram inside a full-width wrapper).
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+    svg.style.width    = origW + 'px';
+    svg.style.height   = origH + 'px';
+    svg.style.maxWidth = 'none';
+
     let scale = 1;
     let tx = 0, ty = 0;
-    const ZOOM_STEP = 0.15;
-    const PAN_STEP  = 50;
-    const SCALE_MIN = 0.2;
-    const SCALE_MAX = 5;
+    const ZOOM_STEP   = 0.15;
+    const PAN_STEP    = 50;
+    const SCALE_MIN   = 0.2;
+    const SCALE_MAX   = 5;
+    const WHEEL_STEP  = 1.1;
+
+    // If the diagram is wider than the available column on first paint,
+    // start fit-to-width so phones see the whole thing on load.
+    const parentW0 = (wrapper.parentElement && wrapper.parentElement.clientWidth) || origW;
+    if (origW > parentW0) scale = parentW0 / origW;
 
     function applyTransform() {
       svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-      const w = origW * scale;
+      const desiredW = origW * scale;
+      const parentW  = (wrapper.parentElement && wrapper.parentElement.clientWidth) || desiredW;
+      const w        = Math.min(desiredW, parentW); // never overflow the column
       wrapper.style.width  = w + 'px';
-      wrapper.style.height = Math.round(w * aspect) + 'px';  // height always tracks width
+      wrapper.style.height = Math.round(w * aspect) + 'px';
+    }
+
+    // Zoom around an arbitrary point (in viewport coords) so the point under
+    // the cursor / pinch midpoint stays fixed during scaling.
+    function zoomAt(clientX, clientY, nextScale) {
+      nextScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, nextScale));
+      const rect = wrapper.getBoundingClientRect();
+      const fx = clientX - rect.left;
+      const fy = clientY - rect.top;
+      const k  = nextScale / scale;
+      tx = fx - k * (fx - tx);
+      ty = fy - k * (fy - ty);
+      scale = nextScale;
+      applyTransform();
     }
 
     function makeBtn(symbol, title, handler) {
       const b = document.createElement('button');
       b.textContent = symbol;
       b.title = title;
+      b.setAttribute('aria-label', title);
       b.addEventListener('click', (e) => { e.stopPropagation(); handler(); });
       return b;
     }
@@ -144,39 +204,128 @@
     const cells = [
       placeholder(),
       makeBtn('↑', 'Pan up',    () => { ty += PAN_STEP; applyTransform(); }),
-      makeBtn('+', 'Zoom in',   () => { scale = Math.min(scale + ZOOM_STEP, SCALE_MAX); applyTransform(); }),
+      makeBtn('+', 'Zoom in',   () => zoomAt(
+        wrapper.getBoundingClientRect().left + wrapper.clientWidth  / 2,
+        wrapper.getBoundingClientRect().top  + wrapper.clientHeight / 2,
+        scale + ZOOM_STEP)),
       makeBtn('←', 'Pan left',  () => { tx += PAN_STEP; applyTransform(); }),
-      makeBtn('↺', 'Reset',     () => { scale = 1; tx = 0; ty = 0; applyTransform(); }),
+      makeBtn('↺', 'Reset',     () => {
+        const pW = (wrapper.parentElement && wrapper.parentElement.clientWidth) || origW;
+        scale = origW > pW ? pW / origW : 1;
+        tx = 0; ty = 0;
+        applyTransform();
+      }),
       makeBtn('→', 'Pan right', () => { tx -= PAN_STEP; applyTransform(); }),
       placeholder(),
       makeBtn('↓', 'Pan down',  () => { ty -= PAN_STEP; applyTransform(); }),
-      makeBtn('−', 'Zoom out',  () => { scale = Math.max(scale - ZOOM_STEP, SCALE_MIN); applyTransform(); }),
+      makeBtn('−', 'Zoom out',  () => zoomAt(
+        wrapper.getBoundingClientRect().left + wrapper.clientWidth  / 2,
+        wrapper.getBoundingClientRect().top  + wrapper.clientHeight / 2,
+        scale - ZOOM_STEP)),
     ];
     cells.forEach(c => controls.appendChild(c));
     wrapper.appendChild(controls);
 
-    // Drag to pan
-    let dragging = false, ox = 0, oy = 0;
+    // ----- Pointer Events: unified mouse / touch / pen --------------------
+    // Track every active pointer so we can detect single-pointer drag vs
+    // two-pointer pinch from the same event stream.
+    const pointers = new Map();
+    let pan       = null; // { ox, oy } anchor for single-pointer drag
+    let pinchStart = null; // snapshot at the start of a 2-pointer gesture
 
-    svg.addEventListener('mousedown', (e) => {
-      if (e.button !== 0) return;
-      dragging = true;
-      ox = e.clientX - tx;
-      oy = e.clientY - ty;
-      svg.classList.add('mz-grabbing');
+    const midpoint = () => {
+      const [a, b] = [...pointers.values()];
+      return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    };
+    const distance = () => {
+      const [a, b] = [...pointers.values()];
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    };
+
+    svg.addEventListener('pointerdown', (e) => {
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      try { svg.setPointerCapture(e.pointerId); } catch (_) {}
+
+      if (pointers.size === 1) {
+        pan = { ox: e.clientX - tx, oy: e.clientY - ty };
+        svg.classList.add('mz-grabbing');
+      } else if (pointers.size === 2) {
+        pan = null;
+        const mid = midpoint();
+        pinchStart = {
+          dist: distance(),
+          scale,
+          midX: mid.x, midY: mid.y,
+          tx, ty,
+        };
+      }
       e.preventDefault();
     });
 
-    window.addEventListener('mousemove', (e) => {
-      if (!dragging) return;
-      tx = e.clientX - ox;
-      ty = e.clientY - oy;
-      applyTransform();
+    svg.addEventListener('pointermove', (e) => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (pointers.size === 1 && pan) {
+        tx = e.clientX - pan.ox;
+        ty = e.clientY - pan.oy;
+        applyTransform();
+      } else if (pointers.size === 2 && pinchStart) {
+        const newDist = distance();
+        const newMid  = midpoint();
+        const nextScale = Math.max(SCALE_MIN,
+                          Math.min(SCALE_MAX, pinchStart.scale * (newDist / pinchStart.dist)));
+        const rect = wrapper.getBoundingClientRect();
+        const fx = pinchStart.midX - rect.left;
+        const fy = pinchStart.midY - rect.top;
+        const k  = nextScale / pinchStart.scale;
+        // Zoom around the original midpoint, then translate by the drift of
+        // the live midpoint — combines pinch-zoom with two-finger pan.
+        tx = (fx - k * (fx - pinchStart.tx)) + (newMid.x - pinchStart.midX);
+        ty = (fy - k * (fy - pinchStart.ty)) + (newMid.y - pinchStart.midY);
+        scale = nextScale;
+        applyTransform();
+      }
     });
 
-    window.addEventListener('mouseup', () => {
-      dragging = false;
-      svg.classList.remove('mz-grabbing');
-    });
+    function endPointer(e) {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.delete(e.pointerId);
+      try { svg.releasePointerCapture(e.pointerId); } catch (_) {}
+
+      if (pointers.size < 2) pinchStart = null;
+      if (pointers.size === 0) {
+        pan = null;
+        svg.classList.remove('mz-grabbing');
+      } else if (pointers.size === 1) {
+        // Lift one finger after a pinch → resume single-pointer drag cleanly.
+        const p = [...pointers.values()][0];
+        pan = { ox: p.x - tx, oy: p.y - ty };
+      }
+    }
+    svg.addEventListener('pointerup',     endPointer);
+    svg.addEventListener('pointercancel', endPointer);
+
+    // ----- Wheel / trackpad zoom around the cursor ------------------------
+    wrapper.addEventListener('wheel', (e) => {
+      // Only intercept zoom-style wheels: ctrl/cmd + wheel, or pinch on a
+      // trackpad (which the browser reports as ctrlKey). Plain vertical
+      // scrolling is left to the page so users can still scroll past the
+      // diagram on desktop.
+      if (!e.ctrlKey && !e.metaKey) return;
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? WHEEL_STEP : 1 / WHEEL_STEP;
+      zoomAt(e.clientX, e.clientY, scale * factor);
+    }, { passive: false });
+
+    // Re-clamp wrapper width if the column resizes (orientation change, etc.)
+    if (typeof ResizeObserver !== 'undefined' && wrapper.parentElement) {
+      const ro = new ResizeObserver(() => applyTransform());
+      ro.observe(wrapper.parentElement);
+    } else {
+      window.addEventListener('resize', applyTransform);
+    }
+
+    applyTransform();
   });
 </script>
