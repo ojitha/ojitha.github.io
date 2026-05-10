@@ -67,8 +67,9 @@
     height: 28px;
   }
 
-  /* Larger touch targets for phones / coarse pointers (WCAG 2.5.5 ≥ 44px) */
-  @media (max-width: 600px), (pointer: coarse) {
+  /* Larger touch targets for coarse-pointer devices that still show controls
+     (e.g. tablets / touch laptops where the viewport is wide enough). */
+  @media (pointer: coarse) and (min-width: 601px) {
     .mermaid-controls {
       grid-template-columns: repeat(3, 44px);
       grid-template-rows: repeat(3, 44px);
@@ -83,6 +84,14 @@
     .mermaid-controls .mz-placeholder {
       width: 44px;
       height: 44px;
+    }
+  }
+
+  /* Mobile (phones): hide the control pad entirely — pinch/pan via touch
+     gestures still works because those listeners live on the SVG itself. */
+  @media (max-width: 600px) {
+    .mermaid-controls {
+      display: none;
     }
   }
 </style>
