@@ -1,35 +1,172 @@
+<style>
+  /* Mermaid diagram zoom/pan wrapper */
+  .mermaid-zoom-wrapper {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e4e4e4;
+    border-radius: 6px;
+    margin: 1em 0;
+    background: #fff;
+    min-height: 60px;
+  }
+  .mermaid-zoom-wrapper svg {
+    cursor: grab;
+    transform-origin: top left;
+    display: block;
+    max-width: none !important; /* allow zooming past default max */
+  }
+  .mermaid-zoom-wrapper svg.mz-grabbing {
+    cursor: grabbing;
+  }
+
+  /* 3×3 control grid — bottom-right corner, fades unless hovered */
+  .mermaid-controls {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 28px);
+    grid-template-rows: repeat(3, 28px);
+    gap: 2px;
+    z-index: 50;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .mermaid-zoom-wrapper:hover .mermaid-controls {
+    opacity: 1;
+  }
+  .mermaid-controls button {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #bbb;
+    background: rgba(255,255,255,0.92);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    padding: 0;
+    color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mermaid-controls button:hover {
+    background: #f0f0f0;
+    border-color: #888;
+    color: #111;
+  }
+  .mermaid-controls .mz-placeholder {
+    width: 28px;
+    height: 28px;
+  }
+</style>
+
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.9.0/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ 
-    startOnLoad: true,
+
+  mermaid.initialize({
+    startOnLoad: false,
     securityLevel: 'loose',
     theme: 'base',
     logLevel: 'error',
-    // Add error callback
-    mermaid: {
-      callback: function(id) {
-        console.log('Diagram rendered:', id);
-      }
-    },
-    // Catch parse errors
     parseError: function(err, hash) {
-      console.error('Mermaid Parse Error:', err);
-      console.error('Error details:', hash);
-      // Display error on page
-      document.getElementById('error-display').innerHTML = 
-        `<pre style="color:red">${err.message}\n${err.str}</pre>`;
+      console.error('Mermaid Parse Error:', err, hash);
     }
-   });
+  });
 
   mermaid.registerIconPacks([
-      {
-        name: 'logos',
-        loader: () =>
-          fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((res) => res.json()),
-      },
+    {
+      name: 'logos',
+      loader: () =>
+        fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((res) => res.json()),
+    },
   ]);
 
+  // Convert fenced code blocks (```mermaid) into .mermaid pre elements
   document.querySelectorAll('pre > code.language-mermaid').forEach((codeBlock) => {
     codeBlock.parentElement.outerHTML = `<pre class="mermaid">${codeBlock.textContent}</pre>`;
+  });
+
+  // Render all .mermaid elements, then attach zoom/pan controls
+  await mermaid.run({ querySelector: '.mermaid' });
+
+  document.querySelectorAll('.mermaid').forEach((el) => {
+    const svg = el.querySelector('svg');
+    if (!svg) return;
+
+    // Wrap the element in a zoom container
+    const wrapper = document.createElement('div');
+    wrapper.className = 'mermaid-zoom-wrapper';
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+
+    let scale = 1;
+    let tx = 0, ty = 0;
+    const ZOOM_STEP = 0.15;
+    const PAN_STEP  = 50;
+    const SCALE_MIN = 0.2;
+    const SCALE_MAX = 5;
+
+    function applyTransform() {
+      svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    }
+
+    function makeBtn(symbol, title, handler) {
+      const b = document.createElement('button');
+      b.textContent = symbol;
+      b.title = title;
+      b.addEventListener('click', (e) => { e.stopPropagation(); handler(); });
+      return b;
+    }
+
+    function placeholder() {
+      const d = document.createElement('div');
+      d.className = 'mz-placeholder';
+      return d;
+    }
+
+    // Build 3×3 grid:  [·  ↑  +]
+    //                  [←  ↺  →]
+    //                  [·  ↓  −]
+    const controls = document.createElement('div');
+    controls.className = 'mermaid-controls';
+
+    const cells = [
+      placeholder(),
+      makeBtn('↑', 'Pan up',    () => { ty += PAN_STEP; applyTransform(); }),
+      makeBtn('+', 'Zoom in',   () => { scale = Math.min(scale + ZOOM_STEP, SCALE_MAX); applyTransform(); }),
+      makeBtn('←', 'Pan left',  () => { tx += PAN_STEP; applyTransform(); }),
+      makeBtn('↺', 'Reset',     () => { scale = 1; tx = 0; ty = 0; applyTransform(); }),
+      makeBtn('→', 'Pan right', () => { tx -= PAN_STEP; applyTransform(); }),
+      placeholder(),
+      makeBtn('↓', 'Pan down',  () => { ty -= PAN_STEP; applyTransform(); }),
+      makeBtn('−', 'Zoom out',  () => { scale = Math.max(scale - ZOOM_STEP, SCALE_MIN); applyTransform(); }),
+    ];
+    cells.forEach(c => controls.appendChild(c));
+    wrapper.appendChild(controls);
+
+    // Drag to pan
+    let dragging = false, ox = 0, oy = 0;
+
+    svg.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      dragging = true;
+      ox = e.clientX - tx;
+      oy = e.clientY - ty;
+      svg.classList.add('mz-grabbing');
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      tx = e.clientX - ox;
+      ty = e.clientY - oy;
+      applyTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+      svg.classList.remove('mz-grabbing');
+    });
   });
 </script>
