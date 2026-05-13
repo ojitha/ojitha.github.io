@@ -479,13 +479,85 @@ flowchart TD
 
 ### 6.3 Missing MoE Tuning Configuration
 
-vLLM ships pre-tuned JSON tiling configs for known GPU chip IDs in its `fused_moe/configs/` directory. The Radeon 890M chip ID `0x150e` has no config. Without this file, the Triton MoE kernel uses generic conservative defaults for tile sizes, block dimensions, and split counts — the same problem has been noted across RDNA consumer GPUs.[^rocm-device-wishlist] Startup warning:
+**Status change: ⚠️ In progress → ✅ Resolved**
+
+Add under the existing warning text:
+
+**Resolution (May 2026):** The `tune_fused_moe.py` script no longer exists in `vllm/vllm-openai-rocm:latest` (vLLM 0.20.1). The replacement benchmark script at `/app/vllm/benchmarks/kernels/benchmark_moe_defaults.py` runs predefined Mixtral configurations only — it does not generate per-device configs for arbitrary models.
+
+The config must be created manually using the format from existing AMD configs as a template. Key constraints for `AMD_Radeon_890M` with Gemma 4 26B (`E=128, N=704`):
+
+-   `BLOCK_SIZE_N` must divide N=704 evenly → only 16, 32, or 64 valid (704/128 = 5.5 ✗)
+-   `BLOCK_SIZE_K` must divide hidden\_dim=2560 → 64 or 128
+-   `num_warps` max 4 for 16 CU RDNA 3.5
+-   `matrix_instr_nonkdim=16` throughout (not 32)
+
+Then insert the full JSON:
+
+
+
+```json
+{
+    "1":    { "BLOCK_SIZE_M": 16, "BLOCK_SIZE_N": 16, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 1, "num_warps": 2, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 1 },
+    "2":    { "BLOCK_SIZE_M": 16, "BLOCK_SIZE_N": 32, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 1, "num_warps": 2, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 1 },
+    "4":    { "BLOCK_SIZE_M": 16, "BLOCK_SIZE_N": 32, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 1, "num_warps": 2, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 1 },
+    "8":    { "BLOCK_SIZE_M": 16, "BLOCK_SIZE_N": 32, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 1, "num_warps": 2, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "16":   { "BLOCK_SIZE_M": 16, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 1, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "24":   { "BLOCK_SIZE_M": 16, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 1, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "32":   { "BLOCK_SIZE_M": 32, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "48":   { "BLOCK_SIZE_M": 32, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "64":   { "BLOCK_SIZE_M": 64, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "96":   { "BLOCK_SIZE_M": 64, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "128":  { "BLOCK_SIZE_M": 64, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "256":  { "BLOCK_SIZE_M": 64, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "512":  { "BLOCK_SIZE_M": 64, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 },
+    "1024": { "BLOCK_SIZE_M": 64, "BLOCK_SIZE_N": 64, "BLOCK_SIZE_K": 64,
+              "GROUP_SIZE_M": 4, "num_warps": 4, "num_stages": 2,
+              "waves_per_eu": 0, "matrix_instr_nonkdim": 16, "kpack": 2 }
+}
+```
+
+Mount it via docker volume — do not copy into the image:
+
+bash
+
+```bash
+-v "$HOME/moe_configs:/usr/local/lib/python3.12/dist-packages/vllm/model_executor/layers/fused_moe/configs" \
+```
+
+Confirmed working — startup log shows:
 
 ```
-Using default MoE config. Performance might be sub-optimal!
-Config file not found at
-.../fused_moe/configs/E=128,N=704,device_name=0x150e.json
+Using configuration from .../E=128,N=704,device_name=AMD_Radeon_890M.json for MoE layer.
 ```
+
+* * *
 
 ### 6.4 Attention Backend — Forced to TRITON
 
@@ -532,11 +604,20 @@ IrOpPriorityConfig(rms_norm=['native'])
 
 ### 7.1 Observed Throughput
 
-| Runtime | Model format | t/s | Context | Use case |
-|---|---|---|---|---|
-| Ollama[^unsloth-gguf] | Q4_K_M (~13 GB) | **17** | ~8K default | Single user, personal |
-| vLLM bf16 | bfloat16 (~52 GB) | **7** | 32K configured | API server, multi-user |
-| vLLM bf16 + TunableOp[^tunableop-blog] | bfloat16 (~52 GB) | ~12 | 32K configured | After first-run tuning |
+| Runtime | Format | t/s | KV Cache | Concurrency |
+| --- | --- | --- | --- | --- |
+| Ollama | Q4\\_K\\_M (~13 GB) | 17  | ~8K default | Single user |
+| vLLM bf16 | bfloat16 (~52 GB) | 7–8 | 32K configured | API, multi-user |
+| vLLM bf16 + MoE config | bfloat16 (~52 GB) | **~8 (confirmed)** | 32K, 214K tokens cached | ✅ Verified May 2026 |
+| vLLM bf16 + TunableOp | bfloat16 (~52 GB) | ~12(expected) | 32K configured | After first-run tuning |
+
+Also add confirmed KV cache stats:
+
+```
+Available KV cache memory: 7.97 GiB
+GPU KV cache size: 214,454 tokens
+Maximum concurrency for 32,768 tokens per request: 6.54x
+```
 
 ### 7.2 Why Ollama is Faster for Single-User Decode
 
@@ -661,7 +742,7 @@ flowchart TD
 | `expandable_segments` warning | ✅ Resolved | Removed `PYTORCH_ALLOC_CONF` |
 | Docker script bash error | ✅ Resolved | Moved all `#` comments outside docker run |
 | Speculative decoding missing | ❌ Open | ROCm vLLM upstream limitation[^vllm-rocm-install] |
-| MoE config 0x150e.json | ⚠️ Partial | Using generic defaults; generation pending |
+| MoE config 0x150e.json | ✅ Resolved | UManual JSON created — `tune_fused_moe.py` removed in vLLM 0.20.1; config derived from RDNA 3.5 constraints |
 | Auto-prefetch disabled | ⚠️ Acceptable | EXT4 + RAM constraint; sequential load OK |
 | `rms_norm` native fallback | ⚠️ Acceptable | Minor cost; awaiting upstream gfx1150 config[^pytorch-rocm-compat] |
 
@@ -831,7 +912,72 @@ flowchart TD
     style E fill:#8e44ad,color:#fff
 ```
 
----
+## 10 — Gemini CLI Integration via LiteLLM
+
+Architecture:
+
+```
+Gemini CLI → LiteLLM Proxy (Gemini ↔ OpenAI translation) → vLLM (Gemma 4 26B)
+```
+
+LiteLLM Configuration (`litellm_config.yaml`):
+
+```yaml
+model_list:
+  - model_name: gemma4-local
+    litellm_params:
+      model: hosted_vllm/google/gemma-4-26B-A4B-it
+      api_base: http://localhost:8000/v1
+      api_key: "EMPTY"
+
+router_settings:
+  model_group_alias:
+    "gemini-2.5-pro": "gemma4-local"
+    "gemini-2.5-flash": "gemma4-local"
+    "gemini-3-flash-preview": "gemma4-local"
+    "gemini-2.5-flash-lite": "gemma4-local"
+
+general_settings:
+  master_key: "sk-local-key-1234"
+
+environment_variables:
+  GEMINI_API_KEY: "fake-not-used-locally"
+```
+
+**10.3 Key configuration notes** — four issues encountered and resolved:
+
+| Issue                              | Symptom                                                      | Fix                                                          |
+| ---------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Pass-through requires Google key   | `Required GEMINI_API_KEY to make pass-through calls`         | Add `GEMINI_API_KEY: "fake-not-used-locally"` under `environment_variables` in config |
+| Wrong vLLM endpoint                | `404 Not Found for url http://localhost:8000/chat/completions` | Use `api_base: http://localhost:8000/v1` — the `/v1` suffix is required |
+| Python 3.14 uvloop incompatibility | `ImportError: cannot import name BaseDefaultEventLoopPolicy` | Use Python 3.12 venv — `uv venv --python 3.12`               |
+| Non-blocking logging noise         | `[Non-Blocking] LiteLLM.Success_Call Error: httpx_response is None` | Harmless — requests return `200 OK`; suppress with `set_verbose: false` |
+
+Gemini CLI environment variables:
+
+```bash
+export GOOGLE_GEMINI_BASE_URL="http://localhost:4000"
+export GEMINI_API_KEY="sk-local-key-1234"
+gemini
+```
+
+> Note: `GEMINI_API_KEY` in the terminal is the LiteLLM master key authenticating the client to LiteLLM. `GEMINI_API_KEY` inside `environment_variables` in the config satisfies LiteLLM's internal pass-through guard check. They serve different purposes despite sharing the same name.
+
+Startup order
+
+```bash
+# 1. Start vLLM (docker run as per section 9.2)
+# 2. Start LiteLLM
+cd ~/workspace/gemma4litellm
+source .venv/bin/activate
+uv run litellm --config litellm_config.yaml --port 4000
+
+# 3. Start Gemini CLI
+export GOOGLE_GEMINI_BASE_URL="http://localhost:4000"
+export GEMINI_API_KEY="sk-local-key-1234"
+gemini
+```
+
 
 ## Appendix A — Kernel / ROCm Logs Reference
 
