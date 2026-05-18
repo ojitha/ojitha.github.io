@@ -39,7 +39,7 @@ minima:
     - about.md
   # `auto` switches between light and dark via prefers-color-scheme.
   # Use `classic` to force light, `dark` to force dark.
-  skin: classic
+  skin: auto
   # v3 format: array of {icon, url, title} entries (FA icon name, full URL,
   # link title). The v2 hash form (twitter: ojitha) renders blank icons in v3
   # because the new social.html iterates entry.icon / entry.url / entry.title.

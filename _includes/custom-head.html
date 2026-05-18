@@ -1,3 +1,11 @@
+<!-- Apply stored theme before first paint to avoid flash of unstyled content -->
+<script>
+(function(){
+  var t = localStorage.getItem('minima-theme');
+  if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <meta name="description" content="Technical documentation and engineering reference for Cloud Architecture, Data Engineering, AWS, and AI Agent development.">
 <meta name="keywords" content="Technical Documentation, Software Engineering, Data Science, AWS Architecture, Artificial Intelligence, Scala, Java, System Design">
 <meta name="author" content="Ojitha Hewa Kumanayaka">

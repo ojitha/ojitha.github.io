@@ -468,3 +468,423 @@
     }
   }
 }
+
+/* ==========================================================================
+   Dark / Light mode toggle
+   ========================================================================== */
+
+/* -- Nav layout: put toggle inline with nav items on desktop ------------- */
+
+@media screen and (min-width: 601px) {
+  .site-nav {
+    display: flex;
+    align-items: center;
+  }
+  .site-nav .nav-items {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Hide toggle inside the mobile hamburger dropdown */
+@media screen and (max-width: 600px) {
+  .site-nav .theme-toggle {
+    display: none;
+  }
+}
+
+/* -- Toggle button -------------------------------------------------------- */
+
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  margin-left: 10px;
+  border-radius: 4px;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  opacity: 0.7;
+  transition: opacity 0.2s, background-color 0.2s;
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Light mode: show moon, hide sun */
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: inline-block; }
+
+/* Dark mode: show sun, hide moon */
+[data-theme="dark"] .theme-toggle .icon-sun  { display: inline-block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+[data-theme="dark"] .theme-toggle:hover      { background-color: rgba(255, 255, 255, 0.1); }
+
+/* -- Element-level dark mode overrides ----------------------------------- */
+/*
+   The auto skin emits CSS custom properties but the SCSS variable reassignment
+   inside @if is not propagating to _base.scss, so body/heading/link colors
+   are compiled as hardcoded hex values. These selectors override them directly.
+*/
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  body {
+    background-color: #181818;
+    color: #959595;
+  }
+
+  h1, h2, h3, h4, h5, h6 { color: #bbbbbb; }
+
+  a                { color: #5691cd; }
+  a:visited        { color: #80bbff; }
+  a:hover          { color: #bbbbbb; }
+
+  blockquote {
+    color: #858585;
+    border-left-color: #2b2b2b;
+  }
+
+  pre, code        { background-color: #222222; color: #bbbbbb; }
+  pre              { color: #bbbbbb; }
+  code.highlighter-rouge { border-color: #2b2b2b; }
+
+  div.highlight, figure.highlight {
+    border-color: #2b2b2b;
+  }
+
+  table {
+    color: #959595;
+    border-color: #2b2b2b;
+    tr:nth-child(even) { background-color: #1c1c1c; }
+    th { background-color: #282828; border-color: #2d2d2d; }
+    td { border-color: #2b2b2b; }
+  }
+
+  hr { border-color: #2b2b2b; }
+
+  .site-header {
+    background-color: #181818;
+    border-top-color:    #999999;
+    border-bottom-color: #2b2b2b;
+  }
+
+  .site-title,
+  .site-title:visited { color: #a6a6a6; }
+
+  .site-nav {
+    background-color: inherit;
+    .nav-item { color: #a6a6a6; }
+  }
+
+  @media screen and (max-width: 600px) {
+    .site-nav {
+      background-color: #1f1f1f;
+      border-color: #2b2b2b;
+    }
+    .site-nav .menu-icon > svg path { fill: #a6a6a6; }
+  }
+
+  .site-footer       { border-top-color: #2b2b2b; }
+  .footer-col-wrapper,
+  .social-links      { color: #858585; }
+
+  .post-meta         { color: #858585; }
+  .post-header       { border-bottom-color: #2b2b2b; }
+
+  .posts > .post     { border-bottom-color: #2b2b2b; }
+
+  .social-media-list li a {
+    border-color: #2b2b2b;
+    &:hover { border-color: #555555; }
+  }
+
+  .pagination li a {
+    border-color: #2b2b2b;
+    &:hover { border-color: #555555; }
+  }
+  .pagination li div              { border-color: transparent; }
+  .pagination li div.pager-edge   { color: #2b2b2b; }
+}
+
+/* Force full light mode when user overrides a dark OS preference */
+[data-theme="light"] {
+  color-scheme: light;
+
+  body            { background-color: #fdfdfd; color: #414141; }
+  h1,h2,h3,h4,h5,h6 { color: #111111; }
+  a               { color: #1e69d8; }
+  a:visited       { color: #154895; }
+  a:hover         { color: #414141; }
+  blockquote      { color: #818181; border-left-color: #e7e7e7; }
+  pre, code       { background-color: #f6f8fa; color: #111111; }
+  code.highlighter-rouge { border-color: #e7e7e7; }
+  div.highlight, figure.highlight { border-color: #e7e7e7; }
+  table           { color: #3f3f3f; border-color: #e7e7e7; }
+  table tr:nth-child(even) { background-color: #f6f6f6; }
+  table th        { background-color: #efefef; border-color: #dfdfdf; }
+  table td        { border-color: #e7e7e7; }
+  .site-header    { background-color: #fdfdfd; border-top-color: #414141; border-bottom-color: #e7e7e7; }
+  .site-title, .site-title:visited { color: #414141; }
+  .site-nav .nav-item { color: #414141; }
+  .site-footer    { border-top-color: #e7e7e7; }
+  .footer-col-wrapper, .social-links { color: #656565; }
+  .post-meta      { color: #656565; }
+  .post-header    { border-bottom-color: #e7e7e7; }
+  .posts > .post  { border-bottom-color: #eee; }
+}
+
+/* -- Minima CSS-variable overrides --------------------------------------- */
+/*
+   Keep CSS custom properties in sync so any components that DO use
+   var(--minima-*) also switch correctly.
+*/
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --minima-brand-color:           #999999;
+  --minima-brand-color-light:     #a6a6a6;
+  --minima-brand-color-dimmed:    #858585;
+  --minima-brand-color-dark:      #2b2b2b;
+  --minima-site-title-color:      #a6a6a6;
+  --minima-heading-color:         #bbbbbb;
+  --minima-text-color:            #959595;
+  --minima-background-color:      #181818;
+  --minima-code-background-color: #222222;
+  --minima-link-base-color:       #5691cd;
+  --minima-link-visited-color:    #80bbff;
+  --minima-link-hover-color:      #959595;
+  --minima-border-color-01:       #2b2b2b;
+  --minima-border-color-02:       #a6a6a6;
+  --minima-border-color-03:       #999999;
+  --minima-table-text-color:      #959595;
+  --minima-table-zebra-color:     #1c1c1c;
+  --minima-table-header-bg-color: #282828;
+  --minima-table-header-border:   #2d2d2d;
+  --minima-table-border-color:    #2b2b2b;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --minima-brand-color:           #818181;
+  --minima-brand-color-light:     #e7e7e7;
+  --minima-brand-color-dimmed:    #656565;
+  --minima-brand-color-dark:      #414141;
+  --minima-site-title-color:      #414141;
+  --minima-heading-color:         #111111;
+  --minima-text-color:            #414141;
+  --minima-background-color:      #fdfdfd;
+  --minima-code-background-color: #f6f8fa;
+  --minima-link-base-color:       #1e69d8;
+  --minima-link-visited-color:    #154895;
+  --minima-link-hover-color:      #414141;
+  --minima-border-color-01:       #e7e7e7;
+  --minima-border-color-02:       #dadada;
+  --minima-border-color-03:       #414141;
+  --minima-table-text-color:      #2f2f2f;
+  --minima-table-zebra-color:     #f6f6f6;
+  --minima-table-header-bg-color: #efefef;
+  --minima-table-header-border:   #dfdfdf;
+  --minima-table-border-color:    #e7e7e7;
+}
+
+/* -- Syntax highlighting (dark) ------------------------------------------ */
+/*
+   The auto skin includes lm-highlight at top level and dm-highlight only
+   inside @media (prefers-color-scheme: dark).  These [data-theme="dark"]
+   rules use a higher-specificity selector so they override the media query
+   and apply whenever the user explicitly chooses dark mode.
+*/
+
+[data-theme="dark"] .highlight {
+  .err   { color: #e3d2d2; background-color: #8c2121; }
+  .c     { color: #8a8a8a; }
+  .c1    { color: #8a8a8a; }
+  .cm    { color: #8a8a8a; }
+  .cp    { color: #8a8a8a; }
+  .cs    { color: #8a8a8a; font-style: italic; }
+  .gd    { color: #d85a5a; }
+  .gd .x { color: #d85a5a; }
+  .ge    { font-style: italic; }
+  .gh    { color: #999999; }
+  .gi    { color: #4ec64e; }
+  .gi .x { color: #4ec64e; }
+  .go    { color: #888888; }
+  .gp    { color: #555555; }
+  .gr    { color: #f07178; }
+  .gs    { font-weight: bold; }
+  .gt    { color: #f07178; }
+  .gu    { color: #aaaaaa; }
+  .k     { color: #d85a7b; }
+  .kc    { color: #d85a7b; }
+  .kd    { color: #d85a7b; }
+  .kp    { color: #d85a7b; }
+  .kr    { color: #d85a7b; }
+  .kt    { color: #ffcb6b; }
+  .n     { color: #c7d1d8; }
+  .na    { color: #11a69f; }
+  .nb    { color: #d85a7b; }
+  .bp    { color: #999999; }
+  .nc    { color: #11a69f; }
+  .ne    { color: #990000; }
+  .nf    { color: #5ab780; }
+  .ni    { color: #11a69f; }
+  .nn    { color: #11a69f; }
+  .no    { color: #9d99e6; }
+  .nt    { color: #de3581; }
+  .nv    { color: #9680b1; }
+  .vc    { color: #9680b1; }
+  .vg    { color: #9680b1; }
+  .vi    { color: #9680b1; }
+  .o     { color: #bcd890; }
+  .ow    { color: #bcd890; }
+  .m     { color: #9d99e6; }
+  .mf    { color: #9d99e6; }
+  .mh    { color: #9d99e6; }
+  .mi    { color: #9d99e6; }
+  .il    { color: #9d99e6; }
+  .mo    { color: #9d99e6; }
+  .s     { color: #baa94a; }
+  .s1    { color: #baa94a; }
+  .s2    { color: #baa94a; }
+  .sb    { color: #baa94a; }
+  .sc    { color: #baa94a; }
+  .sd    { color: #baa94a; }
+  .se    { color: #baa94a; }
+  .sh    { color: #baa94a; }
+  .si    { color: #baa94a; }
+  .sr    { color: #009926; }
+  .ss    { color: #3c90f5; }
+  .sx    { color: #baa94a; }
+  .w     { color: #eeffff; }
+  .lineno, .gl { color: #8a8a8a; }
+  .hll   { background-color: #373730; }
+}
+
+/* Force light syntax highlighting when user explicitly picks light mode
+   (overrides @media prefers-color-scheme: dark inside the auto skin). */
+[data-theme="light"] .highlight {
+  .err   { color: #e3d2d2; background-color: #a61717; }
+  .c, .cm, .cp, .c1 { color: #9c9996; }
+  .cs    { color: #9c9996; font-style: italic; }
+  .gd, .gd .x { color: #e25050; }
+  .ge    { font-style: italic; }
+  .gh    { color: #999999; }
+  .gi, .gi .x { color: #3f993f; }
+  .go    { color: #888888; }
+  .gp    { color: #555555; }
+  .gr    { color: #aa0000; }
+  .gs    { font-weight: bold; }
+  .gt    { color: #aa0000; }
+  .gu    { color: #aaaaaa; }
+  .k, .kc, .kd, .kp, .kr, .nb { color: #cf222e; }
+  .kt    { color: #445588; }
+  .n     { color: #111111; }
+  .na, .nc, .ni, .nn { color: #097e39; }
+  .bp    { color: #999999; }
+  .ne    { color: #990000; }
+  .nf    { color: #2c7d74; }
+  .no    { color: #a61154; }
+  .nt    { color: #b81e63; }
+  .nv, .vc, .vg, .vi { color: #752a75; }
+  .o, .ow { color: #0842a0; }
+  .m, .mf, .mh, .mi, .il, .mo { color: #005a99; }
+  .s, .s1, .s2, .sb, .sc, .sd, .se, .sh, .si, .sx { color: #914d08; }
+  .sr    { color: #009926; }
+  .ss    { color: #0842a0; }
+  .w     { color: #bbbbbb; }
+  .lineno, .gl { color: #9c9996; }
+  .hll   { background-color: #ffffcc; }
+}
+
+/* -- Post custom colours -------------------------------------------------- */
+
+[data-theme="dark"] .posts > .post {
+  border-bottom-color: #2b2b2b;
+}
+
+[data-theme="dark"] .posts > .post:last-child {
+  border-bottom: none;
+}
+
+/* Blockquote default fallback colours */
+[data-theme="dark"] .post blockquote {
+  --blockquote-bg-color:     #1e2530;
+  --blockquote-border-color: #3a6ea8;
+  --blockquote-text-color:   #a0aab8;
+}
+
+/* em / strong em highlights */
+[data-theme="dark"] .post em {
+  background-color: #2e2900;
+}
+
+/* Inline tone classes */
+[data-theme="dark"] .post {
+  .warn { --u-color: #fbbf24; background-color: #1a1000; }
+  .info { --u-color: #60a5fa; background-color: #0a1628; }
+  .ok   { --u-color: #4ade80; background-color: #0a200e; }
+  .note { --u-color: #9ca3af; background-color: #131619; }
+  .bad  { --u-color: #f87171; background-color: #1a0808; }
+}
+
+/* Semantic tone system — dark palette */
+[data-theme="dark"] .post {
+  .info  { --tone-bg:#0d1f3c; --tone-fg:#93c5fd; --tone-border:#3b82f6; --tone-accent:#60a5fa; }
+  .ok    { --tone-bg:#0d2d1a; --tone-fg:#86efac; --tone-border:#22c55e; --tone-accent:#4ade80; }
+  .warn  { --tone-bg:#2d1d00; --tone-fg:#fcd34d; --tone-border:#f59e0b; --tone-accent:#fbbf24; }
+  .bad   { --tone-bg:#2d0d0a; --tone-fg:#fca5a5; --tone-border:#ef4444; --tone-accent:#f87171; }
+  .note  { --tone-bg:#1a1f27; --tone-fg:#d1d5db; --tone-border:#6b7280; --tone-accent:#9ca3af; }
+}
+
+/* -- Floating TOC dark overrides ----------------------------------------- */
+
+[data-theme="dark"] .floating-toc {
+  background: rgba(24, 24, 24, 0.95);
+  border-color: #333;
+}
+
+[data-theme="dark"] .toc-header {
+  background: #212121;
+  border-bottom-color: #333;
+  color: #c9d1d9;
+}
+
+[data-theme="dark"] .toc-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .toc-link {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .toc-link:hover {
+  color: #58a6ff;
+  background-color: rgba(88, 166, 255, 0.08);
+}
+
+[data-theme="dark"] .toc-link.active {
+  color: #58a6ff;
+  background-color: rgba(88, 166, 255, 0.12);
+  border-left-color: #58a6ff;
+}
+
+[data-theme="dark"] .toc-content::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+
+[data-theme="dark"] .toc-content::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+[data-theme="dark"] .toc-content::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
