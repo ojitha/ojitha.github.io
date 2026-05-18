@@ -10,6 +10,12 @@
     min-height: 60px;
     max-width: 100%;
     touch-action: none; /* prevent the page from stealing pinch/scroll inside the wrapper */
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  [data-theme="dark"] .mermaid-zoom-wrapper {
+    background: #1e1e2e;
+    border-color: #333;
   }
   .mermaid-zoom-wrapper svg {
     cursor: grab;
@@ -62,6 +68,17 @@
     border-color: #888;
     color: #111;
   }
+
+  [data-theme="dark"] .mermaid-controls button {
+    background: rgba(40, 40, 60, 0.92);
+    border-color: #555;
+    color: #ccc;
+  }
+  [data-theme="dark"] .mermaid-controls button:hover {
+    background: #3a3a5a;
+    border-color: #888;
+    color: #fff;
+  }
   .mermaid-controls .mz-placeholder {
     width: 28px;
     height: 28px;
@@ -99,15 +116,21 @@
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.13.0/dist/mermaid.esm.min.mjs';
 
-  mermaid.initialize({
-    startOnLoad: false,
-    securityLevel: 'loose',
-    theme: 'base',
-    logLevel: 'error',
-    parseError: function(err, hash) {
-      console.error('Mermaid Parse Error:', err, hash);
-    }
-  });
+  // ── Theme helpers ──────────────────────────────────────────────────────────
+  function getMermaidTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'base';
+  }
+
+  function initMermaid() {
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'loose',
+      theme: getMermaidTheme(),
+      logLevel: 'error',
+      darkMode: getMermaidTheme() === 'dark',
+      parseError(err, hash) { console.error('Mermaid Parse Error:', err, hash); },
+    });
+  }
 
   mermaid.registerIconPacks([
     {
@@ -122,10 +145,17 @@
     codeBlock.parentElement.outerHTML = `<pre class="mermaid">${codeBlock.textContent}</pre>`;
   });
 
-  // Render all .mermaid elements, then attach zoom/pan controls
+  // Store original source on each diagram element before mermaid replaces it
+  document.querySelectorAll('.mermaid').forEach((el) => {
+    el.setAttribute('data-mermaid-src', el.textContent.trim());
+  });
+
+  // ── Initial render ─────────────────────────────────────────────────────────
+  initMermaid();
   await mermaid.run({ querySelector: '.mermaid' });
 
-  document.querySelectorAll('.mermaid').forEach((el) => {
+  // ── Zoom/pan wrapper ───────────────────────────────────────────────────────
+  function wrapWithZoom(el) {
     const svg = el.querySelector('svg');
     if (!svg) return;
 
@@ -336,5 +366,38 @@
     }
 
     applyTransform();
-  });
+  } // end wrapWithZoom
+
+  // Wrap all freshly-rendered diagrams
+  document.querySelectorAll('.mermaid').forEach(wrapWithZoom);
+
+  // ── Re-render when dark/light mode toggles ────────────────────────────────
+  async function rerenderMermaid() {
+    // Unwrap zoom containers and restore original mermaid source text
+    document.querySelectorAll('.mermaid-zoom-wrapper').forEach((wrapper) => {
+      const el = wrapper.querySelector('.mermaid');
+      if (!el) return;
+      const src = el.getAttribute('data-mermaid-src');
+      if (src) {
+        el.removeAttribute('data-processed');
+        el.textContent = src;
+      }
+      wrapper.parentNode.insertBefore(el, wrapper);
+      wrapper.remove();
+    });
+
+    initMermaid();
+    await mermaid.run({ querySelector: '.mermaid' });
+    document.querySelectorAll('.mermaid').forEach(wrapWithZoom);
+  }
+
+  // Watch <html data-theme> for changes triggered by the toggle button
+  new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      if (m.attributeName === 'data-theme') {
+        rerenderMermaid();
+        break;
+      }
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 </script>
