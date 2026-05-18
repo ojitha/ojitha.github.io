@@ -62,9 +62,24 @@ title: Home
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
 }
+[data-theme="dark"] .pagination {
+  background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .pagination .page_number {
+  background-color: #1f1f1f;
+  color: #c9d1d9;
+  border-color: #444;
+}
 [data-theme="dark"] .pagination .page_number input[type="number"] {
   color: #c9d1d9;
   border-color: #555;
+  background: #2a2a2a;
+}
+[data-theme="dark"] .pagination span:not(.page_number) {
+  color: #666;
+  border-color: #333;
+  background-color: #1a1a1a;
 }
 .pagination span:not(.page_number) {
   color: #adb5bd;
