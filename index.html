@@ -41,6 +41,31 @@ title: Home
   border: 2px solid #dee2e6;
   font-weight: 600;
 }
+.pagination .page_number input[type="number"] {
+  width: 3em;
+  text-align: center;
+  font-size: 1em;
+  font-weight: 600;
+  color: #495057;
+  background: transparent;
+  border: 1px solid #adb5bd;
+  border-radius: 4px;
+  padding: 2px 4px;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.pagination .page_number input[type="number"]::-webkit-inner-spin-button,
+.pagination .page_number input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+.pagination .page_number input[type="number"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+[data-theme="dark"] .pagination .page_number input[type="number"] {
+  color: #c9d1d9;
+  border-color: #555;
+}
 .pagination span:not(.page_number) {
   color: #adb5bd;
   border: 2px solid #e9ecef;
@@ -100,7 +125,31 @@ title: Home
   {% else %}
     <span class="previous">⇦ New</span>
   {% endif %}
-  <span class="page_number">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+  <span class="page_number">
+    Page
+    <input
+      id="page-jump-input"
+      type="number"
+      min="1"
+      max="{{ paginator.total_pages }}"
+      value="{{ paginator.page }}"
+      aria-label="Go to page"
+      title="Type a page number and press Enter"
+    >
+    of {{ paginator.total_pages }}
+  </span>
+  <script>
+  (function () {
+    var input = document.getElementById('page-jump-input');
+    var total = {{ paginator.total_pages }};
+    input.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      var p = parseInt(input.value, 10);
+      if (isNaN(p) || p < 1 || p > total) { input.value = {{ paginator.page }}; return; }
+      window.location.href = p === 1 ? '/' : '/page' + p + '/';
+    });
+  })();
+  </script>
   {% if paginator.next_page %}
     <a href="{{ paginator.next_page_path }}" class="next">Older ⇨</a>
   {% else %}
