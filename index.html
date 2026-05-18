@@ -90,6 +90,24 @@ title: Home
   display: inline;
   margin-left: 10px;
 }
+.archived-notice {
+  padding: 15px;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 6px;
+  background-color: #fff6e4;
+  border-color: #f5ecda;
+  color: #5a4a2a;
+}
+[data-theme="dark"] .archived-notice {
+  background-color: #1e1a10;
+  border-color: #3a3020;
+  color: #c9b88a;
+}
+[data-theme="dark"] .archived-notice a,
+[data-theme="dark"] .archived-notice a:visited {
+  color: #7aadee;
+}
 .post-tags .tag {
   background-color: #e9ecef;
   color: #495057;
@@ -102,7 +120,7 @@ title: Home
 </style>
 <!-- <div style="background-color: #e7f3fe; border-left: 6px solid #2196F3;"> 
   This is my tech workbook. Please visit <a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a> for my official Tech blog.</div> -->
-  <p style="background-color:#fff6e4; padding:15px; border-width:3px; border-color:#f5ecda; border-style:solid; border-radius:6px"> 📝 <b>Research :<code><a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a></code></b> for my lengthy articles.</p>
+  <p class="archived-notice"> 📝 <b>Archived :<code><a href="https://ojitha.blogspot.com.au" target="_blank">https://ojitha.blogspot.com.au</a></code></b></p>
   <div class="posts">
     {% for post in paginator.posts %}
     {% capture url_to_use %}{{ post.url }}{% endcapture %}
