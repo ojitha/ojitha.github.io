@@ -3,6 +3,14 @@ layout: post
 ---
 
 <style>
+.notes-instruction {
+  font-size: 0.95em;
+  color: #555;
+  margin-bottom: 8px;
+}
+[data-theme="dark"] .notes-instruction {
+  color: #8b949e;
+}
 .button-link {
   display: inline-block;
   padding: 2px 4px;
@@ -18,6 +26,7 @@ layout: post
   color: #0056b3;
 }
 </style>
+<p class="notes-instruction">Click a topic below to open the notes for that subject:</p>
 <!-- <h2>{{ site.data.noteslist.docs_list_title }}</h2> -->
 {% for item in site.data.noteslist.docs %}
   <a href="{{ item.url }}" class="button-link">{{ item.title }}</a>
