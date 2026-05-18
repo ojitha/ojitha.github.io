@@ -888,3 +888,22 @@
 [data-theme="dark"] .toc-content::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
+
+/* -- Algolia InstantSearch dark mode overrides ---------------------------- */
+
+[data-theme="dark"] {
+  .ais-search-box--input {
+    background-color: #1f1f1f;
+    color: #d0d0d0;
+    border-color: #444;
+
+    &::placeholder { color: #666; }
+    &:focus        { border-color: #5691cd; outline: none; }
+  }
+
+  /* magnifier / reset icons */
+  .ais-search-box--magnifier svg path,
+  .ais-search-box--reset svg path {
+    fill: #888;
+  }
+}
