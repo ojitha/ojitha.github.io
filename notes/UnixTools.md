@@ -657,3 +657,19 @@ sudo mv pandoc-crossref /usr/local/bin/
 # Verify
 pandoc-crossref --version
 ```
+
+### Close open ports
+
+To close the open port by the ollama:
+
+```bash
+sudo fuser -k 11434/tcp
+```
+
+### GPU
+
+To check the GPU use in one line:
+```ba
+rocm-smi --showuse
+```
+
