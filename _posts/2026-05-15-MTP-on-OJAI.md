@@ -8,10 +8,11 @@ mermaid: true
 maths: true
 typora-root-url: ~/GitHub/ojitha.github.io
 typora-copy-images-to: ~/GitHub/blog/assets/images/${filename}
-excerpt: 'Multi-Token Prediction (MTP) speculative decoding on the OJAI machine — a Minisforum AI X1 Pro driven by the AMD Ryzen AI 9 HX 470, Radeon 890M iGPU (gfx1150), and XDNA 2 NPU. The guide walks the math of speculative acceptance, the verified llama-server command, the BIOS 1.01 and TTM allocator preconditions, and shows where Lemonade and FastFlowLM each sit in the stack.'
 ---
 
-
+{% include video-summary.html
+   id="7RSiMIlOcaA"
+   content="The provided source outlines the implementation of <strong>Multi-Token Prediction (MTP)</strong> to accelerate AI inference on the <strong>OJAI hardware platform</strong>, which features an AMD Ryzen AI 9 processor. This technical guide explains how <strong>speculative decoding</strong> bypasses memory bandwidth bottlenecks by using an auxiliary head to propose multiple tokens simultaneously for verification by the main model. It details necessary system configurations, such as <strong>BIOS updates</strong> and <strong>memory allocator adjustments</strong>, required to optimise the <strong>Radeon 890M iGPU</strong> and <strong>XDNA 2 NPU</strong>. The text further distinguishes between different software stacks, noting that while <strong>llama.cpp</strong> handles MTP tasks on the graphics processor, <strong>FastFlowLM</strong> targets the NPU for energy-efficient processing. Finally, it describes how the <strong>Lemonade</strong> orchestration server manages these various backends to provide a unified, high-performance local AI environment." %}
 
 <!--more-->
 
