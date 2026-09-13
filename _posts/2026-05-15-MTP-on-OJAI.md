@@ -11,7 +11,7 @@ typora-copy-images-to: ~/GitHub/blog/assets/images/${filename}
 excerpt: 'Multi-Token Prediction (MTP) speculative decoding on the OJAI machine — a Minisforum AI X1 Pro driven by the AMD Ryzen AI 9 HX 470, Radeon 890M iGPU (gfx1150), and XDNA 2 NPU. The guide walks the math of speculative acceptance, the verified llama-server command, the BIOS 1.01 and TTM allocator preconditions, and shows where Lemonade and FastFlowLM each sit in the stack.'
 ---
 
-Multi-Token Prediction (MTP) speculative decoding on the OJAI[^ojitha-rocm] machine — a Minisforum AI X1 Pro driven by the AMD Ryzen AI 9 HX 470, Radeon 890M iGPU (`gfx1150`), and XDNA 2 NPU. The guide walks the math of speculative acceptance, the verified `llama-server` command, the BIOS 1.01 and TTM allocator preconditions, and shows where Lemonade🍋 and FastFlowLM each sit in the stack.
+
 
 <!--more-->
 
