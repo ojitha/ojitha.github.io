@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Claude on Amazon Bedrock - EVALs & Prompt Engineering
+title:  Claude on Amazon Bedrock - EVALS & Prompt Engineering
 date: 2026-09-13
 categories: [AI, Claude, AWS]
 toc: true
