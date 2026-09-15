@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Claude on Amazon Bedrock
+title:  Claude on Amazon Bedrock - API Integration & Prompt Engineering
 date: 2026-09-13
 categories: [AI, Claude, AWS]
 toc: true
@@ -11,8 +11,8 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
 {% include video-summary.html
-   id=""
-   content="" %}
+   id="e2Xysrn20n8"
+   content="<p>These sources offer a comprehensive technical guide for <strong>integrating and optimising Claude models within the Amazon Bedrock ecosystem</strong>. They detail the programmatic implementation of AI services using the <strong>Boto3 library</strong>, covering essential functionalities such as <strong>inference configuration, real-time streaming, and structured JSON output control</strong>. Beyond simple deployment, the text emphasises a rigorous <strong>five-step evaluation workflow</strong> to objectively measure performance through automated datasets and hybrid grading systems. Furthermore, it outlines <strong>advanced prompt engineering strategies</strong>, including the use of <strong>XML delimiters</strong> and <strong>multi-shot prompting</strong>, to refine model accuracy and reliability. By combining practical coding examples with systematic testing methodologies, the documentation provides a blueprint for building <strong>production-ready, high-performance AI applications</strong>.</p>" %}
 
 <!--more-->
 
