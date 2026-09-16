@@ -15,7 +15,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
    content="<p>This source provides a comprehensive walkthrough of a <strong>project-scoped Claude skill</strong> designed to automate the creation of <strong>Jekyll blog post excerpts</strong>. By following Anthropic&#39;s official design principles, the guide demonstrates how to use <strong>progressive disclosure</strong> to manage complex instructions through a structured hierarchy of files. The specific skill identifies <strong>technical jargon</strong> within a post to generate a small, inline <strong>SVG illustration</strong> and a brief HTML summary directly into the document&#39;s <strong>YAML front matter</strong>. Key emphasis is placed on <strong>workflow orchestration</strong>, ensuring the AI performs rigorous <strong>verification checks</strong> to maintain file safety and formatting consistency. Ultimately, the text serves as a practical blueprint for developers looking to build <strong>portable and composable</strong> AI tools that solve narrow, high-utility automation tasks.</p>" %}
 
 
-A practical, end-to-end walkthrough of the project-scoped `blog-post-excerpt` Claude skill that lives in this repository under `.claude/skills/blog-post-excerpt/`. The guide follows the chapter structure of Anthropic's *Complete Guide to Building Skills for Claude*[^complete-guide] and applies each principle to the real, working skill that automates Jekyll front-matter excerpt generation for `ojitha.github.io`.
+<!--more-->
 
 * TOC
 {:toc}
