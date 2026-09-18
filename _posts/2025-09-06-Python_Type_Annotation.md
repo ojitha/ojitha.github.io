@@ -8,41 +8,11 @@ typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../assets/images/${filename}
 ---
 
-<style>
-/* Styles for the two-column layout */
-.image-text-container {
-    display: flex; /* Enables flexbox */
-    flex-wrap: wrap; /* Allows columns to stack on small screens */
-    gap: 10px; /* Space between the image and text */
-    align-items: left; /* Vertically centers content in columns */
-    margin-bottom: 20px; /* Space below this section */
-}
 
-.image-column {
-    flex: 1; /* Allows this column to grow */
-    min-width: 150px; /* Minimum width for the image column before stacking */
-    max-width: 20%; /* Maximum width for the image column to not take up too much space initially */
-    box-sizing: border-box; /* Include padding/border in element's total width/height */
-}
+{% include video-summary.html
+   id="uM_YN8RAz2E"
+   content="<p>Python type annotations are essential for AI agent development with frameworks like LangGraph and AutoGen, enabling automatic schema generation, runtime validation, and seamless LLM integration. This comprehensive guide explores modern Python typing features including TypedDict for state management, PyDantic models for data validation, and parameterized generics. It covers practical implementations using Python 3.12+ syntax, structured output with ChatGPT, and real-world examples demonstrating tool registration and function calling. The tutorial showcases how type hints transform from optional documentation to architectural foundations in AI development, providing automatic error handling, JSON schema generation, and reliable data flow between agents for robust conversational AI systems.</p>" %}
 
-.text-column {
-    flex: 2; /* Allows this column to grow more (e.g., twice as much as image-column) */
-    min-width: 300px; /* Minimum width for the text column before stacking */
-    box-sizing: border-box;
-}
-
-</style>
-
-<div class="image-text-container">
-    <div class="image-column">
-        <img src="/assets/images/2025-09-06-Python_Type_Annotation/ai_painting_svg.svg" alt="LangGraph Testing Sketch" width="150" height="150">
-    </div>
-    <div class="text-column">
-<p>
-Python type annotations are essential for AI agent development with frameworks like LangGraph and AutoGen, enabling automatic schema generation, runtime validation, and seamless LLM integration. This comprehensive guide explores modern Python typing features including TypedDict for state management, PyDantic models for data validation, and parameterized generics. It covers practical implementations using Python 3.12+ syntax, structured output with ChatGPT, and real-world examples demonstrating tool registration and function calling. The tutorial showcases how type hints transform from optional documentation to architectural foundations in AI development, providing automatic error handling, JSON schema generation, and reliable data flow between agents for robust conversational AI systems.
-</p>
-    </div>
-</div>
 
 <!--more-->
 
@@ -91,100 +61,100 @@ Python type annotations play a crucial role in AI agent development, especially 
 
 1. Tool and Function Schema Definition: AI agents frequently need to call external tools and functions. Type annotations provide the schema information that frameworks
 
-```python
-from typing import List, Dict
-from pydantic import BaseModel
+    ```python
+    from typing import List, Dict
+    from pydantic import BaseModel
 
-class WeatherQuery(BaseModel):
-    location: str
-    days: int = 1
+    class WeatherQuery(BaseModel):
+        location: str
+        days: int = 1
 
-def get_weather(query: WeatherQuery) -> Dict[str, any]:
-    """Get weather information for a location"""
-    # Implementation here
-    pass
-```
-The framework can automatically generate OpenAPI schemas or function calling specifications from these annotations, which LLMs need to understand how to invoke tools correctly.
+    def get_weather(query: WeatherQuery) -> Dict[str, any]:
+        """Get weather information for a location"""
+        # Implementation here
+        pass
+    ```
+    The framework can automatically generate OpenAPI schemas or function calling specifications from these annotations, which LLMs need to understand how to invoke tools correctly.
 
 2. Structured Data Flow Between Agents: In multi-agent systems like AutoGen, agents pass structured data between each other. Type annotations ensure:
 
-```python
-from dataclasses import dataclass
-from typing import Optional
+    ```python
+    from dataclasses import dataclass
+    from typing import Optional
 
-@dataclass
-class AgentMessage:
-    content: str
-    sender: str
-    message_type: str
-    metadata: Optional[Dict[str, any]] = None
+    @dataclass
+    class AgentMessage:
+        content: str
+        sender: str
+        message_type: str
+        metadata: Optional[Dict[str, any]] = None
 
-def process_agent_response(message: AgentMessage) -> AgentMessage:
-    # Framework knows exactly what structure to expect
-    pass
-```
+    def process_agent_response(message: AgentMessage) -> AgentMessage:
+        # Framework knows exactly what structure to expect
+        pass
+    ```
 The framework can automatically generate OpenAPI schemas or function calling specifications from these annotations, which LLMs need to understand how to invoke tools correctly.
 
 3. LangGraph State Management: LangGraph uses typed state objects to manage data flow through graph nodes.
 
-```python
-from typing import TypedDict, List
-from langgraph.graph import StateGraph
+    ```python
+    from typing import TypedDict, List
+    from langgraph.graph import StateGraph
 
-class AgentState(TypedDict):
-    messages: List[str]
-    current_step: str
-    context: Dict[str, any]
-    
-def reasoning_node(state: AgentState) -> AgentState:
-    # LangGraph validates state structure automatically
-    return {
-        "messages": state["messages"] + ["New reasoning step"],
-        "current_step": "analysis",
-        "context": state["context"]
-    }
-```
+    class AgentState(TypedDict):
+        messages: List[str]
+        current_step: str
+        context: Dict[str, any]
+        
+    def reasoning_node(state: AgentState) -> AgentState:
+        # LangGraph validates state structure automatically
+        return {
+            "messages": state["messages"] + ["New reasoning step"],
+            "current_step": "analysis",
+            "context": state["context"]
+        }
+    ```
 4. Runtime Validation and Error Prevention: Type annotations enable runtime validation libraries like Pydantic to catch errors early:
 
-```python
-from pydantic import BaseModel, validator
+    ```python
+    from pydantic import BaseModel, validator
 
-class LLMResponse(BaseModel):
-    reasoning: str
-    confidence: float
-    next_action: str
-    
-    @validator('confidence')
-    def confidence_must_be_valid(cls, v):
-        if not 0 <= v <= 1:
-            raise ValueError('Confidence must be between 0 and 1')
-        return v
-```
+    class LLMResponse(BaseModel):
+        reasoning: str
+        confidence: float
+        next_action: str
+        
+        @validator('confidence')
+        def confidence_must_be_valid(cls, v):
+            if not 0 <= v <= 1:
+                raise ValueError('Confidence must be between 0 and 1')
+            return v
+    ```
 
 5. LLM Function Calling Integration: Modern LLMs support function calling, and frameworks automatically convert type annotations to JSON schemas:
 
-```pyhton
-def search_database(
-    query: str,
-    filters: Dict[str, str],
-    limit: int = 10
-) -> List[Dict[str, any]]:
-    """Search database with specified filters"""
-    pass
+    ```python
+    def search_database(
+        query: str,
+        filters: Dict[str, str],
+        limit: int = 10
+    ) -> List[Dict[str, any]]:
+        """Search database with specified filters"""
+        pass
 
-# Framework auto-generates:
-# {
-#   "name": "search_database",
-#   "parameters": {
-#     "type": "object",
-#     "properties": {
-#       "query": {"type": "string"},
-#       "filters": {"type": "object"},
-#       "limit": {"type": "integer", "default": 10}
-#     }
-#   }
-# }
-```
+    # Framework auto-generates:
+    # {
+    #   "name": "search_database",
+    #   "parameters": {
+    #     "type": "object",
+    #     "properties": {
+    #       "query": {"type": "string"},
+    #       "filters": {"type": "object"},
+    #       "limit": {"type": "integer", "default": 10}
+    #     }
+    #   }
+    # }
+    ```
 
 ### AI demands typing
 
