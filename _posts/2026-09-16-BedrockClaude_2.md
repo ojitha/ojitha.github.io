@@ -11,7 +11,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
 {% include video-summary.html
-   id=""
+   id="I_S2lP8TznA"
    content="<p>This source provides a technical guide for <strong>integrating Claude models with Amazon Bedrock</strong> to enable advanced functional capabilities. It focuses primarily on <strong>tool use</strong>, a mechanism that allows the AI to <strong>interact with external APIs</strong>, databases, and custom code to perform real-time actions. The text details the <strong>multi-turn communication cycle</strong> between the application server and the model, using <strong>JSON schemas</strong> to define how tools are called and executed. Practical implementation is demonstrated through <strong>Python and Boto3</strong>, highlighting the importance of <strong>structured message histories</strong> and descriptive naming for reliability. Additionally, the documentation explains how to use <strong>Pydantic for automated schema generation</strong> and rigorous input validation. By following these workflows, developers can transition from static chat interfaces to <strong>autonomous, agentic AI systems</strong> capable of solving complex tasks.</p>" %}
 
 <!--more-->
