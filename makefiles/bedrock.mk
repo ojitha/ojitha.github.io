@@ -4,7 +4,8 @@ BedrockBlogsSources := 2025-08-29-BedrockLangGraph \
 	2026-09-16-BedrockClaude_2 \
 	2026-09-18-BedrockClaude_3 \
 	2026-09-19-BedrockClaude_4 \
-	2026-09-20-BedrockClaude_5
+	2026-09-20-BedrockClaude_5 \
+	2026-09-21-BedrockClaude_6
 md_targets += $(foreach wrd,$(BedrockBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(BedrockBlogsSources),$(ASSETS_DIR)/$(wrd))
 
