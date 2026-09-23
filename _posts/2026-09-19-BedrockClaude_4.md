@@ -1486,6 +1486,8 @@ flowchart TD
 
 Here the example:
 
+{% raw %}
+
 
 ```python
 import json
@@ -1525,7 +1527,7 @@ class ClaudeReranker:
             region_name=self.settings.aws_region,
         )
 
-    def _extract_json(self, text: str) -> str:
+    def _extract_json(self, text: str) -&gt; str:
         """Extracts JSON substring even if Claude wraps it in markdown backticks."""
         # Search for ```json { ... } ``` or raw { ... }
         match = re.search(
@@ -1535,26 +1537,26 @@ class ClaudeReranker:
 
     def rerank(
         self, query: str, candidates: List[DocumentCandidate], top_k: int = 2
-    ) -> List[DocumentCandidate]:
+    ) -&gt; List[DocumentCandidate]:
         if not candidates:
             return []
 
         xml_docs = "\n".join(
             [
-                f"<document><document_id>{doc.doc_id}</document_id><content>{doc.content}</content></document>"
+                f"&lt;document&gt;&lt;document_id&gt;{doc.doc_id}&lt;/document_id&gt;&lt;content&gt;{doc.content}&lt;/content&gt;&lt;/document&gt;"
                 for doc in candidates
             ]
         )
 
         prompt = f"""You are an expert search result re-ranker. Rank the candidate documents by relevance to the user's question.
 
-                <user_question>
+                &lt;user_question&gt;
                 {query}
-                </user_question>
+                &lt;/user_question&gt;
 
-                <candidate_documents>
+                &lt;candidate_documents&gt;
                 {xml_docs}
-                </candidate_documents>
+                &lt;/candidate_documents&gt;
 
                 Return a JSON object containing the top {top_k} document IDs in order of DECREASING relevance.
                 Example JSON structure:
@@ -1604,6 +1606,8 @@ class ClaudeReranker:
 
         return reranked_docs[:top_k]
 ```
+
+{% endraw %}
 
 In the prompt template, `<candidate_documents>{xml_docs}</candidate_documents>` serves **three critical functions** in a Claude-based RAG re-ranking pipeline:
 

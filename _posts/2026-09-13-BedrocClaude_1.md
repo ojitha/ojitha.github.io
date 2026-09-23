@@ -716,6 +716,7 @@ def load_dataset(filepath=DATASET_FILE):
 ```
 
 Here the pipeline functionality to generate dataset:
+{% raw %}
 
 
 ```python
@@ -765,10 +766,10 @@ Solution: {solution}
 
 Evaluate the solution against the task description. Return a valid JSON object matching EXACTLY this structure:
 {{
-  "score": <integer from 1 to 10>,
-  "reasoning": "<concise explanation>",
-  "strengths": ["<strength 1>", "<strength 2>"],
-  "weaknesses": ["<weakness 1>"]
+  "score": &lt;integer from 1 to 10&gt;,
+  "reasoning": "&lt;concise explanation&gt;",
+  "strengths": ["&lt;strength 1&gt;", "&lt;strength 2&gt;"],
+  "weaknesses": ["&lt;weakness 1&gt;"]
 }}
 """
 
@@ -810,6 +811,7 @@ def grade_solution(task_description, solution_text):
     }
 ```
 
+{% endraw %}
 STEP 1 is to generate the Dataset and save to a file:
 
 
