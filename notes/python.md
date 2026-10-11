@@ -548,70 +548,6 @@ RUN if [ -n "$http_proxy" ]; then \
     apt-get update && apt-get install -y some-package
 ```
 
-## Conda
-
-After install the conda,
-
-If you are need proxy setting, then setup that in the file `miniconda3/.condarc`:
-
-```
-ssl_verify: false
-proxy_servers:
-	http://...
-	https://...<same as above>
-channels:
-	- default
-	- conda-forge
-```
-
-To create a new environment
-
-```bash
-conda create --name myenv python=3.11.11
-```
-
-To get all the existing environments
-
-```bash
-conda info --envs
-```
-
-To activate the environment:
-
-```bash
-conda activiate myenv
-```
-
-To deactivate
-
-```bash
-conda deactivate
-```
-
-To delete the environment
-
-```bash
-conda remove -n myenv --all
-```
-
-### Create a conda env on Jupyter Lab
-
-Create a new conda environment:
-
-```bash
-conda create -n lab_python310 python=3.10.14 -y
-```
-
-To set the above conda environment to Jupyter kernel:
-
-```bash
-python -m ipykernel install --user --name lab_python310 --display-name 'conda_lab_python310'
-```
-
-When you open the Jupyter notebook, select the `No Kernel` at the beginning. Then again, click the `No Kernel` to select the `conda_lab_python310` env.
-
-
-
 ## Logging
 
 ### Custom JSON Formatter 
@@ -767,6 +703,96 @@ echo "creating ${cName}  class diagram..."
 dot -T jpg ${cName}.dot -o  mytest.jpg
 ```
 
+## Conda
+
+### Installation
+
+```bash
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm ~/miniconda3/miniconda.sh
+~/miniconda3/bin/conda init bash
+```
+
+After install the conda,
+
+If you are need proxy setting, then setup that in the file `miniconda3/.condarc`:
+
+```
+ssl_verify: false
+proxy_servers:
+	http://...
+	https://...<same as above>
+channels:
+	- default
+	- conda-forge
+```
+
+To create a new environment
+
+```bash
+conda create --name myenv python=3.11.11
+```
+
+To get all the existing environments
+
+```bash
+conda info --envs
+```
+
+To activate the environment:
+
+```bash
+conda activiate myenv
+```
+
+To deactivate
+
+```bash
+conda deactivate
+```
+
+To delete the environment
+
+```bash
+conda remove -n myenv --all
+```
+
+### Create a conda env on Jupyter Lab
+
+Create a new conda environment:
+
+```bash
+conda create -n lab_python310 python=3.10.14 -y
+```
+
+To set the above conda environment to Jupyter kernel:
+
+```bash
+python -m ipykernel install --user --name lab_python310 --display-name 'conda_lab_python310'
+```
+
+When you open the Jupyter notebook, select the `No Kernel` at the beginning. Then again, click the `No Kernel` to select the `conda_lab_python310` env.
+
+### Remove
+
+To completely remove Conda from the system:
+
+1. Clean shell configuration by removing the Conda initialization block from `~/.bashrc`:
+
+```bash
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+...
+# <<< conda initialize <<<
+```
+
+2. Delete the Conda installation directory, environments, configuration, and cache:
+
+```bash
+rm -rf ~/miniconda3 ~/.conda ~/.anaconda ~/.cache/conda ~/.cache/conda-anaconda-tos
+```
 
 
 [fluent]: https://www.oreilly.com/library/view/fluent-python-2nd/9781492056348 "Fluent Python 2nd Edition"
