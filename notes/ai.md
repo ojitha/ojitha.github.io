@@ -324,3 +324,66 @@ Ollama is fully offloading inference to the Radeon 890M via ROCm. ✅
 
 > `gemma4:31b` (19 GB) was removed with `ollama rm gemma4:31b`.
 
+## PyTorch
+
+Pull [docker](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html?rocm-ver=7.14.1&fam=ryzen&gpu=amd-ryzen-ai-9-hx-pro-470&os=linux&pytorch-ver=2.12.0&i=docker&w=compute&gfx=gfx1150) for the Python 3.14 on Ubuntu 24.04, ROCm version 7.14, Pytorch ver 2.12:
+
+```bash
+docker pull rocm/pytorch:rocm7.14.1_ubuntu26.04_py3.14_pytorch_release_2.12.0
+```
+
+Run docker
+
+```bash
+docker run -it --rm \
+   --device /dev/kfd \
+   --device /dev/dri \
+   --network=host \
+   --ipc=host \
+   --group-add=video \
+   --cap-add=SYS_PTRACE \
+   --security-opt seccomp=unconfined \
+   rocm/pytorch:rocm7.14.1_ubuntu26.04_py3.14_pytorch_release_2.12.0 \
+   bash
+```
+
+# Claude
+
+## Claude Code
+
+### Configuration
+
+The claude code configuration is in the `~/.claude/setttings.json` file:
+```json
+{
+  "env": {
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "AWS_REGION": "ap-southeast-2",
+    "AWS_PROFILE": "dev",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "au.anthropic.claude-sonnet-4-5-20250929-v1:0",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "au.anthropic.claude-opus-5-5",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "au.anthropic.claude-haiku-4-5-20251001-v1:0"
+  },
+  "model": "sonnet",
+  "enabledPlugins": {
+    "aws-agents@claude-plugins-official": true,
+    "aws-core@claude-plugins-official": true,
+    "aws-data-analytics@claude-plugins-official": true
+  }
+```
+
+If you need back to the Anthropic PRO to use. Use the following `~/.claude/settings.json` file:
+
+```json
+{
+  "model": "sonnet",
+  "enabledPlugins": {
+    "aws-agents@claude-plugins-official": true,
+    "aws-core@claude-plugins-official": true,
+    "aws-data-analytics@claude-plugins-official": true
+  }
+}
+```
+
+
+
