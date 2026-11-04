@@ -17,6 +17,18 @@
     background: #1e1e2e;
     border-color: #333;
   }
+  /* The <pre class="mermaid"> inherits minima's pre padding/border/margin,
+     which shifts the SVG off the wrapper's origin and crops the diagram
+     (the wrapper height is computed from the SVG aspect ratio alone). */
+  .mermaid-zoom-wrapper > .mermaid {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    text-align: left;
+    line-height: 0;
+  }
   .mermaid-zoom-wrapper svg {
     cursor: grab;
     transform-origin: top left;
