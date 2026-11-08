@@ -532,10 +532,16 @@
   }
 }
 
-/* Hide toggle inside the mobile hamburger dropdown */
+/* Mobile: pin the toggle as an icon button just left of the hamburger box
+   (the search icon sits to its left), so it stays visible when the menu is
+   collapsed. */
 @media screen and (max-width: 600px) {
   .site-nav .theme-toggle {
-    display: none;
+    position: absolute;
+    top: 3px;
+    right: 44px;
+    margin: 0;
+    padding: 8px 9px;
   }
 }
 
@@ -1004,11 +1010,11 @@
 }
 
 @media screen and (max-width: 600px) {
-  /* Sit as an icon button just left of the hamburger box. */
+  /* Sit as an icon button left of the theme toggle and hamburger box. */
   .site-nav .site-search-trigger {
     position: absolute;
     top: 3px;
-    right: 44px;
+    right: 82px;
     margin: 0;
     padding: 7px 9px;
     border: none;

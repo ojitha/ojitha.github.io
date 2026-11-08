@@ -116,11 +116,20 @@
     }
   }
 
-  /* Mobile (phones): hide the control pad entirely — pinch/pan via touch
-     gestures still works because those listeners live on the SVG itself. */
+  /* Mobile (phones): no zoom/pan wrapper at all (see isMobile() in the
+     script) — the diagram renders inline, scaled to the column width, and
+     touches scroll the page normally. */
   @media (max-width: 600px) {
-    .mermaid-controls {
-      display: none;
+    pre.mermaid {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      text-align: center;
+      line-height: normal;
+    }
+    pre.mermaid > svg {
+      max-width: 100% !important;
+      height: auto;
     }
   }
 
@@ -251,7 +260,12 @@
   await renderAllDiagrams();
 
   // ── Zoom/pan wrapper ───────────────────────────────────────────────────────
+  // Phones get the plain, width-fitted SVG instead of the zoom/pan wrapper.
+  const mobileQuery = window.matchMedia('(max-width: 600px)');
+  const isMobile = () => mobileQuery.matches;
+
   function wrapWithZoom(el) {
+    if (isMobile()) return;
     const svg = el.querySelector('svg');
     if (!svg) return;
 
@@ -499,4 +513,9 @@
       }
     }
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // Add or drop the zoom wrapper when the viewport crosses the phone breakpoint
+  // (rotation, window resize). Re-rendering restores Mermaid's own sizing,
+  // which wrapWithZoom overrides with fixed pixel dimensions.
+  mobileQuery.addEventListener('change', rerenderMermaid);
 </script>
