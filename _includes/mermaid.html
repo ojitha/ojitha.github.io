@@ -95,6 +95,27 @@
     width: 28px;
     height: 28px;
   }
+  /* Collapsed (toggle off): only the toggle (top-left cell) is shown. */
+  .mermaid-controls:not(.mz-open) > :not(.mz-toggle) {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .mermaid-controls:not(.mz-open) {
+    pointer-events: none; /* let drags on the hidden cells reach the diagram */
+  }
+  .mermaid-controls .mz-toggle {
+    pointer-events: auto;
+  }
+  .mermaid-controls.mz-open .mz-toggle {
+    background: #e6eefc;
+    border-color: #6b8fd6;
+    color: #1d4fa8;
+  }
+  [data-theme="dark"] .mermaid-controls.mz-open .mz-toggle {
+    background: #2f3f66;
+    border-color: #7b9be0;
+    color: #fff;
+  }
 
   /* Larger touch targets for coarse-pointer devices that still show controls
      (e.g. tablets / touch laptops where the viewport is wide enough). */
@@ -344,14 +365,26 @@
       return d;
     }
 
-    // Build 3×3 grid:  [·  ↑  +]
+    // Build 3×3 grid:  [⚙  ↑  +]   (⚙ toggles the other cells)
     //                  [←  ↺  →]
     //                  [·  ↓  −]
     const controls = document.createElement('div');
-    controls.className = 'mermaid-controls';
+    controls.className = 'mermaid-controls mz-open'; // pad starts open
+
+    // Top-left cell: toggle that shows/hides the rest of the pad.
+    const toggle = makeBtn('✕', 'Hide diagram controls', () => {
+      const open = controls.classList.toggle('mz-open');
+      const label = open ? 'Hide diagram controls' : 'Show diagram controls';
+      toggle.textContent = open ? '✕' : '⚙';
+      toggle.title = label;
+      toggle.setAttribute('aria-label', label);
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    toggle.classList.add('mz-toggle');
+    toggle.setAttribute('aria-expanded', 'true');
 
     const cells = [
-      placeholder(),
+      toggle,
       makeBtn('↑', 'Pan up',    () => { ty += PAN_STEP; applyTransform(); }),
       makeBtn('+', 'Zoom in',   () => zoomAt(
         wrapper.getBoundingClientRect().left + wrapper.clientWidth  / 2,
