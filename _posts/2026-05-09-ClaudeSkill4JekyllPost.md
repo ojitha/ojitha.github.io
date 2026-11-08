@@ -4,7 +4,7 @@ title:  "A Learning Guide to the blog-post-excerpt Claude Skill"
 date:   2026-05-09
 categories: [Claude, Skills]
 toc: true
-mermaid: false
+mermaid: true
 maths: false
 typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
@@ -19,6 +19,24 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 
 * TOC
 {:toc}
+
+AI Fluecy[^ai-fluency] is the key to build proper AI solutions for Customer problems.
+
+> **AI Fluency** is defined as the capability to interact with AI systems effectively, efficiently, ethically, and safely throughout the product development lifecycle.
+{:.info-box}
+
+__The 4D Framework__ 🧠
+
+The **4D Framework** provides an operational foundation for human-AI software collaboration:
+
+| Competency | Focus Area | Key Principle | Failure Mode to Avoid |
+| --- | --- | --- | --- |
+| **Delegation** 🎯 | Task Decomposition | Hand off execution and repetitive tasks, but retain critical strategic calls. | Surrendering final quality decisions to the model. |
+| **Description** 📝 | Context Transfer | Feed comprehensive domain requirements, constraints, and user perspectives upstream. | Blaming code generation when the root cause was incomplete context. |
+| **Discernment** 🔍 | Output Evaluation | Verify code beyond basic execution—test for scale, UX clarity, edge cases, and safety. | Accepting "locally correct" code that breaks under real usage. |
+| **Diligence** 🛡️ | Full Ownership | Maintain full accountability for production realities (migrations, monitoring, rate limits). | Treating a functional prototype as production-ready software. |
+
+> 📌 **Core Principle:** Delegating implementation to AI speeds up development, but delegating judgment degrades software quality. Builders must maintain final oversight.
 
 ## 1. Why this guide exists
 
@@ -198,6 +216,8 @@ The `blog-post-linkedin` neighbour is interesting because it shares half a trigg
 
 ## 10. Troubleshooting — what to do when things go sideways
 
+Validate your skills with `claude plugin validate .claude/skills/`.
+
 The Anthropic guide's troubleshooting chapter lists five failure modes; here is how each one applies to `blog-post-excerpt`.
 
 **Skill won't upload.** Not relevant here — the skill is project-scoped and discovered automatically by Claude Code from `.claude/skills/`, not uploaded through Settings. The equivalent failure for a project-scoped skill is *the skill is not auto-discovered when Claude Code is launched from the repo root*. The fix is to verify the folder is named in kebab-case (it is: `blog-post-excerpt`), the file is named exactly `SKILL.md` (it is, case-sensitive), and the YAML frontmatter parses (delimiters, no unclosed quotes).
@@ -215,6 +235,42 @@ The Anthropic guide's *advanced technique* note — that for critical validation
 **Large context issues.** Not a current problem because `SKILL.md` is concise and `references/style-guide.md` is loaded only when needed. If the skill ever grows new styles, new placeholder shapes, or new repository conventions, the right move is to keep the body of `SKILL.md` lean and let the new detail land in the references folder.
 
 ## 11. Distribution — when a project skill is the right answer
+
+
+
+A skill used by one person is a convenience, but a skill shared across a team becomes a standard. A pull request review skill, for example, helps its author, but shared widely it gives the whole organization a consistent way to review code. How far a skill should travel determines how it's distributed, and there are three main routes[^skills-sharing].
+
+### Through the repository
+
+The simplest route is to commit skills to the project's `.claude/skills` directory. Anyone who clones the repository receives them with no installation, and later updates arrive with the next pull. The skills sit in the version-controlled `.claude` directory alongside agents, hooks and settings, so they follow the team's normal Git workflow. This suits team coding standards, project-specific workflows and skills that depend on the structure of the codebase.
+
+### Through plugins
+
+Skills that are useful beyond a single project can be packaged as a plugin. A plugin contains a `skills` directory laid out much like `.claude`, with each skill in its own folder containing a `SKILL.md` file. Once the plugin is published to a marketplace, other users can find it and install it into Claude Code themselves. This route is best for skills that aren't too project-specific and could help the wider community.
+
+### Through managed settings
+
+Some practices are mandatory rather than optional, and for these administrators can deploy skills across the organization. Each skill goes in `.claude/skills/` inside the managed settings directory on each machine, such as `/etc/claude-code/.claude/skills/` on Linux. Enterprise skills take the highest priority, overriding personal and project skills with the same name.
+
+Managed settings also govern plugins. For example, `strictKnownMarketplaces` limits which marketplaces people can add and install plugins from. This route is meant for security requirements, compliance workflows and coding practices that must be consistent, and the lesson stresses the word "must".
+
+### Skills and subagents
+
+One behavior surprises many people: a subagent doesn't see the skills you've already invoked. It starts with a fresh context, unless it's a fork, which begins with a copy of your conversation. A fresh subagent can still find and invoke skills, but only if it has the Skill tool.
+
+Agents differ in how they handle skills:
+
+- **Built-in agents:** Agents such as Explore and Plan don't preload skills.
+- **Custom subagents:** These can preload the skills named in their `skills` field. If you give one a `tools` list, keep Skill in it so the subagent can still invoke unlisted skills.
+- **Preloaded skills:** These load in full when the subagent starts, not on demand as in the main conversation.
+
+To set this up, make sure the skills exist in `.claude/skills`, then add an agent markdown file in `.claude/agents` with a `skills` field in its frontmatter. If that directory didn't exist when your session began, restart Claude Code to load the new subagent.
+
+This pattern works well when you want isolated delegation with specific expertise, or when different subagents need different skills, such as a frontend and a backend reviewer. It also enforces standards in delegated work without relying on prompts.
+
+### Looking ahead
+
+Distribution is about reach: the repository serves a team, plugins serve a community, and managed settings serve an organization that requires compliance. The final lesson turns to troubleshooting, including skills that don't trigger, priority conflicts and runtime errors.
 
 The Anthropic guide's distribution chapter focuses on sharing a skill with other people: hosting it on GitHub, writing a human-facing README at the repo root (separate from the skill folder, which must not contain a `README.md`), uploading the zipped folder through Claude.ai's Settings, or deploying it organisation-wide as an admin.
 
@@ -270,4 +326,27 @@ The `blog-post-excerpt` skill is small, but it is small the way good code is sma
 
 [`_posts/2026-05-05-Gemma4.md`](computer:///Users/ojitha/GitHub/ojitha.github.io/_posts/2026-05-05-Gemma4.md) — a worked example of the skill's output, with the rewritten `excerpt:` line on line 11.
 
+## 15. Speciality Comparison 
+
+| Mechanism | When & How It Loads | Context Window Scope | Trigger & Guarantee | Best For | Avoid For |
+| --- | --- | --- | --- | --- | --- |
+| **CLAUDE.md** | Loaded automatically at session startup. | **Main Context** (Always-on across every prompt). | **Probabilistic** (Claude treats it as context and guidelines, not strict hardware configuration). | Project conventions, short build/test commands, architectural rules (<200 lines recommended). | Long reference materials, one-off procedures, or strict safety guardrails. |
+| **Skills (`SKILL.md`)** | **Progressive Disclosure**: Name/description preloads at startup; full body loads on-demand. | **Main Context** (Loads into current window only when invoked). | **Probabilistic / Manual** (Claude decides based on description match, or triggered via `/skill-name`). | Reusable workflows, specialized coding procedures, reference checklists, release workflows. | Non-negotiable rule enforcement or noisy tasks that clutter the primary chat context. |
+| **Subagents** | Spawned dynamically when requested by user or main Claude session. | **Isolated Window** (Runs in a standalone window and returns only a summary). | **Probabilistic Delegation** (Decided by parent prompt; runs isolated turn-by-turn). | Heavy context quarantine, running test suites, multi-file code reviews, web scraping. | Interactive tasks requiring ongoing mid-process user feedback or full conversation history. |
+| **Hooks** | Triggered automatically by lifecycle events (e.g., `PreToolUse`, `PostToolUse`, `Stop`). | **External Execution** (Runs shell scripts outside the context window; costs ~0 tokens). | **Deterministic** (100% guaranteed trigger; exit code 2 strictly blocks actions). | Enforcing non-negotiable guardrails, auto-formatting/linting after edits, blocking unsafe terminal commands. | Tasks requiring LLM reasoning or flexible discretionary behavior. |
+| **Slash Commands** | Session startup (aliased/unified under the Skills architecture). | **Main Context** | **User-Directed** (Explicit command invocation via `/name`). | Fast shortcuts and quick manual triggers for predefined workflows. | Automated background tasks or passive policy enforcement. |
+
+### Core Selection Matrix[^skills-training]
+
+* **Non-negotiable rule / Guardrail?** -> **Hook** *(Deterministic enforcement)*
+* **Procedure Claude should choose when relevant?** -> **Skill** *(Progressive context disclosure)*
+* **Noisy task that generates heavy intermediate output?** -> **Subagent** *(Context isolation)*
+* **Always-on repo orientation?** -> **CLAUDE.md** *(Global baseline context)*
+
 [^complete-guide]: [The-Complete-Guide-to-Building-Skill-for-Claude.pdf](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf){:target="_blank" rel="noopener noreferrer"}
+
+[^skills-training]: [Skills vs. other Claude Code features · Introduction to agent skills · Claude Academy](https://academy.claude.com/courses/introduction-to-agent-skills/skills-vs-other-claude-code-features){:target="_blank" rel="noopener noreferrer"}
+
+[^skills-sharing]: [Sharing skills · Introduction to agent skills · Claude Academy](https://academy.claude.com/courses/introduction-to-agent-skills/sharing-skills){:target="_blank" rel="noopener noreferrer"}
+
+[^ai-fluency]: [AI Fluency for builders · Claude Academy](https://academy.claude.com/courses/ai-fluency-for-builders){:target="_blank" rel="noopener noreferrer"}
