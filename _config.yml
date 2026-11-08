@@ -25,6 +25,20 @@ google_analytics: UA-12622200-2
 timezone: Australia/Sydney
 show_excerpts: true
 
+# giscus comments (https://giscus.app). Comments render on posts only when
+# repo_id and category_id are both set; opt a post out with `comments: false`.
+giscus:
+  repo: ojitha/ojitha.github.io
+  repo_id: MDEwOlJlcG9zaXRvcnkyNjMwMjEzOTg=
+  category: Announcements
+  category_id: "DIC_kwDOD61jVs4DKooS" # fill in from https://giscus.app after enabling Discussions
+  mapping: pathname
+  reactions_enabled: "1"
+  input_position: bottom
+  light_theme: light
+  dark_theme: dark
+  lang: en
+
 # theme: minima
 remote_theme: jekyll/minima@4de322363fca5927e6f4012cb94f6dad69ab5e6c
 minima:

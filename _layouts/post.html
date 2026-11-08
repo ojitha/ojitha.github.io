@@ -24,6 +24,10 @@ layout: default
     {{ content }}
   </div>
 
+  {%- if site.giscus.repo_id and site.giscus.category_id and page.comments != false -%}
+    {%- include giscus.html -%}
+  {%- endif -%}
+
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
   {%- endif -%}

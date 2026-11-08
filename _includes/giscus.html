@@ -1,0 +1,43 @@
+<!-- giscus comments (https://giscus.app), backed by GitHub Discussions -->
+{%- assign g = site.giscus -%}
+<section class="giscus-comments">
+  <div class="giscus"></div>
+</section>
+<script>
+(function () {
+  var html = document.documentElement;
+  function giscusTheme() {
+    return html.getAttribute('data-theme') === 'dark'
+      ? '{{ g.dark_theme | default: "dark" }}'
+      : '{{ g.light_theme | default: "light" }}';
+  }
+
+  var s = document.createElement('script');
+  s.src = 'https://giscus.app/client.js';
+  s.setAttribute('data-repo', '{{ g.repo }}');
+  s.setAttribute('data-repo-id', '{{ g.repo_id }}');
+  s.setAttribute('data-category', '{{ g.category }}');
+  s.setAttribute('data-category-id', '{{ g.category_id }}');
+  s.setAttribute('data-mapping', '{{ g.mapping | default: "pathname" }}');
+  s.setAttribute('data-strict', '{{ g.strict | default: "0" }}');
+  s.setAttribute('data-reactions-enabled', '{{ g.reactions_enabled | default: "1" }}');
+  s.setAttribute('data-emit-metadata', '0');
+  s.setAttribute('data-input-position', '{{ g.input_position | default: "bottom" }}');
+  s.setAttribute('data-theme', giscusTheme());
+  s.setAttribute('data-lang', '{{ g.lang | default: "en" }}');
+  s.setAttribute('data-loading', 'lazy');
+  s.crossOrigin = 'anonymous';
+  s.async = true;
+  document.querySelector('.giscus-comments').appendChild(s);
+
+  // Keep the giscus iframe in sync with the site's light/dark toggle.
+  new MutationObserver(function () {
+    var frame = document.querySelector('iframe.giscus-frame');
+    if (!frame) return;
+    frame.contentWindow.postMessage(
+      { giscus: { setConfig: { theme: giscusTheme() } } },
+      'https://giscus.app'
+    );
+  }).observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
