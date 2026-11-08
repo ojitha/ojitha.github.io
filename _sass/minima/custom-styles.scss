@@ -152,9 +152,11 @@
   display: none;
 }
 
+/* Collapsed: the panel shrinks to a 44px reading-progress ring button */
 .floating-toc.collapsed {
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   overflow: hidden;
 }
 
@@ -171,8 +173,11 @@
 }
 
 .floating-toc.collapsed .toc-header {
-  padding: 12px;
-  border-radius: 8px;
+  padding: 0;
+  height: 100%;
+  justify-content: center;
+  background: transparent;
+  border-radius: 50%;
   border-bottom: none;
 }
 
@@ -186,23 +191,64 @@
 }
 
 .toc-toggle {
+  --toc-ring-track: #e1e4e8;
+  --toc-ring-bar: #0366d6;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
   border-radius: 4px;
-  transition: background-color 0.2s ease;
+  color: #586069;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .toc-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #24292e;
 }
 
-.toc-icon {
-  font-size: 32px;
-  font-weight: bold;
+.toc-toggle:focus-visible {
+  outline: 2px solid var(--toc-ring-bar);
+  outline-offset: 2px;
+}
+
+.toc-icon-open,
+.toc-ring { display: none; }
+.toc-icon-close { display: block; }
+
+.floating-toc.collapsed .toc-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+.floating-toc.collapsed .toc-icon-open { display: block; }
+.floating-toc.collapsed .toc-icon-close { display: none; }
+.floating-toc.collapsed .toc-ring {
   display: block;
-  line-height: 1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* start the arc at 12 o'clock */
+  pointer-events: none;
+}
+
+.toc-ring-track,
+.toc-ring-bar {
+  fill: none;
+  stroke-width: 3;
+}
+.toc-ring-track { stroke: var(--toc-ring-track); }
+.toc-ring-bar {
+  stroke: var(--toc-ring-bar);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.15s linear;
 }
 
 .toc-content {
@@ -858,8 +904,15 @@
   color: #c9d1d9;
 }
 
+[data-theme="dark"] .toc-toggle {
+  --toc-ring-track: #333;
+  --toc-ring-bar: #58a6ff;
+  color: #8b949e;
+}
+
 [data-theme="dark"] .toc-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  color: #c9d1d9;
 }
 
 [data-theme="dark"] .toc-link {

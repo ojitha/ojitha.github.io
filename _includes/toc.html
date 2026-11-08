@@ -3,8 +3,23 @@
   <div id="toc-resize-handle" class="toc-resize-handle" aria-label="Resize TOC"></div>
   <div class="toc-header">
     <span class="toc-title">Table of Contents</span>
-    <button id="toc-toggle" class="toc-toggle" aria-label="Toggle TOC">
-      <span class="toc-icon">−</span>
+    <button id="toc-toggle" class="toc-toggle" type="button"
+            aria-controls="toc-content" aria-expanded="true"
+            aria-label="Collapse table of contents" title="Collapse table of contents">
+      <!-- Reading-progress ring: only visible when the TOC is collapsed -->
+      <svg class="toc-ring" viewBox="0 0 44 44" aria-hidden="true">
+        <circle class="toc-ring-track" cx="22" cy="22" r="20"/>
+        <circle class="toc-ring-bar" id="toc-ring-bar" cx="22" cy="22" r="20"/>
+      </svg>
+      <!-- List icon: collapsed state -->
+      <svg class="toc-icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+      <!-- Chevrons: expanded state (tuck the panel away to the right) -->
+      <svg class="toc-icon-close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/>
+      </svg>
     </button>
   </div>
   <nav id="toc-content" class="toc-content">
@@ -15,8 +30,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   generateTOC();
-  setupTOCBehavior();
-  setupTOCResize();
+  setupTOCResize();   // restore the saved width first…
+  setupTOCBehavior(); // …so a restored collapsed state can stash and clear it
 });
 
 function setupTOCResize() {
@@ -143,23 +158,61 @@ function setupTOCBehavior() {
   if (!floatingToc || !tocToggle || !tocContent) return;
   
   // Toggle TOC visibility
-  const tocIcon = tocToggle.querySelector('.toc-icon');
+  const ringBar = document.getElementById('toc-ring-bar');
+  const RING_C = 2 * Math.PI * 20; // circumference for r=20
+  let readPct = 0;
   let savedInlineWidth = '';
-  tocToggle.addEventListener('click', function() {
-    tocContent.classList.toggle('collapsed');
-    floatingToc.classList.toggle('collapsed');
-    const isCollapsed = floatingToc.classList.contains('collapsed');
+
+  function setLabel(isCollapsed) {
+    const label = isCollapsed
+      ? 'Show table of contents (' + readPct + '% read)'
+      : 'Collapse table of contents';
+    tocToggle.setAttribute('aria-label', label);
+    tocToggle.setAttribute('title', label);
+    tocToggle.setAttribute('aria-expanded', String(!isCollapsed));
+  }
+
+  function setCollapsed(isCollapsed) {
+    tocContent.classList.toggle('collapsed', isCollapsed);
+    floatingToc.classList.toggle('collapsed', isCollapsed);
     if (isCollapsed) {
       // Stash the user-resized width and clear it so the collapsed CSS wins
-      savedInlineWidth = floatingToc.style.width;
+      if (floatingToc.style.width) savedInlineWidth = floatingToc.style.width;
       floatingToc.style.width = '';
     } else if (savedInlineWidth) {
       floatingToc.style.width = savedInlineWidth;
     }
-    if (tocIcon) {
-      tocIcon.textContent = isCollapsed ? '+' : '−';
-    }
+    setLabel(isCollapsed);
+    try { localStorage.setItem('floatingTocCollapsed', isCollapsed ? '1' : '0'); } catch (e) {}
+  }
+
+  tocToggle.addEventListener('click', function() {
+    setCollapsed(!floatingToc.classList.contains('collapsed'));
   });
+
+  // Restore the reader's last choice (after the resize code applied the saved width)
+  let startCollapsed = false;
+  try { startCollapsed = localStorage.getItem('floatingTocCollapsed') === '1'; } catch (e) {}
+  if (startCollapsed) setCollapsed(true);
+
+  // Reading progress through the post body, drawn on the collapsed ring
+  const article = document.querySelector('.post-content');
+  if (ringBar) ringBar.style.strokeDasharray = RING_C.toFixed(2);
+  function updateProgress() {
+    if (!article || !ringBar) return;
+    const rect = article.getBoundingClientRect();
+    const total = rect.height - window.innerHeight;
+    let p = total > 0 ? -rect.top / total : (rect.top < 0 ? 1 : 0);
+    p = Math.min(1, Math.max(0, p));
+    ringBar.style.strokeDashoffset = (RING_C * (1 - p)).toFixed(2);
+    const pct = Math.round(p * 100);
+    if (pct !== readPct) {
+      readPct = pct;
+      if (floatingToc.classList.contains('collapsed')) setLabel(true);
+    }
+  }
+  updateProgress();
+  window.addEventListener('resize', updateProgress);
 
   // Highlight current section while scrolling
   const headings = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
@@ -227,6 +280,7 @@ function setupTOCBehavior() {
     if (!ticking) {
       requestAnimationFrame(function() {
         updateActiveLink();
+        updateProgress();
         ticking = false;
       });
       ticking = true;
