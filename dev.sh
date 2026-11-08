@@ -5,7 +5,7 @@
 case "$1" in
     start)
         echo "🚀 Starting Jekyll development server with Docker..."
-        docker compose up --build
+        docker compose up --build -d
         ;;
     stop)
         echo "🛑 Stopping Jekyll development server..."

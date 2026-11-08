@@ -1,4 +1,4 @@
-# Tested for the ruby:3.3.4
+# Tested for the ruby:3.1
 FROM ruby:3.1
 
 # Install dependencies
@@ -49,7 +49,7 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 # Default command
 CMD ["bundle", "exec", "jekyll", "serve", \
      "--config", "_config.yml,_config_dev.yml", \
-     "--limit_posts", "5", \
+    #  "--limit_posts", "5", \
      "--host", "0.0.0.0", \
      "--livereload", \
      "--force_polling", \
