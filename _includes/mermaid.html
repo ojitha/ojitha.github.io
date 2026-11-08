@@ -5,7 +5,7 @@
     overflow: hidden;
     border: 1px solid #e4e4e4;
     border-radius: 6px;
-    margin: 1em 0;
+    margin: 1em auto; /* centred in the column, so it grows evenly both ways */
     background: #fff;
     min-height: 60px;
     max-width: 100%;
@@ -328,26 +328,55 @@
     if (origW > parentW0) scale = parentW0 / origW;
 
     function applyTransform() {
-      svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
       const desiredW = origW * scale;
       const parentW  = (wrapper.parentElement && wrapper.parentElement.clientWidth) || desiredW;
       const w        = Math.min(desiredW, parentW); // never overflow the column
+      const h        = w * aspect;
+      // Keep the scaled diagram covering the viewport. The wrapper grows from
+      // its top-left corner while the diagram fits the column, so zooming
+      // about any other point would push the top of the diagram out of view
+      // and leave empty space at the bottom. Clamping the translation pins
+      // the diagram to the wrapper while it fits (tx = ty = 0, so it grows
+      // proportionally) and stops panning past the edges once it overflows.
+      tx = Math.min(0, Math.max(w - desiredW, tx));
+      ty = Math.min(0, Math.max(h - origH * scale, ty));
+      svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
       wrapper.style.width  = w + 'px';
-      wrapper.style.height = Math.round(w * aspect) + 'px';
+      wrapper.style.height = Math.round(h) + 'px';
     }
 
-    // Zoom around an arbitrary point (in viewport coords) so the point under
-    // the cursor / pinch midpoint stays fixed during scaling.
+    // Diagram coordinates (unscaled) of a viewport point.
+    function toDiagram(clientX, clientY) {
+      const r = wrapper.getBoundingClientRect();
+      return { x: (clientX - r.left - tx) / scale, y: (clientY - r.top - ty) / scale };
+    }
+
+    // Set the scale, let the wrapper resize (it is centred in the column, so
+    // its left edge moves as it grows), then translate so that diagram point
+    // `p` lands on the viewport point returned by `target(rect)`.
+    function scaleAndPlace(nextScale, p, target) {
+      scale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, nextScale));
+      applyTransform(); // resizes the wrapper
+      const r = wrapper.getBoundingClientRect();
+      const t = target(r);
+      tx = t.x - r.left - p.x * scale;
+      ty = t.y - r.top  - p.y * scale;
+      applyTransform(); // clamps to the edges
+    }
+
+    // Zoom keeping the diagram point under (clientX, clientY) under it.
     function zoomAt(clientX, clientY, nextScale) {
-      nextScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, nextScale));
-      const rect = wrapper.getBoundingClientRect();
-      const fx = clientX - rect.left;
-      const fy = clientY - rect.top;
-      const k  = nextScale / scale;
-      tx = fx - k * (fx - tx);
-      ty = fy - k * (fy - ty);
-      scale = nextScale;
-      applyTransform();
+      scaleAndPlace(nextScale, toDiagram(clientX, clientY),
+                    () => ({ x: clientX, y: clientY }));
+    }
+
+    // Zoom keeping whatever is at the centre of the view at the centre of the
+    // (resized) view — used by the +/− buttons.
+    function zoomCentre(nextScale) {
+      const r = wrapper.getBoundingClientRect();
+      scaleAndPlace(nextScale,
+                    toDiagram(r.left + r.width / 2, r.top + r.height / 2),
+                    (nr) => ({ x: nr.left + nr.width / 2, y: nr.top + nr.height / 2 }));
     }
 
     function makeBtn(symbol, title, handler) {
@@ -386,10 +415,7 @@
     const cells = [
       toggle,
       makeBtn('↑', 'Pan up',    () => { ty += PAN_STEP; applyTransform(); }),
-      makeBtn('+', 'Zoom in',   () => zoomAt(
-        wrapper.getBoundingClientRect().left + wrapper.clientWidth  / 2,
-        wrapper.getBoundingClientRect().top  + wrapper.clientHeight / 2,
-        scale + ZOOM_STEP)),
+      makeBtn('+', 'Zoom in',   () => zoomCentre(scale + ZOOM_STEP)),
       makeBtn('←', 'Pan left',  () => { tx += PAN_STEP; applyTransform(); }),
       makeBtn('↺', 'Reset',     () => {
         const pW = (wrapper.parentElement && wrapper.parentElement.clientWidth) || origW;
@@ -400,10 +426,7 @@
       makeBtn('→', 'Pan right', () => { tx -= PAN_STEP; applyTransform(); }),
       placeholder(),
       makeBtn('↓', 'Pan down',  () => { ty -= PAN_STEP; applyTransform(); }),
-      makeBtn('−', 'Zoom out',  () => zoomAt(
-        wrapper.getBoundingClientRect().left + wrapper.clientWidth  / 2,
-        wrapper.getBoundingClientRect().top  + wrapper.clientHeight / 2,
-        scale - ZOOM_STEP)),
+      makeBtn('−', 'Zoom out',  () => zoomCentre(scale - ZOOM_STEP)),
     ];
     cells.forEach(c => controls.appendChild(c));
     wrapper.appendChild(controls);
@@ -437,8 +460,7 @@
         pinchStart = {
           dist: distance(),
           scale,
-          midX: mid.x, midY: mid.y,
-          tx, ty,
+          p: toDiagram(mid.x, mid.y), // diagram point under the fingers
         };
       }
       e.preventDefault();
@@ -452,21 +474,17 @@
         tx = e.clientX - pan.ox;
         ty = e.clientY - pan.oy;
         applyTransform();
+        // Re-anchor to the clamped offset so dragging back from an edge
+        // responds immediately instead of after a dead zone.
+        pan.ox = e.clientX - tx;
+        pan.oy = e.clientY - ty;
       } else if (pointers.size === 2 && pinchStart) {
         const newDist = distance();
         const newMid  = midpoint();
-        const nextScale = Math.max(SCALE_MIN,
-                          Math.min(SCALE_MAX, pinchStart.scale * (newDist / pinchStart.dist)));
-        const rect = wrapper.getBoundingClientRect();
-        const fx = pinchStart.midX - rect.left;
-        const fy = pinchStart.midY - rect.top;
-        const k  = nextScale / pinchStart.scale;
-        // Zoom around the original midpoint, then translate by the drift of
-        // the live midpoint — combines pinch-zoom with two-finger pan.
-        tx = (fx - k * (fx - pinchStart.tx)) + (newMid.x - pinchStart.midX);
-        ty = (fy - k * (fy - pinchStart.ty)) + (newMid.y - pinchStart.midY);
-        scale = nextScale;
-        applyTransform();
+        // Keep the diagram point that started under the fingers under the
+        // live midpoint — combines pinch-zoom with two-finger pan.
+        scaleAndPlace(pinchStart.scale * (newDist / pinchStart.dist),
+                      pinchStart.p, () => newMid);
       }
     });
 
