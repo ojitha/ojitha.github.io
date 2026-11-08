@@ -1,0 +1,178 @@
+<!--
+  Header search: a button in the site header that opens a modal with
+  as-you-type Algolia results (Ctrl/Cmd+K or "/" also open it).
+  Queries the Algolia REST API directly with the public search-only key,
+  so no client library is loaded. Enter with nothing selected, or
+  "See all results", goes to the full /search/ page with ?q=.
+-->
+<button type="button" id="site-search-open" class="site-search-trigger" aria-label="Search posts" aria-haspopup="dialog" aria-controls="site-search">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  <span class="site-search-trigger-label">Search</span>
+  <kbd class="site-search-trigger-kbd" aria-hidden="true">Ctrl K</kbd>
+</button>
+
+<div id="site-search" class="site-search" role="dialog" aria-modal="true" aria-label="Search posts" hidden>
+  <div class="site-search-backdrop" data-close></div>
+  <div class="site-search-panel">
+    <form class="site-search-form" role="search" action="{{ '/search/' | relative_url }}" method="get">
+      <svg class="site-search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="site-search-input" class="site-search-input" type="search" name="q"
+             placeholder="Search posts…" autocomplete="off" spellcheck="false"
+             role="combobox" aria-expanded="false" aria-controls="site-search-results" aria-autocomplete="list">
+      <button type="button" class="site-search-esc" data-close aria-label="Close search">Esc</button>
+    </form>
+    <ul id="site-search-results" class="site-search-results" role="listbox" aria-label="Search results"></ul>
+    <div class="site-search-footer">
+      <a id="site-search-all" class="site-search-all" href="{{ '/search/' | relative_url }}">See all results</a>
+      <span class="site-search-powered">Search by <a href="https://www.algolia.com/" target="_blank" rel="noopener">Algolia</a></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var APP_ID = '{{ site.algolia.application_id }}';
+  var API_KEY = '{{ site.algolia.search_only_api_key }}';
+  var INDEX = '{{ site.algolia.index_name }}';
+  var BASE = '{{ site.baseurl }}';
+  var SEARCH_PAGE = '{{ "/search/" | relative_url }}';
+  var ENDPOINT = 'https://' + APP_ID + '-dsn.algolia.net/1/indexes/' + encodeURIComponent(INDEX) + '/query';
+  var PRE = '__hl_start__', POST = '__hl_end__';
+
+  var openBtn = document.getElementById('site-search-open');
+  var modal = document.getElementById('site-search');
+  if (!openBtn || !modal || !APP_ID) return;
+  var input = document.getElementById('site-search-input');
+  var list = document.getElementById('site-search-results');
+  var allLink = document.getElementById('site-search-all');
+  var form = modal.querySelector('form');
+
+  var active = -1, timer = null, controller = null, lastFocus = null;
+  var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  var kbd = openBtn.querySelector('.site-search-trigger-kbd');
+  if (kbd && isMac) kbd.textContent = '⌘ K';
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  // Escape the text, then turn our private highlight markers into <mark>.
+  function hl(field) {
+    if (!field || field.value == null) return '';
+    return esc(field.value).split(PRE).join('<mark>').split(POST).join('</mark>');
+  }
+
+  function open() {
+    if (!modal.hidden) return;
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    document.documentElement.classList.add('site-search-open');
+    input.focus();
+    input.select();
+    if (input.value.trim()) run(input.value);
+  }
+  function close() {
+    if (modal.hidden) return;
+    modal.hidden = true;
+    document.documentElement.classList.remove('site-search-open');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  function setActive(i) {
+    var items = list.querySelectorAll('.site-search-hit');
+    if (!items.length) { active = -1; return; }
+    active = (i + items.length) % items.length;
+    items.forEach(function (el, n) { el.setAttribute('aria-selected', n === active ? 'true' : 'false'); });
+    items[active].scrollIntoView({ block: 'nearest' });
+    input.setAttribute('aria-activedescendant', items[active].id);
+  }
+
+  function render(hits, query) {
+    active = -1;
+    input.removeAttribute('aria-activedescendant');
+    allLink.href = SEARCH_PAGE + '?q=' + encodeURIComponent(query);
+    if (!hits.length) {
+      list.innerHTML = '<li class="site-search-empty">No results for “' + esc(query) + '”</li>';
+      input.setAttribute('aria-expanded', 'false');
+      return;
+    }
+    list.innerHTML = hits.map(function (h, n) {
+      var url = BASE + h.url + (h.anchor ? '#' + h.anchor : '');
+      var hr = h._highlightResult || {}, sr = h._snippetResult || {};
+      var crumbs = (hr.headings || []).map(hl).join(' <span aria-hidden="true">›</span> ');
+      var date = h.date ? new Date(h.date * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+      var cats = (h.categories || []).slice(0, 2).map(esc).join(' · ');
+      return '<li role="option" aria-selected="false" class="site-search-hit" id="site-search-hit-' + n + '">' +
+        '<a href="' + esc(url) + '">' +
+          '<span class="site-search-hit-title">' + (hl(hr.title) || esc(h.title)) + '</span>' +
+          (crumbs ? '<span class="site-search-hit-crumbs">' + crumbs + '</span>' : '') +
+          (sr.content ? '<span class="site-search-hit-snippet">' + hl(sr.content) + '</span>' : '') +
+          '<span class="site-search-hit-meta">' + [date, cats].filter(Boolean).join(' · ') + '</span>' +
+        '</a></li>';
+    }).join('');
+    input.setAttribute('aria-expanded', 'true');
+  }
+
+  function run(query) {
+    query = query.trim();
+    if (controller) controller.abort();
+    if (!query) {
+      list.innerHTML = '';
+      input.setAttribute('aria-expanded', 'false');
+      allLink.href = SEARCH_PAGE;
+      return;
+    }
+    controller = 'AbortController' in window ? new AbortController() : null;
+    fetch(ENDPOINT, {
+      method: 'POST',
+      signal: controller ? controller.signal : undefined,
+      headers: { 'X-Algolia-Application-Id': APP_ID, 'X-Algolia-API-Key': API_KEY },
+      body: JSON.stringify({
+        query: query,
+        hitsPerPage: 8,
+        distinct: 1,
+        attributesToRetrieve: ['title', 'url', 'anchor', 'date', 'categories', 'headings'],
+        attributesToHighlight: ['title', 'headings'],
+        attributesToSnippet: ['content:24'],
+        highlightPreTag: PRE,
+        highlightPostTag: POST,
+        snippetEllipsisText: '…'
+      })
+    })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (data) { if (input.value.trim() === query) render(data.hits || [], query); })
+      .catch(function (err) {
+        if (err && err.name === 'AbortError') return;
+        list.innerHTML = '<li class="site-search-empty">Search is unavailable right now.</li>';
+      });
+  }
+
+  openBtn.addEventListener('click', open);
+  modal.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) close(); });
+
+  input.addEventListener('input', function () {
+    clearTimeout(timer);
+    var q = input.value;
+    timer = setTimeout(function () { run(q); }, 120);
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+    else if (e.key === 'Enter' && active >= 0) {
+      e.preventDefault();
+      var a = list.querySelectorAll('.site-search-hit a')[active];
+      if (a) window.location.href = a.href;
+    }
+  });
+  // Plain Enter with nothing highlighted submits to the full search page.
+  form.addEventListener('submit', function (e) { if (!input.value.trim()) e.preventDefault(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !modal.hidden) { e.preventDefault(); close(); return; }
+    var t = e.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+    if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) { e.preventDefault(); modal.hidden ? open() : close(); }
+    else if (e.key === '/' && !typing && modal.hidden) { e.preventDefault(); open(); }
+  });
+})();
+</script>

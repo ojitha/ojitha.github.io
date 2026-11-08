@@ -7,7 +7,9 @@
 const search = instantsearch({
   appId: '{{ site.algolia.application_id }}',
   apiKey: '{{ site.algolia.search_only_api_key }}',
-  indexName: '{{ site.algolia.index_name }}'
+  indexName: '{{ site.algolia.index_name }}',
+  // Reads/writes ?q= so the header search's "See all results" lands here pre-filled.
+  urlSync: { trackedParameters: ['query'] }
 });
 
 const hitTemplate = function(hit) {
@@ -69,7 +71,7 @@ search.start();
   margin-bottom: 30px;
 }
 .post-link .ais-Highlight {
-  color: #111;
+  color: inherit;
   font-style: normal;
   text-decoration: underline;
 }
