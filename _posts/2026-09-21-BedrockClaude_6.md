@@ -1605,11 +1605,6 @@ Add a helper function to convert MCP prompt messages into Bedrock Converse API `
 
 
 ```python
-display_script_as_markdown("BedrockClaude_6/example_4/bedrock_utils.py")
-```
-
-
-```python
 """
 bedrock_utils.py: Translates MCP tools and prompt messages to Amazon Bedrock formats.
 """
@@ -1663,11 +1658,6 @@ def mcp_prompt_to_bedrock_messages(prompt_result: types.GetPromptResult) -> List
 2.  Evaluate a template on the server (`get_prompt()`).
 3.  Convert the generated prompt to Bedrock format (`mcp_prompt_to_bedrock_messages()`).
 4.  Execute via Bedrock `converse()` while enabling tools if Claude needs to read the document content to complete the prompt request.
-
-
-```python
-display_script_as_markdown("BedrockClaude_6/example_4/main.py")
-```
 
 
 ```python
