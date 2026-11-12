@@ -350,3 +350,5 @@ The `blog-post-excerpt` skill is small, but it is small the way good code is sma
 [^skills-sharing]: [Sharing skills · Introduction to agent skills · Claude Academy](https://academy.claude.com/courses/introduction-to-agent-skills/sharing-skills){:target="_blank" rel="noopener noreferrer"}
 
 [^ai-fluency]: [AI Fluency for builders · Claude Academy](https://academy.claude.com/courses/ai-fluency-for-builders){:target="_blank" rel="noopener noreferrer"}
+
+[^skill_home]: [Agent Skills Overview - Agent Skills](https://agentskills.io/home#adoption){:target="_blank" rel="noopener noreferrer"}
