@@ -14,8 +14,6 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
    id="IzdTUO5ta1o"
    content="<p>This post outline the architecture and implementation of <strong>LangChain&#39;s Deep Agents</strong> framework, explaining how foundation models are combined with an <strong>Agent Harness</strong> to handle complex autonomous workflows. Key concepts explored include <strong>prompt caching</strong> for token optimization, <strong>built-in and custom tools</strong> for executing actions or querying databases like MovieLens, and the integration of <strong>Model Context Protocol (MCP)</strong> servers. Additionally, the text details state management utilizing <strong>threads and checkpointers</strong> to preserve conversation history across sessions, while showcasing <strong>time travel</strong> capabilities for branching or reviewing past states. Finally, the materials emphasize <strong>Human-in-the-Loop (HITL)</strong> safety controls, allowing developers to pause execution before sensitive actions take place and review, edit, approve, or reject pending operations.</p>" %}
 
----
-
 <!--more-->
 
 {% include series/langchain-on-bedrock.md current="2" %}
