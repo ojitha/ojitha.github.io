@@ -1,5 +1,6 @@
 PyTipsBlogsDir := ../learn-langgraph/blogs
-PyTipsBlogsSources := 2026-11-07-LangchainOnBedrock
+PyTipsBlogsSources := 2026-11-07-LangchainOnBedrock \
+	 2026-11-09-LangcainDeepAgent
 md_targets += $(foreach wrd,$(PyTipsBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(PyTipsBlogsSources),$(ASSETS_DIR)/$(wrd))
 
