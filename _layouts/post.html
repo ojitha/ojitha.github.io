@@ -20,8 +20,20 @@ layout: default
     {%- include toc.html -%}
   {%- endif -%}
 
+  <!-- Series card: injected right after the excerpt separator when the post
+       is listed in _data/series.yml (see _includes/series.html). -->
+  {%- capture series_box -%}{%- include series.html -%}{%- endcapture -%}
+  {%- assign series_box = series_box | strip -%}
+  {%- assign more_marker = site.excerpt_separator | default: "<!--more-->" -%}
   <div class="post-content e-content" itemprop="articleBody">
+    {%- if series_box == "" %}
     {{ content }}
+    {%- elsif content contains more_marker %}
+    {{ content | replace_first: more_marker, series_box }}
+    {%- else %}
+    {{ series_box }}
+    {{ content }}
+    {%- endif %}
   </div>
 
   {%- if site.giscus.repo_id and site.giscus.category_id and page.comments != false -%}

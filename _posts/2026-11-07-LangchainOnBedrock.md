@@ -14,7 +14,6 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
    content="<p>This post provides a comprehensive technical walkthrough for constructing <strong>LangChain agents on AWS Bedrock</strong> using <code>uv</code> package management and foundation models such as Anthropic Claude, OpenAI, and Google Gemma via the Bedrock Converse API. It compares lightweight <strong>ReAct agents (</strong> <strong>create_agent</strong> <strong>)</strong> designed for single-purpose tasks against feature-rich <strong>deep agents (</strong> <strong>create_deep_agent</strong> <strong>)</strong>. Furthermore, the guide details <strong>short-term memory checkpoints</strong> and demonstrates optimizing <strong>Model Context Protocol (MCP)</strong> tool execution via <strong>&quot;Code Mode&quot;</strong>, presenting tools as sandbox-executed code wrappers to preserve data privacy, enable control loops, and decrease token waste by up to <strong>98.7%</strong>.</p>" %}
 
 <!--more-->
-{% include series.html %}
 
 * TOC
 {:toc}

@@ -1,5 +1,5 @@
 # Post series definitions. Rendered by _includes/series.html.
-# Key = series id. Posts are listed in reading order; a post finds its series automatically via {% include series.html %}.
+# Key = series id. Posts are listed in reading order. _layouts/post.html adds the card after <!--more--> automatically.
 
 claude-on-bedrock:
   title: Claude on AWS Bedrock

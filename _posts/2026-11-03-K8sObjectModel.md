@@ -14,7 +14,6 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 <!--more-->
 
 
-{% include series.html %}
 
 ------
 
