@@ -1345,3 +1345,49 @@ html.site-search-open { overflow: hidden; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .series-box { @include series-box-dark; }
 }
+
+/* -- In-post TOC container (kramdown `* TOC {:toc}` → #markdown-toc) ------- */
+/* Card only, same look as .series-box; list items keep their default style. */
+
+#markdown-toc {
+  --toc-card-accent: #1e69d8;
+  --toc-card-bg:     #f5f8fd;
+  --toc-card-border: #dbe4f2;
+
+  margin: 1.5em 0 2em;
+  padding: 0.9em 1.25em 0.75em 2.5em;
+  background: var(--toc-card-bg);
+  border: 1px solid var(--toc-card-border);
+  border-left: 4px solid var(--toc-card-accent);
+  border-radius: 8px;
+
+  &::before {
+    content: "Contents";
+    display: inline-block;
+    margin: 0 0 0.6em -1.25em;
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--toc-card-accent);
+    padding: 0.15em 0.6em;
+    border-radius: 999px;
+  }
+
+  @media screen and (max-width: 600px) {
+    padding: 0.8em 0.9em 0.6em 2em;
+  }
+}
+
+@mixin markdown-toc-dark {
+  --toc-card-accent: #5691cd;
+  --toc-card-bg:     #1e2530;
+  --toc-card-border: #2c3a4d;
+}
+
+[data-theme="dark"] #markdown-toc { @include markdown-toc-dark; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #markdown-toc { @include markdown-toc-dark; }
+}
