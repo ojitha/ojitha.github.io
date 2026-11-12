@@ -26,15 +26,17 @@
 {%- if series_current > 0 %}
 <div class="series-box__progress" aria-hidden="true"><span style="width: {{ series_pct }}%"></span></div>
 {%- endif %}
-<ol class="series-box__list">
-{%- for sp in series.posts -%}
+<ol class="series-box__list" reversed>
+{%- comment -%} Listed newest part first; sp_num keeps the reading-order part number. {%- endcomment -%}
+{%- for sp in series.posts reversed -%}
+{%- assign sp_num = series_total | minus: forloop.index0 -%}
 {%- assign sp_post = site.posts | where: "path", sp | first -%}
-{%- if forloop.index == series_current %}
-<li class="series-box__item is-current" aria-current="page"><span class="series-box__num">{{ forloop.index }}</span><span class="series-box__name">{{ page.title }}</span><span class="series-box__badge">You are here</span></li>
+{%- if sp_num == series_current %}
+<li class="series-box__item is-current" aria-current="page"><span class="series-box__num">{{ sp_num }}</span><span class="series-box__name">{{ page.title }}</span><span class="series-box__badge">You are here</span></li>
 {%- elsif sp_post %}
-<li class="series-box__item{% if forloop.index < series_current %} is-done{% endif %}"><span class="series-box__num">{{ forloop.index }}</span><a class="series-box__name" href="{{ sp_post.url | relative_url }}" target="_blank" rel="noopener noreferrer">{{ sp_post.title }}</a></li>
+<li class="series-box__item{% if sp_num < series_current %} is-done{% endif %}"><span class="series-box__num">{{ sp_num }}</span><a class="series-box__name" href="{{ sp_post.url | relative_url }}" target="_blank" rel="noopener noreferrer">{{ sp_post.title }}</a></li>
 {%- else %}
-<li class="series-box__item is-upcoming"><span class="series-box__num">{{ forloop.index }}</span><span class="series-box__name">Coming soon</span></li>
+<li class="series-box__item is-upcoming"><span class="series-box__num">{{ sp_num }}</span><span class="series-box__name">Coming soon</span></li>
 {%- endif -%}
 {%- endfor %}
 </ol>
