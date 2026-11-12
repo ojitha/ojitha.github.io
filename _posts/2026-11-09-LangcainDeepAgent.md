@@ -16,7 +16,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 
 <!--more-->
 
-{% include series/langchain-on-bedrock.md current="2" %}
+{% include series.html %}
 
 * TOC
 {:toc}

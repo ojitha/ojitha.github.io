@@ -17,7 +17,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 
 <!--more-->
 
-{% include series/claude-on-bedrock.md current="6"%}
+{% include series.html %}
 
 ---
 

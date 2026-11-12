@@ -14,7 +14,7 @@ typora-copy-images-to: ../../blog/assets/images/${filename}
 <!--more-->
 
 
-{% include series/k8s-on-pi5.md current="2"%}
+{% include series.html %}
 
 ------
 

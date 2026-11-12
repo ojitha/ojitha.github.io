@@ -1,5 +1,5 @@
-# Post series definitions. Rendered by _includes/series-box.html.
-# Key = series id (matches _includes/series/<id>.md). Posts are listed in reading order.
+# Post series definitions. Rendered by _includes/series.html.
+# Key = series id. Posts are listed in reading order; a post finds its series automatically via {% include series.html %}.
 
 claude-on-bedrock:
   title: Claude on AWS Bedrock
