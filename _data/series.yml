@@ -21,5 +21,11 @@ k8s-on-pi5:
 langchain-on-bedrock:
   title: LangChain on Amazon Bedrock
   posts:
+    - _posts/2025-04-27-AWS-LLM-Basics.md
+    - _posts/2025-05-01-AWS-LLM-langchain.md
+    - _posts/2025-09-05-LangGraph_studio_v2.md
+    - _posts/2025-09-05-LangGrapStudioExample.md
+    - _posts/2025-09-06-Python_Type_Annotation.md
     - _posts/2026-11-07-LangchainOnBedrock.md
+    - _posts/2025-08-29-BedrockLangGraph.md
     - _posts/2026-11-09-LangcainDeepAgent.md
