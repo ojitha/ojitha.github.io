@@ -1,0 +1,42 @@
+{%- comment -%}
+  Shared renderer for a post series box.
+  Series definitions live in _data/series.yml.
+  Params:
+    id      – series key in _data/series.yml (defaults to page.series)
+    current – (optional) 1-based index of the current post; falls back to page.path
+{%- endcomment -%}
+{%- assign series_id = include.id | default: page.series -%}
+{%- assign series = site.data.series[series_id] -%}
+{%- if series -%}
+{%- assign series_paths = series.posts -%}
+{%- assign series_title = series.title -%}
+{%- assign series_total = series_paths | size -%}
+{%- assign series_current = include.current | plus: 0 -%}
+{%- for p in series_paths -%}{%- assign sp = p | strip -%}{%- if sp == page.path -%}{%- assign series_current = forloop.index -%}{%- endif -%}{%- endfor -%}
+{%- assign series_pct = series_current | times: 100 | divided_by: series_total -%}
+<nav class="series-box" aria-label="Series: {{ series_title | escape }}">
+<div class="series-box__header">
+<span class="series-box__label">Series</span>
+<span class="series-box__title">{{ series_title }}</span>
+{%- if series_current > 0 %}
+<span class="series-box__count">Part {{ series_current }} of {{ series_total }}</span>
+{%- endif %}
+</div>
+{%- if series_current > 0 %}
+<div class="series-box__progress" aria-hidden="true"><span style="width: {{ series_pct }}%"></span></div>
+{%- endif %}
+<ol class="series-box__list">
+{%- for p in series_paths -%}
+{%- assign sp = p | strip -%}
+{%- assign sp_post = site.posts | where: "path", sp | first -%}
+{%- if forloop.index == series_current %}
+<li class="series-box__item is-current" aria-current="page"><span class="series-box__num">{{ forloop.index }}</span><span class="series-box__name">{% if sp_post %}{{ sp_post.title }}{% else %}{{ page.title }}{% endif %}</span><span class="series-box__badge">You are here</span></li>
+{%- elsif sp_post %}
+<li class="series-box__item{% if forloop.index < series_current %} is-done{% endif %}"><span class="series-box__num">{{ forloop.index }}</span><a class="series-box__name" href="{{ sp_post.url | relative_url }}" target="_blank" rel="noopener noreferrer">{{ sp_post.title }}</a></li>
+{%- else %}
+<li class="series-box__item is-upcoming"><span class="series-box__num">{{ forloop.index }}</span><span class="series-box__name">Coming soon</span></li>
+{%- endif -%}
+{%- endfor %}
+</ol>
+</nav>
+{%- endif -%}

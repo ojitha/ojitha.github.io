@@ -11,7 +11,7 @@ profile: true
 strict_front_matter: false
 
 # Limit pagination for faster builds
-paginate: 2
+paginate: 5
 
 # Disable heavy plugins that aren't needed during development
 # Only keep essential plugins for local development

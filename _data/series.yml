@@ -1,0 +1,25 @@
+# Post series definitions. Rendered by _includes/series-box.html.
+# Key = series id (matches _includes/series/<id>.md). Posts are listed in reading order.
+
+claude-on-bedrock:
+  title: Claude on AWS Bedrock
+  posts:
+    - _posts/2026-09-13-BedrocClaude_1.md
+    - _posts/2026-09-16-BedrockClaude_2.md
+    - _posts/2026-09-18-BedrockClaude_3.md
+    - _posts/2026-09-19-BedrockClaude_4.md
+    - _posts/2026-09-20-BedrockClaude_5.md
+    - _posts/2026-09-21-BedrockClaude_6.md
+
+k8s-on-pi5:
+  title: Kubernetes on Raspberry Pi 5
+  posts:
+    - _posts/2026-01-03-K8sIntro.md
+    - _posts/2026-11-03-K8sObjectModel.md
+    - _posts/2026-11-08-K8sAIML.md
+
+langchain-on-bedrock:
+  title: LangChain on Amazon Bedrock
+  posts:
+    - _posts/2026-11-07-LangchainOnBedrock.md
+    - _posts/2026-11-09-LangcainDeepAgent.md
