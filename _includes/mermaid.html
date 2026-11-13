@@ -265,7 +265,13 @@
 
   // Convert fenced code blocks (```mermaid) into .mermaid pre elements
   document.querySelectorAll('pre > code.language-mermaid').forEach((codeBlock) => {
-    codeBlock.parentElement.outerHTML = `<pre class="mermaid">${codeBlock.textContent}</pre>`;
+    const oldPre = codeBlock.parentElement;
+    const pre = document.createElement('pre');
+    pre.className = 'mermaid';
+    pre.innerHTML = codeBlock.textContent; // same parsing as the previous outerHTML swap
+    // Keep caption/cross-reference attributes (see captions.html) if an IAL put them on the <pre>
+    ['id', 'caption'].forEach((a) => { if (oldPre.hasAttribute(a)) pre.setAttribute(a, oldPre.getAttribute(a)); });
+    oldPre.replaceWith(pre);
   });
 
   // Store original source on each diagram element before mermaid replaces it

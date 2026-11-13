@@ -1,0 +1,113 @@
+<!-- Captions & cross-references (client-side; GitHub Pages safe mode can't run plugins).
+     Tag a block with a kramdown IAL on the line straight after it:
+       {: #fig-name caption="Text"}   {: #tbl-name caption="Text"}   {: #lst-name caption="Text"}
+     and reference it with [](#fig-name) or [Figure](#fig-name).
+     The id prefix picks the type; add a type with one line in TYPES. -->
+<script>
+(function () {
+  // prefix → label and caption position ('above' | 'below'; tables always use <caption>)
+  var TYPES = {
+    fig: { label: 'Figure',  pos: 'below' },
+    tbl: { label: 'Table',   pos: 'above' },
+    lst: { label: 'Listing', pos: 'above' }
+  };
+  var KEYS = Object.keys(TYPES);
+  var HEADINGS = { H1: 1, H2: 1, H3: 1, H4: 1, H5: 1, H6: 1 };
+
+  function typeOf(id) {
+    var k = (id || '').split('-')[0];
+    return TYPES[k] && id.indexOf(k + '-') === 0 ? k : null;
+  }
+
+  function captionNode(tag, label, text) {
+    var c = document.createElement(tag);
+    var s = document.createElement('strong');
+    s.textContent = label + (text ? ':' : '');
+    c.appendChild(s);
+    if (text) c.appendChild(document.createTextNode(' ' + text));
+    return c;
+  }
+
+  function init() {
+    var root = document.querySelector('.post-content');
+    if (!root) return;
+    var sel = KEYS.map(function (k) { return '[id^="' + k + '-"]'; }).join(',');
+    var linkSel = KEYS.map(function (k) { return 'a[href^="#' + k + '-"]'; }).join(',');
+    var targets = root.querySelectorAll(sel);
+    var links = root.querySelectorAll(linkSel);
+    if (!targets.length && !links.length) return;
+
+    var counters = {}, numbers = {};
+
+    Array.prototype.forEach.call(targets, function (el) {
+      if (HEADINGS[el.tagName]) return;          // kramdown auto heading ids
+      if (el.closest('svg')) return;             // ids inside rendered diagrams
+      var id = el.id, type = typeOf(id);
+      if (!type || numbers[id]) return;
+      var t = TYPES[type];
+      var n = counters[type] = (counters[type] || 0) + 1;
+      var label = t.label + ' ' + n;
+      var text = el.getAttribute('caption') || '';
+      el.removeAttribute('caption');
+      numbers[id] = label;
+
+      if (el.tagName === 'TABLE') {
+        var cap = el.createCaption();
+        cap.textContent = '';
+        var c = captionNode('span', label, text);
+        while (c.firstChild) cap.appendChild(c.firstChild);
+        return;
+      }
+
+      // Span IAL on an image lands on the <img> inside a <p>: wrap the paragraph.
+      var block = el;
+      if (el.tagName === 'IMG' && el.parentElement && el.parentElement.tagName === 'P') {
+        block = el.parentElement;
+      }
+      // Mermaid diagram already wrapped by mermaid.html's zoom container: wrap that instead.
+      if (el.parentElement && el.parentElement.classList.contains('mermaid-zoom-wrapper')) {
+        block = el.parentElement;
+      }
+
+      var fig = document.createElement('figure');
+      fig.className = 'captioned ' + type;
+      el.removeAttribute('id');
+      fig.id = id;
+      block.parentNode.insertBefore(fig, block);
+      var fc = captionNode('figcaption', label, text);
+      if (t.pos === 'above') fig.appendChild(fc);
+      fig.appendChild(block);
+      if (t.pos !== 'above') fig.appendChild(fc);
+    });
+
+    Array.prototype.forEach.call(links, function (a) {
+      var id = decodeURIComponent(a.getAttribute('href').slice(1));
+      var type = typeOf(id);
+      if (!type) return;
+      var text = a.textContent.trim();
+      var word = TYPES[type].label;
+      if (text && text !== word) {
+        if (!numbers[id] && !document.getElementById(id)) {
+          a.classList.add('xref-missing');
+          console.warn('[captions] missing reference target: #' + id);
+        }
+        return;
+      }
+      a.classList.add('xref');
+      if (numbers[id]) {
+        a.textContent = numbers[id];
+      } else {
+        a.textContent = text ? word + ' ??' : '??';
+        a.classList.add('xref-missing');
+        console.warn('[captions] missing reference target: #' + id);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

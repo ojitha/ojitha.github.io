@@ -35,6 +35,7 @@ layout: default
     {{ content }}
     {%- endif %}
   </div>
+  {%- include captions.html -%}
 
   {%- if site.giscus.repo_id and site.giscus.category_id and page.comments != false -%}
     {%- include giscus.html -%}

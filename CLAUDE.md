@@ -50,6 +50,30 @@ If a post belongs to one of those sections, edit the source in the sibling repo,
 
 `_layouts/post.html` includes the floating `_includes/toc.html` unless `toc: false`. Posts usually also have a kramdown `* TOC\n{:toc}` block. Use `<!--more-->` as the excerpt separator. Many posts start with `{% include video-summary.html id="" content="" %}`.
 
+### Captions & cross-references
+`_includes/captions.html` (included from `_layouts/post.html`, so notes pages get it too) numbers tagged blocks in the browser. Plugins can't run in Pages safe mode, so this is done client-side. Tag a block with a kramdown IAL on the line **directly after it, with no blank line**. If there is a blank line, kramdown applies the IAL to the *next* block. The id prefix sets the type:
+
+````markdown
+![](/assets/images/stem/x.png){: #fig-layout caption="tmux layout"}
+
+| A | B |
+|---|---|
+{: #tbl-components caption="Components"}
+
+```bash
+brew install neovim
+```
+{: #lst-install caption="Installing prerequisites"}
+
+See [](#fig-layout), [Table](#tbl-components) and [Listing](#lst-install).
+````
+
+- `fig-` → Figure (caption below), `tbl-` → Table (`<caption>` above), `lst-` → Listing (caption above). Each type is numbered separately in document order. To add a type, add one line to the `TYPES` map in `captions.html`.
+- Mermaid blocks take `fig-` ids. The figure wraps the diagram outside the zoom wrapper, so captions survive theme re-renders.
+- Link text: empty or exactly the type word becomes "Figure N"; any other text is kept. A missing target shows a red `??` (`.xref-missing`) and a `console.warn`.
+- Without JS the content still renders, but `[](#fig-x)` shows no text. Prefer `[Figure](#fig-x)` if that matters.
+- In notebook-synced posts, keep the IAL in the **same Markdown cell** as the table or image. nbconvert puts a blank line between cells, so an IAL in its own cell (e.g. under a code cell) tags the wrong element.
+
 ### Dark mode
 The theme toggle lives in `header.html`. It sets `data-theme="light|dark"` on `<html>` and saves the choice in `localStorage['minima-theme']`. `_includes/custom-head.html` applies the saved theme before first paint. Any new component styles need a `[data-theme="dark"] …` variant, and JS that renders theme-dependent output should watch `data-theme` with a MutationObserver (as `mermaid.html` does).
 

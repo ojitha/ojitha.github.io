@@ -1465,3 +1465,44 @@ html.site-search-open { overflow: hidden; }
   }
   .code-gutter { color: #6e7681; border-right-color: #3a3a3a; }
 }
+
+/* ── Captions & cross-references (_includes/captions.html) ───────────── */
+figure.captioned {
+  margin: 1.5em 0;
+  text-align: center;
+
+  > :not(figcaption) { text-align: left; }
+  > p > img { display: inline-block; }
+}
+
+figure.captioned > figcaption,
+table > caption {
+  font-size: 0.85em;
+  line-height: 1.4;
+  color: #6a737d;
+  padding: 0.35em 0;
+
+  strong { font-weight: 600; color: #57606a; }
+}
+
+figure.captioned.lst > figcaption { text-align: left; }
+
+table > caption {
+  caption-side: top;
+  text-align: center;
+}
+
+a.xref-missing {
+  color: #d73a49;
+  font-weight: 600;
+}
+
+[data-theme="dark"] {
+  figure.captioned > figcaption,
+  table > caption {
+    color: #8b949e;
+
+    strong { color: #c9d1d9; }
+  }
+  a.xref-missing { color: #ff7b72; }
+}
