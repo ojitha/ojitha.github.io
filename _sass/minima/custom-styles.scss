@@ -1391,3 +1391,77 @@ html.site-search-open { overflow: hidden; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) #markdown-toc { @include markdown-toc-dark; }
 }
+
+/* -- Code block tools (copy + line numbers) — see _includes/code-tools.html */
+.highlight.has-code-tools { position: relative; }
+
+.code-toolbar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 2;
+}
+
+.highlight.has-code-tools:hover .code-toolbar,
+.highlight.has-code-tools:focus-within .code-toolbar { opacity: 1; }
+
+@media (hover: none) {
+  .code-toolbar { opacity: 0.85; }
+}
+
+.code-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 6px;
+  font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: #57606a;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #d0d7de;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover { color: #24292f; background: #f3f4f6; }
+  &:focus-visible { outline: 2px solid #0969da; outline-offset: 1px; }
+  &.copied { color: #1a7f37; border-color: #1a7f37; }
+  &.code-ln-btn[aria-pressed="true"] { color: #0969da; border-color: #0969da; }
+}
+
+.code-gutter {
+  display: none;
+  position: absolute;
+  left: 1px;
+  padding: 0 8px 0 10px;
+  white-space: pre;
+  text-align: right;
+  color: #8c959f;
+  border-right: 1px solid #d0d7de;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.highlight.ln-on {
+  > .code-gutter { display: block; }
+  > pre { padding-left: calc(var(--gutter-w, 3em) + 10px); }
+}
+
+[data-theme="dark"] {
+  .code-tool-btn {
+    color: #9da7b3;
+    background: rgba(34, 34, 34, 0.92);
+    border-color: #3a3a3a;
+
+    &:hover { color: #e6edf3; background: #2d2d2d; }
+    &:focus-visible { outline-color: #58a6ff; }
+    &.copied { color: #3fb950; border-color: #3fb950; }
+    &.code-ln-btn[aria-pressed="true"] { color: #58a6ff; border-color: #58a6ff; }
+  }
+  .code-gutter { color: #6e7681; border-right-color: #3a3a3a; }
+}

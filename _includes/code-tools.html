@@ -1,0 +1,131 @@
+<!-- Code block tools: copy button + line-number toggle on every fenced code block.
+     Line numbers are drawn in a separate gutter (not inside <pre>), so copying
+     and text selection never pick them up. Set `linenos: true` in a page's front
+     matter to show numbers by default. Blocks from the Liquid highlight tag with linenos
+     already have Rouge's own numbers, so they only get the copy button. -->
+<script>
+(function () {
+  var DEFAULT_ON = {{ page.linenos | default: false | jsonify }};
+
+  var ICON_COPY = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M0 6.75C0 5.78.78 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .14.11.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/><path fill="currentColor" d="M5 1.75C5 .78 5.78 0 6.75 0h7.5C15.22 0 16 .78 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .14.11.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>';
+  var ICON_OK = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>';
+
+  function codeText(block) {
+    var el = block.querySelector('.rouge-table td.code pre, .rouge-code pre') || block.querySelector('pre code') || block.querySelector('pre');
+    return el ? el.textContent.replace(/\n$/, '') : '';
+  }
+
+  function copy(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy') ? resolve() : reject(); } catch (e) { reject(e); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  function button(label, html, cls) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'code-tool-btn ' + cls;
+    b.setAttribute('aria-label', label);
+    b.title = label;
+    b.innerHTML = html;
+    return b;
+  }
+
+  function setLineNumbers(highlight, on) {
+    var gutter = highlight.querySelector(':scope > .code-gutter');
+    if (on && !gutter) {
+      var n = codeText(highlight).split('\n').length;
+      var nums = [];
+      for (var i = 1; i <= n; i++) nums.push(i);
+      gutter = document.createElement('div');
+      gutter.className = 'code-gutter';
+      gutter.setAttribute('aria-hidden', 'true');
+      gutter.textContent = nums.join('\n');
+      highlight.insertBefore(gutter, highlight.firstChild);
+    }
+    if (on) {
+      // Match the gutter's metrics to the rendered code so rows line up.
+      var pre = highlight.querySelector('pre');
+      var code = pre.querySelector('code') || pre;
+      var cs = getComputedStyle(code);
+      var ps = getComputedStyle(pre);
+      gutter.style.fontFamily = cs.fontFamily;
+      gutter.style.fontSize = cs.fontSize;
+      gutter.style.lineHeight = cs.lineHeight;
+      gutter.style.top = (pre.offsetTop + pre.clientTop + parseFloat(ps.paddingTop)) + 'px';
+    }
+    highlight.classList.toggle('ln-on', on);
+    if (on) highlight.style.setProperty('--gutter-w', gutter.offsetWidth + 'px');
+  }
+
+  function enhance(block) {
+    if (block.dataset.codeTools) return;
+    if (block.querySelector('code.language-mermaid')) return;
+    var highlight = block.matches('figure.highlight') ? block : block.querySelector('div.highlight');
+    if (!highlight || !highlight.querySelector('pre')) return;
+    block.dataset.codeTools = '1';
+
+    var hasRougeNumbers = !!highlight.querySelector('.rouge-table, .lineno');
+    var bar = document.createElement('div');
+    bar.className = 'code-toolbar';
+
+    if (!hasRougeNumbers) {
+      var lnBtn = button('Toggle line numbers', '#', 'code-ln-btn');
+      lnBtn.setAttribute('aria-pressed', 'false');
+      lnBtn.addEventListener('click', function () {
+        var on = !highlight.classList.contains('ln-on');
+        setLineNumbers(highlight, on);
+        lnBtn.setAttribute('aria-pressed', String(on));
+      });
+      bar.appendChild(lnBtn);
+      if (DEFAULT_ON) {
+        setLineNumbers(highlight, true);
+        lnBtn.setAttribute('aria-pressed', 'true');
+      }
+    }
+
+    var copyBtn = button('Copy code', ICON_COPY, 'code-copy-btn');
+    var timer;
+    copyBtn.addEventListener('click', function () {
+      copy(codeText(highlight)).then(function () {
+        copyBtn.innerHTML = ICON_OK;
+        copyBtn.classList.add('copied');
+        copyBtn.title = 'Copied!';
+      }, function () {
+        copyBtn.title = 'Copy failed';
+      });
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        copyBtn.innerHTML = ICON_COPY;
+        copyBtn.classList.remove('copied');
+        copyBtn.title = 'Copy code';
+      }, 1500);
+    });
+    bar.appendChild(copyBtn);
+
+    highlight.classList.add('has-code-tools');
+    highlight.appendChild(bar);
+  }
+
+  function init() {
+    document.querySelectorAll('div.highlighter-rouge, figure.highlight').forEach(enhance);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
