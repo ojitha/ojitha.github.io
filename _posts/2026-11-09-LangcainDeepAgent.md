@@ -397,17 +397,20 @@ Use the `@tool` decorator from `langchain_core.tools` to turn a regular function
 
 `tool_calls` is a **list** because the model can ask for several tools in one turn. When the calls don't depend on each other, the Tools runner can run them **at the same time**.
 
+{% raw %}
 ```mermaid
 flowchart TD
-    Q["User: 'Weather in Tokyo, and convert 100 AUD to USD?'"] --> L1[LLM turn 1]
-    L1 -->|tool_calls list| P{{Run in parallel}}
-    P --> W["get_weather(city='Tokyo')"]
-    P --> C["convert_currency(100, 'AUD', 'USD')"]
-    W --> R[Both ToolMessages]
-    C --> R
-    R --> L2[LLM turn 2: sees both results together]
-    L2 --> A[Final combined answer]
+    Q["User: 'Weather in Tokyo, and convert 100 AUD to USD?'"] --&gt; L1[LLM turn 1]
+    L1 --&gt;|tool_calls list| P{{Run in parallel}}
+    P --&gt; W["get_weather(city='Tokyo')"]
+    P --&gt; C["convert_currency(100, 'AUD', 'USD')"]
+    W --&gt; R[Both ToolMessages]
+    C --&gt; R
+    R --&gt; L2[LLM turn 2: sees both results together]
+    L2 --&gt; A[Final combined answer]
 ```
+{% endraw %}
+
 
 <svg xmlns="http://www.w3.org/2000/svg" width="620" height="150" viewBox="0 0 620 150" font-family="Helvetica, Arial, sans-serif">
   <text x="10" y="20" font-size="14" font-weight="bold">Sequential</text>
