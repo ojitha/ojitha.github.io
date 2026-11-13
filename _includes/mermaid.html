@@ -75,6 +75,11 @@
     align-items: center;
     justify-content: center;
   }
+  /* Icon SVGs inside buttons: undo the diagram-SVG rules above */
+  .mermaid-controls button svg {
+    cursor: pointer;
+    pointer-events: none;
+  }
   .mermaid-controls button:hover {
     background: #f0f0f0;
     border-color: #888;
@@ -90,10 +95,6 @@
     background: #3a3a5a;
     border-color: #888;
     color: #fff;
-  }
-  .mermaid-controls .mz-placeholder {
-    width: 28px;
-    height: 28px;
   }
   /* Collapsed (toggle off): only the toggle (top-left cell) is shown. */
   .mermaid-controls:not(.mz-open) > :not(.mz-toggle) {
@@ -130,10 +131,6 @@
       width: 44px;
       height: 44px;
       font-size: 18px;
-    }
-    .mermaid-controls .mz-placeholder {
-      width: 44px;
-      height: 44px;
     }
   }
 
@@ -285,7 +282,72 @@
   const mobileQuery = window.matchMedia('(max-width: 600px)');
   const isMobile = () => mobileQuery.matches;
 
-  function wrapWithZoom(el) {
+  // ── Save as JPEG ───────────────────────────────────────────────────────────
+  const EXPORT_SCALE = 2; // export at 2× for crisp text
+
+  function triggerDownload(href, filename) {
+    const a = document.createElement('a');
+    a.href = href;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  // Export the full, untransformed diagram (ignores current zoom/pan).
+  function saveDiagramAsJpeg(svg, bg, idx) {
+    const vb = svg.viewBox.baseVal;
+    const w = (vb && vb.width  > 0) ? vb.width  : svg.getBoundingClientRect().width;
+    const h = (vb && vb.height > 0) ? vb.height : svg.getBoundingClientRect().height;
+
+    const clone = svg.cloneNode(true);
+    clone.classList.remove('mz-grabbing');
+    clone.style.transform = '';
+    clone.style.width = '';
+    clone.style.height = '';
+    clone.style.maxWidth = '';
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+    clone.setAttribute('width',  w * EXPORT_SCALE);
+    clone.setAttribute('height', h * EXPORT_SCALE);
+
+    const svgText = new XMLSerializer().serializeToString(clone);
+    // data: URL (not blob:) so Chrome doesn't taint the canvas for <foreignObject> labels
+    const dataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+    const base = `mermaid-diagram-${idx + 1}`;
+
+    const fallbackToSvg = (reason) => {
+      console.warn('Mermaid JPEG export failed, saving SVG instead:', reason);
+      const url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
+      triggerDownload(url, base + '.svg');
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    };
+
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.ceil(w * EXPORT_SCALE);
+        canvas.height = Math.ceil(h * EXPORT_SCALE);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = bg || '#fff'; // JPEG has no alpha
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+          if (!blob) return fallbackToSvg('empty canvas blob');
+          const url = URL.createObjectURL(blob);
+          triggerDownload(url, base + '.jpg');
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }, 'image/jpeg', 0.95);
+      } catch (err) {
+        fallbackToSvg(err); // e.g. SecurityError from a tainted canvas
+      }
+    };
+    img.onerror = () => fallbackToSvg('SVG image failed to load');
+    img.src = dataUrl;
+  }
+
+  function wrapWithZoom(el, idx) {
     if (isMobile()) return;
     const svg = el.querySelector('svg');
     if (!svg) return;
@@ -388,15 +450,21 @@
       return b;
     }
 
-    function placeholder() {
-      const d = document.createElement('div');
-      d.className = 'mz-placeholder';
-      return d;
-    }
-
     // Build 3×3 grid:  [⚙  ↑  +]   (⚙ toggles the other cells)
     //                  [←  ↺  →]
-    //                  [·  ↓  −]
+    //                  [💾 ↓  −]   (floppy-disk icon saves the diagram as JPEG)
+
+    // Save button: the classic floppy-disk "Save" icon, drawn as an inline
+    // SVG with currentColor so it follows the light/dark button colours.
+    const saveBtn = makeBtn('', 'Save diagram as JPEG', () =>
+      saveDiagramAsJpeg(svg, getComputedStyle(wrapper).backgroundColor, idx || 0));
+    saveBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" width="60%" height="60%" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>' +
+        '<polyline points="17 21 17 13 7 13 7 21"/>' +
+        '<polyline points="7 3 7 8 15 8"/>' +
+      '</svg>';
     const controls = document.createElement('div');
     controls.className = 'mermaid-controls mz-open'; // pad starts open
 
@@ -424,7 +492,7 @@
         applyTransform();
       }),
       makeBtn('→', 'Pan right', () => { tx -= PAN_STEP; applyTransform(); }),
-      placeholder(),
+      saveBtn,
       makeBtn('↓', 'Pan down',  () => { ty -= PAN_STEP; applyTransform(); }),
       makeBtn('−', 'Zoom out',  () => zoomCentre(scale - ZOOM_STEP)),
     ];
