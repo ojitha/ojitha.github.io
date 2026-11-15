@@ -61,13 +61,66 @@ There is no `scripts/` folder because no executable code is needed: SVG generati
 
 This is a textbook example of **progressive disclosure**, the first core design principle in the Anthropic guide. The skill uses the three-level system exactly as recommended:
 
-The first level is the YAML frontmatter at the top of `SKILL.md`. It is always loaded into Claude's system prompt and is what Claude uses to decide whether the skill is even relevant to the current request. Look at the description and you can see that it lists every phrase that should trigger loading — "create an excerpt for post X", "add a TLDR", "add SVG illustration", "draw a thumbnail", "generate excerpt" — plus every supported style word and an explicit cue that the presence of *both* a `_posts/*.md` filename *and* a drawing style is enough on its own. This is the single most important field in the entire skill, because it determines whether the body of `SKILL.md` ever gets loaded.
+1. The first level is the YAML frontmatter at the top of `SKILL.md`. Claude always loads it into its system prompt and uses it to decide whether the skill is relevant to the current request. Look at the description and you can see that it lists every phrase that should trigger loading — "create an excerpt for post X", "add a TLDR", "add SVG illustration", "draw a thumbnail", "generate excerpt" — plus every supported style word and an explicit cue that the presence of *both* a `_posts/*.md` filename *and* a drawing style is enough on its own. This is the single most important field in the entire skill, because it determines whether the body of `SKILL.md` ever gets loaded.
 
-The second level is the body of `SKILL.md` itself. It is loaded only when Claude has decided the skill is relevant. It contains the workflow steps, the inputs to confirm, the YAML safety rules, and the verification checklist — everything Claude needs to actually run the workflow correctly.
+    | Required Fields | Constraints                                                  |
+    | --------------- | ------------------------------------------------------------ |
+    | **name**        | • Maximum 64 chars <br />• Allowed only lowercase letters, numbers, and hyphens <br />• cannot start or end with hyphens <br />• Must match the parent directory name <br />• Recommended: gerund (verb+-ing) form |
+    | **description** | • Maximum 1024 chars <br />• Non-empty <br />• Should describe both *what*{:.hl} the skill does and *when*{:.hl} to use it <br />• Should include specific keywords that help agents identify relevant tasks |
 
-The third level is `references/style-guide.md`. It is bundled inside the skill folder but is not loaded by default. Claude reads it on demand, only when it has to actually draw an SVG in a particular style. The reference file contains a complete, valid worked SVG for each of the six supported styles, plus rendering tips. None of that detail belongs in `SKILL.md` because it would consume context tokens for every invocation, even ones where Claude is just picking jargon and re-using a known visual vocabulary.
+    In addition to the above there are optional fields:
 
-The other two core principles named in the Anthropic guide — **composability** and **portability** — also show up here. The skill makes no assumption that it is the only capability available; it sits alongside `blog-post-linkedin` in the same `.claude/skills/` directory and never trips over it because the trigger language is disjoint (LinkedIn vs. excerpt + drawing style). And the skill is portable in the sense that it would work identically on Claude.ai, in Claude Code, or via the API, because it depends on nothing more than the ability to read and edit a markdown file at a known path.
+    | Optional Fields | Constraints                                               |
+    | --------------- | --------------------------------------------------------- |
+    | license         | License name or reference to a license file               |
+    | compatibility   | Maximum 500 chars, indicates environment requirements     |
+    | metadata        | Arbitrary key-value pairs                                 |
+    | allowed-tools   | Space-delimited list of pre-approved tools (Experimental) |
+
+2. The second level is the body of `SKILL.md` itself. It is loaded only when Claude has decided the skill is relevant. It contains the workflow steps, the inputs to confirm, the YAML safety rules, and the verification checklist — everything Claude needs to actually run the workflow correctly.
+
+    1. No restrictions in the *fomrat*{:gtxt}
+    2. But input/output(including format), examples and edge cases
+    3. practicle guidelines (keep under 500 lines)
+    4. reference materials (1 level deep from `SKILL.md`) links to advanced or domain-specific content
+    5. Body Content degree(**High**{:.hl} with general text, **Medium****{:.hl} with pseudocode, examples and patterns and **low****{:.hl} with specific scripts and pre-defined sequences) of freedom.
+
+3. The third level is `references/style-guide.md`. It is bundled inside the skill folder but is not loaded by default. Claude reads it on demand, only when it has to actually draw an SVG in a particular style. The reference file contains a complete, valid worked SVG for each of the six supported styles, plus rendering tips. None of that detail belongs in `SKILL.md` because it would consume context tokens for every invocation, even ones where Claude is just picking jargon and re-using a known visual vocabulary.
+
+    Let me open the transcript to see what the lesson says about these folders. In this lesson, `/scripts`, `/references` and `/assets` are optional subfolders that sit next to the required `SKILL.md`. Claude loads what's in them only when the task needs it.
+
+    - **`/scripts`: code**
+
+        - Holds any code the skill needs Claude to read and run.
+        - Best practices:
+            - Include error handling.
+            - document scripts and dependencies
+
+    - **`/references`: extra documentation**
+
+        - Holds additional documentation or reference files.
+
+        - Keeps long or detailed material out of `SKILL.md`.
+
+            > If a reference file is long, it often helps to tell the skill to read the whole file.
+            > {:.note}
+
+    - **`/assets`: supporting resources**
+
+        - Holds files the skill uses or outputs, such as:
+            - document and configuration templates
+            - Images/diagrams and logos
+            - Data files
+            - Schemas
+
+
+**About the standard**
+
+- These three folder names follow the agent skills standard.
+- The standard is still changing quickly, so some existing skills use different folder names or conventions.
+- All the skills are expected to follow the standard.
+
+The other two core principles named in the Anthropic guide — **composability** and **portability**. The skill makes no assumption that it is the only capability available; it sits alongside `blog-post-linkedin` in the same `.claude/skills/` directory and never trips over it because the trigger language is disjoint (LinkedIn vs. excerpt + drawing style). And the skill is portable in the sense that it would work identically on Claude.ai, in Claude Code, or via the API, because it depends on nothing more than the ability to read and edit a markdown file at a known path.
 
 ## 3. Planning and design — what problem does this skill solve?
 
@@ -352,3 +405,4 @@ The `blog-post-excerpt` skill is small, but it is small the way good code is sma
 [^ai-fluency]: [AI Fluency for builders · Claude Academy](https://academy.claude.com/courses/ai-fluency-for-builders){:target="_blank" rel="noopener noreferrer"}
 
 [^skill_home]: [Agent Skills Overview - Agent Skills](https://agentskills.io/home#adoption){:target="_blank" rel="noopener noreferrer"}
+[^deeplearning_claude_skill]: [Agent Skills with Anthropic - DeepLearning.AI](https://www.deeplearning.ai/courses/agent-skills-with-anthropic){:target="_blank" rel="noopener noreferrer"}
