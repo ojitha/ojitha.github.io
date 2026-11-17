@@ -1,19 +1,40 @@
 ---
+title: "Claude on Amazon Bedrock: Part 6 - MCP"
+description: "Connect Claude on Amazon Bedrock to Model Context Protocol servers in Python: transports, converting MCP tools to Bedrock tool specs, and tools vs resources vs prompts."
+date: 2026-10-19 00:00:00 +1100
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  Claude MCP on Amazon Bedrock
-date: 2026-10-19
 categories: [AI, Claude, AWS, Python]
+tags: [Amazon Bedrock, Claude, MCP, Model Context Protocol, Python]
 toc: true
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/c7RJ9a9c-vU/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "Claude on Amazon Bedrock: Part 6 - MCP video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/c7RJ9a9c-vU/mqdefault.jpg" alt="Claude on Amazon Bedrock: Part 6 video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>This post details the implementation of the <strong>Model Context Protocol (MCP)</strong> to connect external capabilities with Claude models running on <strong>Amazon Bedrock</strong>. It explains how the architecture decouples integration code by leveraging <strong>MCP servers</strong> and <strong>clients</strong> that communicate via flexible transport layers like standard input/output or network protocols. Through practical code examples, it demonstrates how to translate tool definitions into Bedrock&#39;s required format for dynamic function execution. Furthermore, the texts contrast three foundational primitives: <strong>tools</strong> driven autonomously by the model, <strong>resources</strong> fetched proactively by application code, and <strong>prompts</strong> triggered explicitly by users. Ultimately, these components establish a standardized, secure, and maintainable framework for building sophisticated agentic applications.</p>
+  </div>
+  </div>
 mermaid: true
 maths: true
-typora-root-url: /User/ojitha/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-{% include video-summary.html
-   id="c7RJ9a9c-vU"
-   content="<p>This post details the implementation of the <strong>Model Context Protocol (MCP)</strong> to connect external capabilities with Claude models running on <strong>Amazon Bedrock</strong>. It explains how the architecture decouples integration code by leveraging <strong>MCP servers</strong> and <strong>clients</strong> that communicate via flexible transport layers like standard input/output or network protocols. Through practical code examples, it demonstrates how to translate tool definitions into Bedrock&#39;s required format for dynamic function execution. Furthermore, the texts contrast three foundational primitives: <strong>tools</strong> driven autonomously by the model, <strong>resources</strong> fetched proactively by application code, and <strong>prompts</strong> triggered explicitly by users. Ultimately, these components establish a standardized, secure, and maintainable framework for building sophisticated agentic applications.</p>" 
-%}
+<!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="c7RJ9a9c-vU" content=summary %}
 
 <!--more-->
 

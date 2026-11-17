@@ -1,18 +1,40 @@
 ---
+title: "Claude on Amazon Bedrock: Part 1 - EVALS & Prompt Engineering"
+description: "Call Claude on Amazon Bedrock with Boto3: inference config, streaming and JSON output, a five-step evaluation workflow, and XML and multi-shot prompting."
+date: 2026-09-13 00:00:00 +1000
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  Claude on Amazon Bedrock - EVALS & Prompt Engineering
-date: 2026-09-13
 categories: [AI, Claude, AWS]
+tags: [Amazon Bedrock, Claude, Boto3, Converse API, Prompt Engineering, Evals]
 toc: true
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/e2Xysrn20n8/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "Claude on Amazon Bedrock: Part 1 - EVALS & Prompt Engineering video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/e2Xysrn20n8/mqdefault.jpg" alt="Claude on Amazon Bedrock: Part 1 video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>These sources offer a comprehensive technical guide for <strong>integrating and optimising Claude models within the Amazon Bedrock ecosystem</strong>. They detail the programmatic implementation of AI services using the <strong>Boto3 library</strong>, covering essential functionalities such as <strong>inference configuration, real-time streaming, and structured JSON output control</strong>. Beyond simple deployment, the text emphasises a rigorous <strong>five-step evaluation workflow</strong> to objectively measure performance through automated datasets and hybrid grading systems. Furthermore, it outlines <strong>advanced prompt engineering strategies</strong>, including the use of <strong>XML delimiters</strong> and <strong>multi-shot prompting</strong>, to refine model accuracy and reliability. By combining practical coding examples with systematic testing methodologies, the documentation provides a blueprint for building <strong>production-ready, high-performance AI applications</strong>.</p>
+  </div>
+  </div>
 mermaid: true
 maths: true
-typora-root-url: ~/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-{% include video-summary.html
-   id="e2Xysrn20n8"
-   content="<p>These sources offer a comprehensive technical guide for <strong>integrating and optimising Claude models within the Amazon Bedrock ecosystem</strong>. They detail the programmatic implementation of AI services using the <strong>Boto3 library</strong>, covering essential functionalities such as <strong>inference configuration, real-time streaming, and structured JSON output control</strong>. Beyond simple deployment, the text emphasises a rigorous <strong>five-step evaluation workflow</strong> to objectively measure performance through automated datasets and hybrid grading systems. Furthermore, it outlines <strong>advanced prompt engineering strategies</strong>, including the use of <strong>XML delimiters</strong> and <strong>multi-shot prompting</strong>, to refine model accuracy and reliability. By combining practical coding examples with systematic testing methodologies, the documentation provides a blueprint for building <strong>production-ready, high-performance AI applications</strong>.</p>" %}
+<!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="e2Xysrn20n8" content=summary %}
 
 <!--more-->
 

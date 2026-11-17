@@ -1,18 +1,40 @@
 ---
+title: "Claude on Amazon Bedrock: Part 4 - RAG"
+description: "Retrieval-Augmented Generation with Claude on Amazon Bedrock: chunking, vector embeddings, BM25 hybrid search, Reciprocal Rank Fusion, reranking and contextual retrieval."
+date: 2026-09-20 00:00:00 +1000
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  Claude RAG on Amazon Bedrock
-date: 2026-09-20
 categories: [AI, Claude, AWS]
+tags: [Amazon Bedrock, Claude, RAG, Embeddings, BM25, Hybrid Search, Reranking]
 toc: true
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/2MprTXlKjus/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "Claude on Amazon Bedrock: Part 4 - RAG video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/2MprTXlKjus/mqdefault.jpg" alt="Claude on Amazon Bedrock: Part 4 video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>These documents examine advanced <strong>Retrieval-Augmented Generation (RAG)</strong> techniques implemented through <strong>Claude on Amazon Bedrock</strong> to handle large-scale data analysis. The text outlines essential architectural stages, beginning with <strong>document preprocessing</strong> and the strategic use of <strong>text chunking</strong> to maintain semantic integrity. It highlights the move towards <strong>hybrid search</strong>, which merges the conceptual strengths of <strong>vector embeddings</strong> with the precision of <strong>BM25 lexical matching</strong>. To ensure the highest accuracy, the sources describe sophisticated workflows involving <strong>Reciprocal Rank Fusion</strong> and <strong>LLM-based reranking</strong> to prioritise the most relevant data. Finally, the concept of <strong>contextual retrieval</strong> is introduced, where Claude generates snippets to anchor individual text fragments within their broader narrative. This comprehensive guide serves as a technical roadmap for building <strong>scalable, high-performance AI systems</strong> that are both cost-effective and contextually aware</p>
+  </div>
+  </div>
 mermaid: true
 maths: true
-typora-root-url: /User/ojitha/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-{% include video-summary.html
-   id="2MprTXlKjus"
-   content="<p>These documents examine advanced <strong>Retrieval-Augmented Generation (RAG)</strong> techniques implemented through <strong>Claude on Amazon Bedrock</strong> to handle large-scale data analysis. The text outlines essential architectural stages, beginning with <strong>document preprocessing</strong> and the strategic use of <strong>text chunking</strong> to maintain semantic integrity. It highlights the move towards <strong>hybrid search</strong>, which merges the conceptual strengths of <strong>vector embeddings</strong> with the precision of <strong>BM25 lexical matching</strong>. To ensure the highest accuracy, the sources describe sophisticated workflows involving <strong>Reciprocal Rank Fusion</strong> and <strong>LLM-based reranking</strong> to prioritise the most relevant data. Finally, the concept of <strong>contextual retrieval</strong> is introduced, where Claude generates snippets to anchor individual text fragments within their broader narrative. This comprehensive guide serves as a technical roadmap for building <strong>scalable, high-performance AI systems</strong> that are both cost-effective and contextually aware</p>" %}
+<!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="2MprTXlKjus" content=summary %}
 
 <!--more-->
 

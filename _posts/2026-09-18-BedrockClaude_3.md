@@ -1,19 +1,40 @@
 ---
+title: "Claude on Amazon Bedrock: Part 3 - Tool Use and Structured Data"
+description: "Structured data extraction with Pydantic tool schemas, batch tool execution, autonomous tool chaining and the built-in text editor tool with Claude on Amazon Bedrock."
+date: 2026-09-18 00:00:00 +1000
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  Claude on Amazon Bedrock - Mastering Tool Use and Structured Data
-date: 2026-09-18
 categories: [AI, Claude, AWS]
+tags: [Amazon Bedrock, Claude, Tool Use, Pydantic, Structured Output, Text Editor Tool]
 toc: true
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/aeSmBXJQHBY/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "Claude on Amazon Bedrock: Part 3 - Tool Use and Structured Data video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/aeSmBXJQHBY/mqdefault.jpg" alt="Claude on Amazon Bedrock: Part 3 video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>This technical guide details how to implement <strong>structured data extraction</strong> and <strong>multi-turn tool use</strong> using <strong>Claude on Amazon Bedrock</strong>. By defining <strong>Pydantic schemas</strong> as tool inputs, developers can force the model to return precise, type-safe data while bypassing unreliable conversational filler. The documentation explores advanced orchestration techniques, including <strong>batch tool execution</strong> for parallel processing and <strong>autonomous tool chaining</strong> for complex, multi-step tasks. Additionally, it highlights the use of <strong>built-in Anthropic tools</strong> like the text editor to perform direct file operations through validated backend handlers. The provided examples demonstrate a robust architecture for building resilient, <strong>agentic workflows</strong> that can self-correct when encountering validation errors. Overall, the text serves as a comprehensive manual for integrating <strong>large language models</strong> into production backend services with high reliability.</p>
+  </div>
+  </div>
 mermaid: true
 maths: true
-typora-root-url: /User/ojitha/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-{% include video-summary.html
-   id="aeSmBXJQHBY"
-   content="<p>This technical guide details how to implement <strong>structured data extraction</strong> and <strong>multi-turn tool use</strong> using <strong>Claude on Amazon Bedrock</strong>. By defining <strong>Pydantic schemas</strong> as tool inputs, developers can force the model to return precise, type-safe data while bypassing unreliable conversational filler. The documentation explores advanced orchestration techniques, including <strong>batch tool execution</strong> for parallel processing and <strong>autonomous tool chaining</strong> for complex, multi-step tasks. Additionally, it highlights the use of <strong>built-in Anthropic tools</strong> like the text editor to perform direct file operations through validated backend handlers. The provided examples demonstrate a robust architecture for building resilient, <strong>agentic workflows</strong> that can self-correct when encountering validation errors. Overall, the text serves as a comprehensive manual for integrating <strong>large language models</strong> into production backend services with high reliability.</p>
-" %}
+<!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="aeSmBXJQHBY" content=summary %}
 
 <!--more-->
 

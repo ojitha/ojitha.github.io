@@ -1,18 +1,40 @@
 ---
+title: "Claude on Amazon Bedrock: Part 2 - Tool Use Basics"
+description: "Tool use with Claude on Amazon Bedrock: JSON schema tool specs, the multi-turn tool call cycle in Python and Boto3, and Pydantic schema generation and validation."
+date: 2026-09-16 00:00:00 +1000
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  Claude on Amazon Bedrock - Tool use basics
-date: 2026-09-16
 categories: [AI, Claude, AWS]
+tags: [Amazon Bedrock, Claude, Tool Use, Boto3, Pydantic, JSON Schema]
 toc: true
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/I_S2lP8TznA/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "Claude on Amazon Bedrock: Part 2 - Tool Use Basics video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/I_S2lP8TznA/mqdefault.jpg" alt="Claude on Amazon Bedrock: Part 2 video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>This source provides a technical guide for <strong>integrating Claude models with Amazon Bedrock</strong> to enable advanced functional capabilities. It focuses primarily on <strong>tool use</strong>, a mechanism that allows the AI to <strong>interact with external APIs</strong>, databases, and custom code to perform real-time actions. The text details the <strong>multi-turn communication cycle</strong> between the application server and the model, using <strong>JSON schemas</strong> to define how tools are called and executed. Practical implementation is demonstrated through <strong>Python and Boto3</strong>, highlighting the importance of <strong>structured message histories</strong> and descriptive naming for reliability. Additionally, the documentation explains how to use <strong>Pydantic for automated schema generation</strong> and rigorous input validation. By following these workflows, developers can transition from static chat interfaces to <strong>autonomous, agentic AI systems</strong> capable of solving complex tasks.</p>
+  </div>
+  </div>
 mermaid: true
 maths: true
-typora-root-url: ~/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-{% include video-summary.html
-   id="I_S2lP8TznA"
-   content="<p>This source provides a technical guide for <strong>integrating Claude models with Amazon Bedrock</strong> to enable advanced functional capabilities. It focuses primarily on <strong>tool use</strong>, a mechanism that allows the AI to <strong>interact with external APIs</strong>, databases, and custom code to perform real-time actions. The text details the <strong>multi-turn communication cycle</strong> between the application server and the model, using <strong>JSON schemas</strong> to define how tools are called and executed. Practical implementation is demonstrated through <strong>Python and Boto3</strong>, highlighting the importance of <strong>structured message histories</strong> and descriptive naming for reliability. Additionally, the documentation explains how to use <strong>Pydantic for automated schema generation</strong> and rigorous input validation. By following these workflows, developers can transition from static chat interfaces to <strong>autonomous, agentic AI systems</strong> capable of solving complex tasks.</p>" %}
+<!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="I_S2lP8TznA" content=summary %}
 
 <!--more-->
 

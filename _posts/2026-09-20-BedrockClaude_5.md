@@ -1,18 +1,40 @@
 ---
+title: "Claude on Amazon Bedrock: Part 5 - Extended Thinking"
+description: "Extended and adaptive thinking for Claude on Amazon Bedrock: thinking budgets, signed reasoning blocks in multi-turn chats, and latency and cost trade-offs."
+date: 2026-09-21 00:00:00 +1000
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  Claude Extended Thinking on Amazon Bedrock
-date: 2026-09-21
 categories: [AI, Claude, AWS]
+tags: [Amazon Bedrock, Claude, Extended Thinking, Adaptive Thinking, Reasoning]
 toc: true
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/xSAgNrgIvp0/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "Claude on Amazon Bedrock: Part 5 - Extended Thinking video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/xSAgNrgIvp0/mqdefault.jpg" alt="Claude on Amazon Bedrock: Part 5 video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>The provided text explains <strong>extended thinking</strong> for Claude models on <strong>Amazon Bedrock</strong>, a feature that allows the AI to use a dedicated internal &quot;scratchpad&quot; to process complex logic before generating a final answer. This mechanism improves performance for <strong>multi-step reasoning</strong> and technical tasks, though it increases <strong>latency and costs</strong> as reasoning tokens are billed as output. Modern Claude models utilise <strong>adaptive thinking</strong> to manage this process, while older versions require a manual token budget. For security, these internal monologues are protected by <strong>cryptographic signatures</strong> to prevent tampering during multi-turn conversations. Developers are encouraged to use <strong>quantitative evaluations</strong> to determine if the accuracy gains of extended thinking justify the additional resource consumption. Ultimately, the feature decouples <strong>internal problem decomposition</strong> from customer-facing text, ensuring cleaner and more logical responses.</p>
+  </div>
+  </div>
 mermaid: true
 maths: true
-typora-root-url: /User/ojitha/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-{% include video-summary.html
-   id="xSAgNrgIvp0"
-   content="<p>The provided text explains <strong>extended thinking</strong> for Claude models on <strong>Amazon Bedrock</strong>, a feature that allows the AI to use a dedicated internal &quot;scratchpad&quot; to process complex logic before generating a final answer. This mechanism improves performance for <strong>multi-step reasoning</strong> and technical tasks, though it increases <strong>latency and costs</strong> as reasoning tokens are billed as output. Modern Claude models utilise <strong>adaptive thinking</strong> to manage this process, while older versions require a manual token budget. For security, these internal monologues are protected by <strong>cryptographic signatures</strong> to prevent tampering during multi-turn conversations. Developers are encouraged to use <strong>quantitative evaluations</strong> to determine if the accuracy gains of extended thinking justify the additional resource consumption. Ultimately, the feature decouples <strong>internal problem decomposition</strong> from customer-facing text, ensuring cleaner and more logical responses.</p>" %}
+<!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="xSAgNrgIvp0" content=summary %}
 
 <!--more-->
 
