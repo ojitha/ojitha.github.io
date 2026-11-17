@@ -1,19 +1,43 @@
 ---
+title: "LangChain Agent on Bedrock"
+description: "Build LangChain agents on Amazon Bedrock with uv: Converse API models, ReAct vs deep agents, short-term memory checkpoints and MCP Code Mode."
+date: 2026-11-07 00:00:00 +1100
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  "LangChain Agent on Bedrock"
-date: 2026-11-07
 categories: [AI, AWS, LangChain]
-toc: true
+tags: [Amazon Bedrock, Converse API, ReAct Agent, Deep Agents, Checkpointers, MCP, Code Mode]
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/ZvMqxxKkTuo/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "LangChain Agent on Bedrock video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/ZvMqxxKkTuo/mqdefault.jpg" alt="LangChain Agent on Bedrock video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>This post provides a comprehensive technical walkthrough for constructing <strong>LangChain agents on AWS Bedrock</strong> using <code>uv</code> package management and foundation models such as Anthropic Claude, OpenAI, and Google Gemma via the Bedrock Converse API. It compares lightweight <strong>ReAct agents (</strong> <strong>create_agent</strong> <strong>)</strong> designed for single-purpose tasks against feature-rich <strong>deep agents (</strong> <strong>create_deep_agent</strong> <strong>)</strong>. Furthermore, the guide details <strong>short-term memory checkpoints</strong> and demonstrates optimizing <strong>Model Context Protocol (MCP)</strong> tool execution via <strong>&quot;Code Mode&quot;</strong>, presenting tools as sandbox-executed code wrappers to preserve data privacy, enable control loops, and decrease token waste by up to <strong>98.7%</strong>.</p>
+  </div>
+  </div>
 mermaid: true
 maths: false
-typora-root-url: /User/ojitha/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
-{% include video-summary.html
-   id="ZvMqxxKkTuo"
-   content="<p>This post provides a comprehensive technical walkthrough for constructing <strong>LangChain agents on AWS Bedrock</strong> using <code>uv</code> package management and foundation models such as Anthropic Claude, OpenAI, and Google Gemma via the Bedrock Converse API. It compares lightweight <strong>ReAct agents (</strong> <strong>create_agent</strong> <strong>)</strong> designed for single-purpose tasks against feature-rich <strong>deep agents (</strong> <strong>create_deep_agent</strong> <strong>)</strong>. Furthermore, the guide details <strong>short-term memory checkpoints</strong> and demonstrates optimizing <strong>Model Context Protocol (MCP)</strong> tool execution via <strong>&quot;Code Mode&quot;</strong>, presenting tools as sandbox-executed code wrappers to preserve data privacy, enable control loops, and decrease token waste by up to <strong>98.7%</strong>.</p>" %}
 
 <!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="ZvMqxxKkTuo" content=summary %}
+
+<!--more-->   
+
+------
 
 * TOC
 {:toc}

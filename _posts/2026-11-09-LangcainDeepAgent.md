@@ -1,20 +1,43 @@
 ---
+title: "LangChain Deep Agent on Amazon Bedrock"
+description: "Build LangChain Deep Agents on Amazon Bedrock: agent harness, prompt caching, custom tools, MCP servers, checkpointers, time travel and human-in-the-loop."
+date: 2026-11-09 00:00:00 +1100
+last_modified_at: 2026-11-17 00:00:00 +1100   # uncomment when you revise the post
+
+# ── Taxonomy (categories feed the URL, so don't change them) ──
 layout: post
-title:  "LangChain Deep Agent on Amazon Bedrock"
-date: 2026-11-09
 categories: [AI, AWS, LangChain]
-toc: true
+tags: [Deep Agents, Amazon Bedrock, MCP, Prompt Caching, Checkpointers, Human-in-the-Loop]
+
+# ── Social / SEO image (og:image, twitter:image) ────────────
+image:
+  path: https://i.ytimg.com/vi/IzdTUO5ta1o/maxresdefault.jpg
+  width: 1280
+  height: 720
+  alt: "LangChain Deep Agent on Amazon Bedrock video thumbnail"
+excerpt: |-
+  <div class="image-text-container">
+  <div class="image-column">
+  <img src="https://i.ytimg.com/vi/IzdTUO5ta1o/mqdefault.jpg" alt="LangChain Deep Agent on Amazon Bedrock video thumbnail" width="320" height="180" loading="lazy" decoding="async">
+  </div>
+  <div class="text-column">
+  <p>This post outline the architecture and implementation of <strong>LangChain&#39;s Deep Agents</strong> framework, explaining how foundation models are combined with an <strong>Agent Harness</strong> to handle complex autonomous workflows. Key concepts explored include <strong>prompt caching</strong> for token optimization, <strong>built-in and custom tools</strong> for executing actions or querying databases like MovieLens, and the integration of <strong>Model Context Protocol (MCP)</strong> servers. Additionally, the text details state management utilizing <strong>threads and checkpointers</strong> to preserve conversation history across sessions, while showcasing <strong>time travel</strong> capabilities for branching or reviewing past states. Finally, the materials emphasize <strong>Human-in-the-Loop (HITL)</strong> safety controls, allowing developers to pause execution before sensitive actions take place and review, edit, approve, or reject pending operations.</p>
+  </div>
+  </div>
 mermaid: true
 maths: false
-typora-root-url: /User/ojitha/Github/ojitha.github.io
+typora-root-url: /Users/ojitha/GitHub/ojitha.github.io
 typora-copy-images-to: ../../blog/assets/images/${filename}
 ---
 
-{% include video-summary.html
-   id="IzdTUO5ta1o"
-   content="<p>This post outline the architecture and implementation of <strong>LangChain&#39;s Deep Agents</strong> framework, explaining how foundation models are combined with an <strong>Agent Harness</strong> to handle complex autonomous workflows. Key concepts explored include <strong>prompt caching</strong> for token optimization, <strong>built-in and custom tools</strong> for executing actions or querying databases like MovieLens, and the integration of <strong>Model Context Protocol (MCP)</strong> servers. Additionally, the text details state management utilizing <strong>threads and checkpointers</strong> to preserve conversation history across sessions, while showcasing <strong>time travel</strong> capabilities for branching or reviewing past states. Finally, the materials emphasize <strong>Human-in-the-Loop (HITL)</strong> safety controls, allowing developers to pause execution before sensitive actions take place and review, edit, approve, or reject pending operations.</p>" %}
-
 <!--more-->
+
+{% assign summary = page.excerpt | split: '<div class="text-column">' | last | split: '</div>' | first | strip %}
+{% include video-summary.html id="IzdTUO5ta1o" content=summary %}
+
+<!--more-->   
+
+------
 
 * TOC
 {:toc}
