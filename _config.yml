@@ -1,48 +1,46 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+# Site-wide Jekyll configuration.
+# Not reloaded while `jekyll serve` runs: restart the server after editing.
+# Development overrides live in _config_dev.yml.
 
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
+# ── Site ────────────────────────────────────────────────────────────────────
 title: Ojitha Hewa Kumanayaka
+description: >-
+  AWS Certified Data & AI/ML Engineer from Australia.
 author:
   name: Ojitha Hewa Kumanayak
   email: "ojithak@gmail.com"
-description: >- # this means to ignore newlines until "baseurl:"
-  AWS Certified AI/ML Software Engineer from Australia.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://ojitha.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-google_analytics: G-85WM1QYKXW
+  twitter: ojitha
+lang: en-AU
 timezone: Australia/Sydney
-show_excerpts: true
+url: "https://ojitha.github.io"
+baseurl: ""
+copyright: "Copyright © 2020 Ojitha Hewa Kumanayaka"
+google_analytics: G-85WM1QYKXW
 
-# giscus comments (https://giscus.app). Comments render on posts only when
-# repo_id and category_id are both set; opt a post out with `comments: false`.
-giscus:
-  repo: ojitha/ojitha.github.io
-  repo_id: MDEwOlJlcG9zaXRvcnkyNjMwMjEzOTg=
-  category: Announcements
-  category_id: "DIC_kwDOD61jVs4DKooS" # fill in from https://giscus.app after enabling Discussions
-  mapping: pathname
-  reactions_enabled: "1"
-  input_position: bottom
-  light_theme: light
-  dark_theme: dark
-  lang: en
+# ── SEO (jekyll-seo-tag) ────────────────────────────────────────────────────
+twitter:
+  username: ojitha
+  card: summary_large_image
+social:
+  name: Ojitha Hewa Kumanayaka
+  links:
+    - https://github.com/ojitha
+    - https://twitter.com/ojitha
+    - https://www.linkedin.com/in/ojitha
+    - https://stackoverflow.com/users/546792
 
-# theme: minima
+# ── Front matter defaults ───────────────────────────────────────────────────
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+# ── Theme ───────────────────────────────────────────────────────────────────
 remote_theme: jekyll/minima@4de322363fca5927e6f4012cb94f6dad69ab5e6c
 minima:
-  # v3 reads the nav page list from minima.nav_pages (was site.header_pages in v2).
+  # v3 reads the nav list from minima.nav_pages (v2 used site.header_pages).
   nav_pages:
     - index.html
     - blog.md
@@ -50,21 +48,25 @@ minima:
     - mindmap.html
     - projects.md
     - about.md
-  # `auto` switches between light and dark via prefers-color-scheme.
-  # Use `classic` to force light, `dark` to force dark.
+  # `auto` follows prefers-color-scheme; `classic` forces light, `dark` forces dark.
   skin: auto
-  # v3 format: array of {icon, url, title} entries (FA icon name, full URL,
-  # link title). The v2 hash form (twitter: ojitha) renders blank icons in v3
-  # because the new social.html iterates entry.icon / entry.url / entry.title.
+  # v3 format: array of {icon, url, title}. The v2 hash form (twitter: ojitha)
+  # renders blank icons in v3.
   social_links:
-    - { icon: github,         url: "https://github.com/ojitha",               title: "GitHub" }
-    - { icon: x-twitter,      url: "https://twitter.com/ojitha",              title: "Twitter / X" }
-    - { icon: linkedin,       url: "https://www.linkedin.com/in/ojitha",      title: "LinkedIn" }
-    - { icon: stack-overflow, url: "https://stackoverflow.com/users/546792",  title: "Stack Overflow" }
+    - { icon: github,         url: "https://github.com/ojitha",              title: "GitHub" }
+    - { icon: x-twitter,      url: "https://twitter.com/ojitha",             title: "Twitter / X" }
+    - { icon: linkedin,       url: "https://www.linkedin.com/in/ojitha",     title: "LinkedIn" }
+    - { icon: stack-overflow, url: "https://stackoverflow.com/users/546792", title: "Stack Overflow" }
 
-copyright: "Copyright © 2020 Ojitha Hewa Kumanayaka"
+# ── Content ─────────────────────────────────────────────────────────────────
+show_excerpts: true
+excerpt_separator: <!--more-->
+paginate: 5
 
-# Build settings
+feed:
+  excerpt_only: true
+
+# ── Markdown & maths ────────────────────────────────────────────────────────
 markdown: kramdown
 kramdown:
   auto_ids: true
@@ -72,17 +74,26 @@ kramdown:
   hard_wrap: false
   syntax_highlighter: rouge
 
-# MathJax settings (optional custom settings)
 mathjax:
   source: https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js
   config: 'MathJax.typesetPromise'
 
-excerpt_separator: <!--more-->
-paginate: 5
+# ── Comments (giscus, https://giscus.app) ───────────────────────────────────
+# Rendered on posts only when repo_id and category_id are both set;
+# opt a post out with `comments: false`.
+giscus:
+  repo: ojitha/ojitha.github.io
+  repo_id: MDEwOlJlcG9zaXRvcnkyNjMwMjEzOTg=
+  category: Announcements
+  category_id: "DIC_kwDOD61jVs4DKooS"
+  mapping: pathname
+  reactions_enabled: "1"
+  input_position: bottom
+  light_theme: light
+  dark_theme: dark
+  lang: en
 
-feed:
-  excerpt_only: true
-
+# ── Search (Algolia) ────────────────────────────────────────────────────────
 algolia:
   application_id: 247I9HI0FJ
   index_name: ojitha_github_io
@@ -91,6 +102,8 @@ algolia:
     - index.html
     - blog.md
 
+# ── Plugins ─────────────────────────────────────────────────────────────────
+# _config_dev.yml overrides this list; keep jekyll-remote-theme in both.
 plugins:
   - jekyll-feed
   - jekyll-sitemap
@@ -100,9 +113,7 @@ plugins:
   - jemoji
   - jekyll-remote-theme
 
-# Exclude from processing.
-# The following items will not be processed, by default. Create a custom list
-# to override the default setting.
+# ── Build exclusions ────────────────────────────────────────────────────────
 exclude:
   - skill-usage.md
   - README.md
