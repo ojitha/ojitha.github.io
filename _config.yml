@@ -80,6 +80,9 @@ mathjax:
 excerpt_separator: <!--more-->
 paginate: 5
 
+feed:
+  excerpt_only: true
+
 algolia:
   application_id: 247I9HI0FJ
   index_name: ojitha_github_io
