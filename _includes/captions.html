@@ -48,7 +48,9 @@
       var n = counters[type] = (counters[type] || 0) + 1;
       var label = t.label + ' ' + n;
       var text = el.getAttribute('caption') || '';
+      var pos = el.getAttribute('caption-pos') || t.pos;   // per-block override: caption-pos="above|below"
       el.removeAttribute('caption');
+      el.removeAttribute('caption-pos');
       numbers[id] = label;
 
       if (el.tagName === 'TABLE') {
@@ -75,9 +77,9 @@
       fig.id = id;
       block.parentNode.insertBefore(fig, block);
       var fc = captionNode('figcaption', label, text);
-      if (t.pos === 'above') fig.appendChild(fc);
+      if (pos === 'above') fig.appendChild(fc);
       fig.appendChild(block);
-      if (t.pos !== 'above') fig.appendChild(fc);
+      if (pos !== 'above') fig.appendChild(fc);
     });
 
     Array.prototype.forEach.call(links, function (a) {
