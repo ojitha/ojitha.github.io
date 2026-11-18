@@ -1594,3 +1594,102 @@ a.xref-missing {
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .post-content details { @include details-box-dark; }
 }
+
+/* -- .ok admonition ("TIP" callout) --------------------------------------- */
+/* Block-level {:.ok} (usually on a > blockquote) renders as a green callout
+   with a lightbulb + "TIP" header.  Inline .ok pills are unaffected.
+   Override the header text with a data-label attribute:
+     > Pin image tags in production.
+     {:.ok data-label="Best practice"}                                   */
+
+.post-content {
+  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok {
+    --tip-accent: #009400;
+    --tip-bg:     #e6f6e6;
+    --tip-text:   #003100;
+    --tip-code:   rgba(0, 148, 0, 0.15);
+
+    margin: 1.25em 0;
+    padding: 0.9em 1.25em 1em;
+    color: var(--tip-text);
+    background: var(--tip-bg);
+    border: 0;
+    border-left: 5px solid var(--tip-accent);
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: inherit;
+    font-style: normal;
+    letter-spacing: normal;
+
+    /* Header: lightbulb icon + label. */
+    &::before {
+      content: "TIP";
+      display: flex;
+      align-items: center;
+      gap: 0.45em;
+      margin: 0 0 0.4em;
+      color: var(--tip-text);
+      font-size: 0.85em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    > :last-child { margin-bottom: 0; }
+
+    code {
+      color: inherit;
+      background: var(--tip-code);
+      border: 1px solid rgba(0, 148, 0, 0.3);
+      border-radius: 4px;
+      padding: 0.05em 0.3em;
+    }
+
+    a { color: var(--tip-text); text-decoration: underline; }
+  }
+
+  /* Custom header text: {:.ok data-label="..."} (uppercased by the rule above). */
+  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok {
+    &[data-label]::before { content: attr(data-label); }
+  }
+
+  ul.ok, ol.ok { padding-left: 2.5em; }
+  ul.ok::before, ol.ok::before { margin-left: -1.25em; }
+}
+
+/* Lightbulb icon: an SVG mask over a text-coloured fill, so it follows the theme. */
+.post-content {
+  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok {
+    &::before {
+      padding-left: 1.8em;
+      background-color: transparent;
+      background-image: linear-gradient(var(--tip-text), var(--tip-text));
+      background-repeat: no-repeat;
+      background-size: 1.45em 1.6em;
+      background-position: 0 50%;
+      -webkit-mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z'/%3E%3C/svg%3E") 0 50% / 1.45em 1.6em no-repeat,
+        linear-gradient(#000, #000) 1.8em 0 / 100% 100% no-repeat;
+      mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z'/%3E%3C/svg%3E") 0 50% / 1.45em 1.6em no-repeat,
+        linear-gradient(#000, #000) 1.8em 0 / 100% 100% no-repeat;
+    }
+  }
+}
+
+@mixin tip-box-dark {
+  --tip-accent: #00a400;
+  --tip-bg:     #0d2d1a;
+  --tip-text:   #c8f0c8;
+  --tip-code:   rgba(0, 164, 0, 0.2);
+}
+
+[data-theme="dark"] .post-content {
+  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok { @include tip-box-dark; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .post-content {
+    blockquote.ok, p.ok, div.ok, ul.ok, ol.ok { @include tip-box-dark; }
+  }
+}

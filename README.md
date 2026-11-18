@@ -109,3 +109,58 @@ Posts synced from sibling repos by `make` are converted with `jupyter nbconvert`
 - An attribute list in its own cell (for example, under a code cell or a plot output) tags the wrong element. Captioning code cells and outputs needs a post-processing step in the sibling repo's Makefile that removes the blank line before a `{: #fig-…}`/`{: #tbl-…}`/`{: #lst-…}` line. That step isn't implemented yet.
 
 See `_posts/2026-11-10-NeovimMarkdownLab.md` for a worked example.
+
+## Callout boxes
+
+Two CSS-only boxes for post content, both styled in `_sass/minima/custom-styles.scss` with light and dark variants (the dark values are in a mixin that applies to both `[data-theme="dark"]` and an OS dark preference). No JavaScript or include is needed.
+
+| Box | Markup | Style section | Dark mixin |
+|---|---|---|---|
+| Expandable box | `<details markdown="1">` | *Expandable box* | `details-box-dark` |
+| Tip box | `{:.ok}` on a block | *.ok admonition* | `tip-box-dark` |
+
+### Expandable box
+
+A light-blue card with a title row and a triangle that turns down when the box is opened. It's a plain HTML `<details>` element:
+
+```markdown
+<details markdown="1">
+<summary>What does prepare-environment do? (Click to expand)</summary>
+
+The `prepare-environment` command sets up your lab:
+
+- **Repository Setup**: Downloads the workshop content
+- **Cluster Reset**: Resets the sample app
+
+</details>
+```
+
+- `markdown="1"` is required. kramdown doesn't parse Markdown inside HTML by default, so without it the body shows as raw text.
+- Leave a blank line after `</summary>` and before `</details>`, or the body isn't treated as Markdown blocks.
+- Add `open` (`<details markdown="1" open>`) to show the box expanded when the page loads.
+- Only `<details>` inside `.post-content` gets this style.
+- In a notebook-synced post, keep the whole `<details>` … `</details>` block in one Markdown cell.
+
+### Tip box
+
+Tag a block with `{:.ok}` on the line directly after it to get a green callout with a lightbulb icon and a **TIP** header:
+
+```markdown
+> Each module includes its own `prepare-environment` command.
+{:.ok}
+```
+
+To change the header text, add a `data-label` attribute. The label is always shown in capitals:
+
+```markdown
+> Pin image tags in production.
+{:.ok data-label="Best practice"}
+
+> Everything is configured.
+{:.ok data-label="OK"}
+```
+
+- It works on a blockquote, paragraph, `div` or whole list. A blockquote is the usual choice.
+- Inline `.ok` (for example `*text*{:.ok}`) still renders as a small green pill, not a box.
+- The icon is always the lightbulb, whatever the label says.
+- The label uses `data-label` rather than `title`, because browsers show `title` as a hover tooltip.
