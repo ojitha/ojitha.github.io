@@ -472,19 +472,17 @@
         '<polyline points="7 3 7 8 15 8"/>' +
       '</svg>';
     const controls = document.createElement('div');
-    controls.className = 'mermaid-controls mz-open'; // pad starts open
+    controls.className = 'mermaid-controls'; // pad starts closed (only ⚙ shown)
 
     // Top-left cell: toggle that shows/hides the rest of the pad.
-    const toggle = makeBtn('✕', 'Hide diagram controls', () => {
+    // Hover tip is always "Options"; aria-expanded carries the open state.
+    const toggle = makeBtn('⚙', 'Options', () => {
       const open = controls.classList.toggle('mz-open');
-      const label = open ? 'Hide diagram controls' : 'Show diagram controls';
       toggle.textContent = open ? '✕' : '⚙';
-      toggle.title = label;
-      toggle.setAttribute('aria-label', label);
       toggle.setAttribute('aria-expanded', String(open));
     });
     toggle.classList.add('mz-toggle');
-    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-expanded', 'false');
 
     const cells = [
       toggle,

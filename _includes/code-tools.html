@@ -1,5 +1,7 @@
 <!-- Code block tools for every fenced code block:
-       - word-wrap toggle, line-number toggle and copy button (top-right toolbar)
+       - word-wrap toggle, line-number toggle and copy button in a top-right
+         toolbar, collapsed behind a ⚙ toggle (same pattern as the Mermaid
+         control pad); the toggle shows ✕ while the toolbar is open
        - line marks: highlight lines and put a lettered badge in a left lane, set with
          an attribute list on the line directly after the fence:
            ```yaml
@@ -237,6 +239,17 @@
       }, 1500);
     });
     bar.appendChild(copyBtn);
+
+    // ⚙ / ✕ toggle, last so it stays put while the other buttons appear to its left.
+    // Starts closed. Hover tip is always "Options"; aria-expanded carries the state.
+    var toggle = button('Options', '\u2699', 'code-tools-toggle');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.addEventListener('click', function () {
+      var open = bar.classList.toggle('ct-open');
+      toggle.textContent = open ? '\u2715' : '\u2699';
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    bar.appendChild(toggle);
 
     highlight.appendChild(bar);
     layout(highlight);

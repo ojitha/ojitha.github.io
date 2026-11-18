@@ -179,7 +179,7 @@ To change the header text, add a `data-label` attribute. The label is always sho
 
 ## Code blocks
 
-`_includes/code-tools.html` (loaded from `custom-head.html`) adds a toolbar to every fenced code block, shown on hover:
+`_includes/code-tools.html` (loaded from `custom-head.html`) adds a toolbar to every fenced code block. Hover over the block to see the ⚙ button, which works like the toggle on the Mermaid control pad. Click it to show the buttons below, and click ✕ to hide them again. The toolbar stays visible while it's open:
 
 | Button | What it does |
 |---|---|
