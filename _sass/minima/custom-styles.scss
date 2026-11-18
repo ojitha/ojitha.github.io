@@ -1595,101 +1595,125 @@ a.xref-missing {
   :root:not([data-theme="light"]) .post-content details { @include details-box-dark; }
 }
 
-/* -- .ok admonition ("TIP" callout) --------------------------------------- */
-/* Block-level {:.ok} (usually on a > blockquote) renders as a green callout
-   with a lightbulb + "TIP" header.  Inline .ok pills are unaffected.
+/* -- Callout boxes: {:.ok} {:.warn} {:.note} {:.bad} ---------------------- */
+/* A block tagged with one of these classes (usually a > blockquote) renders
+   as a coloured callout with an icon + header.  Inline pills are unaffected.
+     .ok   → TIP      (green, lightbulb)
+     .warn → WARNING  (amber, triangle)
+     .note → NOTE     (grey,  info circle)
+     .bad  → DANGER   (red,   stop sign)
    Override the header text with a data-label attribute:
      > Pin image tags in production.
      {:.ok data-label="Best practice"}                                   */
 
-.post-content {
-  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok {
-    --tip-accent: #009400;
-    --tip-bg:     #e6f6e6;
-    --tip-text:   #003100;
-    --tip-code:   rgba(0, 148, 0, 0.15);
+@function callout-icon($paths) {
+  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E#{$paths}%3C/svg%3E");
+}
 
-    margin: 1.25em 0;
-    padding: 0.9em 1.25em 1em;
-    color: var(--tip-text);
-    background: var(--tip-bg);
-    border: 0;
-    border-left: 5px solid var(--tip-accent);
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    font-size: inherit;
-    font-style: normal;
-    letter-spacing: normal;
+// tone: (label, icon paths, light accent/bg/text, dark accent/bg/text)
+$callouts: (
+  ok: (
+    label: "TIP",
+    icon:  "%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z'/%3E",
+    light: (#009400, #e6f6e6, #003100),
+    dark:  (#00a400, #0d2d1a, #c8f0c8)
+  ),
+  warn: (
+    label: "WARNING",
+    icon:  "%3Cpath d='M12 3 2 20h20z'/%3E%3Cpath d='M12 10v4M12 17h.01'/%3E",
+    light: (#e6a700, #fff8e6, #4d3800),
+    dark:  (#e6a700, #2e2508, #fde7a6)
+  ),
+  note: (
+    label: "NOTE",
+    icon:  "%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 8h.01'/%3E",
+    light: (#6b7280, #f3f4f6, #1f2937),
+    dark:  (#9ca3af, #1f242c, #d1d5db)
+  ),
+  bad: (
+    label: "DANGER",
+    icon:  "%3Cpath d='M7.9 2.5h8.2l5.8 5.8v8.2l-5.8 5.8H7.9l-5.8-5.8V8.3z'/%3E%3Cpath d='M15 9l-6 6M9 9l6 6'/%3E",
+    light: (#e13238, #ffebec, #4b1113),
+    dark:  (#e13238, #3a1215, #fcc7c9)
+  )
+);
 
-    /* Header: lightbulb icon + label. */
-    &::before {
-      content: "TIP";
-      display: flex;
-      align-items: center;
-      gap: 0.45em;
-      margin: 0 0 0.4em;
-      color: var(--tip-text);
-      font-size: 0.85em;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
+@mixin callout-colours($c) {
+  --callout-accent: #{nth($c, 1)};
+  --callout-bg:     #{nth($c, 2)};
+  --callout-text:   #{nth($c, 3)};
+  --callout-code:   #{rgba(nth($c, 1), 0.15)};
+  --callout-code-border: #{rgba(nth($c, 1), 0.35)};
+  background: var(--callout-bg);   /* beats the older [data-theme] .post .<tone> tint */
+}
+
+@each $tone, $cfg in $callouts {
+  .post-content {
+    blockquote.#{$tone}, p.#{$tone}, div.#{$tone}, ul.#{$tone}, ol.#{$tone} {
+      @include callout-colours(map-get($cfg, light));
+
+      margin: 1.25em 0;
+      padding: 0.9em 1.25em 1em;
+      color: var(--callout-text);
+      border: 0;
+      border-left: 5px solid var(--callout-accent);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      font-size: inherit;
+      font-style: normal;
+      letter-spacing: normal;
+
+      /* Header: icon (SVG mask over a text-coloured fill) + label. */
+      &::before {
+        content: map-get($cfg, label);
+        display: flex;
+        align-items: center;
+        margin: 0 0 0.4em;
+        padding-left: 1.8em;
+        color: var(--callout-text);
+        font-size: 0.85em;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        background: linear-gradient(var(--callout-text), var(--callout-text)) 0 50% / 1.45em 1.6em no-repeat;
+        -webkit-mask:
+          callout-icon(map-get($cfg, icon)) 0 50% / 1.45em 1.6em no-repeat,
+          linear-gradient(#000, #000) 1.8em 0 / 100% 100% no-repeat;
+        mask:
+          callout-icon(map-get($cfg, icon)) 0 50% / 1.45em 1.6em no-repeat,
+          linear-gradient(#000, #000) 1.8em 0 / 100% 100% no-repeat;
+      }
+
+      &[data-label]::before { content: attr(data-label); }
+
+      > :last-child { margin-bottom: 0; }
+
+      code {
+        color: inherit;
+        background: var(--callout-code);
+        border: 1px solid var(--callout-code-border);
+        border-radius: 4px;
+        padding: 0.05em 0.3em;
+      }
+
+      a { color: var(--callout-text); text-decoration: underline; }
     }
 
-    > :last-child { margin-bottom: 0; }
-
-    code {
-      color: inherit;
-      background: var(--tip-code);
-      border: 1px solid rgba(0, 148, 0, 0.3);
-      border-radius: 4px;
-      padding: 0.05em 0.3em;
-    }
-
-    a { color: var(--tip-text); text-decoration: underline; }
+    ul.#{$tone}, ol.#{$tone} { padding-left: 2.5em; }
+    ul.#{$tone}::before, ol.#{$tone}::before { margin-left: -1.25em; }
   }
 
-  /* Custom header text: {:.ok data-label="..."} (uppercased by the rule above). */
-  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok {
-    &[data-label]::before { content: attr(data-label); }
-  }
-
-  ul.ok, ol.ok { padding-left: 2.5em; }
-  ul.ok::before, ol.ok::before { margin-left: -1.25em; }
-}
-
-/* Lightbulb icon: an SVG mask over a text-coloured fill, so it follows the theme. */
-.post-content {
-  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok {
-    &::before {
-      padding-left: 1.8em;
-      background-color: transparent;
-      background-image: linear-gradient(var(--tip-text), var(--tip-text));
-      background-repeat: no-repeat;
-      background-size: 1.45em 1.6em;
-      background-position: 0 50%;
-      -webkit-mask:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z'/%3E%3C/svg%3E") 0 50% / 1.45em 1.6em no-repeat,
-        linear-gradient(#000, #000) 1.8em 0 / 100% 100% no-repeat;
-      mask:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z'/%3E%3C/svg%3E") 0 50% / 1.45em 1.6em no-repeat,
-        linear-gradient(#000, #000) 1.8em 0 / 100% 100% no-repeat;
+  [data-theme="dark"] .post-content {
+    blockquote.#{$tone}, p.#{$tone}, div.#{$tone}, ul.#{$tone}, ol.#{$tone} {
+      @include callout-colours(map-get($cfg, dark));
     }
   }
-}
 
-@mixin tip-box-dark {
-  --tip-accent: #00a400;
-  --tip-bg:     #0d2d1a;
-  --tip-text:   #c8f0c8;
-  --tip-code:   rgba(0, 164, 0, 0.2);
-}
-
-[data-theme="dark"] .post-content {
-  blockquote.ok, p.ok, div.ok, ul.ok, ol.ok { @include tip-box-dark; }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .post-content {
-    blockquote.ok, p.ok, div.ok, ul.ok, ol.ok { @include tip-box-dark; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .post-content {
+      blockquote.#{$tone}, p.#{$tone}, div.#{$tone}, ul.#{$tone}, ol.#{$tone} {
+        @include callout-colours(map-get($cfg, dark));
+      }
+    }
   }
 }

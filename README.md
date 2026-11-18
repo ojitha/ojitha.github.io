@@ -117,7 +117,7 @@ Two CSS-only boxes for post content, both styled in `_sass/minima/custom-styles.
 | Box | Markup | Style section | Dark mixin |
 |---|---|---|---|
 | Expandable box | `<details markdown="1">` | *Expandable box* | `details-box-dark` |
-| Tip box | `{:.ok}` on a block | *.ok admonition* | `tip-box-dark` |
+| Callout box | `{:.ok}`, `{:.warn}`, `{:.note}`, `{:.bad}` on a block | *Callout boxes* (`$callouts` map) | `callout-colours` (dark entry in the map) |
 
 ### Expandable box
 
@@ -141,13 +141,23 @@ The `prepare-environment` command sets up your lab:
 - Only `<details>` inside `.post-content` gets this style.
 - In a notebook-synced post, keep the whole `<details>` … `</details>` block in one Markdown cell.
 
-### Tip box
+### Callout boxes
 
-Tag a block with `{:.ok}` on the line directly after it to get a green callout with a lightbulb icon and a **TIP** header:
+Tag a block with a tone class on the line directly after it to get a coloured callout with an icon and a header:
+
+| Class | Default header | Colour | Icon |
+|---|---|---|---|
+| `{:.ok}` | TIP | Green | Lightbulb |
+| `{:.warn}` | WARNING | Amber | Triangle |
+| `{:.note}` | NOTE | Grey | Info circle |
+| `{:.bad}` | DANGER | Red | Stop sign |
 
 ```markdown
 > Each module includes its own `prepare-environment` command.
 {:.ok}
+
+> This deletes the cluster.
+{:.bad}
 ```
 
 To change the header text, add a `data-label` attribute. The label is always shown in capitals:
@@ -156,11 +166,13 @@ To change the header text, add a `data-label` attribute. The label is always sho
 > Pin image tags in production.
 {:.ok data-label="Best practice"}
 
-> Everything is configured.
-{:.ok data-label="OK"}
+> Requires Kubernetes 1.30 or later.
+{:.warn data-label="Heads up"}
 ```
 
 - It works on a blockquote, paragraph, `div` or whole list. A blockquote is the usual choice.
-- Inline `.ok` (for example `*text*{:.ok}`) still renders as a small green pill, not a box.
-- The icon is always the lightbulb, whatever the label says.
+- Inline use (for example `*text*{:.warn}`) still renders as a small coloured pill, not a box.
+- The icon follows the class, whatever the label says.
 - The label uses `data-label` rather than `title`, because browsers show `title` as a hover tooltip.
+- To change a colour, icon or default label, or to add a tone, edit its entry in the `$callouts` map. Each entry holds the label, the SVG icon paths, and `(accent, background, text)` colours for light and dark.
+- `.info` isn't in the map, so a block tagged `{:.info}` keeps the older left-border style.
