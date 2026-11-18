@@ -51,7 +51,7 @@ Figures, tables and code listings can have numbered captions ("Figure 1: …", "
 
 ### Tagging a block
 
-Put a kramdown attribute list on the line **directly after** the block, with no blank line in between. The id prefix sets the type, and `caption` sets the text:
+Put a kramdown attribute list on the line **directly after** the block, with no blank line in between. For a code block, it can also go on the line directly before the opening fence. The id prefix sets the type, and `caption` sets the text:
 
 ````markdown
 ![](/assets/images/stem/x.png){: #fig-layout caption="tmux layout"}
@@ -176,3 +176,53 @@ To change the header text, add a `data-label` attribute. The label is always sho
 - The label uses `data-label` rather than `title`, because browsers show `title` as a hover tooltip.
 - To change a colour, icon or default label, or to add a tone, edit its entry in the `$callouts` map. Each entry holds the label, the SVG icon paths, and `(accent, background, text)` colours for light and dark.
 - `.info` isn't in the map, so a block tagged `{:.info}` keeps the older left-border style.
+
+## Code blocks
+
+`_includes/code-tools.html` (loaded from `custom-head.html`) adds a toolbar to every fenced code block, shown on hover:
+
+| Button | What it does |
+|---|---|
+| Word wrap | Wraps long lines instead of scrolling sideways |
+| `#` | Shows line numbers. Set `linenos: true` in front matter to show them by default |
+| Copy | Copies the code. Line numbers and badges are never copied |
+
+### Marking lines
+
+To highlight lines and put a lettered badge beside them, add a `mark` attribute to the block's attribute list. The list can go on the line **directly before** the opening fence, together with a listing id and caption:
+
+````markdown
+{: #lst-cluster caption="Cluster config" mark="3-4:A, 6:B"}
+```yaml
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+availabilityZones:
+  - ${AWS_REGION}a
+metadata:
+  name: ${EKS_CLUSTER_NAME}
+```
+````
+
+The same list also works on the line directly after the closing fence. Either way, don't leave a blank line between the list and the fence.
+
+- Each item is a line number or a range (`3-6`), separated by commas.
+- `:LABEL` puts a badge on the first line of the item. The label can be any short text.
+- An item without a label (`mark="5"`) is only highlighted.
+- Line numbers count from 1 and include blank lines. Numbers past the end of the block are ignored.
+- Marks don't work on blocks from the Liquid `highlight` tag with `linenos`, which have their own line numbers.
+
+### Explaining the marks
+
+To explain each badge under the block, write a list straight after it and tag the list with `{: .marks}`:
+
+```markdown
+- Create a VPC across three availability zones
+- Create an EKS cluster, which default is named `eks-workshop`
+- Create an IAM OIDC provider
+{: .marks}
+```
+
+- Each item gets a badge instead of a bullet. The badges are taken in order from the labels in the code block above, so a block with `mark="3:A, 8:B, 15:C"` gives the items A, B and C.
+- The list has to come right after the code block (or its listing caption), with nothing else in between.
+- If there's no marked block above, the items are lettered A, B, C… in order.
+- Bulleted (`-`) and numbered (`1.`) lists both work.

@@ -1392,7 +1392,7 @@ html.site-search-open { overflow: hidden; }
   :root:not([data-theme="light"]) #markdown-toc { @include markdown-toc-dark; }
 }
 
-/* -- Code block tools (copy + line numbers) — see _includes/code-tools.html */
+/* -- Code block tools (wrap, line numbers, copy, line marks) — see _includes/code-tools.html */
 .highlight.has-code-tools { position: relative; }
 
 .code-toolbar {
@@ -1430,15 +1430,16 @@ html.site-search-open { overflow: hidden; }
   &:hover { color: #24292f; background: #f3f4f6; }
   &:focus-visible { outline: 2px solid #0969da; outline-offset: 1px; }
   &.copied { color: #1a7f37; border-color: #1a7f37; }
-  &.code-ln-btn[aria-pressed="true"] { color: #0969da; border-color: #0969da; }
+  &.code-ln-btn[aria-pressed="true"],
+  &.code-wrap-btn[aria-pressed="true"] { color: #0969da; border-color: #0969da; }
 }
 
 .code-gutter {
   display: none;
   position: absolute;
-  left: 1px;
+  left: calc(var(--lane-w, 0px) + 1px);
   padding: 0 8px 0 10px;
-  white-space: pre;
+  white-space: nowrap;
   text-align: right;
   color: #8c959f;
   border-right: 1px solid #d0d7de;
@@ -1447,9 +1448,89 @@ html.site-search-open { overflow: hidden; }
   z-index: 1;
 }
 
-.highlight.ln-on {
-  > .code-gutter { display: block; }
-  > pre { padding-left: calc(var(--gutter-w, 3em) + 10px); }
+/* Gutter rows get their height from JS, so they follow wrapped lines. */
+.code-gutter > div { overflow: hidden; }
+
+.highlight.ln-on > .code-gutter { display: block; }
+
+.highlight.ln-on,
+.highlight.has-marks {
+  > pre { padding-left: calc(var(--lane-w, 0px) + var(--gutter-w, 0px) + 10px); }
+}
+
+/* One span per source line (added by JS); shrink-wraps the text but fills the
+   row so a marked line's background spans the code area. */
+.code-line {
+  display: inline-block;
+  min-width: 100%;
+  vertical-align: top;
+
+  &:empty::before { content: "\200b"; }
+}
+
+.code-line.marked { background: rgba(0, 0, 0, 0.07); }
+
+/* Badge lane on the left, e.g. {: mark="3-6:A, 8:B"} */
+.code-marks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--lane-w, 40px);
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@mixin mark-badge {
+  min-width: 1.6em;
+  padding: 0.15em 0.4em;
+  font: 700 12px/1.2 -apple-system, "Segoe UI", Roboto, sans-serif;
+  text-align: center;
+  color: #fff;
+  background: #0972d3;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.code-mark {
+  @include mark-badge;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Legend list under a marked block: {: .marks} on a list.
+   JS copies the block's labels into data-mark; otherwise A, B, C… */
+.post-content ul.marks,
+.post-content ol.marks {
+  list-style: none;
+  margin: 0.75em 0 1.25em;
+  padding-left: 0;
+  counter-reset: mark;
+
+  > li {
+    position: relative;
+    margin: 0.5em 0;
+    padding-left: 2.8em;
+    counter-increment: mark;
+
+    &::before {
+      @include mark-badge;
+      content: counter(mark, upper-alpha);
+      position: absolute;
+      left: 0.35em;
+      top: 0.2em;
+    }
+
+    &[data-mark]::before { content: attr(data-mark); }
+  }
+}
+
+/* Word wrap toggle */
+.highlight.wrap-on > pre,
+.highlight.wrap-on > pre > code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 [data-theme="dark"] {
@@ -1461,9 +1542,13 @@ html.site-search-open { overflow: hidden; }
     &:hover { color: #e6edf3; background: #2d2d2d; }
     &:focus-visible { outline-color: #58a6ff; }
     &.copied { color: #3fb950; border-color: #3fb950; }
-    &.code-ln-btn[aria-pressed="true"] { color: #58a6ff; border-color: #58a6ff; }
+    &.code-ln-btn[aria-pressed="true"],
+    &.code-wrap-btn[aria-pressed="true"] { color: #58a6ff; border-color: #58a6ff; }
   }
   .code-gutter { color: #6e7681; border-right-color: #3a3a3a; }
+  .code-line.marked { background: rgba(255, 255, 255, 0.09); }
+  .code-mark,
+  .post-content .marks > li::before { background: #539fe5; color: #0f1b2a; }
 }
 
 /* ── Captions & cross-references (_includes/captions.html) ───────────── */

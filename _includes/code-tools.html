@@ -1,14 +1,35 @@
-<!-- Code block tools: copy button + line-number toggle on every fenced code block.
-     Line numbers are drawn in a separate gutter (not inside <pre>), so copying
-     and text selection never pick them up. Set `linenos: true` in a page's front
-     matter to show numbers by default. Blocks from the Liquid highlight tag with linenos
-     already have Rouge's own numbers, so they only get the copy button. -->
+<!-- Code block tools for every fenced code block:
+       - word-wrap toggle, line-number toggle and copy button (top-right toolbar)
+       - line marks: highlight lines and put a lettered badge in a left lane, set with
+         an attribute list on the line directly after the fence:
+           ```yaml
+           ...
+           ```
+           {: mark="3-6:A, 8:B, 10"}
+         Each item is a line or range, optionally followed by :LABEL for a badge at
+         its first line. Items without a label are only highlighted.
+     A list tagged {: .marks} right after the block explains the marks: each item
+     gets the matching badge, taken in order from the block's labels (A, B, C… if
+     the list doesn't follow a marked block).
+     Each code line is wrapped in <span class="code-line"> so the gutter and badges
+     line up with the code, even when word wrap is on. Line numbers and badges sit
+     outside <pre>, so copying and text selection never pick them up.
+     Front matter: `linenos: true` shows numbers by default. Blocks from the Liquid
+     highlight tag with linenos already have Rouge's own numbers, so they only get
+     the copy button. -->
 <script>
 (function () {
   var DEFAULT_ON = {{ page.linenos | default: false | jsonify }};
+  var LANE_W = 40; // px reserved on the left for mark badges
 
   var ICON_COPY = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M0 6.75C0 5.78.78 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .14.11.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/><path fill="currentColor" d="M5 1.75C5 .78 5.78 0 6.75 0h7.5C15.22 0 16 .78 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .14.11.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>';
   var ICON_OK = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>';
+  var ICON_WRAP = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3.5h12M2 8h9.25a2.25 2.25 0 0 1 0 4.5H8.5"/><path d="M10 11l-1.5 1.5L10 14M2 12.5h3.5"/></svg>';
+
+  function codeEl(highlight) {
+    var pre = highlight.querySelector('pre');
+    return pre && (pre.querySelector('code') || pre);
+  }
 
   function codeText(block) {
     var el = block.querySelector('.rouge-table td.code pre, .rouge-code pre') || block.querySelector('pre code') || block.querySelector('pre');
@@ -42,31 +63,114 @@
     return b;
   }
 
-  function setLineNumbers(highlight, on) {
-    var gutter = highlight.querySelector(':scope > .code-gutter');
-    if (on && !gutter) {
-      var n = codeText(highlight).split('\n').length;
-      var nums = [];
-      for (var i = 1; i <= n; i++) nums.push(i);
-      gutter = document.createElement('div');
-      gutter.className = 'code-gutter';
-      gutter.setAttribute('aria-hidden', 'true');
-      gutter.textContent = nums.join('\n');
-      highlight.insertBefore(gutter, highlight.firstChild);
+  /* Wrap each source line in <span class="code-line">, keeping Rouge's token
+     spans balanced across line breaks. The "\n" stays between the spans, so
+     textContent (and copying) is unchanged. */
+  function splitLines(code) {
+    var html = code.innerHTML;
+    var trailing = /\n$/.test(html);
+    if (trailing) html = html.slice(0, -1);
+    var lines = [], line = '', open = [];
+    var re = /(<[^>]+>)|([^<]+)/g, m;
+    while ((m = re.exec(html))) {
+      if (m[1]) {
+        if (m[1].charAt(1) === '/') open.pop();
+        else if (!/\/>$/.test(m[1])) open.push(m[1]);
+        line += m[1];
+      } else {
+        var parts = m[2].split('\n');
+        for (var i = 0; i < parts.length; i++) {
+          if (i > 0) {
+            lines.push(line + open.map(function (t) { return '</' + t.match(/^<([\w-]+)/)[1] + '>'; }).reverse().join(''));
+            line = open.join('');
+          }
+          line += parts[i];
+        }
+      }
     }
-    if (on) {
-      // Match the gutter's metrics to the rendered code so rows line up.
-      var pre = highlight.querySelector('pre');
-      var code = pre.querySelector('code') || pre;
-      var cs = getComputedStyle(code);
-      var ps = getComputedStyle(pre);
+    lines.push(line);
+    code.innerHTML = lines.map(function (l) { return '<span class="code-line">' + l + '</span>'; }).join('\n') + (trailing ? '\n' : '');
+    return Array.prototype.slice.call(code.querySelectorAll(':scope > .code-line'));
+  }
+
+  // "3-6:A, 8:B, 10" → [{from:3, to:6, label:'A'}, {from:8, to:8, label:'B'}, {from:10, to:10, label:''}]
+  function parseMarks(spec) {
+    var out = [];
+    (spec || '').split(',').forEach(function (item) {
+      var m = item.trim().match(/^(\d+)(?:\s*-\s*(\d+))?(?:\s*:\s*(.+))?$/);
+      if (!m) { if (item.trim()) console.warn('[code-tools] bad mark: ' + item.trim()); return; }
+      var from = +m[1], to = m[2] ? +m[2] : from;
+      out.push({ from: Math.min(from, to), to: Math.max(from, to), label: (m[3] || '').trim() });
+    });
+    return out;
+  }
+
+  function applyMarks(highlight, lines, marks) {
+    var lane = document.createElement('div');
+    lane.className = 'code-marks';
+    lane.setAttribute('aria-hidden', 'true');
+    marks.forEach(function (mk) {
+      for (var n = mk.from; n <= mk.to && n <= lines.length; n++) lines[n - 1].classList.add('marked');
+      if (mk.label && lines[mk.from - 1]) {
+        var badge = document.createElement('span');
+        badge.className = 'code-mark';
+        badge.textContent = mk.label;
+        badge.dataset.line = mk.from;
+        lane.appendChild(badge);
+      }
+    });
+    highlight.insertBefore(lane, highlight.firstChild);
+    highlight.classList.add('has-marks');
+    highlight.style.setProperty('--lane-w', LANE_W + 'px');
+  }
+
+  /* Position the gutter rows and badges against the rendered code lines.
+     Runs again whenever the code reflows (wrap toggle, resize, font load). */
+  function layout(highlight) {
+    var lines = highlight._codeLines;
+    if (!lines) return;
+    var gutter = highlight.querySelector(':scope > .code-gutter');
+    var lane = highlight.querySelector(':scope > .code-marks');
+    var base = highlight.getBoundingClientRect().top - highlight.clientTop;
+    var code = codeEl(highlight);
+    var cs = getComputedStyle(code);
+
+    if (gutter && highlight.classList.contains('ln-on')) {
       gutter.style.fontFamily = cs.fontFamily;
       gutter.style.fontSize = cs.fontSize;
       gutter.style.lineHeight = cs.lineHeight;
-      gutter.style.top = (pre.offsetTop + pre.clientTop + parseFloat(ps.paddingTop)) + 'px';
+      gutter.style.top = (lines[0].getBoundingClientRect().top - base) + 'px';
+      var rows = gutter.children;
+      for (var i = 0; i < lines.length; i++) rows[i].style.height = lines[i].getBoundingClientRect().height + 'px';
+      highlight.style.setProperty('--gutter-w', gutter.offsetWidth + 'px');
+    } else {
+      highlight.style.setProperty('--gutter-w', '0px');
+    }
+
+    if (lane) {
+      lane.querySelectorAll('.code-mark').forEach(function (badge) {
+        var r = lines[badge.dataset.line - 1].getBoundingClientRect();
+        var lh = parseFloat(cs.lineHeight) || r.height;
+        badge.style.top = (r.top - base + (Math.min(lh, r.height) - badge.offsetHeight) / 2) + 'px';
+      });
+    }
+  }
+
+  function setLineNumbers(highlight, on) {
+    var gutter = highlight.querySelector(':scope > .code-gutter');
+    if (on && !gutter) {
+      gutter = document.createElement('div');
+      gutter.className = 'code-gutter';
+      gutter.setAttribute('aria-hidden', 'true');
+      highlight._codeLines.forEach(function (_, i) {
+        var row = document.createElement('div');
+        row.textContent = i + 1;
+        gutter.appendChild(row);
+      });
+      highlight.insertBefore(gutter, highlight.firstChild);
     }
     highlight.classList.toggle('ln-on', on);
-    if (on) highlight.style.setProperty('--gutter-w', gutter.offsetWidth + 'px');
+    layout(highlight);
   }
 
   function enhance(block) {
@@ -79,8 +183,24 @@
     var hasRougeNumbers = !!highlight.querySelector('.rouge-table, .lineno');
     var bar = document.createElement('div');
     bar.className = 'code-toolbar';
+    highlight.classList.add('has-code-tools');
 
     if (!hasRougeNumbers) {
+      highlight._codeLines = splitLines(codeEl(highlight));
+
+      var marks = parseMarks(block.getAttribute('mark') || block.getAttribute('data-mark'));
+      if (marks.length) applyMarks(highlight, highlight._codeLines, marks);
+
+      var wrapBtn = button('Toggle word wrap', ICON_WRAP, 'code-wrap-btn');
+      wrapBtn.setAttribute('aria-pressed', 'false');
+      wrapBtn.addEventListener('click', function () {
+        var on = !highlight.classList.contains('wrap-on');
+        highlight.classList.toggle('wrap-on', on);
+        wrapBtn.setAttribute('aria-pressed', String(on));
+        layout(highlight);
+      });
+      bar.appendChild(wrapBtn);
+
       var lnBtn = button('Toggle line numbers', '#', 'code-ln-btn');
       lnBtn.setAttribute('aria-pressed', 'false');
       lnBtn.addEventListener('click', function () {
@@ -92,6 +212,10 @@
       if (DEFAULT_ON) {
         setLineNumbers(highlight, true);
         lnBtn.setAttribute('aria-pressed', 'true');
+      }
+
+      if (window.ResizeObserver) {
+        new ResizeObserver(function () { layout(highlight); }).observe(highlight.querySelector('pre'));
       }
     }
 
@@ -114,12 +238,30 @@
     });
     bar.appendChild(copyBtn);
 
-    highlight.classList.add('has-code-tools');
     highlight.appendChild(bar);
+    layout(highlight);
+  }
+
+  // Badges for a {: .marks} list come from the nearest marked code block above it.
+  function labelMarkList(list) {
+    var prev = list.previousElementSibling;
+    var hl = prev && (prev.matches('.highlight.has-marks') ? prev : prev.querySelector('.highlight.has-marks'));
+    if (!hl) return;
+    var labels = Array.prototype.map.call(hl.querySelectorAll('.code-mark'), function (b) { return b.textContent; });
+    Array.prototype.forEach.call(list.children, function (li, i) {
+      if (labels[i] && !li.hasAttribute('data-mark')) li.setAttribute('data-mark', labels[i]);
+    });
   }
 
   function init() {
-    document.querySelectorAll('div.highlighter-rouge, figure.highlight').forEach(enhance);
+    var blocks = document.querySelectorAll('div.highlighter-rouge, figure.highlight');
+    blocks.forEach(enhance);
+    document.querySelectorAll('ul.marks, ol.marks').forEach(labelMarkList);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        document.querySelectorAll('.highlight.has-code-tools').forEach(layout);
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
