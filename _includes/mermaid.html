@@ -42,11 +42,11 @@
     cursor: grabbing;
   }
 
-  /* 3×3 control grid — top-left corner, fades unless hovered/focused */
+  /* 3×3 control grid — top-right corner, fades unless hovered/focused */
   .mermaid-controls {
     position: absolute;
     top: 8px;
-    left: 8px;
+    right: 8px;
     display: grid;
     grid-template-columns: repeat(3, 28px);
     grid-template-rows: repeat(3, 28px);
@@ -96,7 +96,7 @@
     border-color: #888;
     color: #fff;
   }
-  /* Collapsed (toggle off): only the toggle (top-left cell) is shown. */
+  /* Collapsed (toggle off): only the toggle (top-right cell) is shown. */
   .mermaid-controls:not(.mz-open) > :not(.mz-toggle) {
     visibility: hidden;
     pointer-events: none;
@@ -456,9 +456,9 @@
       return b;
     }
 
-    // Build 3×3 grid:  [⚙  ↑  +]   (⚙ toggles the other cells)
+    // Build 3×3 grid:  [+  ↑  ⚙]   (⚙ toggles the other cells)
     //                  [←  ↺  →]
-    //                  [💾 ↓  −]   (floppy-disk icon saves the diagram as JPEG)
+    //                  [−  ↓  💾]   (floppy-disk icon saves the diagram as JPEG)
 
     // Save button: the classic floppy-disk "Save" icon, drawn as an inline
     // SVG with currentColor so it follows the light/dark button colours.
@@ -474,7 +474,7 @@
     const controls = document.createElement('div');
     controls.className = 'mermaid-controls'; // pad starts closed (only ⚙ shown)
 
-    // Top-left cell: toggle that shows/hides the rest of the pad.
+    // Top-right cell: toggle that shows/hides the rest of the pad.
     // Hover tip is always "Options"; aria-expanded carries the open state.
     const toggle = makeBtn('⚙', 'Options', () => {
       const open = controls.classList.toggle('mz-open');
@@ -485,9 +485,9 @@
     toggle.setAttribute('aria-expanded', 'false');
 
     const cells = [
-      toggle,
-      makeBtn('↑', 'Pan up',    () => { ty += PAN_STEP; applyTransform(); }),
       makeBtn('+', 'Zoom in',   () => zoomCentre(scale + ZOOM_STEP)),
+      makeBtn('↑', 'Pan up',    () => { ty += PAN_STEP; applyTransform(); }),
+      toggle,
       makeBtn('←', 'Pan left',  () => { tx += PAN_STEP; applyTransform(); }),
       makeBtn('↺', 'Reset',     () => {
         const pW = (wrapper.parentElement && wrapper.parentElement.clientWidth) || origW;
@@ -496,9 +496,9 @@
         applyTransform();
       }),
       makeBtn('→', 'Pan right', () => { tx -= PAN_STEP; applyTransform(); }),
-      saveBtn,
-      makeBtn('↓', 'Pan down',  () => { ty -= PAN_STEP; applyTransform(); }),
       makeBtn('−', 'Zoom out',  () => zoomCentre(scale - ZOOM_STEP)),
+      makeBtn('↓', 'Pan down',  () => { ty -= PAN_STEP; applyTransform(); }),
+      saveBtn,
     ];
     cells.forEach(c => controls.appendChild(c));
     wrapper.appendChild(controls);
