@@ -1,6 +1,7 @@
 K8sBlogsDir := ../learn-k8s/blogs
 K8sBlogsSources := 2026-01-03-K8sIntro \
-	2026-11-03-K8sObjectModel
+	2026-11-03-K8sObjectModel \
+	2026-11-18-EKSIntro
 
 md_targets += $(foreach wrd,$(K8sBlogsSources),$(DRAFTS_DIR)/$(wrd).md)
 asset_targets += $(foreach wrd,$(K8sBlogsSources),$(ASSETS_DIR)/$(wrd))
